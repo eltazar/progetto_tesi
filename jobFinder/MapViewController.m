@@ -295,7 +295,7 @@
     //lastSpan = 180/floor( 180/map.region.span.latitudeDelta);
     
     //inizializzazione span
-    lastSpan = map.region.span.latitudeDelta;  
+    lastSpan = map.region.span.latitudeDelta;  //ciao
     
     //mi registro come delegato della classe PublishViewController
       

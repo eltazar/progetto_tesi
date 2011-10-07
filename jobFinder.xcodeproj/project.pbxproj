@@ -1,0 +1,565 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AC154CD2143A310000AE5FAD /* RootJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD1143A310000AE5FAD /* RootJobViewController.m */; };
+		AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC154CD3143A315600AE5FAD /* RootJobViewController.xib */; };
+		AC154CD7143A33B300AE5FAD /* EditJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD6143A33B300AE5FAD /* EditJobViewController.m */; };
+		AC154CDA143A343600AE5FAD /* InfoJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD9143A343600AE5FAD /* InfoJobViewController.m */; };
+		AC4A04921422369200FE96F7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04911422369200FE96F7 /* UIKit.framework */; };
+		AC4A04941422369200FE96F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04931422369200FE96F7 /* Foundation.framework */; };
+		AC4A04961422369200FE96F7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04951422369200FE96F7 /* CoreGraphics.framework */; };
+		AC4A049C1422369200FE96F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AC4A049A1422369200FE96F7 /* InfoPlist.strings */; };
+		AC4A049E1422369200FE96F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A049D1422369200FE96F7 /* main.m */; };
+		AC4A04A21422369200FE96F7 /* jobFinderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04A11422369200FE96F7 /* jobFinderAppDelegate.m */; };
+		AC4A04A51422369200FE96F7 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04A31422369200FE96F7 /* MainWindow.xib */; };
+		AC4A04AD1422369200FE96F7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04AC1422369200FE96F7 /* SenTestingKit.framework */; };
+		AC4A04AE1422369200FE96F7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04911422369200FE96F7 /* UIKit.framework */; };
+		AC4A04AF1422369200FE96F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04931422369200FE96F7 /* Foundation.framework */; };
+		AC4A04B01422369200FE96F7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04951422369200FE96F7 /* CoreGraphics.framework */; };
+		AC4A04B81422369200FE96F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04B61422369200FE96F7 /* InfoPlist.strings */; };
+		AC4A04BA1422369200FE96F7 /* jobFinderTests.h in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04B91422369200FE96F7 /* jobFinderTests.h */; };
+		AC4A04BC1422369200FE96F7 /* jobFinderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04BB1422369200FE96F7 /* jobFinderTests.m */; };
+		AC4A04C6142236CA00FE96F7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04C5142236CA00FE96F7 /* MapKit.framework */; };
+		AC4A04CA142239E300FE96F7 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04C8142239E300FE96F7 /* MapViewController.m */; };
+		AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04C9142239E300FE96F7 /* MapViewController.xib */; };
+		AC736EFD1434D176003626F7 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC736EFC1434D176003626F7 /* ConfigViewController.m */; };
+		ACB0D1CE143DBD3200EB579C /* CellCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = ACB0D1CD143DBD3200EB579C /* CellCategory.m */; };
+		ACB6C5471424F0B200693952 /* Job.m in Sources */ = {isa = PBXBuildFile; fileRef = ACB6C5461424F0B200693952 /* Job.m */; };
+		ACC7C5E0143CBE9A006CFC0F /* PickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC7C5DF143CBE99006CFC0F /* PickerViewController.m */; };
+		ACCA8FE81438B10D00141CDE /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACCA8FE71438B10D00141CDE /* MessageUI.framework */; };
+		ACCAB8051435A115008DA6B8 /* ConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */; };
+		ACD73AB7143AF4810025DF6C /* ActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB0143AF4810025DF6C /* ActionCell.m */; };
+		ACD73AB8143AF4810025DF6C /* InfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB2143AF4810025DF6C /* InfoCell.m */; };
+		ACD73AB9143AF4810025DF6C /* TextAreaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB4143AF4810025DF6C /* TextAreaCell.m */; };
+		ACD73ABA143AF4810025DF6C /* TextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB6143AF4810025DF6C /* TextFieldCell.m */; };
+		ACD73ABD143AF9D90025DF6C /* JobAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */; };
+		ACD73ABF143AFA700025DF6C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACD73ABE143AFA700025DF6C /* CoreLocation.framework */; };
+		ACFAB5121435E88700AB1490 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACFAB5111435E88700AB1490 /* PublishViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AC4A04B11422369200FE96F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC4A04841422369200FE96F7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC4A048C1422369200FE96F7;
+			remoteInfo = jobFinder;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AC154CD0143A310000AE5FAD /* RootJobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootJobViewController.h; sourceTree = "<group>"; };
+		AC154CD1143A310000AE5FAD /* RootJobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootJobViewController.m; sourceTree = "<group>"; };
+		AC154CD3143A315600AE5FAD /* RootJobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootJobViewController.xib; sourceTree = "<group>"; };
+		AC154CD5143A33B300AE5FAD /* EditJobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditJobViewController.h; sourceTree = "<group>"; };
+		AC154CD6143A33B300AE5FAD /* EditJobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditJobViewController.m; sourceTree = "<group>"; };
+		AC154CD8143A343600AE5FAD /* InfoJobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoJobViewController.h; sourceTree = "<group>"; };
+		AC154CD9143A343600AE5FAD /* InfoJobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoJobViewController.m; sourceTree = "<group>"; };
+		AC4A048D1422369200FE96F7 /* jobFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jobFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC4A04911422369200FE96F7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		AC4A04931422369200FE96F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		AC4A04951422369200FE96F7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		AC4A04991422369200FE96F7 /* jobFinder-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jobFinder-Info.plist"; sourceTree = "<group>"; };
+		AC4A049B1422369200FE96F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AC4A049D1422369200FE96F7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		AC4A049F1422369200FE96F7 /* jobFinder-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "jobFinder-Prefix.pch"; sourceTree = "<group>"; };
+		AC4A04A01422369200FE96F7 /* jobFinderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jobFinderAppDelegate.h; sourceTree = "<group>"; };
+		AC4A04A11422369200FE96F7 /* jobFinderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jobFinderAppDelegate.m; sourceTree = "<group>"; };
+		AC4A04A41422369200FE96F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		AC4A04AB1422369200FE96F7 /* jobFinderTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = jobFinderTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC4A04AC1422369200FE96F7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		AC4A04B51422369200FE96F7 /* jobFinderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jobFinderTests-Info.plist"; sourceTree = "<group>"; };
+		AC4A04B71422369200FE96F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AC4A04B91422369200FE96F7 /* jobFinderTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jobFinderTests.h; sourceTree = "<group>"; };
+		AC4A04BB1422369200FE96F7 /* jobFinderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jobFinderTests.m; sourceTree = "<group>"; };
+		AC4A04C5142236CA00FE96F7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		AC4A04C7142239E300FE96F7 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		AC4A04C8142239E300FE96F7 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		AC4A04C9142239E300FE96F7 /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
+		AC736EFB1434D176003626F7 /* ConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController.h; sourceTree = "<group>"; };
+		AC736EFC1434D176003626F7 /* ConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigViewController.m; sourceTree = "<group>"; };
+		ACB0D1CC143DBD3100EB579C /* CellCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellCategory.h; sourceTree = "<group>"; };
+		ACB0D1CD143DBD3200EB579C /* CellCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellCategory.m; sourceTree = "<group>"; };
+		ACB6C5451424F0B200693952 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
+		ACB6C5461424F0B200693952 /* Job.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Job.m; sourceTree = "<group>"; };
+		ACC7C5DE143CBE99006CFC0F /* PickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerViewController.h; sourceTree = "<group>"; };
+		ACC7C5DF143CBE99006CFC0F /* PickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerViewController.m; sourceTree = "<group>"; };
+		ACCA8FE71438B10D00141CDE /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigViewController.xib; sourceTree = "<group>"; };
+		ACD73AAF143AF4810025DF6C /* ActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCell.h; sourceTree = "<group>"; };
+		ACD73AB0143AF4810025DF6C /* ActionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionCell.m; sourceTree = "<group>"; };
+		ACD73AB1143AF4810025DF6C /* InfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoCell.h; sourceTree = "<group>"; };
+		ACD73AB2143AF4810025DF6C /* InfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoCell.m; sourceTree = "<group>"; };
+		ACD73AB3143AF4810025DF6C /* TextAreaCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextAreaCell.h; sourceTree = "<group>"; };
+		ACD73AB4143AF4810025DF6C /* TextAreaCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextAreaCell.m; sourceTree = "<group>"; };
+		ACD73AB5143AF4810025DF6C /* TextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldCell.h; sourceTree = "<group>"; };
+		ACD73AB6143AF4810025DF6C /* TextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldCell.m; sourceTree = "<group>"; };
+		ACD73ABB143AF9D90025DF6C /* JobAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JobAnnotation.h; sourceTree = "<group>"; };
+		ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JobAnnotation.m; sourceTree = "<group>"; };
+		ACD73ABE143AFA700025DF6C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		ACFAB5101435E88700AB1490 /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
+		ACFAB5111435E88700AB1490 /* PublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC4A048A1422369200FE96F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACD73ABF143AFA700025DF6C /* CoreLocation.framework in Frameworks */,
+				ACCA8FE81438B10D00141CDE /* MessageUI.framework in Frameworks */,
+				AC4A04C6142236CA00FE96F7 /* MapKit.framework in Frameworks */,
+				AC4A04921422369200FE96F7 /* UIKit.framework in Frameworks */,
+				AC4A04941422369200FE96F7 /* Foundation.framework in Frameworks */,
+				AC4A04961422369200FE96F7 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC4A04A71422369200FE96F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC4A04AD1422369200FE96F7 /* SenTestingKit.framework in Frameworks */,
+				AC4A04AE1422369200FE96F7 /* UIKit.framework in Frameworks */,
+				AC4A04AF1422369200FE96F7 /* Foundation.framework in Frameworks */,
+				AC4A04B01422369200FE96F7 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AC154CCE143A30E400AE5FAD /* TableModel */ = {
+			isa = PBXGroup;
+			children = (
+				AC154CD0143A310000AE5FAD /* RootJobViewController.h */,
+				AC154CD1143A310000AE5FAD /* RootJobViewController.m */,
+				AC154CD3143A315600AE5FAD /* RootJobViewController.xib */,
+				AC154CD5143A33B300AE5FAD /* EditJobViewController.h */,
+				AC154CD6143A33B300AE5FAD /* EditJobViewController.m */,
+				ACC7C5DE143CBE99006CFC0F /* PickerViewController.h */,
+				ACC7C5DF143CBE99006CFC0F /* PickerViewController.m */,
+				AC154CD8143A343600AE5FAD /* InfoJobViewController.h */,
+				AC154CD9143A343600AE5FAD /* InfoJobViewController.m */,
+				AC154CDB143A377200AE5FAD /* CellsType */,
+			);
+			name = TableModel;
+			sourceTree = "<group>";
+		};
+		AC154CDB143A377200AE5FAD /* CellsType */ = {
+			isa = PBXGroup;
+			children = (
+				ACD73AAF143AF4810025DF6C /* ActionCell.h */,
+				ACD73AB0143AF4810025DF6C /* ActionCell.m */,
+				ACD73AB1143AF4810025DF6C /* InfoCell.h */,
+				ACD73AB2143AF4810025DF6C /* InfoCell.m */,
+				ACB0D1CC143DBD3100EB579C /* CellCategory.h */,
+				ACB0D1CD143DBD3200EB579C /* CellCategory.m */,
+				ACD73AB3143AF4810025DF6C /* TextAreaCell.h */,
+				ACD73AB4143AF4810025DF6C /* TextAreaCell.m */,
+				ACD73AB5143AF4810025DF6C /* TextFieldCell.h */,
+				ACD73AB6143AF4810025DF6C /* TextFieldCell.m */,
+			);
+			name = CellsType;
+			sourceTree = "<group>";
+		};
+		AC4A04821422369200FE96F7 = {
+			isa = PBXGroup;
+			children = (
+				AC4A04971422369200FE96F7 /* jobFinder */,
+				AC4A04B31422369200FE96F7 /* jobFinderTests */,
+				AC4A04901422369200FE96F7 /* Frameworks */,
+				AC4A048E1422369200FE96F7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC4A048E1422369200FE96F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC4A048D1422369200FE96F7 /* jobFinder.app */,
+				AC4A04AB1422369200FE96F7 /* jobFinderTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC4A04901422369200FE96F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ACD73ABE143AFA700025DF6C /* CoreLocation.framework */,
+				ACCA8FE71438B10D00141CDE /* MessageUI.framework */,
+				AC4A04C5142236CA00FE96F7 /* MapKit.framework */,
+				AC4A04911422369200FE96F7 /* UIKit.framework */,
+				AC4A04931422369200FE96F7 /* Foundation.framework */,
+				AC4A04951422369200FE96F7 /* CoreGraphics.framework */,
+				AC4A04AC1422369200FE96F7 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AC4A04971422369200FE96F7 /* jobFinder */ = {
+			isa = PBXGroup;
+			children = (
+				AC4A04A01422369200FE96F7 /* jobFinderAppDelegate.h */,
+				AC4A04A11422369200FE96F7 /* jobFinderAppDelegate.m */,
+				AC4A04A31422369200FE96F7 /* MainWindow.xib */,
+				AC4A04C7142239E300FE96F7 /* MapViewController.h */,
+				AC4A04C8142239E300FE96F7 /* MapViewController.m */,
+				AC4A04C9142239E300FE96F7 /* MapViewController.xib */,
+				ACFAB5101435E88700AB1490 /* PublishViewController.h */,
+				ACFAB5111435E88700AB1490 /* PublishViewController.m */,
+				AC736EFB1434D176003626F7 /* ConfigViewController.h */,
+				AC736EFC1434D176003626F7 /* ConfigViewController.m */,
+				ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */,
+				ACB6C5451424F0B200693952 /* Job.h */,
+				ACB6C5461424F0B200693952 /* Job.m */,
+				ACD73ABB143AF9D90025DF6C /* JobAnnotation.h */,
+				ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */,
+				AC154CCE143A30E400AE5FAD /* TableModel */,
+				AC4A04981422369200FE96F7 /* Supporting Files */,
+			);
+			path = jobFinder;
+			sourceTree = "<group>";
+		};
+		AC4A04981422369200FE96F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC4A04991422369200FE96F7 /* jobFinder-Info.plist */,
+				AC4A049A1422369200FE96F7 /* InfoPlist.strings */,
+				AC4A049D1422369200FE96F7 /* main.m */,
+				AC4A049F1422369200FE96F7 /* jobFinder-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AC4A04B31422369200FE96F7 /* jobFinderTests */ = {
+			isa = PBXGroup;
+			children = (
+				AC4A04B91422369200FE96F7 /* jobFinderTests.h */,
+				AC4A04BB1422369200FE96F7 /* jobFinderTests.m */,
+				AC4A04B41422369200FE96F7 /* Supporting Files */,
+			);
+			path = jobFinderTests;
+			sourceTree = "<group>";
+		};
+		AC4A04B41422369200FE96F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC4A04B51422369200FE96F7 /* jobFinderTests-Info.plist */,
+				AC4A04B61422369200FE96F7 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AC4A048C1422369200FE96F7 /* jobFinder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC4A04BF1422369200FE96F7 /* Build configuration list for PBXNativeTarget "jobFinder" */;
+			buildPhases = (
+				AC4A04891422369200FE96F7 /* Sources */,
+				AC4A048A1422369200FE96F7 /* Frameworks */,
+				AC4A048B1422369200FE96F7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jobFinder;
+			productName = jobFinder;
+			productReference = AC4A048D1422369200FE96F7 /* jobFinder.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AC4A04AA1422369200FE96F7 /* jobFinderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC4A04C21422369200FE96F7 /* Build configuration list for PBXNativeTarget "jobFinderTests" */;
+			buildPhases = (
+				AC4A04A61422369200FE96F7 /* Sources */,
+				AC4A04A71422369200FE96F7 /* Frameworks */,
+				AC4A04A81422369200FE96F7 /* Resources */,
+				AC4A04A91422369200FE96F7 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC4A04B21422369200FE96F7 /* PBXTargetDependency */,
+			);
+			name = jobFinderTests;
+			productName = jobFinderTests;
+			productReference = AC4A04AB1422369200FE96F7 /* jobFinderTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC4A04841422369200FE96F7 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = AC4A04871422369200FE96F7 /* Build configuration list for PBXProject "jobFinder" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AC4A04821422369200FE96F7;
+			productRefGroup = AC4A048E1422369200FE96F7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC4A048C1422369200FE96F7 /* jobFinder */,
+				AC4A04AA1422369200FE96F7 /* jobFinderTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC4A048B1422369200FE96F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC4A049C1422369200FE96F7 /* InfoPlist.strings in Resources */,
+				AC4A04A51422369200FE96F7 /* MainWindow.xib in Resources */,
+				AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */,
+				ACCAB8051435A115008DA6B8 /* ConfigViewController.xib in Resources */,
+				AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC4A04A81422369200FE96F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC4A04B81422369200FE96F7 /* InfoPlist.strings in Resources */,
+				AC4A04BA1422369200FE96F7 /* jobFinderTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AC4A04A91422369200FE96F7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC4A04891422369200FE96F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC4A049E1422369200FE96F7 /* main.m in Sources */,
+				AC4A04A21422369200FE96F7 /* jobFinderAppDelegate.m in Sources */,
+				AC4A04CA142239E300FE96F7 /* MapViewController.m in Sources */,
+				ACB6C5471424F0B200693952 /* Job.m in Sources */,
+				AC736EFD1434D176003626F7 /* ConfigViewController.m in Sources */,
+				ACFAB5121435E88700AB1490 /* PublishViewController.m in Sources */,
+				AC154CD2143A310000AE5FAD /* RootJobViewController.m in Sources */,
+				AC154CD7143A33B300AE5FAD /* EditJobViewController.m in Sources */,
+				AC154CDA143A343600AE5FAD /* InfoJobViewController.m in Sources */,
+				ACD73AB7143AF4810025DF6C /* ActionCell.m in Sources */,
+				ACD73AB8143AF4810025DF6C /* InfoCell.m in Sources */,
+				ACD73AB9143AF4810025DF6C /* TextAreaCell.m in Sources */,
+				ACD73ABA143AF4810025DF6C /* TextFieldCell.m in Sources */,
+				ACD73ABD143AF9D90025DF6C /* JobAnnotation.m in Sources */,
+				ACC7C5E0143CBE9A006CFC0F /* PickerViewController.m in Sources */,
+				ACB0D1CE143DBD3200EB579C /* CellCategory.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC4A04A61422369200FE96F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC4A04BC1422369200FE96F7 /* jobFinderTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AC4A04B21422369200FE96F7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC4A048C1422369200FE96F7 /* jobFinder */;
+			targetProxy = AC4A04B11422369200FE96F7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AC4A049A1422369200FE96F7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC4A049B1422369200FE96F7 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		AC4A04A31422369200FE96F7 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC4A04A41422369200FE96F7 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		AC4A04B61422369200FE96F7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC4A04B71422369200FE96F7 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AC4A04BD1422369200FE96F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AC4A04BE1422369200FE96F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AC4A04C01422369200FE96F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "jobFinder/jobFinder-Prefix.pch";
+				INFOPLIST_FILE = "jobFinder/jobFinder-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		AC4A04C11422369200FE96F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "jobFinder/jobFinder-Prefix.pch";
+				INFOPLIST_FILE = "jobFinder/jobFinder-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		AC4A04C31422369200FE96F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/jobFinder.app/jobFinder";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "jobFinder/jobFinder-Prefix.pch";
+				INFOPLIST_FILE = "jobFinderTests/jobFinderTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		AC4A04C41422369200FE96F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/jobFinder.app/jobFinder";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "jobFinder/jobFinder-Prefix.pch";
+				INFOPLIST_FILE = "jobFinderTests/jobFinderTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC4A04871422369200FE96F7 /* Build configuration list for PBXProject "jobFinder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC4A04BD1422369200FE96F7 /* Debug */,
+				AC4A04BE1422369200FE96F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC4A04BF1422369200FE96F7 /* Build configuration list for PBXNativeTarget "jobFinder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC4A04C01422369200FE96F7 /* Debug */,
+				AC4A04C11422369200FE96F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC4A04C21422369200FE96F7 /* Build configuration list for PBXNativeTarget "jobFinderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC4A04C31422369200FE96F7 /* Debug */,
+				AC4A04C41422369200FE96F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AC4A04841422369200FE96F7 /* Project object */;
+}

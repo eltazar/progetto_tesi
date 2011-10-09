@@ -16,6 +16,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.textView = [[[UITextView alloc] initWithFrame:CGRectZero]autorelease];
         self.textView.font = [UIFont systemFontOfSize:17];
         self.textView.dataDetectorTypes = UIDataDetectorTypeNone;

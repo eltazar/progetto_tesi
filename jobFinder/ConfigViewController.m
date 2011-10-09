@@ -16,54 +16,7 @@
     if (self) {
         // Custom initialization
         
-        //creo le sezioni
-        NSMutableArray *secA = [[NSMutableArray alloc] init];
-        NSMutableArray *secB = [[NSMutableArray alloc] init];
         
-        //creo i dizionari per le sezioni
-        [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"street",           @"DataKey",
-                            @"TextFieldCell",    @"kind", 
-                            @"Via",              @"label",
-                            @"",                 @"img",
-                            [NSString stringWithFormat:@"%d",UIKeyboardTypeDefault], @"keyboardType",
-                            nil] autorelease] atIndex: 0];
-        
-        [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"city",             @"DataKey",
-                            @"TextFieldCell",    @"kind",
-                            @"Città",            @"label",
-                            @"",                 @"img",
-                            [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
-                            nil] autorelease] atIndex: 1];
-        
-        [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"province",         @"DataKey",
-                            @"TextFieldCell",    @"kind",
-                            @"Provincia",        @"label",
-                            @"",                 @"img",
-                            [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
-                            nil] autorelease] atIndex: 2];
-        
-        [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"email",            @"DataKey",
-                            @"ActionCell",       @"kind",
-                            @"Contattaci",       @"label",
-                            @"",                 @"img",
-                            nil] autorelease] atIndex: 0];
-                                    
-        [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"site",             @"DataKey",
-                            @"ActionCell",       @"kind",
-                            @"Visita il sito",   @"label",
-                            @"",                 @"img",
-                            nil]autorelease] atIndex: 1];
-        
-        sectionData = [[NSArray alloc] initWithObjects: secA, secB, nil];
-        sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"About Us",nil];
-        
-        [secA autorelease];
-        [secB autorelease];
     }
     return self;
 }
@@ -91,9 +44,10 @@
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     NSString *dataKey = [rowDesc objectForKey:@"DataKey"];
     NSString *kind = [rowDesc objectForKey:@"kind"];
+  
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: kind];
     
-    //istanzio cella
+    //se non è recuperata creo una nuova cella
 	if (cell == nil) {
         cell = [[[NSClassFromString(kind) alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kind] autorelease];
     }
@@ -116,8 +70,6 @@
         NSString * kt = [rowDesc objectForKey:@"keyboardType"];
         NSInteger kti = [kt integerValue];
         ((TextFieldCell *)cell).textField.keyboardType = kti;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
     }
     else if([[rowDesc objectForKey:@"kind"] isEqualToString:@"ActionCell"]){
         //TODO: aggiungere immagine alla cella
@@ -204,7 +156,7 @@
 /*sembra funzionare qui, ma è meglio metterlo in TextFieldCell?
  * inoltre devo salvare le informazioni digitate dall'utente nelle impostazioni
  * dell'app, e forse dovrei trasformare l'indirizzo in coordinate.
- * vedere se creare proprio un oggetto con le varie informazioni incapsulate
+ * vedere se implementare diretttamente una searchbar che interroga api di google
  */
 
 // gestisce la fine dell'editing in un textField
@@ -215,6 +167,11 @@
     NSLog(@"2) dataKey %@, texField %@", cell.dataKey, cell.textField.text);
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{ 
+	[textField resignFirstResponder];
+	return YES;
+}
 
 #pragma mark - azioni dei bottoni
 
@@ -293,8 +250,54 @@
     self.navigationItem.rightBarButtonItem = anotherButton;
     [anotherButton release];
     
-    //mi registro al notification center???
+    //creo le sezioni
+    NSMutableArray *secA = [[NSMutableArray alloc] init];
+    NSMutableArray *secB = [[NSMutableArray alloc] init];
     
+    //creo i dizionari per le sezioni
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"street",           @"DataKey",
+                         @"TextFieldCell",    @"kind", 
+                         @"Via",              @"label",
+                         @"",                 @"img",
+                         [NSString stringWithFormat:@"%d",UIKeyboardTypeDefault], @"keyboardType",
+                         nil] autorelease] atIndex: 0];
+    
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"city",             @"DataKey",
+                         @"TextFieldCell",    @"kind",
+                         @"Città",            @"label",
+                         @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
+                         nil] autorelease] atIndex: 1];
+    
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"province",         @"DataKey",
+                         @"TextFieldCell",    @"kind",
+                         @"Provincia",        @"label",
+                         @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
+                         nil] autorelease] atIndex: 2];
+    
+    [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"email",            @"DataKey",
+                         @"ActionCell",       @"kind",
+                         @"Contattaci",       @"label",
+                         @"",                 @"img",
+                         nil] autorelease] atIndex: 0];
+    
+    [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"site",             @"DataKey",
+                         @"ActionCell",       @"kind",
+                         @"Visita il sito",   @"label",
+                         @"",                 @"img",
+                         nil]autorelease] atIndex: 1];
+    
+    sectionData = [[NSArray alloc] initWithObjects: secA, secB, nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"About Us",nil];
+    
+    [secA autorelease];
+    [secB autorelease];    
 }
 
 

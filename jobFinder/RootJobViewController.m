@@ -7,8 +7,11 @@
 //
 
 #import "RootJobViewController.h"
+#import "ActionCell.h"
 
 @implementation RootJobViewController
+@synthesize job; 
+
 
 #pragma mark - init
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -50,16 +53,16 @@
 //    //setto lo stile della cella in base al tipo
 //    if([kind isEqualToString:@"InfoCell"] || [kind isEqualToString:@"ActionCell"])
 //        cellStyle = UITableViewCellStyleValue1;  //mettere value2
+   //NSLog(@"CELL IS NIL? = %p",cell);
     
     if (cell == nil) {       
         cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind] autorelease];
     }
     
     //di default imposto la cella come non selezionabile (non diventa blu)
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     //imposto la label della cella
 	cell.textLabel.text = [rowDesc objectForKey:@"label"];	
-    
     //TODO: aggiungere immagine alla cella
     
     return cell;

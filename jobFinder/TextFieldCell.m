@@ -18,20 +18,18 @@
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
 		// Configuro il textfield secondo la necessità
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
 		self.textField = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
 		self.textField.clearsOnBeginEditing = NO;
 		self.textField.textAlignment = UITextAlignmentLeft;
 		self.textField.returnKeyType = UIReturnKeyDone;
 		self.textField.font = [UIFont systemFontOfSize:17];
         [self.textField setAdjustsFontSizeToFitWidth:YES];
-
 		self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-		self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//      self.textField.delegate = self; //aggiunto 1 ottobre
-//        self.textField.setAdj      
+		self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;    
         
         //per far sparire la tastiera per qualsiasi textfield quando editing è finito
-        [self.textField addTarget:self action:@selector(textFieldFinished:) forControlEvents:UIControlEventEditingDidEndOnExit];	
+//        [self.textField addTarget:self action:@selector(textFieldFinished:) forControlEvents:UIControlEventEditingDidEndOnExit];	
         
 		[self.contentView addSubview:self.textField];
     }
@@ -58,10 +56,10 @@
 
 
 
--(void) textFieldFinished: (id) sender
-{   //intenzionalmente vuoto
-   //    [sender resignFirstResponder];
-}
+//-(void) textFieldFinished: (id) sender
+//{   //intenzionalmente vuoto
+//   //    [sender resignFirstResponder];
+//}
 
 
 

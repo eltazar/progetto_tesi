@@ -22,7 +22,7 @@
     
     if(self)
     {
-        NSLog(@"ok");
+       // NSLog(@"ok");
     }
     
     return self;
@@ -37,24 +37,25 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-
 #pragma mark - metodi bottoni della view
 
 -(IBAction)insertBtnPressed:(id)sender{
-    
+
+    //fa si che il testo inserito nei texfield sia preso anche se non è stata dismessa la keyboard
+    [self.view endEditing:TRUE];
     
     //VEDERE IL PROB DELLA MEMORIA DI QUESTI TIPI DI OGGETTI
-    newJob = ((EditJobViewController *) tableView).job;
-    
-    NSLog(@"PUBLISH_VIEW user coordinate %f %f",userCoordinate.latitude,userCoordinate.longitude);
-//    newJob.longitude = userCoordinate.longitude;
-//    newJob.latitude = userCoordinate.latitude;
-    
+    //ricavo il job dalla tabella
+    newJob = ((EditJobViewController *) tableView).job;  
+    NSLog(@"************* PublishViewController************");    
+    NSLog(@"user coordinate %f %f",userCoordinate.latitude,userCoordinate.longitude);    
     newJob.coordinate = CLLocationCoordinate2DMake(userCoordinate.latitude,userCoordinate.longitude);
     
-    NSLog(@"PUBLISH_VIEW newJob = %p |||| newJob.coordinate LONG %F | LAT %F",newJob, newJob.coordinate.longitude,newJob.coordinate.latitude);
-    NSLog(@"PUBLISH_VIEW: job.employee = %@",newJob.employee);
+    NSLog(@"newJob = %p |||| newJob.coordinate LONG %F | LAT %F",newJob, newJob.coordinate.longitude,newJob.coordinate.latitude);
+    NSLog(@"job.employee = %@",newJob.employee);
+    NSLog(@"***********************************************");
     
+    //passo al delegato il nuovo job;
     [pwDelegate receiveAnewJob:newJob];
 }
 
@@ -64,25 +65,7 @@
     [self.pwDelegate publishViewControllerDidCancel:self];
 }
 
-
-//#pragma mark - PassDataCollectedDelegate
-//
-//-(void) setJobCollected:(Job *)job
-//{
-//    [newJob autorelease];
-//    newJob = job;
-//    NSLog(@"PUBLISH_VIEW: job.employee = %@",newJob.employee);
-//    NSLog(@"newJob = %p, job = %p",newJob, job);
-//}
-
 #pragma mark - View lifecycle
-
-
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-//- (void)loadView
-//{   
-//}
-
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
@@ -99,18 +82,10 @@
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Annulla" style:UIBarButtonItemStylePlain target:self action:@selector(cancelBtnPressed:)];     
     tableView.navigationItem.rightBarButtonItem = insertButton;
     tableView.navigationItem.leftBarButtonItem = cancelButton;
-    
-    //mi registro come delegato del protocollo nella tableView
-//    [((EditJobViewController *)tableView) setDelegate:self];
-    
+
     [insertButton release];
     [cancelButton release];
 }
-
-//-(void) viewWillDisappear:(BOOL)animated
-//{
-//    [pwDelegate receiveAnewJob:newJob];
-//}
 
 - (void)viewDidUnload
 {
@@ -129,8 +104,12 @@
 {
     //per ora li metto ma non so se è giusto
 //    [newJob release];
-//    [tableView release];
+    //[tableView release];
 //    [pwDelegate release];
     [super dealloc];
 }
+
+//TODO: tasto inserisci grigio finchè non si è scelta la categoria!
+
+
 @end

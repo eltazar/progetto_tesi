@@ -7,71 +7,20 @@
 //
 
 #import "InfoJobViewController.h"
+#import <MessageUI/MessageUI.h>
 
 @implementation InfoJobViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+-(id) initWithJob:(Job *)aJob
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:@"RootJobViewController" bundle:nil];
     if (self) {
         // Custom initialization
-        
-        NSMutableArray *secA = [[NSMutableArray alloc] init];
-        NSMutableArray *secB = [[NSMutableArray alloc] init];
-        NSMutableArray *secC = [[NSMutableArray alloc] init];
-        
-        [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"InfoCell",         @"kind", 
-                            @"Impiego",          @"label",
-                            @"",                 @"img",
-                            nil] autorelease] atIndex: 0];
-        
-        [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"InfoCell",         @"kind", 
-                            @"Via",              @"label",
-                            @"",                 @"img",
-                            nil] autorelease] atIndex: 1];
-        
-        [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"InfoCell",         @"kind", 
-                            @"Città",            @"label",
-                            @"",                 @"img",
-                            nil]autorelease] atIndex: 2];
-        //descrizione
-        [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"TextAreaCell",     @"kind",
-                            @"",                 @"label",
-                            @"",                 @"img",
-                            nil] autorelease] atIndex: 0];
-        
-        [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"ActionCell",       @"kind", 
-                            @"Chiama",           @"label", 
-                            @"",                 @"img", 
-                            nil]autorelease] atIndex: 0];
-        
-        [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"ActionCell",       @"kind",
-                            @"Scrivi",           @"label",
-                            @"",                 @"img",
-                            nil] autorelease] atIndex: 1];
-        
-        [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                            @"ActionCell",       @"kind", 
-                            @"Visita",           @"label",
-                            @"",                 @"img",
-                            nil]autorelease] atIndex: 2];
-        
-        sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
-        sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti", nil];  
-        
-        [secA autorelease];
-        [secB autorelease];
-        [secC autorelease];       
+        job = aJob; //??? GIUSTO????
     }
     return self;
+    
 }
-
 
 #pragma mark - DataSourceProtocol
 
@@ -84,61 +33,135 @@
     
     //fare un metodo popola celle??
     
-    
-    //    if([[rowDesc objectForKey:@"kind"] isEqualToString:@"InfoCell"]){
-    //        //recupera i dati dall'oggetto Job e popola le celle Impiego, Zona e Descrizione    
-    //        //prova
-    //        if(indexPath.row == 0)
-    //            cell.detailTextLabel.text = job.employe;
-    //        else if(indexPath.row == 1)
-    //            cell.detailTextLabel.text = job.email;
-    //
-    //    }
-    
     [self fillCell:cell InRow:indexPath.row inSection:indexPath.section];
     
-//    if([[rowDesc objectForKey:@"kind"] isEqualToString:@"ActionCell"]){
-//        //rendo la cella selezionabile (diventa blu)
-//        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-//        //prova
-//        //        cell.detailTextLabel.text = @"bhoooo";
-//        
-//        //TODO: aggiungere immagine alla cella
-//    }
-    
-    if([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextAreaCell"])
+    if([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextAreaCell"]){
         //rendo la cella non editabile
         ((TextAreaCell *)cell).textView.editable = NO;
+    }
     
     return cell;
 }    
 
 /*forse questo è il modo più semplice/efficiente per riempire ogni riga della tabella job.
- *quindi forse conviene fare un metodo in Job che ritorna l'array di tutti i suoi attributi,
- * in modo da avere i suoi campi indicizzati in base al numero delle righe della tabella.
+ * la classe incapsulando un job ha tutti i dati per completare la tabella
  */
 -(void) fillCell:(UITableViewCell*)cell InRow:(int)row inSection:(int)section
 {
     //PASSARE UN JOB!!!!
     
-    //    NSLog(@"job array count = %d",jobArray.count);
-//    NSLog(@"row = %d, section = %d", row, section);
-//    static int arrayIndex = 0;
-//    NSLog(@"arrayIndex inizio metodo = %d",arrayIndex);
-//    
-//    
-//    if([[jobArray objectAtIndex:arrayIndex] isEqualToString:@""])
-//        cell.detailTextLabel.text = @"Non disponibile";       
-//    else    cell.detailTextLabel.text = [jobArray objectAtIndex:arrayIndex];
-//    
-//    
-//    //TODO: come settare il campo textView della descrizione? :S
-//    
-//    ++arrayIndex;
-//    NSLog(@"arrayIndex fine metodo = %d",arrayIndex);
-//    if(arrayIndex == [jobArray count])
-//        arrayIndex = 0;
-//    
+//    NSLog(@"sectio = %d , row = %d", section, row);
+    
+    switch (section) {
+        case 0:
+            if(row == 0)
+                cell.detailTextLabel.text = job.employee;
+            else if(row == 1)
+                cell.detailTextLabel.text = job.date;
+            else if(row == 2)
+                cell.detailTextLabel.text = @"";
+            else if(row == 3)
+                cell.detailTextLabel.text = job.city;
+            
+            break;
+        case 1:
+            if(row == 0)
+                ((TextAreaCell*)cell).textView.text = job.description;
+            break;
+        case 2:
+            if(row == 0){
+                if(job.phone != nil && ! [job.phone isEqualToString:@""])
+                    cell.detailTextLabel.text = job.phone;
+                else cell.detailTextLabel.text = @"Non disponibile";
+            }
+            else if(row == 1){
+                if(job.email != nil && ! [job.email isEqualToString:@""])
+                    cell.detailTextLabel.text = job.email;
+                else cell.detailTextLabel.text = @"Non disponibile";
+            } 
+            else if(row == 2){
+                if(job.url != nil && ! [job.url isEqualToString:@""])
+                    cell.detailTextLabel.text = job.url;
+                else cell.detailTextLabel.text = @"Non disponibile";
+            }
+            break;
+        default:
+            break;
+    }   
+
+}
+
+//azioni per le celle selezionate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    int section = indexPath.section;
+    int row = indexPath.row;
+    NSURL *url; 
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if(section == 2){
+        switch (row) {
+            case 0:
+                NSLog(@"riga 0 sezione 2");
+                NSString *number = [NSString stringWithFormat:@"%@%@", @"tell://", cell.detailTextLabel.text];
+                //verificare sul device
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+                break;
+                
+            case 1:
+                NSLog(@"emaildidSelectRow");
+                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                    MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+                    mail.mailComposeDelegate = self;
+                    
+                    if([MFMailComposeViewController canSendMail]){
+                        [mail setToRecipients:[NSArray arrayWithObjects:cell.detailTextLabel.text, nil]];
+                        [mail setSubject:@"Oggetto della mail"];
+                        [mail setMessageBody:@"Corpo del messaggio della nostra e-mail" isHTML:NO];
+                        [self presentModalViewController:mail animated:YES];
+                        [mail release];
+                    }
+                }
+                break;  
+            case 2:
+                NSLog(@"url didSelectRow");
+                url = [NSURL URLWithString:cell.detailTextLabel.text];
+                //this will open the selected URL into the safari
+                [[UIApplication sharedApplication]openURL: url ]; 
+                break; 
+        }
+    }
+    
+    //deseleziona cella
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];  
+    
+}
+
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
+    
+    //[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	
+    [self dismissModalViewControllerAnimated:YES];
+    
+	if (result == MFMailComposeResultFailed){
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio non inviato!" message:@"Non è stato possibile inviare la tua e-mail" delegate:self cancelButtonTitle:@"Annulla" otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+	}
+    
+    // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+-(void) setJob:(Job*) newJob{
+    if(job != newJob){
+        [newJob retain];
+        [job release];
+        job = newJob;
+    }
 }
 
 #pragma mark - View lifecycle
@@ -156,6 +179,65 @@
 {
     [super viewDidLoad];
     [self setTitle:@"Lavoro"]; 
+
+    //inizializzo tabella
+    NSMutableArray *secA = [[NSMutableArray alloc] init];
+    NSMutableArray *secB = [[NSMutableArray alloc] init];
+    NSMutableArray *secC = [[NSMutableArray alloc] init];
+    
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"InfoCell",         @"kind", 
+                         @"Impiego",          @"label",
+                         @"",                 @"img",
+                         nil] autorelease] atIndex: 0];
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"InfoCell",         @"kind", 
+                         @"Inserito il",      @"label",
+                         @"",                 @"img",
+                         nil] autorelease] atIndex: 1];
+    
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"InfoCell",         @"kind", 
+                         @"Via",              @"label",
+                         @"",                 @"img",
+                         nil] autorelease] atIndex: 2];
+    
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"InfoCell",         @"kind", 
+                         @"Città",            @"label",
+                         @"",                 @"img",
+                         nil]autorelease] atIndex: 3];
+    //descrizione
+    [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"TextAreaCell",     @"kind",
+                         @"",                 @"label",
+                         @"",                 @"img",
+                         nil] autorelease] atIndex: 0];
+    
+    [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"ActionCell",       @"kind", 
+                         @"Chiama",           @"label", 
+                         @"",                 @"img", 
+                         nil]autorelease] atIndex: 0];
+    
+    [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"ActionCell",       @"kind",
+                         @"Scrivi",           @"label",
+                         @"",                 @"img",
+                         nil] autorelease] atIndex: 1];
+    
+    [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"ActionCell",       @"kind", 
+                         @"Visita",           @"label",
+                         @"",                 @"img",
+                         nil]autorelease] atIndex: 2];
+    
+    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti", nil];  
+    
+    [secA autorelease];
+    [secB autorelease];
+    [secC autorelease];   
 }
 
 
@@ -186,7 +268,6 @@
 -(void) dealloc
 {
     [super dealloc];
-
 }
 
 @end

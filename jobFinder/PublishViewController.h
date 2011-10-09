@@ -22,8 +22,10 @@
 {
     //punta al delegato di questa vista
     id<PublishViewControllerDelegate> pwDelegate;
+    //la tabella per la raccolta dati dell'utente
     RootJobViewController *tableView;
     Job *newJob;
+    //coordinate dell'utente
     CLLocationCoordinate2D userCoordinate;
 }
 

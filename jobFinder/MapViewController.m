@@ -7,12 +7,13 @@
 //
 
 #import "MapViewController.h"
+#import "InfoJobViewController.h"
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
 
 @implementation MapViewController 
-@synthesize map, publishBtn, infoBtn, toolBar, refreshBtn, /*publishViewCtrl,*/ infoView, detailJobView;
+@synthesize map, publishBtn, infoBtn, toolBar, refreshBtn, /*publishViewCtrl,*/ configView /*, infoJobView*/;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -101,8 +102,31 @@
 }
 
 //per gestire il tap sul disclosure
-- (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+- (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
 	// Handle it, such as showing another view controller
+    
+    //PROVA
+    jobDiprova = [[Job alloc] init];
+    jobDiprova.employee = @"Architettura";
+    jobDiprova.date = @"01/04/2011";
+    jobDiprova.description = @"cercasi architettetto per stage di 5 mesi, rimborso spese 500 euro. Minima esperienza nel settore. Bla bla bla bla bla bla bla bla bla bla bla bla";
+    jobDiprova.phone = @"312347589";
+    jobDiprova.email = @"studioArch@bla.it";
+    jobDiprova.url = @"http://www.ciao.it";
+    jobDiprova.coordinate = CLLocationCoordinate2DMake(41.485997, 12.606361);
+
+    
+    //BUONO
+    InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: jobDiprova];
+    [self.navigationController pushViewController:infoJobView animated: YES];
+    [infoJobView release];
+    
+    //VECCHIO
+//    InfoJobViewController *infoJobView = [[[InfoJobViewController alloc] initWithNibName:@"RootJobViewController" bundle:nil] autorelease];
+//    [infoJobView setJob:jobDiprova];
+//    [self.navigationController pushViewController:infoJobView animated: YES];
+
 }
 
 
@@ -207,8 +231,7 @@
     return;
 }
 
-
-
+ 
 
 
 #pragma mark - gestione click bottoni della view
@@ -235,7 +258,7 @@
 -(IBAction)infoButtonClicked:(id)sender
 {
     
-    self.infoView = [[[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil] autorelease];
+    self.configView = [[[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil] autorelease];
     
     //animazione e push della view
     [UIView 
@@ -244,7 +267,7 @@
      options:UIViewAnimationOptionTransitionFlipFromRight
      animations:^{ 
          [self.navigationController 
-          pushViewController:self.infoView 
+          pushViewController:self.configView 
           animated:NO];
      }
      completion:NULL];
@@ -254,12 +277,13 @@
 
 -(IBAction) updateButtonClicked:(id)sender
 {
-    self.detailJobView = [[[InfoJobViewController alloc] initWithNibName:@"RootJobViewController" bundle:nil] autorelease];
-    
-    [self.navigationController pushViewController:detailJobView animated: YES];
+    //riposiziona la region alla userLocation con lo stesso span della region precedente
+    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
+    [map setRegion:region animated:YES]; 
 }
 
-#pragma mark - metodi del PublishViewControllerDelegate
+#pragma mark - PublishViewControllerDelegate
+
 //dismette la modal view
 -(void) dismissPublishView
 {
@@ -270,12 +294,20 @@
  *faccio inviare a questo metodo il job sul db ?????
  */
 -(void)receiveAnewJob:(Job *) newJob;{
-    //ricevo il job dalla vista modale
+    //ricevo il job dalla vista modale già pronto per essere inviato su server
     jobToPublish = newJob;
-//    NSLog(@"MAP_VIEW: job.employee = %@",jobToPublish.employee);
-//    NSLog(@"MAP_VIEw: jobToPublish = %p and job = %p", jobToPublish, newJob);
-    NSLog(@"MAP_VIEW: jobToPublish.coordinate LONG %F | LAT %F",jobToPublish.coordinate.longitude,jobToPublish.coordinate.latitude);
     
+    
+    //debug
+    NSLog(@"************** MAP_VIEW: *************************");
+    NSLog(@"job.employee = %@",jobToPublish.employee);
+    NSLog(@"job.description= %@",jobToPublish.description);
+    NSLog(@"job.phone = %@",jobToPublish.phone);
+    NSLog(@"job.email = %@",jobToPublish.email);
+    NSLog(@"job.url = %@",jobToPublish.url);
+    NSLog(@"jobToPublish.coordinate LONG %F | LAT %F",jobToPublish.coordinate.longitude,jobToPublish.coordinate.latitude);
+    NSLog(@"*************************************************");
+
     [self dismissPublishView];  
 }
 
@@ -304,7 +336,7 @@
 	[tempInfoButton addTarget:self action:@selector(infoButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 	
     infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tempInfoButton];
-	self.navigationItem.rightBarButtonItem = infoBarButtonItem;
+	self.navigationItem.leftBarButtonItem = infoBarButtonItem;
     
 //    [tempInfoButton release];
     
@@ -354,8 +386,7 @@
     [infoBarButtonItem release];
     [publishBtn release];
     
-    [infoView release];
-    [detailJobView release];
+    [configView release];
 }
 
 

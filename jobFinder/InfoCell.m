@@ -15,15 +15,24 @@
     self = [super initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+//        self.detailTextLabel.text = @"ciao";
+        self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+        self.detailTextLabel.minimumFontSize = 11;
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+-(void) setDetailText:(NSString *) newDetailText
 {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+    self.detailTextLabel.text = newDetailText;
 }
+
+//- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+//{
+//    [super setSelected:selected animated:animated];
+//
+//    // Configure the view for the selected state
+//}
 
 @end

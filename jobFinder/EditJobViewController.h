@@ -9,23 +9,22 @@
 #import "RootJobViewController.h"
 #import "TextFieldCell.h"
 #import "TextAreaCell.h"
-#import "Job.h"
+//#import "Job.h"
 #import "PickerViewController.h"
 #import "CellCategory.h"
 
 //@protocol PassDataCollectedDelegate;
 
 @interface EditJobViewController : RootJobViewController <UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate>{
-    Job *job;
+//    Job *job;
 //    id<PassDataCollectedDelegate> delegate;
     PickerViewController *pickerView;
     UIActionSheet *actionSheet;
     
 }
-@property(nonatomic, retain, readonly) Job *job;
+//@property(nonatomic, retain, readonly) Job *job;
 //@property(nonatomic, retain) PickerViewController *pickerView;
 //@property(nonatomic, retain) id<PassDataCollectedDelegate> delegate;
-
 
 @end
 

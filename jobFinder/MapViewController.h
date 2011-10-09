@@ -11,7 +11,6 @@
 #import <MapKit/MKAnnotation.h>
 #import "PublishViewController.h"
 #import "ConfigViewController.h"
-#import "InfoJobViewController.h"
 #import "JobAnnotation.h"
 
 @interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate>{
@@ -23,13 +22,15 @@
     UIBarButtonItem *infoBarButtonItem;
     
     Job *jobToPublish;
+    Job *jobDiprova;
+    
     CLLocationDegrees lastSpan;
     NSMutableArray *arrayJOBtemp;
     
     
     //PublishViewController *publishViewCtrl;
-    ConfigViewController *infoView;
-    InfoJobViewController *detailJobView;
+    ConfigViewController *configView;
+    //InfoJobViewController *infoJobView;
     
 }
 
@@ -39,8 +40,8 @@
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *refreshBtn;
 @property(nonatomic, retain) IBOutlet UIButton *infoBtn;
 //@property(nonatomic, retain) PublishViewController *publishViewCtrl;
-@property(nonatomic, retain) ConfigViewController *infoView;
-@property(nonatomic, retain) RootJobViewController *detailJobView;
+@property(nonatomic, retain) ConfigViewController *configView;
+//@property(nonatomic, retain) RootJobViewController *infoJobView;
 
 -(IBAction)publishBtnClicked:(id)sender;
 -(void)infoButtonClicked:(id)sender;

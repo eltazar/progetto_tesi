@@ -10,19 +10,13 @@
 
 @implementation Job
 
-@synthesize employee, street, city, description, phone, url, email, coordinate, latitude, longitude;
+@synthesize employee, date, street, city, description, phone, url, email, coordinate, latitude, longitude;
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        // Initialization code here.
-        //prova
-//        self->coordinate.longitude = -122.084095;
-//        self->coordinate.latitude = 37.422006;
-//        self.employee = @"Meccanico";
-//        self.street = @"via roma 2";
-        
+        // Initialization code here.     
     }
     
     return self;
@@ -32,12 +26,12 @@
 -(void) dealloc
 {
     [super dealloc];
-    [description release];
-    [email release];
-    [employee release];
-    [street release];
-    [phone release];
-    [url release];
+//    [description release];
+//    [email release];
+//    [employee release];
+//    [street release];
+//    [phone release];
+//    [url release];
     
 }
 @end

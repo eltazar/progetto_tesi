@@ -10,6 +10,10 @@
 
 @interface PickerViewController : UIViewController< UIPickerViewDelegate, UIPickerViewDataSource>
 {
+    NSArray *jobListCategory;
+    NSString *jobCategory;
+    
 }
 @property(nonatomic, retain) UIPickerView *picker;
+@property(nonatomic, retain,readonly) NSString *jobCategory;
 @end

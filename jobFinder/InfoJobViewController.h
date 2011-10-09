@@ -9,11 +9,17 @@
 #import "RootJobViewController.h"
 #import "TextAreaCell.h"
 #import "ActionCell.h"
+#import <MessageUI/MessageUI.h>
 
-@interface InfoJobViewController : RootJobViewController
 
+@interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate>
+{ 
+}
 
+-(id) initWithJob:(Job *)aJob;
 -(void) fillCell:(UITableViewCell*)cell InRow:(int)row inSection:(int)section;
 
+//@property(nonatomic,retain) Job *job;
+-(void) setJob:(Job*) newJob;
 @end
 

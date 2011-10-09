@@ -13,11 +13,10 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
-    if (self = [super initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:reuseIdentifier]) {
+    if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
 		// Custom initialization
-        
+        [self setSelectionStyle:UITableViewCellSelectionStyleBlue]; //nn funge
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        self.selectionStyle = UITableViewCellSelectionStyleBlue;
         
     }
     return self;
@@ -32,5 +31,6 @@
                                   self.textLabel.frame.size.height);
 	[self.textLabel setFrame:labelRect];
 }
+
 
 @end

@@ -12,21 +12,24 @@
 @interface Job : NSObject{
     
     NSString *employee;
+    NSString *date;
+    NSString *description;
     NSString *phone;
     NSString *email;
-    NSString *description;
     NSString *url;
+    
     
     NSString *street;
     NSString *city;
-    CLLocationDegrees latitude;
-    CLLocationDegrees longitude;
+//    CLLocationDegrees latitude;
+//    CLLocationDegrees longitude;
     
     CLLocationCoordinate2D coordinate;
 }
 
 //valutare se le property servono, o se fare un metodo che ritorna oggetto job da un array o altro
 @property(nonatomic, retain) NSString *employee;
+@property(nonatomic, retain) NSString *date;
 @property(nonatomic, retain) NSString *street;
 @property(nonatomic, retain) NSString *city;
 @property(nonatomic, retain) NSString *phone;

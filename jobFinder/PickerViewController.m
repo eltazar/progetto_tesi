@@ -9,7 +9,7 @@
 #import "PickerViewController.h"
 
 @implementation PickerViewController
-@synthesize picker;
+@synthesize picker, jobCategory;
 
 
 
@@ -23,28 +23,36 @@
 //    return pickerRect;
 //}
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
 
-- (NSString *)pickerView:(UIPickerView *)pickerView
-			 titleForRow:(NSInteger)row
+
+#pragma mark - PickerDelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row
 			forComponent:(NSInteger)component
 {
-	return [NSString stringWithFormat:@"VALORE NUM:%d",row];
+	return [jobListCategory objectAtIndex:row];
 }
 
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row
+      inComponent:(NSInteger)component
+{
+    //NSLog(@"selezionato dal picker: %@", [jobListCategory objectAtIndex:row]);
+    
+    jobCategory = [jobListCategory objectAtIndex:row]; /*[NSString stringWithFormat:@"%@",[jobListCategory objectAtIndex:row]];*/
+    
+    
+//    NSLog(@"jobCategori stringa: %@",jobCategory);
+ //   NSLog(@"puntatore stringa %p",jobCategory);
+}
+
+#pragma mark - PickerDataSource
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
 	return 1;
 }
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-	return 20;
+	return jobListCategory.count;
 }
 
 #pragma mark - View lifecycle
@@ -73,7 +81,25 @@
     //    [self.view setBounds:CGRectMake(0,100, 320, 216)];
     //    [self.view addSubview:positionPicker];
     
+//    
+//    job = [[NSArray alloc] initWithObjects:
+//                         @"Australia (AUD)", @"China (CNY)", @"France (EUR)",
+//                         @"Great Britain (GBP)", @"Japan (JPY)", nil];
+//    
+//    self.exchangeRates = [[NSArray alloc] 
+//                          initWithObjects: [NSNumber numberWithFloat:0.9922],
+//                          [NSNumber numberWithFloat:6.5938], 
+//                          [NSNumber numberWithFloat:0.7270],
+//                          [NSNumber numberWithFloat:0.6206], 
+//                          [NSNumber numberWithFloat:81.57], nil];
+//    
 
+    
+    jobListCategory = [[NSArray alloc] initWithObjects:@"Ingegneria",@"Edilizia",@"Architettura",@"Medicina",@"Biologia",@"Chimica",@"Informatica",@"Idraulica", nil];
+    
+    jobCategory = [jobListCategory objectAtIndex:0];
+    //NSLog(@"jobCategory iniziale= %@", jobCategory);
+    
 }
 
 - (void)viewDidUnload
@@ -90,10 +116,22 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark - memory management
+
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
+}
+
 -(void) dealloc
 {
     [super dealloc];
     [picker release]; //??????
+    //
+  //  [jobCategory release];
 
 }
 

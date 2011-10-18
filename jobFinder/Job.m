@@ -10,7 +10,8 @@
 
 @implementation Job
 
-@synthesize employee, date, street, city, description, phone, url, email, coordinate, latitude, longitude;
+@synthesize employee, date, address, city, description, phone, url, email, coordinate;
+@synthesize isAnimated, isMultiple;
 
 - (id)init
 {

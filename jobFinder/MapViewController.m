@@ -238,16 +238,23 @@
 
 //in teoria presenta solo la vista modale
 - (IBAction)publishBtnClicked:(id)sender 
+-(IBAction)publishBtnClicked:(id)sender coordinate:(CLLocationCoordinate2D)coord 
 {
     
+    NSLog(@"SENDER = %@",sender);
     //istanzio la view
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     
     //registro la classe come delegato del publishViewController
     publishViewCtrl.pwDelegate = self;
-    //invio in avanti la userLocation
-    publishViewCtrl.userCoordinate = map.userLocation.coordinate;
-    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
+    
+//    //invio in avanti le user coordinate se ho spinto il bottone "segnala"
+    if(sender != self)
+        publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
+    else publishViewCtrl.jobCoordinate = coord; //altrimenti setto quelle del tocco
+    
+    //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
+    
     //carico la view come vista modale
     [self presentModalViewController:publishViewCtrl animated:YES];
     [publishViewCtrl release];

@@ -299,6 +299,38 @@
 
 /*metodo delegate: richiamato dalla view modale dopo il click su inserisci
  *faccio inviare a questo metodo il job sul db ?????
+
+-(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
+{
+    NSLog(@"PASSATO");
+    // This is important if you only want to receive one tap and hold event
+    if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
+        //[self publishBtnClicked:self coordinate:locCoord];
+        return;
+    }
+    else{
+        // Here we get the CGPoint for the touch and convert it to latitude and longitude coordinates to display on the map
+        CGPoint point = [sender locationInView:self.map];
+        CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
+        
+        [self publishBtnClicked:self coordinate:locCoord];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*richiamato dalla view modale dopo il click su inserisci, e gli viene passato il nuovoJob da
+ * inviare al db
  */
 -(void)receiveAnewJob:(Job *) newJob;{
     //ricevo il job dalla vista modale già pronto per essere inviato su server
@@ -353,6 +385,8 @@
     
     
     
+    longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
+    [self.map addGestureRecognizer:longPressGesture];
     
     //array di job di prova
     arrayJOBtemp = [[NSMutableArray alloc] initWithCapacity:1000];
@@ -394,6 +428,7 @@
     [publishBtn release];
     
     [configView release];
+    [longPressGesture release];
 }
 
 

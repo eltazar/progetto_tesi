@@ -10,6 +10,8 @@
 #import "RootJobViewController.h"
 #import "EditJobViewController.h"
 #import "Job.h"
+#import "MapKit/MKReverseGeocoder.h"
+
 
 @protocol PublishViewControllerDelegate;
 
@@ -18,7 +20,7 @@
  */
 
 
-@interface PublishViewController : UINavigationController /*<PassDataCollectedDelegate>*/
+@interface PublishViewController : UINavigationController  <MKReverseGeocoderDelegate>/*<PassDataCollectedDelegate>*/
 {
     //punta al delegato di questa vista
     id<PublishViewControllerDelegate> pwDelegate;
@@ -26,11 +28,16 @@
     RootJobViewController *tableView;
     Job *newJob;
     //coordinate dell'utente
-    CLLocationCoordinate2D userCoordinate;
+    CLLocationCoordinate2D jobCoordinate;
+    
+    MKReverseGeocoder *reverseGecoder;
+    @private
+    NSString *addressGeocoding;
 }
 
 @property(nonatomic, assign) id<PublishViewControllerDelegate> pwDelegate;
-@property(nonatomic, assign) CLLocationCoordinate2D userCoordinate;
+@property(nonatomic, assign) CLLocationCoordinate2D jobCoordinate;
+@property(nonatomic, retain) NSString *addressGeocoding;
 
 
 - (id) initWithStandardRootViewController;

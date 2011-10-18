@@ -3,14 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "_contains(objc_object*, MKQuadTrieNode*):(null)">
-         <PersistentStrings>
-            <PersistentString
-               value = "(MKAnnotationView*)(0x5fc0400)">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "-[AbstractJobViewController keyboardWillShow:]:AbstractJobViewController.m">
          <PersistentStrings>
             <PersistentString
@@ -19,7 +11,23 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "_contains(objc_object*, MKQuadTrieNode*):(null)">
+         <PersistentStrings>
+            <PersistentString
+               value = "(MKAnnotationView*)(0x5fc0400)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[EditableJobViewController stampa]:EditableJobViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "main:main.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "newJob.address">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>

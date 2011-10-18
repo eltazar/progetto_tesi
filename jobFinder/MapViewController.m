@@ -1,3 +1,4 @@
+
 //
 //  MapViewController.m
 //  jobFinder
@@ -13,7 +14,7 @@
 #define THRESHOLD 0.01
 
 @implementation MapViewController 
-@synthesize map, publishBtn, infoBtn, toolBar, refreshBtn, /*publishViewCtrl,*/ configView /*, infoJobView*/;
+@synthesize map, publishBtn, infoBtn, toolBar, refreshBtn /*, publishViewCtrl, configView , infoJobView*/;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -21,20 +22,19 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        
-        
     }
     return self;
 }
 
 #pragma mark - MKMapViewDelegate
 
-- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
+- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
+{
     
     //zoom sulla posizione dell'utente
     for (MKAnnotationView *annotationView in views) {
         if (annotationView.annotation == mapView.userLocation) {
-            NSLog(@"posizione %f - %f |||| %f %f", mapView.userLocation.coordinate.longitude, mapView.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude,map.userLocation.coordinate.latitude);
+            //NSLog(@"posizione %f - %f |||| %f %f", mapView.userLocation.coordinate.longitude, mapView.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude,map.userLocation.coordinate.latitude);
             MKCoordinateSpan span = MKCoordinateSpanMake(0.3, 0.3);
             MKCoordinateRegion region = MKCoordinateRegionMake(mapView.userLocation.coordinate, span);
             [mapView setRegion:region animated:YES];
@@ -43,9 +43,10 @@
 }
 
 //gestisce le annotation durante lo zooming e il panning
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation {
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
+{
 
-    //se la annotation è la nostra posizione, trascurala
+    //se la annotation è la nostra posizione, ritorna annotationView standard
     if (annotation == mapView.userLocation) {
         [mapView.userLocation setTitle:@"Mia posizione"];
         return nil;
@@ -61,7 +62,7 @@
         //setto colore, disclosure button ed animazione
         pinView.canShowCallout = YES;
         pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        if(((JobAnnotation *)annotation).isAnimated)
+        if(((Job *)annotation).isAnimated)
             pinView.animatesDrop = YES;
         else pinView.animatesDrop = NO;
     }
@@ -71,7 +72,7 @@
         pinView.pinColor = MKPinAnnotationColorRed;
     else
         pinView.pinColor = MKPinAnnotationColorGreen;
-    NSLog(@"Annotation: %p -> View: %p", annotation, pinView);
+    //NSLog(@"Annotation: %p -> View: %p", annotation, pinView);
     return pinView;
 }
 
@@ -104,29 +105,11 @@
 //per gestire il tap sul disclosure
 - (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
-	// Handle it, such as showing another view controller
-    
-    //PROVA
-    jobDiprova = [[Job alloc] init];
-    jobDiprova.employee = @"Architettura";
-    jobDiprova.date = @"01/04/2011";
-    jobDiprova.description = @"cercasi architettetto per stage di 5 mesi, rimborso spese 500 euro. Minima esperienza nel settore. Bla bla bla bla bla bla bla bla bla bla bla bla";
-    jobDiprova.phone = @"312347589";
-    jobDiprova.email = @"studioArch@bla.it";
-    jobDiprova.url = @"http://www.ciao.it";
-    jobDiprova.coordinate = CLLocationCoordinate2DMake(41.485997, 12.606361);
-
-    
+	// Handle it, such as showing another view controller    
     //BUONO
-    InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: jobDiprova];
+    InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
     [self.navigationController pushViewController:infoJobView animated: YES];
     [infoJobView release];
-    
-    //VECCHIO
-//    InfoJobViewController *infoJobView = [[[InfoJobViewController alloc] initWithNibName:@"RootJobViewController" bundle:nil] autorelease];
-//    [infoJobView setJob:jobDiprova];
-//    [self.navigationController pushViewController:infoJobView animated: YES];
-
 }
 
 
@@ -138,7 +121,7 @@
     
 
     if(map.region.span.latitudeDelta <= THRESHOLD && lastSpan > THRESHOLD){
-        for(JobAnnotation *ja in annotations)
+        for(Job *ja in annotations)
             ja.isMultiple = FALSE;
         [map removeAnnotations:annotations];
         [map addAnnotations:annotations];        
@@ -146,13 +129,13 @@
     
     else{
         
-        for( JobAnnotation *ja in annotations){
+        for( Job *ja in annotations){
         
             ja.isMultiple = FALSE;
             BOOL show = TRUE;
             CGPoint jaPoint = CGPointMake(ja.coordinate.latitude, ja.coordinate.longitude);
             
-            for(JobAnnotation *jai in annotationInserted){
+            for(Job *jai in annotationInserted){
                 
                 CGRect jaiRect = CGRectMake(jai.coordinate.latitude - delta, jai.coordinate.longitude - delta, 2*delta, 2 * delta);
                 if (CGRectContainsPoint(jaiRect, jaPoint)){
@@ -228,19 +211,15 @@
 //    }
 //    
 //    lastSpan = delta;
-    return;
 }
-
- 
 
 
 #pragma mark - gestione click bottoni della view
 
 //in teoria presenta solo la vista modale
-- (IBAction)publishBtnClicked:(id)sender 
 -(IBAction)publishBtnClicked:(id)sender coordinate:(CLLocationCoordinate2D)coord 
 {
-    
+        
     NSLog(@"SENDER = %@",sender);
     //istanzio la view
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
@@ -265,7 +244,7 @@
 -(IBAction)infoButtonClicked:(id)sender
 {
     
-    self.configView = [[[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil] autorelease];
+    ConfigViewController *configView = [[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil];
     
     //animazione e push della view
     [UIView 
@@ -274,18 +253,20 @@
      options:UIViewAnimationOptionTransitionFlipFromRight
      animations:^{ 
          [self.navigationController 
-          pushViewController:self.configView 
+          pushViewController: configView 
           animated:NO];
      }
-     completion:NULL];
+     completion:NULL];   
     
-    
+    [configView release];
 }
 
--(IBAction) updateButtonClicked:(id)sender
+-(IBAction) showUserLocationButtonClicked:(id)sender
 {
-    //riposiziona la region alla userLocation con lo stesso span della region precedente
-    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
+    //riposiziona la region alla userLocation
+    MKCoordinateSpan span = MKCoordinateSpanMake(0.3, 0.3);
+    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, span);
+    //    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
     [map setRegion:region animated:YES]; 
 }
 
@@ -297,8 +278,6 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-/*metodo delegate: richiamato dalla view modale dopo il click su inserisci
- *faccio inviare a questo metodo il job sul db ?????
 
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
 {
@@ -332,22 +311,30 @@
 /*richiamato dalla view modale dopo il click su inserisci, e gli viene passato il nuovoJob da
  * inviare al db
  */
--(void)receiveAnewJob:(Job *) newJob;{
+#warning leggere sotto
+-(void)receiveAnewJob:(Job *) newJob
+{
     //ricevo il job dalla vista modale già pronto per essere inviato su server
-    jobToPublish = newJob;
-    
-    
-    //debug
-    NSLog(@"************** MAP_VIEW: *************************");
-    NSLog(@"job.employee = %@",jobToPublish.employee);
-    NSLog(@"job.description= %@",jobToPublish.description);
-    NSLog(@"job.phone = %@",jobToPublish.phone);
-    NSLog(@"job.email = %@",jobToPublish.email);
-    NSLog(@"job.url = %@",jobToPublish.url);
-    NSLog(@"jobToPublish.coordinate LONG %F | LAT %F",jobToPublish.coordinate.longitude,jobToPublish.coordinate.latitude);
-    NSLog(@"*************************************************");
+    jobToPublish = [newJob retain]; //fare un retain di newJob e alla fine del metodo un release?   
+                                    //così prendo l'ownership di tale oggetto??
 
+//    //debug
+//    NSLog(@"************** MAP_VIEW: *************************");
+//    NSLog(@"job.employee = %@",jobToPublish.employee);
+//    NSLog(@"job.address = %@",jobToPublish.address);
+//    NSLog(@"job.description= %@",jobToPublish.description);
+//    NSLog(@"job.phone = %@",jobToPublish.phone);
+//    NSLog(@"job.email = %@",jobToPublish.email);
+//    NSLog(@"job.url = %@",jobToPublish.url);
+//    NSLog(@"jobToPublish.coordinate LONG %F | LAT %F",jobToPublish.coordinate.longitude,jobToPublish.coordinate.latitude);
+//    NSLog(@"*************************************************");
+
+    //lo aggiungo alla mappa per prova
+
+    [map addAnnotation:jobToPublish];
+       
     [self dismissPublishView];  
+    [jobToPublish release];
 }
 
 //metodo delegate: richiamato dalla view modale dopo il click su annulla
@@ -367,9 +354,7 @@
     
     //inizializzazione span
     lastSpan = map.region.span.latitudeDelta;  //ciao
-    
-    //mi registro come delegato della classe PublishViewController
-      
+          
     //aggiungo bottone Info alla navigation bar
     UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 	[tempInfoButton addTarget:self action:@selector(infoButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -377,7 +362,7 @@
     infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tempInfoButton];
 	self.navigationItem.leftBarButtonItem = infoBarButtonItem;
     
-//    [tempInfoButton release];
+    //[tempInfoButton release];
     
     //posso passargli un array di jobAnnotation
     //aggiunge un oggetto annotazione al mapView, ma non la vista dell'annotazione
@@ -388,18 +373,42 @@
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.map addGestureRecognizer:longPressGesture];
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //########## prove di inserimento jobs
+    
+    
+    //PROVA
+    jobDiprova = [[Job alloc] initWithCoordinate:CLLocationCoordinate2DMake(41.485997, 12.606361)];
+//    jobDiprova.employee = @"Architettura";
+//    jobDiprova.date = @"01/04/2011";
+//    jobDiprova.description = @"cercasi architettetto per stage di 5 mesi, rimborso spese 500 euro. Minima esperienza nel settore. Bla bla bla bla bla bla bla bla bla bla bla bla";
+////    jobDiprova.phone = @"312347589";
+////    jobDiprova.email = @"studioArch@bla.it";
+////    jobDiprova.url = @"http://www.ciao.it";
+//    jobDiprova.address = @"prova";
+    
+    
     //array di job di prova
     arrayJOBtemp = [[NSMutableArray alloc] initWithCapacity:1000];
-    for(int i=0;i < 1000; i++){
-        CGFloat latDelta = rand()*.035/RAND_MAX -.02;
-        CGFloat longDelta = rand()*.03/RAND_MAX -.015;
-        CLLocationCoordinate2D newCoord = {37.331693+ latDelta,-122.030457+ longDelta };
-        JobAnnotation *jobAnn = [[JobAnnotation alloc] initWithCoordinate:newCoord];  
-        [arrayJOBtemp addObject:jobAnn];
-    }
-    
+//    for(int i=0;i < 1000; i++){
+//        CGFloat latDelta = rand()*.035/RAND_MAX -.02;
+//        CGFloat longDelta = rand()*.03/RAND_MAX -.015;
+//        CLLocationCoordinate2D newCoord = {37.331693+ latDelta,-122.030457+ longDelta };
+//        Job *jobAnn = [[Job alloc] initWithCoordinate:newCoord];
+//        jobAnn.employee = [NSString stringWithFormat:@"%d",i];
+//        [arrayJOBtemp addObject:jobAnn];
+//    }
+//    [arrayJOBtemp addObject:jobDiprova];
 //    [map addAnnotations:arrayJOBtemp];
-    
+
 }
 
 - (void)viewDidUnload
@@ -426,8 +435,6 @@
     [refreshBtn release]; 
     [infoBarButtonItem release];
     [publishBtn release];
-    
-    [configView release];
     [longPressGesture release];
 }
 

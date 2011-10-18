@@ -7,39 +7,43 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CoreLocation/CoreLocation.h"
+//#import "CoreLocation/CoreLocation.h"
+#import <MapKit/MapKit.h>
 
-@interface Job : NSObject{
+@interface Job : NSObject <MKAnnotation>{
     
     NSString *employee;
     NSString *date;
     NSString *description;
     NSString *phone;
     NSString *email;
-    NSString *url;
-    
-    
-    NSString *street;
+    NSURL *url;
+       
+    NSString *address;
     NSString *city;
-//    CLLocationDegrees latitude;
-//    CLLocationDegrees longitude;
     
+    BOOL isEmailValid;
+    BOOL isURLvalid;
     CLLocationCoordinate2D coordinate;
 }
 
-//valutare se le property servono, o se fare un metodo che ritorna oggetto job da un array o altro
 @property(nonatomic, retain) NSString *employee;
 @property(nonatomic, retain) NSString *date;
-@property(nonatomic, retain) NSString *street;
+@property(nonatomic, retain) NSString *address;
 @property(nonatomic, retain) NSString *city;
 @property(nonatomic, retain) NSString *phone;
 @property(nonatomic, retain) NSString *email;
 @property(nonatomic, retain) NSString *description;
-@property(nonatomic, retain) NSString *url;
-@property(nonatomic) CLLocationDegrees latitude;
-@property(nonatomic) CLLocationDegrees longitude;
+@property(nonatomic, retain) NSURL *url;
 @property(nonatomic) CLLocationCoordinate2D coordinate;
 
+@property(nonatomic, assign) BOOL isMultiple;
+@property(nonatomic, assign) BOOL isAnimated;
 
+-(id) initWithCoordinate:(CLLocationCoordinate2D)coord;
+-(void) setEmail:(NSString*)newEmail;
+-(void) setUrlWithString:(NSString *) urlString;
+-(BOOL) isValid;
+-(NSString*) invalidReason;
 
 @end

@@ -8,9 +8,11 @@
 
 #import "EditJobViewController.h"
 #import "PickerViewController.h"
+#import "SectorTableViewController.h"
 
 @implementation EditJobViewController
 //@synthesize job;
+@synthesize fields;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,12 +53,13 @@
         ((TextAreaCell *) cell).dataKey = dataKey;
         ((TextAreaCell *) cell).textView.text = [rowDesc objectForKey:@"placeholder"];
     }
-    else cell.detailTextLabel.text = [rowDesc objectForKey:@"placeholder"];
-
-    //forzare utente ad inserire http oppure effettuare il controllo altrove e se nn c'è inserirlo?
-//    if(indexPath.section == 2 && indexPath.row == 2)
-//        ((TextFieldCell*) cell).textField.text = @"http://";
-    
+    else{
+        if(job.employee == nil || [job.employee isEqualToString:@""])
+            cell.detailTextLabel.text = [rowDesc objectForKey:@"placeholder"];
+        else cell.detailTextLabel.text = job.employee;
+        
+        
+    }    
     
     [cell setDelegate:self];
     
@@ -72,45 +75,22 @@
     
     int section = indexPath.section;
     int row = indexPath.row;
-//    NSURL *url; 
-    
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if(section == 0 && row == 0){
         
-        //creo actionSheet con un solo tasto custom
-        actionSheet = [[UIActionSheet alloc] initWithTitle:@"Prova" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Seleziona", nil];
-        //setto il frame NN CE NE è BISOGNO; PERCHé???
-//        [actionSheet setFrame:CGRectMake(0, 117, 320, 383)];
-        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        //imposto questo controller come delegato dell'actionSheet
-        [actionSheet setDelegate:self];
-        [actionSheet showInView:self.view];
-        //setto i bounds dell'action sheet in modo tale da contenere il picker
-        [actionSheet setBounds:CGRectMake(0,0,320, 500)]; 
         
-        //array contenente le subviews dello sheet (sono 2, il titolo e il bottone custom
-        NSArray *subviews = [actionSheet subviews];
-        //setto il frame del tasto così da mostrarlo sotto al picker
-        //1 lo passo a mano, MODIFICARE
-        [[subviews objectAtIndex:1] setFrame:CGRectMake(20, 255, 280, 46)]; 
-        pickerView = [[PickerViewController alloc] init];
-        [actionSheet addSubview: pickerView.view];
-        
-        //inizializzo la cella al primo elemento del picker
-        cell.detailTextLabel.text = pickerView.jobCategory;
+        SectorTableViewController *sectorTable = [[SectorTableViewController alloc] initWithNibName:nil bundle:nil];
+        sectorTable.secDelegate = self;
+        [self.navigationController pushViewController:sectorTable animated:YES];
     }
-    
-
-    
-    //deseleziona cella
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];  
 }
+
 
 #pragma mark - TextField and TextView Delegate
 
 - (void)textFieldDidEndEditing:(UITextField *)txtField
-{
+{   
+
     //recupera la cella relativa al texfield
     TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
 
@@ -119,7 +99,7 @@
     else if([cell.dataKey isEqualToString:@"email"])
         job.email = txtField.text;    
     else if([cell.dataKey isEqualToString:@"url"])
-        job.url = txtField.text;    
+        [job setUrlWithString:txtField.text];    
 }
 
 -(void) textViewDidEndEditing:(UITextView *)textView
@@ -136,24 +116,22 @@
 	return YES;
 }
 
-#pragma mark - ActionSheetDelegate
+#pragma mark - SectorTableDelegate
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{   
-    
+-(void) receiveSectorFromTable:(NSString*) jobSector
+{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-   
-    if(pickerView.jobCategory != nil)
-        cell.detailTextLabel.text = pickerView.jobCategory;
-    else cell.detailTextLabel.text = @"Scegli...";
     
-    //salvo dato preso dal picker dentro job
-    job.employee = pickerView.jobCategory;
- //   NSLog(@"EDITA_TABLE: job.employee = %@",job.employee);
-//    NSLog(@"job puntatore: %p",job);
+    if(jobSector != nil){
+        cell.detailTextLabel.text = jobSector;
+        job.employee = jobSector;
+    }    
+    else{
+        cell.detailTextLabel.text = @"Scegli..."; 
+        job.employee = @"";
+    }        
 }
-
 
 #pragma mark - View lifecycle
 
@@ -170,9 +148,9 @@
  {   
      [super viewDidLoad];
      
-     job = [[Job alloc]init];
-     job.date = @"09/10/2011";
-
+     job = [[Job alloc]initWithCoordinate:CLLocationCoordinate2DMake(0,0)];
+     NSLog(@"job in EDTI_VIEW: %p",job);
+     
      NSMutableArray *secA = [[NSMutableArray alloc] init];
      NSMutableArray *secB = [[NSMutableArray alloc] init];
      NSMutableArray *secC = [[NSMutableArray alloc] init];
@@ -189,7 +167,7 @@
                           @"description",      @"DataKey",
                           @"TextAreaCell",     @"kind",
                           @"Descrizione",      @"label",
-                          @"Inserisci qui una breve descrizione",  @"placeholder",
+                          @"",                 @"placeholder",
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
                           nil] autorelease]  atIndex: 0];
@@ -242,8 +220,6 @@
 {
     //NSLog(@"ECCOLO");
     [super viewDidUnload];
-    pickerView = nil;
-    actionSheet = nil;
     
     //    NSLog(@"UIPIKER UNLOAD count = %d", pickerView.view.retainCount);
     // Release any retained subviews of the main view.
@@ -269,10 +245,8 @@
 
 -(void) dealloc
 {
-    [super dealloc];
     [job release];  
-    [pickerView release]; //crasha_vecchio
-    [actionSheet release];
+    [super dealloc];
 
 //    NSLog(@"dea job = %p, count = %d",job, job.retainCount);
 }

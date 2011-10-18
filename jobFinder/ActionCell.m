@@ -15,7 +15,7 @@
     
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
 		// Custom initialization
-        [self setSelectionStyle:UITableViewCellSelectionStyleBlue]; //nn funge
+        [self setSelectionStyle:UITableViewCellSelectionStyleBlue]; 
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
     }

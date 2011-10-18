@@ -52,6 +52,12 @@
 //{
 //    [self.textView resignFirstResponder];
 //}
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+        [textView resignFirstResponder];
+
+    [super touchesBegan:touches withEvent:event];
+}
 
 -(void) setDelegate:(id<UITextViewDelegate>)delegate
 {

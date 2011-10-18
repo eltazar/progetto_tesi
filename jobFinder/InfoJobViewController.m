@@ -30,9 +30,7 @@
     cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
-    
-    //fare un metodo popola celle??
-    
+        
     [self fillCell:cell InRow:indexPath.row inSection:indexPath.section];
     
     if([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextAreaCell"]){
@@ -65,9 +63,12 @@
             
             break;
         case 1:
-            if(row == 0)
-                ((TextAreaCell*)cell).textView.text = job.description;
-            break;
+            if(row == 0){
+                if(job.description != nil && ! [job.description isEqualToString:@""])
+                    ((TextAreaCell*)cell).textView.text = job.description;
+                else ((TextAreaCell*)cell).textView.text = @"Descrizione non disponibile";
+            }
+                break;
         case 2:
             if(row == 0){
                 if(job.phone != nil && ! [job.phone isEqualToString:@""])
@@ -80,8 +81,8 @@
                 else cell.detailTextLabel.text = @"Non disponibile";
             } 
             else if(row == 2){
-                if(job.url != nil && ! [job.url isEqualToString:@""])
-                    cell.detailTextLabel.text = job.url;
+                if(job.url != nil && ! [[job.url absoluteString ]isEqualToString:@""])
+                    cell.detailTextLabel.text = [job.url absoluteString];
                 else cell.detailTextLabel.text = @"Non disponibile";
             }
             break;
@@ -104,9 +105,19 @@
         switch (row) {
             case 0:
                 NSLog(@"riga 0 sezione 2");
-                NSString *number = [NSString stringWithFormat:@"%@%@", @"tell://", cell.detailTextLabel.text];
-                //verificare sul device
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+                UIDevice *device = [UIDevice currentDevice];    
+                if ([[device model] isEqualToString:@"iPhone"]){
+                
+                    if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                        NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+                    }
+                }
+                else{
+                    UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [Notpermitted show];
+                        [Notpermitted release];
+                }
                 break;
                 
             case 1:
@@ -126,9 +137,11 @@
                 break;  
             case 2:
                 NSLog(@"url didSelectRow");
-                url = [NSURL URLWithString:cell.detailTextLabel.text];
-                //this will open the selected URL into the safari
-                [[UIApplication sharedApplication]openURL: url ]; 
+                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                    url = [NSURL URLWithString:cell.detailTextLabel.text];
+                    //this will open the selected URL into the safari
+                    [[UIApplication sharedApplication]openURL: url ]; 
+                }
                 break; 
         }
     }
@@ -196,17 +209,17 @@
                          @"",                 @"img",
                          nil] autorelease] atIndex: 1];
     
-    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"InfoCell",         @"kind", 
-                         @"Via",              @"label",
-                         @"",                 @"img",
-                         nil] autorelease] atIndex: 2];
-    
-    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"InfoCell",         @"kind", 
-                         @"Città",            @"label",
-                         @"",                 @"img",
-                         nil]autorelease] atIndex: 3];
+//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+//                         @"InfoCell",         @"kind", 
+//                         @"Via",              @"label",
+//                         @"",                 @"img",
+//                         nil] autorelease] atIndex: 2];
+//    
+//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+//                         @"InfoCell",         @"kind", 
+//                         @"Città",            @"label",
+//                         @"",                 @"img",
+//                         nil]autorelease] atIndex: 3];
     //descrizione
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"TextAreaCell",     @"kind",

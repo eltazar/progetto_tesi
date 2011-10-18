@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC0363E91445CD2400060465 /* SectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0363E81445CD2400060465 /* SectorTableViewController.m */; };
 		AC154CD2143A310000AE5FAD /* RootJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD1143A310000AE5FAD /* RootJobViewController.m */; };
 		AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC154CD3143A315600AE5FAD /* RootJobViewController.xib */; };
 		AC154CD7143A33B300AE5FAD /* EditJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD6143A33B300AE5FAD /* EditJobViewController.m */; };
@@ -40,6 +41,8 @@
 		ACD73ABA143AF4810025DF6C /* TextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB6143AF4810025DF6C /* TextFieldCell.m */; };
 		ACD73ABD143AF9D90025DF6C /* JobAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */; };
 		ACD73ABF143AFA700025DF6C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACD73ABE143AFA700025DF6C /* CoreLocation.framework */; };
+		ACD9655A1442F1F20034A1BD /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD965581442F1F20034A1BD /* SearchViewController.m */; };
+		ACD9655B1442F1F20034A1BD /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACD965591442F1F20034A1BD /* SearchViewController.xib */; };
 		ACFAB5121435E88700AB1490 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACFAB5111435E88700AB1490 /* PublishViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +57,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AC0363E71445CD2400060465 /* SectorTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectorTableViewController.h; sourceTree = "<group>"; };
+		AC0363E81445CD2400060465 /* SectorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectorTableViewController.m; sourceTree = "<group>"; };
 		AC154CD0143A310000AE5FAD /* RootJobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootJobViewController.h; sourceTree = "<group>"; };
 		AC154CD1143A310000AE5FAD /* RootJobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootJobViewController.m; sourceTree = "<group>"; };
 		AC154CD3143A315600AE5FAD /* RootJobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootJobViewController.xib; sourceTree = "<group>"; };
@@ -103,6 +108,9 @@
 		ACD73ABB143AF9D90025DF6C /* JobAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JobAnnotation.h; sourceTree = "<group>"; };
 		ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JobAnnotation.m; sourceTree = "<group>"; };
 		ACD73ABE143AFA700025DF6C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		ACD965571442F1F20034A1BD /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		ACD965581442F1F20034A1BD /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		ACD965591442F1F20034A1BD /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
 		ACFAB5101435E88700AB1490 /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
 		ACFAB5111435E88700AB1490 /* PublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -147,6 +155,8 @@
 				ACC7C5DF143CBE99006CFC0F /* PickerViewController.m */,
 				AC154CD8143A343600AE5FAD /* InfoJobViewController.h */,
 				AC154CD9143A343600AE5FAD /* InfoJobViewController.m */,
+				AC0363E71445CD2400060465 /* SectorTableViewController.h */,
+				AC0363E81445CD2400060465 /* SectorTableViewController.m */,
 				AC154CDB143A377200AE5FAD /* CellsType */,
 			);
 			name = TableModel;
@@ -216,6 +226,9 @@
 				AC736EFB1434D176003626F7 /* ConfigViewController.h */,
 				AC736EFC1434D176003626F7 /* ConfigViewController.m */,
 				ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */,
+				ACD965571442F1F20034A1BD /* SearchViewController.h */,
+				ACD965581442F1F20034A1BD /* SearchViewController.m */,
+				ACD965591442F1F20034A1BD /* SearchViewController.xib */,
 				ACB6C5451424F0B200693952 /* Job.h */,
 				ACB6C5461424F0B200693952 /* Job.m */,
 				ACD73ABB143AF9D90025DF6C /* JobAnnotation.h */,
@@ -328,6 +341,7 @@
 				AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */,
 				ACCAB8051435A115008DA6B8 /* ConfigViewController.xib in Resources */,
 				AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */,
+				ACD9655B1442F1F20034A1BD /* SearchViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +393,8 @@
 				ACD73ABD143AF9D90025DF6C /* JobAnnotation.m in Sources */,
 				ACC7C5E0143CBE9A006CFC0F /* PickerViewController.m in Sources */,
 				ACB0D1CE143DBD3200EB579C /* CellCategory.m in Sources */,
+				ACD9655A1442F1F20034A1BD /* SearchViewController.m in Sources */,
+				AC0363E91445CD2400060465 /* SectorTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,11 +7,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TextFieldCell.h"
-#import "ActionCell.h"
 #import <MessageUI/MessageUI.h>
 
-#define EMAIL_CONTACT @"el-tazar@hotmail.it"
-#define URL_INFO @"http://www.google.it"
+
 
 @interface ConfigViewController : UITableViewController <UITableViewDataSource, UITextFieldDelegate, MFMailComposeViewControllerDelegate>{
     

@@ -10,15 +10,25 @@
 
 
 @implementation SectorTableViewController
+@synthesize selectedCell,secDelegate;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
+-(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    self = [super initWithNibName:@"RootJobViewController" bundle:nil];
+    if(self){
+        selectedCells = [[NSMutableArray alloc] init];
+        
     }
     return self;
 }
+
+//- (id)initWithStyle:(UITableViewStyle)style
+//{
+//    self = [super initWithStyle:style];
+//    if (self) {
+//        // Custom initialization
+//    }
+//    return self;
+//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -28,66 +38,18 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [list count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,12 +57,32 @@
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
+        NSLog(@"NUOVA CELLA");
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        [cell setAccessoryView:nil];
+    }
+    else{
+
+        NSLog(@"dentro riuso row: %d",indexPath.row);
+        
+        if([[selectedCells objectAtIndex:indexPath.row] isEqualToString:@"selected"]){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            NSLog(@"mark:INDEX PATH. ROW = %d",indexPath.row);
+        }    
+        else{
+            
+        cell.accessoryType = UITableViewCellAccessoryNone;
+            NSLog(@"nomark:INDEX PATH. ROW = %d",indexPath.row);
+        }
     }
     
-    // Configure the cell...
+    cell.textLabel.text = [list objectAtIndex:indexPath.row];
     
+   // cell.accessoryType = UITableViewCellAccessoryNone;
+#warning RIUSO CELLE!!!! perde il √ vicino la cella selezionata e lo mette ad un'altra
+   
     return cell;
 }
 
@@ -146,15 +128,74 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+{    
+    if(firsTime){
+        indexPathSelected = indexPath;
+        firsTime = FALSE;
+        [tableView cellForRowAtIndexPath:indexPath].accessoryType = 
+            UITableViewCellAccessoryCheckmark;
+        [selectedCells replaceObjectAtIndex:indexPath.row 
+                                 withObject:@"selected"];
+        }
+    
+    if(indexPath.row != indexPathSelected.row){
+        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
+        [selectedCells replaceObjectAtIndex:indexPath.row 
+                                 withObject:@"selected"];
+        [tableView cellForRowAtIndexPath:indexPathSelected].accessoryType = UITableViewCellAccessoryNone;
+        [selectedCells replaceObjectAtIndex:indexPathSelected.row 
+                                 withObject:@"noSelected"];
+       // [selectedCells insertObject:@"notSelected" atIndex:indexPath.row];
+        indexPathSelected = indexPath;
+    }
+    
+    selectedCell = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+    [secDelegate receiveSectorFromTable:selectedCell];   
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"employeeDidSet" object:self userInfo:nil]; 
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
 }
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.title = @"Settori";
+        
+    firsTime = TRUE;    
+    //elementi da visualizzare nella tabella
+	list = [[NSMutableArray alloc] initWithObjects:@"iPhone", @"iPod",
+            @"iPod Touch", @"iMac", @"iBook", @"MacBook", @"MacBook Pro", @"Mac Pro",
+            @"PowerBook", nil];
+    NSLog(@"list grande = %d",list.count);
+    
+    for(int i=0;i<list.count;i++)
+        [selectedCells addObject:@"noSelected"];
+    NSLog(@"array grande = %d",selectedCells.count);        
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+-(void) dealloc
+{
+    [super dealloc];
+    [selectedCells release];
+    [list release];
+}
+
+
 
 @end

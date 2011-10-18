@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SearchViewController : UITableViewController
+@interface SearchViewController : UITableViewController{
+    NSMutableArray *addresses;
+}
+
+@property(nonatomic,retain) NSMutableArray *addresses;
 
 @end

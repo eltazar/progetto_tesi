@@ -11,7 +11,7 @@
 #import <MapKit/MKAnnotation.h>
 #import "PublishViewController.h"
 #import "ConfigViewController.h"
-#import "JobAnnotation.h"
+#import "Job.h"
 
 @interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate>{
     
@@ -25,11 +25,11 @@
     Job *jobDiprova;
     
     CLLocationDegrees lastSpan;
-    NSMutableArray *arrayJOBtemp;
+    NSMutableArray *arrayJOBtemp; 
     
-    
+    UILongPressGestureRecognizer *longPressGesture;
     //PublishViewController *publishViewCtrl;
-    ConfigViewController *configView;
+//    ConfigViewController *configView;
     //InfoJobViewController *infoJobView;
     
 }
@@ -40,12 +40,12 @@
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *refreshBtn;
 @property(nonatomic, retain) IBOutlet UIButton *infoBtn;
 //@property(nonatomic, retain) PublishViewController *publishViewCtrl;
-@property(nonatomic, retain) ConfigViewController *configView;
+//@property(nonatomic, retain) ConfigViewController *configView;
 //@property(nonatomic, retain) RootJobViewController *infoJobView;
 
--(IBAction)publishBtnClicked:(id)sender;
+-(IBAction)publishBtnClicked:(id)sender coordinate:(CLLocationCoordinate2D)coord;
 -(void)infoButtonClicked:(id)sender;
--(IBAction) updateButtonClicked:(id)sender;
+-(IBAction) showUserLocationButtonClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;
 
 @end

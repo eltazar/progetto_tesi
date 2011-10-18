@@ -131,7 +131,7 @@
     [super dealloc];
     [picker release]; //??????
     //
-  //  [jobCategory release];
+    [jobListCategory release];
 
 }
 

@@ -10,19 +10,17 @@
 #import "TextFieldCell.h"
 #import "TextAreaCell.h"
 //#import "Job.h"
-#import "PickerViewController.h"
 #import "CellCategory.h"
-
+#import "SectorTableViewController.h"
 //@protocol PassDataCollectedDelegate;
 
-@interface EditJobViewController : RootJobViewController <UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate>{
+@interface EditJobViewController : RootJobViewController <UITextFieldDelegate, UITextViewDelegate, SectorTableDelegate>{
 //    Job *job;
 //    id<PassDataCollectedDelegate> delegate;
-    PickerViewController *pickerView;
-    UIActionSheet *actionSheet;
+    NSArray *fields;
     
 }
-//@property(nonatomic, retain, readonly) Job *job;
+@property(nonatomic,retain,readonly) NSArray *fields;//@property(nonatomic, retain, readonly) Job *job;
 //@property(nonatomic, retain) PickerViewController *pickerView;
 //@property(nonatomic, retain) id<PassDataCollectedDelegate> delegate;
 

@@ -10,13 +10,13 @@
 
 @implementation TextFieldCell
 
-@synthesize textField, dataKey;
+@synthesize textField;
 
 #pragma mark - setting cell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withDictionary:(NSDictionary *)dictionary {
     
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier withDictionary:dictionary]) {
 		// Configuro il textfield secondo la necessità
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 		self.textField = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
@@ -26,8 +26,9 @@
 		self.textField.font = [UIFont systemFontOfSize:17];
         [self.textField setAdjustsFontSizeToFitWidth:YES];
 		self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-		self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;    
-        
+		self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        self.textField.placeholder = [dictionary objectForKey:@"placeholder"];
+        self.textField.keyboardType = [[dictionary objectForKey:@"keyboardType"]integerValue];
         //per far sparire la tastiera per qualsiasi textfield quando editing è finito
 //        [self.textField addTarget:self action:@selector(textFieldFinished:) forControlEvents:UIControlEventEditingDidEndOnExit];	
         
@@ -55,54 +56,10 @@
 }
 
 
-
-//-(void) textFieldFinished: (id) sender
-//{   //intenzionalmente vuoto
-//   //    [sender resignFirstResponder];
-//}
-
-
-
-//-(void)postEndEditingNotification
-//{
-//	[[NSNotificationCenter defaultCenter] 
-//	 postNotificationName:CELL_ENDEDIT_NOTIFICATION_NAME
-//	 object:[(UITableView *)self.superview indexPathForCell: self]]; // Passa il proprio IndexPath
-//	
-//}
-//-(void) setControlValue:(id)value
-//{
-////	self.textField.text = value;
-//}
-//
-//-(id) getControlValue
-//{
-//	return self.textField.text;
-//}
-//
-//
-#pragma mark UITextFieldDelegate
-
-//- (void)textFieldDidEndEditing:(UITextField *)txtField
-//{
-//	[self postEndEditingNotification];
-//}
-
-//- (NSString *) data
-//{
-//    return self.textField.text;
-//}
-//
-
 -(void) setDelegate:(id<UITextFieldDelegate>)delegate
 {
     self.textField.delegate = delegate; 
 }
-//
-//-(id<UITextFieldDelegate>)delegate
-//{
-//    return self.textField.delegate;
-//}
 
 #pragma mark - Memory management
 

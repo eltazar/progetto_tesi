@@ -9,23 +9,43 @@
 #import "BaseCell.h"
 
 @implementation BaseCell
+@synthesize dataKey;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+-(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withDictionary:(NSDictionary *)dictionary
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+    UITableViewCellStyle s = [[dictionary objectForKey:@"style"] integerValue];
+    
+    if (self = [super initWithStyle:s reuseIdentifier:reuseIdentifier]) {
+		// Custom initialization    
+        self.dataKey = [dictionary objectForKey:@"DataKey"];
+        [self setImg:[dictionary objectForKey:@"img"]];
+        self.textLabel.text = [dictionary objectForKey:@"label"];	
     }
     return self;
+   
 }
 
-- (void)didReceiveMemoryWarning
+
+
+
+
+-(void) setDelegate:(id)delegate
 {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
+
+-(void) setImg:(id)image{
+}
+
+
+//-(void) setPlaceHolder:(NSString *)placeholder{
+//    
+//}
+
+-(void) setKeyboardType:(UIKeyboardType) keyboardType{
+    
+}
+
+
 
 #pragma mark - View lifecycle
 
@@ -51,10 +71,12 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+#pragma  mark - Memory Management
+- (void)didReceiveMemoryWarning
 {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
 }
-
 @end

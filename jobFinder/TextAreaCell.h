@@ -7,16 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CellCategory.h"
+#import "BaseCell.h"
 
-@interface TextAreaCell : UITableViewCell /*<UITextViewDelegate>*/{
+@interface TextAreaCell : BaseCell /*<UITextViewDelegate>*/{
     IBOutlet UITextView *textView;
-    NSString *dataKey;
-
 }
 
 @property (nonatomic, retain) IBOutlet UITextView *textView;
-@property (nonatomic, retain) NSString *dataKey;
 
 -(void) setDelegate:(id<UITextViewDelegate>)delegate;
 @end

@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BaseCell : UITableViewCell
+@interface BaseCell : UITableViewCell{
+
+    NSString *dataKey;
+}
+
+-(void) setDelegate:(id)delegate;
+
+@property(nonatomic, retain) NSString *dataKey;
+
+-(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withDictionary:(NSDictionary *)dictionary;
+-(void) setImg:(id)image;
+//-(void) setPlaceHolder:(NSString *)placeholder;
+//-(void) setKeyboardType:(UIKeyboardType) keyboardType;
 
 @end

@@ -9,23 +9,25 @@
 #import "TextAreaCell.h"
 
 @implementation TextAreaCell
-@synthesize textView, dataKey;
+@synthesize textView;
 
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withDictionary:(NSDictionary *)dictionary {
+    
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier withDictionary:dictionary]){
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.textView = [[[UITextView alloc] initWithFrame:CGRectZero]autorelease];
         self.textView.font = [UIFont systemFontOfSize:17];
         self.textView.dataDetectorTypes = UIDataDetectorTypeNone;
+        self.textView.text = [dictionary objectForKey:@"placeholder"];
+        self.textView.keyboardType = [[dictionary objectForKey:@"keyboardType"] integerValue];
         //self.textView.delegate = self;
         CGRect frame = self.frame;
         frame.size.height *=2;
         [self setFrame:frame];
         [self addSubview:self.textView];
         //CGRect frame = CGRectMake(0, 0, self.window.frame.size.width, 44.0);
+        
     }
     return self;
 }
@@ -52,6 +54,7 @@
 //{
 //    [self.textView resignFirstResponder];
 //}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
         [textView resignFirstResponder];

@@ -9,11 +9,11 @@
 #import "ActionCell.h"
 
 @implementation ActionCell
-@synthesize email, phone, url,dataKey;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withDictionary:(NSDictionary *)dictionary 
+{
     
-    if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier withDictionary:dictionary]) {
 		// Custom initialization
         [self setSelectionStyle:UITableViewCellSelectionStyleBlue]; 
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

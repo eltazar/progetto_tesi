@@ -7,18 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseCell.h"
 
-@interface ActionCell : UITableViewCell{
-    
-    NSString *url;
-    NSString *email;
-    NSString *phone;
-    
-    NSString *dataKey;
-}
-
-@property(nonatomic, retain) NSString *url;
-@property(nonatomic, retain) NSString *email;
-@property(nonatomic, retain) NSString *phone;
-@property(nonatomic, retain) NSString *dataKey;
+@interface ActionCell : BaseCell
 @end

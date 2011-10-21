@@ -37,6 +37,7 @@
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    BaseCell *cell = (BaseCell*)[super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     [self fillCell:cell rowDesc:rowDesc];
     

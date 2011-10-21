@@ -7,8 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GeoDecoder.h"
+#import "CoreLocation/CLLocation.h"
 
-@interface SearchZoneViewController : UIViewController<UISearchBarDelegate, UITableViewDataSource>{
+
+@protocol SearchZoneDelegate;
+
+
+@interface SearchZoneViewController : UIViewController<UISearchBarDelegate, UITableViewDataSource, GeoDecoderDelegate>{
     
     NSMutableArray *tableData;
 
@@ -16,6 +22,10 @@
     UISearchBar *theSearchBar;
     
     UIView *disableViewOverlay;
+    
+   // NSDictionary *
+    
+    id<SearchZoneDelegate> delegate;
 
     
 }
@@ -24,7 +34,14 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property (nonatomic, retain) IBOutlet UISearchBar *theSearchBar;
+@property(nonatomic, assign)  id<SearchZoneDelegate> delegate;
 
 - (void)searchBar:(UISearchBar *)searchBar activate:(BOOL) active;
+
+@end
+
+@protocol SearchZoneDelegate <NSObject>
+
+-(void) didSelectedPreferredAddress:(NSString *)address withLatitude:(CLLocationDegrees)latitude andLongitude:(CLLocationDegrees) longitude;
 
 @end

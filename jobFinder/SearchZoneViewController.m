@@ -7,9 +7,12 @@
 //
 
 #import "SearchZoneViewController.h"
-#import "SearchAddress.h"
+#import "GeoDecoder.h"
+#import <objc/runtime.h>
+#import "CoreLocation/CLLocation.h"
+
 @implementation SearchZoneViewController
-@synthesize tableData, theSearchBar, theTableView, disableViewOverlay;
+@synthesize tableData, theSearchBar, theTableView, disableViewOverlay, delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -60,13 +63,18 @@
     // You'll probably want to do this on another thread
     // SomeService is just a dummy class representing some 
     // api that you are using to do the search
-    //NSArray *results = [SearchAddress searchCoordinatesForAddress:searchBar.text];
-	
+    
+    GeoDecoder *geoDec = [[GeoDecoder alloc] init];
+    [geoDec setDelegate:self];
+    
+    [geoDec searchCoordinatesForAddress:searchBar.text];
+    
     [self searchBar:searchBar activate:NO];
 	
-    [self.tableData removeAllObjects];
-  //  [self.tableData addObjectsFromArray:results];
-    [self.theTableView reloadData];
+//    [self.tableData removeAllObjects];
+//    [self.tableData addObjectsFromArray:results];
+//    [self.theTableView reloadData];
+    
 }
 
 // We call this when we want to activate/deactivate the UISearchBar
@@ -102,6 +110,15 @@
     [searchBar setShowsCancelButton:active animated:YES];
 }
 
+#pragma mark - TableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int row = indexPath.row;
+    [delegate didSelectedPreferredAddress:[[tableData objectAtIndex:row] objectForKey:@"address"] withLatitude:[[[tableData objectAtIndex:row] objectForKey:@"lat"] doubleValue]  andLongitude:[[[tableData objectAtIndex:row] objectForKey:@"long"] doubleValue] ];
+    
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -109,27 +126,88 @@
     return [tableData count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *MyIdentifier = @"SearchResult";
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"SearchResult";
     UITableViewCell *cell = [tableView
-                             dequeueReusableCellWithIdentifier:MyIdentifier];
+                             dequeueReusableCellWithIdentifier:cellIdentifier];
 	
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] 
-                 initWithStyle:UITableViewCellStyleDefault 
-                 reuseIdentifier:MyIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2
+                                       reuseIdentifier:cellIdentifier] autorelease];
     }
 	
-//    id *data = [self.tableData objectAtIndex:indexPath.row];
-//    cell.textLabel.text = data.name;
+    NSDictionary *data = [self.tableData objectAtIndex:indexPath.row];
+   // cell.textLabel.text = data;
+    
+	//NSLog( @"Table cell text: %@", [[transactionHistory objectAtIndex:row] description] );
+    
+    cell.textLabel.text = @"";
+    cell.detailTextLabel.text = [data objectForKey:@"address"];
+    cell.detailTextLabel.numberOfLines = 2;
+    cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;	
+    
     return cell;
 }
+
+#pragma mark - GeoDecoderDelegate
+
+-(void) didReceivedGeoDecoderData:(NSDictionary *)geoData
+{
+    //NSLog(@"DICTIONARY IS: %@",geoData);
+    NSLog(@"CLASSE: %s", class_getName([[geoData objectForKey:@"results"] class]));
+    
+    NSArray *resultsArray = [geoData objectForKey:@"results"];
+    NSMutableArray *addresses = [[[NSMutableArray alloc] initWithCapacity:resultsArray.count] autorelease];
+    
+    for(int i=0; i < resultsArray.count; i++){
+        
+        NSDictionary *result = [resultsArray objectAtIndex:i];
+        NSString *addressString = [ result objectForKey:@"formatted_address"];
+        NSLog(@"ADDRESS_STRING = %@",addressString);
+        CLLocationDegrees latitude = [[[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+        CLLocationDegrees longitude = [[[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+        NSLog(@"LAT = %f LONG = %f",latitude,longitude);
+        
+        NSDictionary *entry = [[[NSDictionary alloc] initWithObjectsAndKeys:
+                                addressString, @"address", 
+                                [NSNumber numberWithDouble: latitude] , @"lat", 
+                                [NSNumber numberWithDouble: longitude], @"long", nil] autorelease];
+        [addresses addObject:entry];
+    }
+//    [addresses addObject:@"<html>ciao come stai <br> bene grazie ciao</html>"];
+//    NSLog(@"ARRAY ADDRESSES: %@",addresses);
+    
+    [self.tableData removeAllObjects];
+    [self.tableData addObjectsFromArray:addresses];
+    [self.theTableView reloadData];
+
+}
+
+/*
+ geometry =             {
+ bounds =                 {
+ northeast =                     {
+ lat = "7.2945335";
+ lng = "171.940155";
+ };
+ southwest =                     {
+ lat = "6.955802900000001";
+ lng = "171.5436189";
+ };
+ };
+ location =                 {
+ lat = "7.061012799999999";
+ lng = "171.647344";
+ };
+
+ */
 
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     [self setTitle:@"Cerca Zona"];
     self.tableData =[[NSMutableArray alloc]init];

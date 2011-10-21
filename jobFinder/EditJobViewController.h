@@ -7,10 +7,6 @@
 //
 
 #import "RootJobViewController.h"
-#import "TextFieldCell.h"
-#import "TextAreaCell.h"
-//#import "Job.h"
-#import "CellCategory.h"
 #import "SectorTableViewController.h"
 //@protocol PassDataCollectedDelegate;
 
@@ -23,6 +19,8 @@
 @property(nonatomic,retain,readonly) NSArray *fields;//@property(nonatomic, retain, readonly) Job *job;
 //@property(nonatomic, retain) PickerViewController *pickerView;
 //@property(nonatomic, retain) id<PassDataCollectedDelegate> delegate;
+
+-(void)fillCell: (UITableViewCell *)cell rowDesc:(NSDictionary *)rowDesc;
 
 @end
 

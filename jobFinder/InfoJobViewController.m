@@ -8,6 +8,7 @@
 
 #import "InfoJobViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "BaseCell.h"
 
 @implementation InfoJobViewController
 
@@ -26,10 +27,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
-    cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
+    
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
         
     [self fillCell:cell InRow:indexPath.row inSection:indexPath.section];
     
@@ -202,11 +204,15 @@
                          @"InfoCell",         @"kind", 
                          @"Impiego",          @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
+                            @"style",
                          nil] autorelease] atIndex: 0];
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
                          @"Inserito il",      @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
+                            @"style",
                          nil] autorelease] atIndex: 1];
     
 //    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
@@ -231,18 +237,21 @@
                          @"ActionCell",       @"kind", 
                          @"Chiama",           @"label", 
                          @"",                 @"img", 
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 0];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind",
                          @"Scrivi",           @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil] autorelease] atIndex: 1];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind", 
                          @"Visita",           @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 2];
     
     sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];

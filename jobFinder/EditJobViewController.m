@@ -9,6 +9,9 @@
 #import "EditJobViewController.h"
 #import "PickerViewController.h"
 #import "SectorTableViewController.h"
+#import "ActionCell.h"
+#import "TextFieldCell.h"
+#import "TextAreaCell.h"
 
 @implementation EditJobViewController
 //@synthesize job;
@@ -30,36 +33,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
-    NSString *dataKey = [rowDesc objectForKey:@"DataKey"];
     
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
-    //setto il tipo di tastiera per il texfield se la cella è di tipo editabile
-    if ([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextFieldCell"]) {
-      
-        //configuro i texfield
-        ((TextFieldCell *) cell).textField.placeholder =
-                                            [rowDesc objectForKey:@"placeholder"];
-        ((TextFieldCell *) cell).dataKey = dataKey;
-        NSString * kt = [rowDesc objectForKey:@"keyboardType"];
-        NSInteger kti = [kt integerValue];
-        ((TextFieldCell *)cell).textField.keyboardType = kti;
-    }
-    else if([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextAreaCell"]){
-        ((TextAreaCell *) cell).dataKey = dataKey;
-        ((TextAreaCell *) cell).textView.text = [rowDesc objectForKey:@"placeholder"];
-    }
-    else{
-        if(job.employee == nil || [job.employee isEqualToString:@""])
-            cell.detailTextLabel.text = [rowDesc objectForKey:@"placeholder"];
-        else cell.detailTextLabel.text = job.employee;
-        
-        
-    }    
+    [self fillCell:cell rowDesc:rowDesc];
     
     [cell setDelegate:self];
     
@@ -77,8 +56,7 @@
     int row = indexPath.row;
     
     if(section == 0 && row == 0){
-        
-        
+
         SectorTableViewController *sectorTable = [[SectorTableViewController alloc] initWithNibName:nil bundle:nil];
         sectorTable.secDelegate = self;
         [self.navigationController pushViewController:sectorTable animated:YES];
@@ -90,7 +68,6 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)txtField
 {   
-
     //recupera la cella relativa al texfield
     TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
 
@@ -133,6 +110,27 @@
     }        
 }
 
+
+-(void)fillCell: (UITableViewCell *)cell rowDesc:(NSDictionary *)rowDesc
+{
+    NSString *datakey= [rowDesc objectForKey:@"DataKey"];
+    
+    if([datakey isEqualToString:@"employee"]){
+         cell.detailTextLabel.text = job.employee;
+        if(job.employee == nil || [job.employee isEqualToString:@""])
+            ((ActionCell *)cell).detailTextLabel.text = [rowDesc objectForKey:@"placeholder"];
+        else ((ActionCell *)cell).detailTextLabel.text = job.employee;
+    }
+    else if([datakey isEqualToString:@"description"])
+        ((TextAreaCell*)cell).textView.text = job.description;
+    else if([datakey isEqualToString:@"phone"])
+         ((TextFieldCell *)cell).textField.text = job.phone;
+    else if([datakey isEqualToString:@"email"])
+         ((TextFieldCell *)cell).textField.text = job.email;
+    else if([datakey isEqualToString:@"url"])
+         ((TextFieldCell *)cell).textField.text = [job.url absoluteString]; 
+}
+
 #pragma mark - View lifecycle
 
 /*
@@ -157,10 +155,11 @@
      
      [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                           @"employee",         @"DataKey",
-                          @"InfoCell",         @"kind", 
+                          @"ActionCell",       @"kind", 
                           @"Impiego",          @"label",
                           @"Scegli...",        @"placeholder",
                           @"",                 @"img",
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           nil] autorelease] atIndex: 0];
      
      [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
@@ -169,6 +168,7 @@
                           @"Descrizione",      @"label",
                           @"",                 @"placeholder",
                           @"",                 @"img",
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
                           nil] autorelease]  atIndex: 0];
      
@@ -178,6 +178,7 @@
                           @"Telefono",         @"label",
                           @"44112233",         @"placeholder",
                           @"",                 @"img",
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeNumbersAndPunctuation], @"keyboardType",
                           nil] autorelease ]  atIndex: 0];
      
@@ -187,6 +188,7 @@
                           @"E-mail",           @"label",
                           @"esempio@mail.com", @"placeholder",
                           @"",                 @"img",
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeEmailAddress], @"keyboardType",
                           nil] autorelease] atIndex: 1];
      
@@ -196,6 +198,7 @@
                           @"URL",              @"label", 
                           @"http://www.esempio.com",  @"placeholder",
                           @"",                 @"img", 
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeURL], @"keyboardType", 
                           nil] autorelease] atIndex: 2];
      
@@ -251,11 +254,5 @@
 //    NSLog(@"dea job = %p, count = %d",job, job.retainCount);
 }
 
-#pragma mark - to do list
-//TODO 1: validazione input
-//TODO 2: se un texfield non viene selezionato mai e si preme "inserisci" il campo salvato nel job sarà NULL, se invece si seleziona almeno una volta e si lascia bianco sarà @""--> UNIFORMARE
-//TODO 3: la textview se non viene mai selezionata sarà NULL nel job.description, mente se selezionata almeno una volta sarà @"Inserire qui una breve descrizione" --> CORREGGERE
-//TODO 4: tasto inserisci grigio finchè non si è scelta la categoria!
-//TODO 5: riuso celle
-//TODO 6: nella validazione dell'input inserire http:// se non presente davanti l'url
+
 @end

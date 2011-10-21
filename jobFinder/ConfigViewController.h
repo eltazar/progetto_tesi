@@ -8,16 +8,13 @@
 #import <UIKit/UIKit.h>
 #import "TextFieldCell.h"
 #import <MessageUI/MessageUI.h>
+#import "SearchZoneViewController.h"
 
 
-
-@interface ConfigViewController : UITableViewController <UITableViewDataSource, UITextFieldDelegate, MFMailComposeViewControllerDelegate>{
+@interface ConfigViewController : UITableViewController <UITableViewDataSource, /*UITextFieldDelegate,*/ MFMailComposeViewControllerDelegate>{
     
     NSArray *sectionDescripition;
     NSArray *sectionData;
-    NSString *street;
-    NSString *city;
-    NSString *province;
-    //Coordinate 
+    SearchZoneViewController *searchZone;
 }
 @end

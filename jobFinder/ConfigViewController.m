@@ -7,8 +7,9 @@
 //
 
 #import "ConfigViewController.h"
-#import "ActionCell.h"
-#import "SearchViewController.h"
+//#import "ActionCell.h"
+#import "BaseCell.h"
+#import "SearchZoneViewController.h"
 
 
 #define EMAIL_CONTACT @"el-tazar@hotmail.it"
@@ -35,7 +36,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section
 {   
     if(sectionData){
-        return [[sectionData objectAtIndex: section] count];    } 
+        return [[sectionData objectAtIndex: section] count];
+    } 
 
     return 0;
 }
@@ -48,33 +50,15 @@
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     NSString *dataKey = [rowDesc objectForKey:@"DataKey"];
     NSString *kind = [rowDesc objectForKey:@"kind"];
-  
-    NSLog(@"KIND è: %@",kind);
+    int cellStyle = UITableViewCellStyleDefault;
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: kind];
+    BaseCell *cell = (BaseCell *)[tableView dequeueReusableCellWithIdentifier: dataKey];
     
     //se non è recuperata creo una nuova cella
 	if (cell == nil) {
-        cell = [[[NSClassFromString(kind) alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kind] autorelease];
+        cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
-    
-    cell.textLabel.text = [rowDesc objectForKey:@"label"];
 
-    if ([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextFieldCell"]) {
-        //setto la label, stile, delegato e datakey
-        ((TextFieldCell *) cell).textField.delegate = self;
-        ((TextFieldCell *) cell).dataKey = dataKey;
-        ((TextFieldCell *) cell).textField.text = [rowDesc objectForKey:@"Value"];
-
-        //setto tipo di tastiera in base al texfield
-        NSString * kt = [rowDesc objectForKey:@"keyboardType"];
-        NSInteger kti = [kt integerValue];
-        ((TextFieldCell *)cell).textField.keyboardType = kti;
-    }
-    else if([[rowDesc objectForKey:@"kind"] isEqualToString:@"ActionCell"]){
-        //TODO: aggiungere immagine alla cella
-    }
-    NSLog(@"cell = %p",cell);
     return cell;
 }
 
@@ -89,7 +73,8 @@
     if(section == 0){
         switch (row) {
             case 0:
-                //SearchViewController *searchView = [[SearchViewController alloc] init];
+                searchZone = [[SearchZoneViewController alloc] initWithNibName: @"SearchZoneViewController" bundle: nil];
+                [self.navigationController pushViewController:searchZone animated:YES];
                 break;
                 
             default:
@@ -138,7 +123,7 @@
 {
     switch (section) {
         case 0:
-            return @"Inserisci un posto preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
+            return @"Cerca e seleziona un indirizzo preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
             break;
         case 1:
             return nil;
@@ -150,7 +135,7 @@
     }
 }
 
-#pragma mark - texfield delegate
+//#pragma mark - texfield delegate
 
 
 /*sembra funzionare qui, ma è meglio metterlo in TextFieldCell?
@@ -160,23 +145,23 @@
  */
 
 // gestisce la fine dell'editing in un textField
-- (void)textFieldDidEndEditing:(UITextField *)txtField
-{
-    //recupera la cella relativa al texfield
-    TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
-    NSLog(@"2) dataKey %@, texField %@", cell.dataKey, cell.textField.text);
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setObject:txtField.text forKey:cell.dataKey];
-    NSLog(@"dato nel prefs: %@",[prefs objectForKey:cell.dataKey]);
-    [prefs synchronize];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{ 
-	[textField resignFirstResponder];
-	return YES;
-}
+//- (void)textFieldDidEndEditing:(UITextField *)txtField
+//{
+//    //recupera la cella relativa al texfield
+//    TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
+//    NSLog(@"2) dataKey %@, texField %@", cell.dataKey, cell.textField.text);
+//    
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    [prefs setObject:txtField.text forKey:cell.dataKey];
+//    NSLog(@"dato nel prefs: %@",[prefs objectForKey:cell.dataKey]);
+//    [prefs synchronize];
+//}
+//
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField
+//{ 
+//	[textField resignFirstResponder];
+//	return YES;
+//}
 
 #pragma mark - azioni dei bottoni
 
@@ -263,51 +248,22 @@
     NSMutableArray *secA = [[NSMutableArray alloc] init];
     NSMutableArray *secB = [[NSMutableArray alloc] init];
     
-    //creo i dizionari per le sezioni
-//    NSString *value = @"";
-//    value = [prefs objectForKey:@"street"];
-//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-//                         @"street",           @"DataKey",
-//                         value,               @"Value",
-//                         @"TextFieldCell",    @"kind", 
-//                         @"Via",              @"label",
-//                         @"",                 @"img",
-//                         [NSString stringWithFormat:@"%d",UIKeyboardTypeDefault], @"keyboardType",
-//                         nil] autorelease] atIndex: 0];
-//    
-//    value =[prefs objectForKey:@"city"];
-//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-//                         @"city",             @"DataKey",
-//                         value,               @"Value",
-//                         @"TextFieldCell",    @"kind",
-//                         @"Città",            @"label",
-//                         @"",                 @"img",
-//                         [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
-//                         nil] autorelease] atIndex: 1];
-//    
-//    value = [prefs objectForKey:@"province"];
-//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-//                         @"province",         @"DataKey",
-//                         value,               @"Value",
-//                         @"TextFieldCell",    @"kind",
-//                         @"Provincia",        @"label",
-//                         @"",                 @"img",
-//                         [NSString stringWithFormat:@"%d", UIKeyboardTypeDefault], @"keyboardType",
-//                         nil] autorelease] atIndex: 2];
     
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"search",           @"DataKey",
                          @"ActionCell",       @"kind",
-                         @"Cerca",            @"label",
+                         @"Cerca zona",  @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 0];
     
-    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"search",                 @"DataKey",
-                         @"ActionCell",             @"kind",
-                         @"Elenco zone preferite",  @"label",
-                         @"",                       @"img",
-                         nil] autorelease] atIndex: 1];
+//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+//                         @"bookmarks",              @"DataKey",
+//                         @"ActionCell",             @"kind",
+//                         @"Elenco zone preferite",  @"label",
+//                         @"",                       @"img",
+//                         [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
+//                         nil] autorelease] atIndex: 1];
 
     
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
@@ -315,6 +271,7 @@
                          @"ActionCell",       @"kind",
                          @"Contattaci",       @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil] autorelease] atIndex: 0];
     
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
@@ -322,6 +279,7 @@
                          @"ActionCell",       @"kind",
                          @"Visita il sito",   @"label",
                          @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil]autorelease] atIndex: 1];
     
     sectionData = [[NSArray alloc] initWithObjects: secA, secB, nil];
@@ -366,6 +324,9 @@
 - (void)dealloc {
     [super dealloc];
     [sectionDescripition release];
-    [sectionData release];}
+    [sectionData release];  
+    [searchZone release];
+
+}
 
 @end

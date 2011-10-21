@@ -11,7 +11,7 @@
 #import "SearchZoneViewController.h"
 
 
-@interface ConfigViewController : UITableViewController <UITableViewDataSource, /*UITextFieldDelegate,*/ MFMailComposeViewControllerDelegate>{
+@interface ConfigViewController : UITableViewController <UITableViewDataSource,MFMailComposeViewControllerDelegate, SearchZoneDelegate >{
     
     NSArray *sectionDescripition;
     NSArray *sectionData;

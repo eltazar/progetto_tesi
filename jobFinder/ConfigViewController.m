@@ -72,8 +72,9 @@
  
     if(section == 0){
         switch (row) {
-            case 0:
+            case 1:
                 searchZone = [[SearchZoneViewController alloc] initWithNibName: @"SearchZoneViewController" bundle: nil];
+                [searchZone setDelegate:self];
                 [self.navigationController pushViewController:searchZone animated:YES];
                 break;
                 
@@ -151,11 +152,7 @@
 //    TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
 //    NSLog(@"2) dataKey %@, texField %@", cell.dataKey, cell.textField.text);
 //    
-//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-//    [prefs setObject:txtField.text forKey:cell.dataKey];
-//    NSLog(@"dato nel prefs: %@",[prefs objectForKey:cell.dataKey]);
-//    [prefs synchronize];
-//}
+//   //}
 //
 //- (BOOL)textFieldShouldReturn:(UITextField *)textField
 //{ 
@@ -226,6 +223,23 @@
 //	}		
 //}
 
+#pragma mark - SearchZoneDelegate
+
+-(void) didSelectedPreferredAddress:(NSString *)address withLatitude:(CLLocationDegrees)latitude andLongitude:(CLLocationDegrees) longitude
+{
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+   [prefs setObject:address forKey:@"address"];
+   [prefs setObject: [NSNumber numberWithDouble:latitude] forKey: @"lat"];
+   [prefs setObject: [NSNumber numberWithDouble:longitude] forKey: @"long"];
+    
+    //    NSLog(@"dato nel prefs: %@",[prefs objectForKey:cell.dataKey]);
+    //    [prefs synchronize];
+    
+    [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:address forKey:@"label"];
+    [self.tableView reloadData];    
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark - View life cycle
 
@@ -234,7 +248,7 @@
 {
     [super viewDidLoad];
     
-//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     //setta titolo vista
     [self setTitle:@"Impostazioni"];
@@ -249,22 +263,21 @@
     NSMutableArray *secB = [[NSMutableArray alloc] init];
     
     
+    [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                         @"bookmarks",              @"DataKey",
+                         @"InfoCell",               @"kind",
+                         [prefs objectForKey:@"address"], @"label",
+                         @"",                       @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
+                         nil] autorelease] atIndex: 0];
+
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"search",           @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Cerca zona",  @"label",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
-                         nil] autorelease] atIndex: 0];
-    
-//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-//                         @"bookmarks",              @"DataKey",
-//                         @"ActionCell",             @"kind",
-//                         @"Elenco zone preferite",  @"label",
-//                         @"",                       @"img",
-//                         [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
-//                         nil] autorelease] atIndex: 1];
-
+                         nil] autorelease] atIndex: 1];
     
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"email",            @"DataKey",
@@ -321,12 +334,12 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc {
-    [super dealloc];
+- (void)dealloc 
+{
     [sectionDescripition release];
     [sectionData release];  
     [searchZone release];
-
+    [super dealloc];
 }
 
 @end

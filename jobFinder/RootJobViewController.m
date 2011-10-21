@@ -7,7 +7,8 @@
 //
 
 #import "RootJobViewController.h"
-#import "ActionCell.h"
+//#import "ActionCell.h"
+#import "BaseCell.h"
 
 @implementation RootJobViewController
 @synthesize job; 
@@ -45,24 +46,20 @@
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     NSString *kind = [rowDesc objectForKey:@"kind"];
+    NSString *dataKey = [rowDesc objectForKey:@"DataKey"];
     
     int cellStyle = UITableViewCellStyleDefault;
     
-    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:kind];
-    
-//    //setto lo stile della cella in base al tipo
-//    if([kind isEqualToString:@"InfoCell"] || [kind isEqualToString:@"ActionCell"])
-//        cellStyle = UITableViewCellStyleValue1;  //mettere value2
-   //NSLog(@"CELL IS NIL? = %p",cell);
-    
+    BaseCell *cell = (BaseCell *)[tableView dequeueReusableCellWithIdentifier:dataKey];
+        
     if (cell == nil) {       
-        cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind] autorelease];
+        cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
+    
     
     //di default imposto la cella come non selezionabile (non diventa blu)
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     //imposto la label della cella
-	cell.textLabel.text = [rowDesc objectForKey:@"label"];	
     //TODO: aggiungere immagine alla cella
     
     return cell;

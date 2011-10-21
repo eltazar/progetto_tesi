@@ -29,20 +29,22 @@
 		AC4A04C6142236CA00FE96F7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04C5142236CA00FE96F7 /* MapKit.framework */; };
 		AC4A04CA142239E300FE96F7 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04C8142239E300FE96F7 /* MapViewController.m */; };
 		AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04C9142239E300FE96F7 /* MapViewController.xib */; };
+		AC7135DD144F45CD0022A47C /* SearchZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */; };
+		AC7135DE144F45CD0022A47C /* SearchZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC7135DC144F45CD0022A47C /* SearchZoneViewController.xib */; };
 		AC736EFD1434D176003626F7 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC736EFC1434D176003626F7 /* ConfigViewController.m */; };
-		ACB0D1CE143DBD3200EB579C /* CellCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = ACB0D1CD143DBD3200EB579C /* CellCategory.m */; };
+		AC8B8BA314501C0E00102E2D /* SearchAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8B8BA214501C0E00102E2D /* SearchAddress.m */; };
 		ACB6C5471424F0B200693952 /* Job.m in Sources */ = {isa = PBXBuildFile; fileRef = ACB6C5461424F0B200693952 /* Job.m */; };
 		ACC7C5E0143CBE9A006CFC0F /* PickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC7C5DF143CBE99006CFC0F /* PickerViewController.m */; };
 		ACCA8FE81438B10D00141CDE /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACCA8FE71438B10D00141CDE /* MessageUI.framework */; };
 		ACCAB8051435A115008DA6B8 /* ConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */; };
+		ACCBD837144D7FA500EEAC2A /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACCBD836144D7FA500EEAC2A /* BaseCell.m */; };
+		ACCBD83A144DC6A700EEAC2A /* phpProva in Resources */ = {isa = PBXBuildFile; fileRef = ACCBD839144DC6A700EEAC2A /* phpProva */; };
 		ACD73AB7143AF4810025DF6C /* ActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB0143AF4810025DF6C /* ActionCell.m */; };
 		ACD73AB8143AF4810025DF6C /* InfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB2143AF4810025DF6C /* InfoCell.m */; };
 		ACD73AB9143AF4810025DF6C /* TextAreaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB4143AF4810025DF6C /* TextAreaCell.m */; };
 		ACD73ABA143AF4810025DF6C /* TextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB6143AF4810025DF6C /* TextFieldCell.m */; };
 		ACD73ABD143AF9D90025DF6C /* JobAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */; };
 		ACD73ABF143AFA700025DF6C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACD73ABE143AFA700025DF6C /* CoreLocation.framework */; };
-		ACD9655A1442F1F20034A1BD /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD965581442F1F20034A1BD /* SearchViewController.m */; };
-		ACD9655B1442F1F20034A1BD /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACD965591442F1F20034A1BD /* SearchViewController.xib */; };
 		ACFAB5121435E88700AB1490 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACFAB5111435E88700AB1490 /* PublishViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -87,16 +89,22 @@
 		AC4A04C7142239E300FE96F7 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		AC4A04C8142239E300FE96F7 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		AC4A04C9142239E300FE96F7 /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
+		AC7135DA144F45CC0022A47C /* SearchZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchZoneViewController.h; sourceTree = "<group>"; };
+		AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchZoneViewController.m; sourceTree = "<group>"; };
+		AC7135DC144F45CD0022A47C /* SearchZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchZoneViewController.xib; sourceTree = "<group>"; };
 		AC736EFB1434D176003626F7 /* ConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController.h; sourceTree = "<group>"; };
 		AC736EFC1434D176003626F7 /* ConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigViewController.m; sourceTree = "<group>"; };
-		ACB0D1CC143DBD3100EB579C /* CellCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellCategory.h; sourceTree = "<group>"; };
-		ACB0D1CD143DBD3200EB579C /* CellCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellCategory.m; sourceTree = "<group>"; };
+		AC8B8BA114501C0E00102E2D /* SearchAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchAddress.h; sourceTree = "<group>"; };
+		AC8B8BA214501C0E00102E2D /* SearchAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchAddress.m; sourceTree = "<group>"; };
 		ACB6C5451424F0B200693952 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
 		ACB6C5461424F0B200693952 /* Job.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Job.m; sourceTree = "<group>"; };
 		ACC7C5DE143CBE99006CFC0F /* PickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerViewController.h; sourceTree = "<group>"; };
 		ACC7C5DF143CBE99006CFC0F /* PickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerViewController.m; sourceTree = "<group>"; };
 		ACCA8FE71438B10D00141CDE /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigViewController.xib; sourceTree = "<group>"; };
+		ACCBD835144D7FA400EEAC2A /* BaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCell.h; sourceTree = "<group>"; };
+		ACCBD836144D7FA500EEAC2A /* BaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCell.m; sourceTree = "<group>"; };
+		ACCBD839144DC6A700EEAC2A /* phpProva */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = phpProva; sourceTree = "<group>"; };
 		ACD73AAF143AF4810025DF6C /* ActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCell.h; sourceTree = "<group>"; };
 		ACD73AB0143AF4810025DF6C /* ActionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionCell.m; sourceTree = "<group>"; };
 		ACD73AB1143AF4810025DF6C /* InfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoCell.h; sourceTree = "<group>"; };
@@ -108,9 +116,6 @@
 		ACD73ABB143AF9D90025DF6C /* JobAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JobAnnotation.h; sourceTree = "<group>"; };
 		ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JobAnnotation.m; sourceTree = "<group>"; };
 		ACD73ABE143AFA700025DF6C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		ACD965571442F1F20034A1BD /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
-		ACD965581442F1F20034A1BD /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
-		ACD965591442F1F20034A1BD /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
 		ACFAB5101435E88700AB1490 /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
 		ACFAB5111435E88700AB1490 /* PublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,12 +170,12 @@
 		AC154CDB143A377200AE5FAD /* CellsType */ = {
 			isa = PBXGroup;
 			children = (
+				ACCBD835144D7FA400EEAC2A /* BaseCell.h */,
+				ACCBD836144D7FA500EEAC2A /* BaseCell.m */,
 				ACD73AAF143AF4810025DF6C /* ActionCell.h */,
 				ACD73AB0143AF4810025DF6C /* ActionCell.m */,
 				ACD73AB1143AF4810025DF6C /* InfoCell.h */,
 				ACD73AB2143AF4810025DF6C /* InfoCell.m */,
-				ACB0D1CC143DBD3100EB579C /* CellCategory.h */,
-				ACB0D1CD143DBD3200EB579C /* CellCategory.m */,
 				ACD73AB3143AF4810025DF6C /* TextAreaCell.h */,
 				ACD73AB4143AF4810025DF6C /* TextAreaCell.m */,
 				ACD73AB5143AF4810025DF6C /* TextFieldCell.h */,
@@ -226,14 +231,17 @@
 				AC736EFB1434D176003626F7 /* ConfigViewController.h */,
 				AC736EFC1434D176003626F7 /* ConfigViewController.m */,
 				ACCAB8041435A115008DA6B8 /* ConfigViewController.xib */,
-				ACD965571442F1F20034A1BD /* SearchViewController.h */,
-				ACD965581442F1F20034A1BD /* SearchViewController.m */,
-				ACD965591442F1F20034A1BD /* SearchViewController.xib */,
+				AC7135DA144F45CC0022A47C /* SearchZoneViewController.h */,
+				AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */,
+				AC7135DC144F45CD0022A47C /* SearchZoneViewController.xib */,
+				AC8B8BA114501C0E00102E2D /* SearchAddress.h */,
+				AC8B8BA214501C0E00102E2D /* SearchAddress.m */,
 				ACB6C5451424F0B200693952 /* Job.h */,
 				ACB6C5461424F0B200693952 /* Job.m */,
 				ACD73ABB143AF9D90025DF6C /* JobAnnotation.h */,
 				ACD73ABC143AF9D90025DF6C /* JobAnnotation.m */,
 				AC154CCE143A30E400AE5FAD /* TableModel */,
+				ACCBD83B144DC6B400EEAC2A /* New Group */,
 				AC4A04981422369200FE96F7 /* Supporting Files */,
 			);
 			path = jobFinder;
@@ -267,6 +275,14 @@
 				AC4A04B61422369200FE96F7 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ACCBD83B144DC6B400EEAC2A /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				ACCBD839144DC6A700EEAC2A /* phpProva */,
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -341,7 +357,8 @@
 				AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */,
 				ACCAB8051435A115008DA6B8 /* ConfigViewController.xib in Resources */,
 				AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */,
-				ACD9655B1442F1F20034A1BD /* SearchViewController.xib in Resources */,
+				ACCBD83A144DC6A700EEAC2A /* phpProva in Resources */,
+				AC7135DE144F45CD0022A47C /* SearchZoneViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,9 +409,10 @@
 				ACD73ABA143AF4810025DF6C /* TextFieldCell.m in Sources */,
 				ACD73ABD143AF9D90025DF6C /* JobAnnotation.m in Sources */,
 				ACC7C5E0143CBE9A006CFC0F /* PickerViewController.m in Sources */,
-				ACB0D1CE143DBD3200EB579C /* CellCategory.m in Sources */,
-				ACD9655A1442F1F20034A1BD /* SearchViewController.m in Sources */,
 				AC0363E91445CD2400060465 /* SectorTableViewController.m in Sources */,
+				ACCBD837144D7FA500EEAC2A /* BaseCell.m in Sources */,
+				AC7135DD144F45CD0022A47C /* SearchZoneViewController.m in Sources */,
+				AC8B8BA314501C0E00102E2D /* SearchAddress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,7 +481,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -480,7 +498,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -493,7 +511,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "jobFinder/jobFinder-Prefix.pch";
 				INFOPLIST_FILE = "jobFinder/jobFinder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -505,7 +523,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "jobFinder/jobFinder-Prefix.pch";
 				INFOPLIST_FILE = "jobFinder/jobFinder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

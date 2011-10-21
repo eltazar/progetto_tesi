@@ -7,10 +7,10 @@
 //
 
 #import "GeoDecoder.h"
-//#import "NSDictionary_JSONExtensions.h"
+#import "NSDictionary_JSONExtensions.h"
 
 @implementation GeoDecoder
-@synthesize dictionary;
+@synthesize dictionary, delegate;
 
 
 - (id)init
@@ -23,10 +23,11 @@
     return self;
 }
 
-+(void) searchCoordinatesForAddress:(NSString *)inAddress
+-(void) searchCoordinatesForAddress:(NSString *)inAddress
 {
     //Build the string to Query Google Maps.
-    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://maps.google.com/maps/geo?q=%@&output=json",inAddress];    
+    
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?address=%@&sensor=true",inAddress];    
     
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
@@ -68,10 +69,13 @@
     NSError *theError = NULL;
     dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
     
-    NSLog(@"%@",dictionary);
+//    NSLog(@"%@",dictionary);
+//    NSLog(@"JSON is: %@",jsonResult);
     
     int numberOfSites = [[dictionary objectForKey:@"results"] count];
-    NSLog(@"count is %d ",numberOfSites);      
+//    NSLog(@"count is %d ",numberOfSites);      
+    
+    [delegate didReceivedGeoDecoderData:dictionary];
 }
 
 
@@ -81,6 +85,14 @@
 }
 
 
+#pragma mark - Memory Management
+
+-(void) dealloc
+{
+    [receivedGeoData release];
+    [super dealloc];
+
+}
 
 
 @end

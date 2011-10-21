@@ -8,20 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol GeoDecoderDelegate;
+
 @interface GeoDecoder : NSObject{
     
     NSMutableData *receivedGeoData;
     NSMutableDictionary *dictionary;
     
+    id<GeoDecoderDelegate> delegate;
+    
 }
 
 @property(nonatomic,readonly) NSMutableDictionary *dictionary;
+@property(nonatomic, assign) id<GeoDecoderDelegate> delegate;
 
-+(void) searchCoordinatesForAddress:(NSString *)inAddress;
+-(void) searchCoordinatesForAddress:(NSString *)inAddress;
 
+@end
 
+@protocol GeoDecoderDelegate <NSObject>
 
-
-
+-(void)didReceivedGeoDecoderData:(NSDictionary *) geoData;
 
 @end

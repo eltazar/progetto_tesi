@@ -59,30 +59,25 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        NSLog(@"NUOVA CELLA");
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         [cell setAccessoryView:nil];
     }
     else{
 
-        NSLog(@"dentro riuso row: %d",indexPath.row);
+        //NSLog(@"dentro riuso row: %d",indexPath.row);
         
         if([[selectedCells objectAtIndex:indexPath.row] isEqualToString:@"selected"]){
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             NSLog(@"mark:INDEX PATH. ROW = %d",indexPath.row);
         }    
-        else{
-            
-        cell.accessoryType = UITableViewCellAccessoryNone;
-            NSLog(@"nomark:INDEX PATH. ROW = %d",indexPath.row);
+        else{            
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            //NSLog(@"nomark:INDEX PATH. ROW = %d",indexPath.row);
         }
     }
     
     cell.textLabel.text = [list objectAtIndex:indexPath.row];
     
-   // cell.accessoryType = UITableViewCellAccessoryNone;
-#warning RIUSO CELLE!!!! perde il √ vicino la cella selezionata e lo mette ad un'altra
-   
     return cell;
 }
 
@@ -125,6 +120,8 @@
 }
 */
 
+
+#warning pulire if-if
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -169,11 +166,11 @@
 	list = [[NSMutableArray alloc] initWithObjects:@"iPhone", @"iPod",
             @"iPod Touch", @"iMac", @"iBook", @"MacBook", @"MacBook Pro", @"Mac Pro",
             @"PowerBook", nil];
-    NSLog(@"list grande = %d",list.count);
+    //NSLog(@"list grande = %d",list.count);
     
     for(int i=0;i<list.count;i++)
         [selectedCells addObject:@"noSelected"];
-    NSLog(@"array grande = %d",selectedCells.count);        
+    //NSLog(@"array grande = %d",selectedCells.count);        
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;

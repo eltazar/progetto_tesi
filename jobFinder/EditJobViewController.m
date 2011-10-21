@@ -98,16 +98,19 @@
 -(void) receiveSectorFromTable:(NSString*) jobSector
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    NSString *placeholder;
     
     if(jobSector != nil){
-        cell.detailTextLabel.text = jobSector;
         job.employee = jobSector;
+        placeholder = jobSector;
     }    
     else{
-        cell.detailTextLabel.text = @"Scegli..."; 
         job.employee = @"";
-    }        
+        placeholder = @"Scegli...";
+    } 
+    
+    [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:placeholder forKey:@"placeholder"];
+    [self.tableView reloadRowsAtIndexPaths: [[[NSArray alloc] initWithObjects:indexPath,nil] autorelease] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 
@@ -154,6 +157,7 @@
      NSMutableArray *secC = [[NSMutableArray alloc] init];
      
      [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                           @"employee",         @"DataKey",
                           @"ActionCell",       @"kind", 
                           @"Impiego",          @"label",

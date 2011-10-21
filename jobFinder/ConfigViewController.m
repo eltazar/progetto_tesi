@@ -7,7 +7,6 @@
 //
 
 #import "ConfigViewController.h"
-//#import "ActionCell.h"
 #import "BaseCell.h"
 #import "SearchZoneViewController.h"
 
@@ -62,6 +61,32 @@
     return cell;
 }
 
+//setta gli header delle sezioni
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
+{  
+     return [sectionDescripition objectAtIndex:section];
+}
+
+//setta i footer della sezione
+//non so se è una soluzione zozza per aggiungere il footer :|, da verificare
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return @"Cerca e seleziona un indirizzo preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
+            break;
+        case 1:
+            return nil;
+            break;
+        
+        default:
+            return nil;
+            break;
+    }
+}
+
+#pragma mark - TableViewDelegate
+
 //azioni per le celle selezionate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -69,7 +94,7 @@
     int section = indexPath.section;
     int row = indexPath.row;
     NSURL *url; 
- 
+    
     if(section == 0){
         switch (row) {
             case 1:
@@ -103,7 +128,7 @@
                 //this will open the selected URL into the safari
                 [[UIApplication sharedApplication]openURL: url ]; 
                 break; 
-
+                
         }
     }
     
@@ -112,73 +137,11 @@
     
 }
 
-//setta gli header delle sezioni
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
-{  
-     return [sectionDescripition objectAtIndex:section];
-}
-
-//setta i footer della sezione
-//non so se è una soluzione zozza per aggiungere il footer :|, da verificare
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    switch (section) {
-        case 0:
-            return @"Cerca e seleziona un indirizzo preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
-            break;
-        case 1:
-            return nil;
-            break;
-        
-        default:
-            return nil;
-            break;
-    }
-}
-
-//#pragma mark - texfield delegate
-
-
-/*sembra funzionare qui, ma è meglio metterlo in TextFieldCell?
- * inoltre devo salvare le informazioni digitate dall'utente nelle impostazioni
- * dell'app, e forse dovrei trasformare l'indirizzo in coordinate.
- * vedere se implementare diretttamente una searchbar che interroga api di google
- */
-
-// gestisce la fine dell'editing in un textField
-//- (void)textFieldDidEndEditing:(UITextField *)txtField
-//{
-//    //recupera la cella relativa al texfield
-//    TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
-//    NSLog(@"2) dataKey %@, texField %@", cell.dataKey, cell.textField.text);
-//    
-//   //}
-//
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField
-//{ 
-//	[textField resignFirstResponder];
-//	return YES;
-//}
-
 #pragma mark - azioni dei bottoni
 
 -(void) doneButtonClicked: (id) sender
 {
-    /*Application_Home/Library/Preferences	Questa directory contiene i file delle preferenze della specifica applicazione. Ci si accede con NSUserDefaults
-     */
-//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-//    
-//    for (int i = 0; i < [self tableView:self.tableView numberOfRowsInSection:0]; i++){        
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow: i inSection: 0];
-//        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-//        NSString *text = ((TextFieldCell *)cell).textField.text;
-//        [prefs setObject:text forKey:[NSString stringWithFormat:@"%d",i]];
-//        NSLog(@"dato nel prefs: %@",[prefs objectForKey:[NSString stringWithFormat:@"%d",i]]);
-//    }
-    
-
     // This is suggested to synch prefs, but is not needed (I didn't put it in my tut)
-//    [prefs synchronize];
     [self.view endEditing:YES];
     
     
@@ -209,19 +172,6 @@
     
    // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
-
-////perchè richiamato 2 volte??????? 
-//-(void)cellControlDidEndEditing:(NSNotification *)notification
-//{
-//	NSIndexPath *cellIndex = (NSIndexPath *)[notification object];
-////    NSLog(@"index path.row = %d",cellIndex.row);
-//	TextFieldCell *cell = (TextFieldCell *)[self.tableView cellForRowAtIndexPath:cellIndex];
-////    NSLog(@"cell in controlDidEnd: %p",cell);
-//	if(cell != nil)
-//	{ 
-//		NSLog(@"L'utente ha digitato %@ per la DataKey %@",  [cell getControlValue], cell.dataKey);
-//	}		
-//}
 
 #pragma mark - SearchZoneDelegate
 

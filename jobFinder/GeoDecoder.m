@@ -66,6 +66,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSString *jsonResult = [[NSString alloc] initWithData:receivedGeoData encoding:NSUTF8StringEncoding];
+    NSString *jsonResult = [[[NSString alloc] initWithData:receivedGeoData encoding:NSUTF8StringEncoding] autorelease]; //giusto sto autorelease?
     NSError *theError = NULL;
     dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
     

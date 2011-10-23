@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CoreLocation/CLLocation.h"
 
 @protocol GeoDecoderDelegate;
 
@@ -23,6 +24,7 @@
 @property(nonatomic, assign) id<GeoDecoderDelegate> delegate;
 
 -(void) searchCoordinatesForAddress:(NSString *)inAddress;
+-(void)searchAddressForCoordinate:(CLLocationCoordinate2D)coordinate;
 
 @end
 

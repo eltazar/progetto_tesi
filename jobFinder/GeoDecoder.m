@@ -8,6 +8,7 @@
 
 #import "GeoDecoder.h"
 #import "NSDictionary_JSONExtensions.h"
+#import "CoreLocation/CLLocation.h"
 
 @implementation GeoDecoder
 @synthesize dictionary, delegate;
@@ -45,6 +46,29 @@
     [request release];
 }
 
+-(void)searchAddressForCoordinate:(CLLocationCoordinate2D)coordinate
+{
+   // http://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=true_or_false
+
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&sensor=true",coordinate.latitude,coordinate.longitude];    
+    
+    //Replace Spaces with a '+' character.
+    [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@""]];
+    
+    //Create NSURL string from a formate URL string.
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    //Setup and start an async download.
+    //Note that we should test for reachability!.
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    [connection release];
+    [request release];
+
+}
+
 -(void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response
 {
     if (receivedGeoData) 
@@ -65,16 +89,12 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSString *jsonResult = [[NSString alloc] initWithData:receivedGeoData encoding:NSUTF8StringEncoding];
     NSString *jsonResult = [[[NSString alloc] initWithData:receivedGeoData encoding:NSUTF8StringEncoding] autorelease]; //giusto sto autorelease?
     NSError *theError = NULL;
     dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
     
-//    NSLog(@"%@",dictionary);
+    NSLog(@"%@",dictionary);
 //    NSLog(@"JSON is: %@",jsonResult);
-    
-    int numberOfSites = [[dictionary objectForKey:@"results"] count];
-//    NSLog(@"count is %d ",numberOfSites);      
     
     [delegate didReceivedGeoDecoderData:dictionary];
 }

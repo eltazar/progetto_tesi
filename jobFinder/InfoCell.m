@@ -14,7 +14,7 @@
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier withDictionary:dictionary]) {
         // Initialization code
-//        self.detailTextLabel.text = @"ciao";
+        self.detailTextLabel.text = [dictionary objectForKey:@"detailLabel"];
         self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         self.detailTextLabel.minimumFontSize = 11;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -22,11 +22,6 @@
         self.imageView.image = image; 
     }
     return self;
-}
-
--(void) setDetailText:(NSString *) newDetailText
-{
-    self.detailTextLabel.text = newDetailText;
 }
 
 //- (void)setSelected:(BOOL)selected animated:(BOOL)animated

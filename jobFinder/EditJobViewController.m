@@ -7,14 +7,12 @@
 //
 
 #import "EditJobViewController.h"
-#import "PickerViewController.h"
 #import "SectorTableViewController.h"
 #import "ActionCell.h"
 #import "TextFieldCell.h"
 #import "TextAreaCell.h"
 
 @implementation EditJobViewController
-//@synthesize job;
 @synthesize fields;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -36,7 +34,6 @@
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     BaseCell *cell = (BaseCell*)[super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     [self fillCell:cell rowDesc:rowDesc];
@@ -137,27 +134,18 @@
 
 #pragma mark - View lifecycle
 
-/*
- // Implement loadView to create a view hierarchy programmatically, without using a nib.
- - (void)loadView
- {
- }
- */
-
-
  // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
  - (void)viewDidLoad
  {   
      [super viewDidLoad];
      
      job = [[Job alloc]initWithCoordinate:CLLocationCoordinate2DMake(0,0)];
-     NSLog(@"job in EDTI_VIEW: %p",job);
+     //NSLog(@"job in EDTI_VIEW: %p",job);
      
      NSMutableArray *secA = [[NSMutableArray alloc] init];
      NSMutableArray *secB = [[NSMutableArray alloc] init];
      NSMutableArray *secC = [[NSMutableArray alloc] init];
      
-     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
      [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                           @"employee",         @"DataKey",
                           @"ActionCell",       @"kind", 

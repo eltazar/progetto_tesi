@@ -12,6 +12,8 @@
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
+#define MIN_LATITUDE 0.007477
+#define MIN_LONGITUDE 0.007677
 
 @implementation MapViewController 
 @synthesize map, publishBtn, infoBtn, toolBar, refreshBtn /*, publishViewCtrl, configView , infoJobView*/;
@@ -281,18 +283,20 @@
 
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
 {
-    NSLog(@"PASSATO");
-    // This is important if you only want to receive one tap and hold event
-    if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
-        //[self publishBtnClicked:self coordinate:locCoord];
-        return;
-    }
-    else{
-        // Here we get the CGPoint for the touch and convert it to latitude and longitude coordinates to display on the map
-        CGPoint point = [sender locationInView:self.map];
-        CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
-        
-        [self publishBtnClicked:self coordinate:locCoord];
+    //Se sto dentro la region minima attivo la possibilità di inserire i job con il tap su map
+    if(map.region.span.latitudeDelta <= MIN_LATITUDE && map.region.span.longitudeDelta <= MIN_LONGITUDE){
+        // This is important if you only want to receive one tap and hold event
+        if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
+            //[self publishBtnClicked:self coordinate:locCoord];
+            return;
+        }
+        else{
+            // Here we get the CGPoint for the touch and convert it to latitude and longitude coordinates to display on the map
+            CGPoint point = [sender locationInView:self.map];
+            CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
+            
+            [self publishBtnClicked:self coordinate:locCoord];
+        }
     }
 }
 

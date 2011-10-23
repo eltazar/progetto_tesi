@@ -75,6 +75,7 @@
 //    [self.tableData addObjectsFromArray:results];
 //    [self.theTableView reloadData];
     
+    [geoDec release];
 }
 
 // We call this when we want to activate/deactivate the UISearchBar

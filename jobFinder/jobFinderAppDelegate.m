@@ -7,6 +7,7 @@
 //
 
 #import "jobFinderAppDelegate.h"
+#import "Reachability.h"
 
 void myExceptionHandler (NSException *ex)
 {
@@ -27,6 +28,10 @@ void myExceptionHandler (NSException *ex)
     
     // Override point for customization after application launch.
     [self.window makeKeyAndVisible];
+
+    //per controllare quando cambia stato connessione
+//    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
+    
     return YES;
 }
 
@@ -58,6 +63,36 @@ void myExceptionHandler (NSException *ex)
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    
+    //Ogni volta che l'app passa in attivo si fa un controllo sulla disponibilità della connessione
+    internetReach = [[Reachability reachabilityForInternetConnection] retain];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    
+    switch (netStatus)
+    {
+        case ReachableViaWWAN:
+        {
+            //NSLog(@"3g");
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            //NSLog(@"Wifi");
+            break;
+        }
+        case NotReachable:
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"BECOME ACTIVE: NO CONNECTION" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            [alert release];
+            break;
+        }
+            
+    }
+
+    //We are unable to make a internet connection at this time. Some functionality will be limited until a connection is made.
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -68,6 +103,36 @@ void myExceptionHandler (NSException *ex)
      See also applicationDidEnterBackground:.
      */
 }
+
+/*chiamato ogni volta che lo stato della connettività cambia. Da sistemare perchè
+ *quando cade la connessione l'alert è mostrato più volte.
+ */
+////Called by Reachability whenever status changes.
+//- (void) reachabilityChanged: (NSNotification* )note
+//{
+//    Reachability* curReach = [note object];
+//    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+//    
+//    NetworkStatus netStatus = [curReach currentReachabilityStatus];
+//    switch (netStatus)
+//    {
+//        case ReachableViaWWAN:
+//        {
+//            break;
+//        }
+//        case ReachableViaWiFi:
+//        {
+//            break;
+//        }
+//        case NotReachable:
+//        {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"CHANGED: NO CONNECTION" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//            [alert show];
+//            [alert release];
+//            break;
+//        }
+//    }
+//}
 
 - (void)dealloc
 {

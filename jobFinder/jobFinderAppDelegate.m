@@ -8,6 +8,7 @@
 
 #import "jobFinderAppDelegate.h"
 #import "Reachability.h"
+#import "CoreLocation/CLLocationManager.h"
 
 void myExceptionHandler (NSException *ex)
 {
@@ -31,6 +32,20 @@ void myExceptionHandler (NSException *ex)
 
     //per controllare quando cambia stato connessione
 //    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
+    
+    /*controlla se i servizi di localizzazione sono attivati.
+     *da sistemare perchè voglio controllare se è attivo il gps in genereale
+     *e poi controllare se l'autorizzazione specifica a jobFinder è attiva per usare il gps
+     *inoltre: metterlo in BecomeActive? così lo fa ogni volta che l'app va in foreground?
+     *così lo fa solo quando viene caricata in memoria la prima volta.
+     */
+    if(![CLLocationManager locationServicesEnabled] || 
+       [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Annulla" otherButtonTitles: @"Riprova",nil];
+        [alert show];
+        [alert release];
+    }
     
     return YES;
 }

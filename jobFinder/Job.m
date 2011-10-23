@@ -56,7 +56,7 @@
 }
 
 - (NSString *)subtitle {
-    return address;
+    return [NSString stringWithFormat:@"Inserito: %@", date];
 }
 
 

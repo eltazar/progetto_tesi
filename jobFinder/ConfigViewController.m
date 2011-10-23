@@ -222,6 +222,7 @@
                          @"InfoCell",               @"kind",
                          [prefs objectForKey:@"address"], @"label",
                          @"",                       @"img",
+                         @"star_64.png",                       @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 0];
 

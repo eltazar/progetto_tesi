@@ -10,9 +10,9 @@
 #import "TextAreaCell.h"
 #import "ActionCell.h"
 #import <MessageUI/MessageUI.h>
+#import "GeoDecoder.h"
 
-
-@interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate>
+@interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate, GeoDecoderDelegate>
 { 
 }
 

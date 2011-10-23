@@ -9,6 +9,9 @@
 #import "InfoJobViewController.h"
 #import <MessageUI/MessageUI.h>
 #import "BaseCell.h"
+#import "GeoDecoder.h"
+#import <objc/runtime.h>
+
 
 @implementation InfoJobViewController
 
@@ -58,8 +61,8 @@
                 cell.detailTextLabel.text = job.employee;
             else if(row == 1)
                 cell.detailTextLabel.text = job.date;
-            else if(row == 2)
-                cell.detailTextLabel.text = @"";
+            else if(row == 2){
+            }
             else if(row == 3)
                 cell.detailTextLabel.text = job.city;
             
@@ -179,6 +182,38 @@
     }
 }
 
+#pragma mark - GeodecoderDelegate
+-(void)didReceivedGeoDecoderData:(NSDictionary *)geoData
+{
+   NSArray *resultsArray = [geoData objectForKey:@"results"];
+
+    NSDictionary *data = [resultsArray objectAtIndex:0];
+    //NSLog(@"DICTIONARY ESTRATTO \n :%@",[data objectForKey:@"address_components"]); //array
+    //NSLog(@"CLASSE: %s", class_getName([[data objectForKey:@"address_components"] class]));
+    
+    NSArray *dataArray = [data objectForKey:@"address_components"];
+    
+//    NSLog(@"CLASSE: %s", class_getName([[dataArray objectAtIndex:0] class]));
+    //NSLog(@"DATA ARRAY: %@", [[dataArray objectAtIndex:0] objectForKey:@"long_name"]);// 0 = dizionario street number
+    
+#warning fatto a mano ma deve farlo se c'è errore nel reverse gecoding, CORREGGERE!!!!
+    NSString *address = @"Non disponibile";
+    NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
+    NSString *number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"];    
+    //formatto la stringa address 
+    if(street != nil && !([street isEqualToString:@""]))
+        address = [NSString stringWithFormat:@"%@", street];
+        if( number != nil && !([number isEqualToString:@""]))
+            address = [NSString stringWithFormat:@"%@, %@", address, number];
+    
+    //aggiorno il model usando la stringa address e ricarico i dati della tabella 
+    [[[sectionData objectAtIndex:0] objectAtIndex:2] setObject:address forKey:@"detailLabel"];
+    [self.tableView reloadData];        
+}
+
+
+    
+
 #pragma mark - View lifecycle
 
 /*
@@ -256,6 +291,17 @@
     
     sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
     sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti", nil];  
+    
+    
+#warning REVERSE GECODING SPOSTARE??
+    /*se non è ancora stato calcolata la via per la vista di un determinato job
+     * sistemato in questo modo il reverse gecoding viene fatto ogni volta che viene caricata la vista in memoria, meno volte rispetto se messo in viewWillAppear ma sempre troppe secondo me.. SISTEMARE!!!!!!!
+    */
+    if([[[[sectionData objectAtIndex:0] objectAtIndex:2] objectForKey:@"detailLabel"] isEqualToString:@""]){
+        GeoDecoder *geoDec = [[GeoDecoder alloc] init];
+        [geoDec setDelegate:self];
+        [geoDec searchAddressForCoordinate:job.coordinate];
+    }
     
     [secA autorelease];
     [secB autorelease];

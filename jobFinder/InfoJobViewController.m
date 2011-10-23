@@ -223,13 +223,12 @@
  }
  */
 
-
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTitle:@"Lavoro"]; 
-
+    
     //inizializzo tabella
     NSMutableArray *secA = [[NSMutableArray alloc] init];
     NSMutableArray *secB = [[NSMutableArray alloc] init];
@@ -238,6 +237,7 @@
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
                          @"Impiego",          @"label",
+                         @"",                 @"detailLabel",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
                             @"style",
@@ -245,17 +245,21 @@
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
                          @"Inserito il",      @"label",
+                         @"",                 @"detailLabel",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
                             @"style",
                          nil] autorelease] atIndex: 1];
     
-//    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-//                         @"InfoCell",         @"kind", 
-//                         @"Via",              @"label",
-//                         @"",                 @"img",
-//                         nil] autorelease] atIndex: 2];
-//    
+    [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                         @"InfoCell",         @"kind", 
+                         @"Indirizzo",        @"label",
+                         @"",                 @"detailLabel",
+                         @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
+                         @"style",
+                         nil] autorelease] atIndex: 2];
+    
 //    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
 //                         @"InfoCell",         @"kind", 
 //                         @"Città",            @"label",

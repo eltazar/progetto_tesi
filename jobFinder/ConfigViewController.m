@@ -200,6 +200,10 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
+    if([prefs objectForKey:@"address"] == nil || [[prefs objectForKey:@"address"] isEqualToString:@""]){
+        [prefs setObject:@"" forKey:@"address"];
+    }
+
     //setta titolo vista
     [self setTitle:@"Impostazioni"];
     self.navigationItem.hidesBackButton = TRUE;
@@ -267,12 +271,6 @@
 //{
 //    
 //}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
 
 #pragma mark - memory management
 

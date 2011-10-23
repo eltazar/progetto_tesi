@@ -20,7 +20,6 @@
     UIBarButtonItem *publishBtn; // bottone "segnala"
     UIBarButtonItem *refreshBtn; //bottone "refresh"
     UIBarButtonItem *infoBarButtonItem;
-    
     Job *jobToPublish;
     Job *jobDiprova;
     

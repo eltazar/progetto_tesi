@@ -46,8 +46,7 @@
 
 //gestisce le annotation durante lo zooming e il panning
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
-{
-
+{    
     //se la annotation è la nostra posizione, ritorna annotationView standard
     if (annotation == mapView.userLocation) {
         [mapView.userLocation setTitle:@"Mia posizione"];
@@ -75,6 +74,7 @@
     else
         pinView.pinColor = MKPinAnnotationColorGreen;
     //NSLog(@"Annotation: %p -> View: %p", annotation, pinView);
+   
     return pinView;
 }
 
@@ -98,10 +98,10 @@
 {
     //qui devo interrogare il database?? ovvero quando mi sposto di region prendo il centro di questa e in base alle sue coordinate scarico le annotation dal db?
     NSLog(@"region.center.longitude %f \n region.center.latitude %f", mapView.region.center.longitude, mapView.region.center.latitude);
-    NSLog    (@"span region: %f ", map.region.span.latitudeDelta);
+    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
+    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
 
     [self filterAnnotation:arrayJOBtemp];
-
 }
 
 //per gestire il tap sul disclosure
@@ -109,6 +109,7 @@
 {
 	// Handle it, such as showing another view controller    
     //BUONO
+    
     InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
     [self.navigationController pushViewController:infoJobView animated: YES];
     [infoJobView release];
@@ -215,7 +216,6 @@
 //    lastSpan = delta;
 }
 
-
 #pragma mark - gestione click bottoni della view
 
 //in teoria presenta solo la vista modale
@@ -229,7 +229,7 @@
     //registro la classe come delegato del publishViewController
     publishViewCtrl.pwDelegate = self;
     
-//    //invio in avanti le user coordinate se ho spinto il bottone "segnala"
+    //invio in avanti le user coordinate se ho spinto il bottone "segnala"
     if(sender != self)
         publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
     else publishViewCtrl.jobCoordinate = coord; //altrimenti setto quelle del tocco
@@ -299,17 +299,6 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*richiamato dalla view modale dopo il click su inserisci, e gli viene passato il nuovoJob da

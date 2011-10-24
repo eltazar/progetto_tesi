@@ -68,6 +68,7 @@
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] retain];
     [internetReach startNotifier];
     NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+     [internetReach release];
     
     if (netStatus == 0){
             

@@ -20,11 +20,14 @@
     UIBarButtonItem *publishBtn; // bottone "segnala"
     UIBarButtonItem *refreshBtn; //bottone "refresh"
     UIBarButtonItem *infoBarButtonItem;
+    UIBarButtonItem *bookmarkButtonItem;
     Job *jobToPublish;
     Job *jobDiprova;
     
     CLLocationDegrees lastSpan;
     NSMutableArray *arrayJOBtemp; 
+    MKAnnotationView *favouriteAnnView;
+    CLLocationCoordinate2D favouriteCoord;
     
     UILongPressGestureRecognizer *longPressGesture;
     //PublishViewController *publishViewCtrl;
@@ -38,12 +41,14 @@
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *publishBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *refreshBtn;
 @property(nonatomic, retain) IBOutlet UIButton *infoBtn;
+@property(nonatomic, retain) IBOutlet UIBarButtonItem *bookmarkButtonItem;
 //@property(nonatomic, retain) PublishViewController *publishViewCtrl;
 //@property(nonatomic, retain) ConfigViewController *configView;
 //@property(nonatomic, retain) RootJobViewController *infoJobView;
 
 -(IBAction)publishBtnClicked:(id)sender coordinate:(CLLocationCoordinate2D)coord;
 -(void)infoButtonClicked:(id)sender;
+-(IBAction)bookmarkBtnClicked:(id)sender;
 -(IBAction) showUserLocationButtonClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;
 

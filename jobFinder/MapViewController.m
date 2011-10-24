@@ -9,6 +9,7 @@
 
 #import "MapViewController.h"
 #import "InfoJobViewController.h"
+#import "FavouriteAnnotation.h"
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
@@ -17,6 +18,7 @@
 
 @implementation MapViewController 
 @synthesize map, publishBtn, infoBtn, toolBar, refreshBtn /*, publishViewCtrl, configView , infoJobView*/;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem /*, publishViewCtrl, configView , infoJobView*/;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -54,11 +56,13 @@
     }
     
     if([annotation isKindOfClass:[FavouriteAnnotation class]]){
-        MKAnnotationView *favouritePinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
+        MKAnnotationView *favouritePinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"];
         favouritePinView.tag = 122;
+        favouriteAnnView = favouritePinView;
 //        favouritePinView.rightCalloutAccessoryView = nil;
         favouritePinView.canShowCallout = YES;
         favouritePinView.image=[UIImage imageNamed:@"favouritePin.png"];
+        NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;
     }
 
@@ -278,6 +282,14 @@
     MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, span);
     //    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
     [map setRegion:region animated:YES]; 
+-(IBAction)bookmarkBtnClicked:(id)sender
+{
+    NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
+    if(favouriteCoord.latitude != 0 && favouriteCoord.longitude != 0){
+        MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+        MKCoordinateRegion region = MKCoordinateRegionMake(favouriteCoord, span);
+        [map setRegion:region animated:YES];
+    }
 }
 
 #pragma mark - PublishViewControllerDelegate
@@ -347,12 +359,16 @@
 #pragma mark - ConfigViewControllerDelegate
 -(void)didSelectedFavouriteZone:(CLLocationCoordinate2D)coordinate
 {
-    MKAnnotationView *oldView = (MKAnnotationView *) [self.view viewWithTag:122];
-    if(oldView != nil){
-        [map removeAnnotation:oldView.annotation];
+    [favouriteAnnView retain];
+    NSLog(@"FAVOURITE ANN VIEW = %p",favouriteAnnView);
+    if(favouriteAnnView != nil){
+        [map removeAnnotation:favouriteAnnView.annotation];
     }
+    favouriteCoord = coordinate;
+    NSLog(@"FAVOURITE COORD LAT: %f",favouriteCoord.latitude);
     FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc]initWithCoordinate:coordinate] autorelease];
     [map addAnnotation:fv];
+    [favouriteAnnView release];
 }
 
 #pragma  mark - View lyfe cicle
@@ -395,11 +411,12 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if([prefs objectForKey: @"lat"] != nil && [prefs objectForKey: @"long"] != nil){
-        NSLog(@"STO INSERENDO IL PIN PREFERITO!");
-        FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue])] autorelease];
+        favouriteCoord = CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue]);
+        FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
         
         [map addAnnotation:fv];   
     }   
+    else NSLog(@"STRONZOOOoooooooooooo");
     
     //########## prove di inserimento jobs
     

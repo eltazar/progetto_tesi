@@ -47,6 +47,34 @@ void myExceptionHandler (NSException *ex)
         [alert release];
     }
     
+    //controlla presenza rete al primo avvio dell'app
+    internetReach = [[Reachability reachabilityForInternetConnection] retain];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    
+    switch (netStatus)
+    {
+        case ReachableViaWWAN:
+        {
+            //NSLog(@"3g");
+            break;
+        }
+        case ReachableViaWiFi:
+        {
+            //NSLog(@"Wifi");
+            break;
+        }
+        case NotReachable:
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            [alert release];
+            break;
+        }
+            
+    }
+
+    
     return YES;
 }
 
@@ -79,33 +107,6 @@ void myExceptionHandler (NSException *ex)
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
-    //Ogni volta che l'app passa in attivo si fa un controllo sulla disponibilità della connessione
-    internetReach = [[Reachability reachabilityForInternetConnection] retain];
-    [internetReach startNotifier];
-    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-    
-    switch (netStatus)
-    {
-        case ReachableViaWWAN:
-        {
-            //NSLog(@"3g");
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            //NSLog(@"Wifi");
-            break;
-        }
-        case NotReachable:
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"BECOME ACTIVE: NO CONNECTION" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
-            [alert release];
-            break;
-        }
-            
-    }
-
     //We are unable to make a internet connection at this time. Some functionality will be limited until a connection is made.
     
 }

@@ -76,6 +76,7 @@
 //    [self.theTableView reloadData];
     
     [geoDec release];
+    
 }
 
 // We call this when we want to activate/deactivate the UISearchBar
@@ -150,6 +151,24 @@
     
     return cell;
 }
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            //trick per visualizzare bene lo scroll della tabella, sistemare le misure delle varie view quando c'è tempo
+            return @"\n\n";
+            break;
+        case 1:
+            return nil;
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
+}
+
+
 
 #pragma mark - GeoDecoderDelegate
 
@@ -185,31 +204,12 @@
 
 }
 
-/*
- geometry =             {
- bounds =                 {
- northeast =                     {
- lat = "7.2945335";
- lng = "171.940155";
- };
- southwest =                     {
- lat = "6.955802900000001";
- lng = "171.5436189";
- };
- };
- location =                 {
- lat = "7.061012799999999";
- lng = "171.647344";
- };
-
- */
-
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+//    self.navigationController.navigationBarHidden = YES;
     [self setTitle:@"Cerca Zona"];
     self.tableData =[[NSMutableArray alloc]init];
     self.disableViewOverlay = [[UIView alloc]

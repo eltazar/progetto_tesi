@@ -10,6 +10,7 @@
 #import "GeoDecoder.h"
 #import <objc/runtime.h>
 #import "CoreLocation/CLLocation.h"
+#import "Reachability.h"
 
 @implementation SearchZoneViewController
 @synthesize tableData, theSearchBar, theTableView, disableViewOverlay, delegate;
@@ -64,6 +65,18 @@
     // SomeService is just a dummy class representing some 
     // api that you are using to do the search
     
+    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] retain];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    
+    if (netStatus == 0){
+            
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Connessione non disponibile. Controllare le impostazioni del proprio device." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+
     GeoDecoder *geoDec = [[GeoDecoder alloc] init];
     [geoDec setDelegate:self];
     

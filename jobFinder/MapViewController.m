@@ -53,8 +53,16 @@
         return nil;
     }
     
-    //se invece la annotation riguarda un lavoro creo e ritorno la vista
+    if([annotation isKindOfClass:[FavouriteAnnotation class]]){
+        MKAnnotationView *favouritePinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
+        favouritePinView.tag = 122;
+//        favouritePinView.rightCalloutAccessoryView = nil;
+        favouritePinView.canShowCallout = YES;
+        favouritePinView.image=[UIImage imageNamed:@"favouritePin.png"];
+        return favouritePinView;
+    }
 
+    //se invece la annotation riguarda un lavoro creo e ritorno la vista
     MKPinAnnotationView* pinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"Pin" ];
     
     //se non sono riuscito a riciclare un pin, lo creo
@@ -247,7 +255,7 @@
 {
     
     ConfigViewController *configView = [[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil];
-    
+    [configView setDelegate:self];
     //animazione e push della view
     [UIView 
      transitionWithView:self.navigationController.view
@@ -336,6 +344,17 @@
     [self dismissPublishView];
 }
 
+#pragma mark - ConfigViewControllerDelegate
+-(void)didSelectedFavouriteZone:(CLLocationCoordinate2D)coordinate
+{
+    MKAnnotationView *oldView = (MKAnnotationView *) [self.view viewWithTag:122];
+    if(oldView != nil){
+        [map removeAnnotation:oldView.annotation];
+    }
+    FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc]initWithCoordinate:coordinate] autorelease];
+    [map addAnnotation:fv];
+}
+
 #pragma  mark - View lyfe cicle
 
 - (void)viewDidLoad
@@ -374,6 +393,13 @@
     
     
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if([prefs objectForKey: @"lat"] != nil && [prefs objectForKey: @"long"] != nil){
+        NSLog(@"STO INSERENDO IL PIN PREFERITO!");
+        FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue])] autorelease];
+        
+        [map addAnnotation:fv];   
+    }   
     
     //########## prove di inserimento jobs
     

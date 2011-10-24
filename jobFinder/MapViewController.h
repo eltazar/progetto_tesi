@@ -13,7 +13,7 @@
 #import "ConfigViewController.h"
 #import "Job.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  

@@ -15,6 +15,7 @@
 #define URL_INFO @"http://www.google.it"
 
 @implementation ConfigViewController
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -188,6 +189,7 @@
     
     [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:address forKey:@"label"];
     [self.tableView reloadData];    
+    [delegate didSelectedFavouriteZone:CLLocationCoordinate2DMake(latitude,longitude)]; 
     [self.navigationController popViewControllerAnimated:YES];
 }
 

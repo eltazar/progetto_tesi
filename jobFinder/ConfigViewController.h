@@ -10,11 +10,20 @@
 #import <MessageUI/MessageUI.h>
 #import "SearchZoneViewController.h"
 
+@protocol ConfigViewControllerDelegate;
 
 @interface ConfigViewController : UITableViewController <UITableViewDataSource,MFMailComposeViewControllerDelegate, SearchZoneDelegate >{
     
     NSArray *sectionDescripition;
     NSArray *sectionData;
     SearchZoneViewController *searchZone;
+    id<ConfigViewControllerDelegate> delegate;
 }
+@property(nonatomic,assign) id<ConfigViewControllerDelegate> delegate;
+@end
+
+@protocol ConfigViewControllerDelegate <NSObject>
+
+-(void)didSelectedFavouriteZone:(CLLocationCoordinate2D) coordinate;
+
 @end

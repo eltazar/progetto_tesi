@@ -20,7 +20,8 @@
     self = [super initWithNibName:@"RootJobViewController" bundle:nil];
     if (self) {
         // Custom initialization
-        job = aJob; //??? GIUSTO????
+#warning giusto fare così???
+        job = [aJob retain]; //??? GIUSTO????
     }
     return self;
     
@@ -61,8 +62,8 @@
                 cell.detailTextLabel.text = job.employee;
             else if(row == 1)
                 cell.detailTextLabel.text = job.date;
-            else if(row == 2){
-            }
+            else if(row == 2)
+                cell.detailTextLabel.text = job.address;
             else if(row == 3)
                 cell.detailTextLabel.text = job.city;
             
@@ -197,15 +198,16 @@
     //NSLog(@"DATA ARRAY: %@", [[dataArray objectAtIndex:0] objectForKey:@"long_name"]);// 0 = dizionario street number
     
 #warning fatto a mano ma deve farlo se c'è errore nel reverse gecoding, CORREGGERE!!!!
-    NSString *address = @"Non disponibile";
+    NSString *address = @""; //dove mettere "non disponibile" ?
     NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
     NSString *number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"];    
     //formatto la stringa address 
-    if(street != nil && !([street isEqualToString:@""]))
+    if(street != nil && !([street isEqualToString:@""])){
         address = [NSString stringWithFormat:@"%@", street];
         if( number != nil && !([number isEqualToString:@""]))
             address = [NSString stringWithFormat:@"%@, %@", address, number];
-    
+        job.address = address;
+    }
     //aggiorno il model usando la stringa address e ricarico i dati della tabella 
     [[[sectionData objectAtIndex:0] objectAtIndex:2] setObject:address forKey:@"detailLabel"];
     [self.tableView reloadData];        
@@ -298,10 +300,11 @@
     
     
 #warning REVERSE GECODING SPOSTARE??
-    /*se non è ancora stato calcolata la via per la vista di un determinato job
-     * sistemato in questo modo il reverse gecoding viene fatto ogni volta che viene caricata la vista in memoria, meno volte rispetto se messo in viewWillAppear ma sempre troppe secondo me.. SISTEMARE!!!!!!!
-    */
-    if([[[[sectionData objectAtIndex:0] objectAtIndex:2] objectForKey:@"detailLabel"] isEqualToString:@""]){
+    /* Quando viene caricata la view controllo se il job scaricato dal server ha il campo address a nil o @"". Se si fa partire il reverse geocoding, altrimenti vuol dire che il job era già stato caricato in precedenza ed era già stato fatto il geocoding. In questo 
+        modo il reverse gecoding è fatto una volta sola, appena scaricato un job dal server.
+     */
+    if(job.address == nil || [job.address isEqualToString:@""] || [job.address isEqualToString:@"Non disponibile"]){
+        NSLog(@"FACCIO REVERSE GECODING!");
         GeoDecoder *geoDec = [[GeoDecoder alloc] init];
         [geoDec setDelegate:self];
         [geoDec searchAddressForCoordinate:job.coordinate];
@@ -338,7 +341,8 @@
 }
 
 -(void) dealloc
-{
+{   
+    [job release];
     [super dealloc];
 }
 

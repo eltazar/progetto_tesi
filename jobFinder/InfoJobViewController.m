@@ -308,6 +308,7 @@
         GeoDecoder *geoDec = [[GeoDecoder alloc] init];
         [geoDec setDelegate:self];
         [geoDec searchAddressForCoordinate:job.coordinate];
+        [geoDec release];
     }
     
     [secA autorelease];

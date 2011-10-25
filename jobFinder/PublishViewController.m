@@ -29,34 +29,6 @@
     return self;
 }
 
-
-#pragma mark - MKReverseGeocoderDelegate
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark
-{
-        NSLog(@"#######################SONO IN REVERSE GEOCODING");
-    if(placemark.thoroughfare == nil){
-        self.addressGeocoding = @"Indirizzo non disponibile";
-        return;
-    }
-    NSString *first = [NSString stringWithFormat:@"%@",placemark.thoroughfare];
-    NSString *second;
-    
-    if(placemark.subThoroughfare == nil)
-        second = @"";
-    else second = [NSString stringWithFormat:@", %@",placemark.subThoroughfare];
-    
-    self.addressGeocoding = [NSString stringWithFormat:@"%@%@",first,second];
-        NSLog(@"address = %@", self.addressGeocoding);
-    //    NSLog(@"new job %p",newJob);
-}
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error
-{
-    NSLog(@"Reverse Geocoding Fallito");
-    self.addressGeocoding = @"FALLITO";
-}
-
 #pragma mark - metodi bottoni della view
 
 -(IBAction)insertBtnPressed:(id)sender
@@ -67,11 +39,7 @@
     //ricavo il job dalla tabella
     newJob = [((EditJobViewController *) tableView).job retain];  //???retain???
     newJob.coordinate =  CLLocationCoordinate2DMake(jobCoordinate.latitude,jobCoordinate.longitude);
-   
-    
-    //setto indirizzo dopo il reverseGeocoding
-    newJob.address = self.addressGeocoding;
-    
+
     //setto data creazione annuncio
     NSLocale *locale = [NSLocale currentLocale];
     NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease]; 
@@ -79,22 +47,7 @@
     [formatter setDateFormat:dateFormat];
     [formatter setLocale:locale];
     newJob.date = [formatter stringFromDate:[NSDate date]];
-    
-    
-    
-    //    NSLog(@"New Job retain count = %p",newJob);
-    //    NSLog(@"job retain count = %p",((EditJobViewController *) tableView).job);
-    
-    //    NSLog(@"************* PublishViewController************");    
-    //    NSLog(@"user coordinate %f %f",userCoordinate.latitude,userCoordinate.longitude);    
-    //    NSLog(@"newJob = %p |||| newJob.coordinate LONG %F | LAT %F",newJob, newJob.coordinate.longitude,newJob.coordinate.latitude);
-    //    NSLog(@"job.employee = %@",newJob.employee);
-    //    NSLog(@"***********************************************");    
-    
-    //VEDERE IL PROB DELLA MEMORIA DI QUESTI TIPI DI OGGETTI
-    
-    
-    
+       
     if([self validate:newJob]){    
         //passo al delegato il nuovo job;
         [pwDelegate didInsertNewJob:newJob];
@@ -131,7 +84,7 @@
 //    if(!([newJob.email isEqualToString:@""] || newJob.email == nil))
 //        rtn = [emailTest evaluateWithObject:newJob.email];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     
     rtn = [job isValid];
     
@@ -148,16 +101,6 @@
 }
 
 #pragma mark - View lifecycle
-
--(void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:NO];
-    reverseGecoder = [[MKReverseGeocoder alloc]initWithCoordinate:jobCoordinate];
-    reverseGecoder.delegate = self;
-    [reverseGecoder start]; //attivare quando necessario sennò google si incazza
-    
-}
-
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
@@ -211,7 +154,6 @@
     //    [pwDelegate release];
     [super dealloc];
     [tableView release];
-    [reverseGecoder release];
 }
 
 @end

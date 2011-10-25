@@ -172,10 +172,6 @@
             //trick per visualizzare bene lo scroll della tabella, sistemare le misure delle varie view quando c'è tempo
             return @"\n\n";
             break;
-        case 1:
-            return nil;
-            break;
-            
         default:
             return nil;
             break;
@@ -189,7 +185,7 @@
 -(void) didReceivedGeoDecoderData:(NSDictionary *)geoData
 {
     //NSLog(@"DICTIONARY IS: %@",geoData);
-    NSLog(@"CLASSE: %s", class_getName([[geoData objectForKey:@"results"] class]));
+   // NSLog(@"CLASSE: %s", class_getName([[geoData objectForKey:@"results"] class]));
     
     NSArray *resultsArray = [geoData objectForKey:@"results"];
     NSMutableArray *addresses = [[[NSMutableArray alloc] initWithCapacity:resultsArray.count] autorelease];
@@ -198,10 +194,10 @@
         
         NSDictionary *result = [resultsArray objectAtIndex:i];
         NSString *addressString = [ result objectForKey:@"formatted_address"];
-        NSLog(@"ADDRESS_STRING = %@",addressString);
+       // NSLog(@"ADDRESS_STRING = %@",addressString);
         CLLocationDegrees latitude = [[[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
         CLLocationDegrees longitude = [[[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-        NSLog(@"LAT = %f LONG = %f",latitude,longitude);
+        //NSLog(@"LAT = %f LONG = %f",latitude,longitude);
         
         NSDictionary *entry = [[[NSDictionary alloc] initWithObjectsAndKeys:
                                 addressString, @"address", 
@@ -225,9 +221,9 @@
     [super viewDidLoad];
 //    self.navigationController.navigationBarHidden = YES;
     [self setTitle:@"Cerca Zona"];
-    self.tableData =[[NSMutableArray alloc]init];
-    self.disableViewOverlay = [[UIView alloc]
-                               initWithFrame:CGRectMake(0.0f,86.0f,320.0f,416.0f)];
+    self.tableData =[[[NSMutableArray alloc]init] autorelease];
+    self.disableViewOverlay = [[[UIView alloc]
+                               initWithFrame:CGRectMake(0.0f,86.0f,320.0f,416.0f)]autorelease];
     self.disableViewOverlay.backgroundColor=[UIColor blackColor];
     self.disableViewOverlay.alpha = 0;
     
@@ -259,10 +255,12 @@
 
 
 - (void)dealloc {
-    [super dealloc];
+    
+    [disableViewOverlay release];
     [theTableView release], theTableView = nil;
     [theSearchBar release], theSearchBar = nil;
     [tableData release];
+    [super dealloc];
 }
 
 @end

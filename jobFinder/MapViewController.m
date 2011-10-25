@@ -325,7 +325,7 @@
  * inviare al db
  */
 #warning leggere sotto
--(void)receiveAnewJob:(Job *) newJob
+-(void)didInsertNewJob:(Job *)newJob
 {
     //ricevo il job dalla vista modale già pronto per essere inviato su server
     jobToPublish = [newJob retain]; //fare un retain di newJob e alla fine del metodo un release?   
@@ -351,7 +351,7 @@
 }
 
 //metodo delegate: richiamato dalla view modale dopo il click su annulla
--(void) publishViewControllerDidCancel:(PublishViewController *)viewController
+-(void) didCancelNewJob:(PublishViewController *)viewController
 {
     [self dismissPublishView];
 }

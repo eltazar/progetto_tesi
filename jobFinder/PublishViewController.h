@@ -20,7 +20,7 @@
  */
 
 
-@interface PublishViewController : UINavigationController  <MKReverseGeocoderDelegate>/*<PassDataCollectedDelegate>*/
+@interface PublishViewController : UINavigationController  //<MKReverseGeocoderDelegate>/*<PassDataCollectedDelegate>*/
 {
     //punta al delegato di questa vista
     id<PublishViewControllerDelegate> pwDelegate;
@@ -30,7 +30,7 @@
     //coordinate dell'utente
     CLLocationCoordinate2D jobCoordinate;
     
-    MKReverseGeocoder *reverseGecoder;
+    //MKReverseGeocoder *reverseGecoder;
     @private
     NSString *addressGeocoding;
 }
@@ -49,6 +49,6 @@
 ////metodi protocollo
 @protocol PublishViewControllerDelegate <NSObject>
 //-(void)publishViewControllerDidInsert:(PublishViewController *)viewController aJob:(Job *)job;
--(void)receiveAnewJob:(Job *) newJob;
--(void) publishViewControllerDidCancel:(PublishViewController *)viewController;
+-(void)didInsertNewJob:(Job *) newJob;
+-(void)didCancelNewJob:(PublishViewController *)viewController;
 @end

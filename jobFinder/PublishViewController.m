@@ -97,7 +97,7 @@
     
     if([self validate:newJob]){    
         //passo al delegato il nuovo job;
-        [pwDelegate receiveAnewJob:newJob];
+        [pwDelegate didInsertNewJob:newJob];
     }
     
     [newJob release];
@@ -106,7 +106,7 @@
 -(IBAction)cancelBtnPressed:(id)sender{
     
     //dico al delegato che è stato spinto annulla
-    [self.pwDelegate publishViewControllerDidCancel:self];
+    [self.pwDelegate didCancelNewJob:self];
 }
 
 -(void)activeInsertBtn:(id)sender

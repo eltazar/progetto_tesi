@@ -69,14 +69,13 @@
         return nil;
     }
     
+    //se la annotatione è di tipo FavouriteAnnotation la creo e salvo 
     if([annotation isKindOfClass:[FavouriteAnnotation class]]){
-        MKAnnotationView *favouritePinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"];
+        MKAnnotationView *favouritePinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
         favouritePinView.tag = 122;
-        favouriteAnnView = favouritePinView;
-//        favouritePinView.rightCalloutAccessoryView = nil;
         favouritePinView.canShowCallout = YES;
         favouritePinView.image=[UIImage imageNamed:@"favouritePin.png"];
-        NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
+        //NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;
     }
 
@@ -302,11 +301,13 @@
 
 -(IBAction)bookmarkBtnClicked:(id)sender
 {
-    NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
-    if(favouriteCoord.latitude != 0 && favouriteCoord.longitude != 0){
-        MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
-        MKCoordinateRegion region = MKCoordinateRegionMake(favouriteCoord, span);
-        [map setRegion:region animated:YES];
+//    NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
+    if(favouriteAnnotation != nil &&
+       favouriteAnnotation.coordinate.latitude != 0 &&
+       favouriteAnnotation.coordinate.longitude != 0){
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+            MKCoordinateRegion region = MKCoordinateRegionMake(favouriteAnnotation.coordinate, span);
+            [map setRegion:region animated:YES];
     }
 }
 
@@ -377,16 +378,13 @@
 #pragma mark - ConfigViewControllerDelegate
 -(void)didSelectedFavouriteZone:(CLLocationCoordinate2D)coordinate
 {
-    [favouriteAnnView retain];
-    NSLog(@"FAVOURITE ANN VIEW = %p",favouriteAnnView);
-    if(favouriteAnnView != nil){
-        [map removeAnnotation:favouriteAnnView.annotation];
+    if(favouriteAnnotation != nil){
+        [map removeAnnotation:favouriteAnnotation];
     }
-    favouriteCoord = coordinate;
-    NSLog(@"FAVOURITE COORD LAT: %f",favouriteCoord.latitude);
-    FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc]initWithCoordinate:coordinate] autorelease];
-    [map addAnnotation:fv];
-    [favouriteAnnView release];
+//    [favouriteAnnotation release];
+//    favouriteAnnotation = nil;
+    favouriteAnnotation = [[[FavouriteAnnotation alloc]initWithCoordinate:coordinate] autorelease];
+    [map addAnnotation:favouriteAnnotation];
 }
 
 #pragma  mark - View lyfe cicle
@@ -420,19 +418,13 @@
     [self.map addGestureRecognizer:longPressGesture];
     
     
-    
-    
-    
-    
-    
-    
-    
+    //recupero e setto le coordinate preferite all'avvio dell'app
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if([prefs objectForKey: @"lat"] != nil && [prefs objectForKey: @"long"] != nil){
-        favouriteCoord = CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue]);
-        FavouriteAnnotation *fv = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
-        
-        [map addAnnotation:fv];   
+        CLLocationCoordinate2D favouriteCoord = CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue]);
+        //creo ed aggiungo l'annotatione alla mappa
+        favouriteAnnotation = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
+        [map addAnnotation:favouriteAnnotation];   
     }   
     else NSLog(@"STRONZOOOoooooooooooo");
     
@@ -485,13 +477,14 @@
 
 - (void)dealloc
 {
-    [super dealloc];
+    [favouriteAnnotation release];
     [map release];
     [toolBar release];  
     [refreshBtn release]; 
     [infoBarButtonItem release];
     [publishBtn release];
     [longPressGesture release];
+    [super dealloc];
 }
 
 

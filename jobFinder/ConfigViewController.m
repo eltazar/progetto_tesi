@@ -201,7 +201,6 @@
     [super viewDidLoad];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
     if([prefs objectForKey:@"address"] == nil || [[prefs objectForKey:@"address"] isEqualToString:@""]){
         [prefs setObject:@"" forKey:@"address"];
     }
@@ -223,8 +222,7 @@
                          @"bookmarks",              @"DataKey",
                          @"InfoCell",               @"kind",
                          [prefs objectForKey:@"address"], @"label",
-                         @"",                       @"img",
-                         @"star_64.png",                       @"img",
+                         @"favouritePin.png",                       @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 0];
 

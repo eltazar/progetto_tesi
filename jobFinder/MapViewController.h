@@ -12,6 +12,7 @@
 #import "PublishViewController.h"
 #import "ConfigViewController.h"
 #import "Job.h"
+#import "FavouriteAnnotation.h"
 
 @interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate>{
     
@@ -27,7 +28,7 @@
     CLLocationDegrees lastSpan;
     NSMutableArray *arrayJOBtemp; 
     MKAnnotationView *favouriteAnnView;
-    CLLocationCoordinate2D favouriteCoord;
+    FavouriteAnnotation *favouriteAnnotation;
     
     UILongPressGestureRecognizer *longPressGesture;
     

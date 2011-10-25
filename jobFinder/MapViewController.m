@@ -15,6 +15,7 @@
 #define THRESHOLD 0.01
 #define MIN_LATITUDE 0.007477
 #define MIN_LONGITUDE 0.007677
+#define DEFAULT_COORDINATE -180
 
 @implementation MapViewController 
 @synthesize map, publishBtn, infoBtn, toolBar, refreshBtn /*, publishViewCtrl, configView , infoJobView*/;
@@ -31,6 +32,19 @@
 }
 
 #pragma mark - MKMapViewDelegate
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    /*attivo il pulsante refresh in base alla user location. Se la localizzazione èdisabilitata dopo un po la userLocation assume i valori di default, quindi disattivol il pulsante.
+     */
+    if(userLocation.coordinate.latitude != DEFAULT_COORDINATE &&
+       userLocation.coordinate.longitude != DEFAULT_COORDINATE){
+        refreshBtn.enabled = YES;
+    }
+    else{
+        refreshBtn.enabled = NO;
+    }
+}
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
@@ -277,11 +291,15 @@
 
 -(IBAction) showUserLocationButtonClicked:(id)sender
 {
-    //riposiziona la region alla userLocation
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.3, 0.3);
-    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, span);
-    //    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
-    [map setRegion:region animated:YES]; 
+    if(refreshBtn.enabled){
+        //riposiziona la region alla userLocation
+        MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+        MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, span);
+        //    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
+        [map setRegion:region animated:YES];
+    }
+}
+
 -(IBAction)bookmarkBtnClicked:(id)sender
 {
     NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
@@ -418,6 +436,8 @@
     }   
     else NSLog(@"STRONZOOOoooooooooooo");
     
+    //di default il tasto refresh è disabilitato
+    refreshBtn.enabled = NO;
     //########## prove di inserimento jobs
     
     

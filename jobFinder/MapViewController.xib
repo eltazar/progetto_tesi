@@ -181,6 +181,22 @@
 					</object>
 					<int key="connectionID">31</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">bookmarkButtonItem</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="658832664"/>
+					</object>
+					<int key="connectionID">32</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">bookmarkBtnClicked:</string>
+						<reference key="source" ref="658832664"/>
+						<reference key="destination" ref="372490531"/>
+					</object>
+					<int key="connectionID">33</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -256,6 +272,7 @@
 						<int key="objectID">28</int>
 						<reference key="object" ref="658832664"/>
 						<reference key="parent" ref="1072607240"/>
+						<string key="objectName">Bar Button Item - Bookmarks</string>
 					</object>
 				</object>
 			</object>
@@ -304,7 +321,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">31</int>
+			<int key="maxID">33</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

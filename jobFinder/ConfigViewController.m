@@ -99,7 +99,7 @@
     if(section == 0){
         switch (row) {
             case 1:
-                searchZone = [[SearchZoneViewController alloc] initWithNibName: @"SearchZoneViewController" bundle: nil];
+                searchZone = [[[SearchZoneViewController alloc] initWithNibName: @"SearchZoneViewController" bundle: nil] autorelease];
                 [searchZone setDelegate:self];
                 [self.navigationController pushViewController:searchZone animated:YES];
                 break;
@@ -149,7 +149,7 @@
     //rimuovi vista
     [UIView 
      transitionWithView:self.navigationController.view
-     duration:1.0
+     duration:0.8
      options:UIViewAnimationOptionTransitionFlipFromLeft
      animations:^{ 
          [self.navigationController 
@@ -222,7 +222,7 @@
                          @"bookmarks",              @"DataKey",
                          @"InfoCell",               @"kind",
                          [prefs objectForKey:@"address"], @"label",
-                         @"favouritePin.png",                       @"img",
+                         @"favourite.png",                       @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 0];
 
@@ -287,7 +287,7 @@
 {
     [sectionDescripition release];
     [sectionData release];  
-    [searchZone release];
+//    [searchZone release];
     [super dealloc];
 }
 

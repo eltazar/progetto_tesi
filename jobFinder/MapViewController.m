@@ -358,6 +358,35 @@
     [UIView transitionFromView:alternativeToolbar toView:toolBar duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:nil];
 }
 
+#pragma mark - ActionSheetDelegate
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0) {
+        //segnalo un job nella userLocation
+        
+        PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
+        //registro la classe come delegato del publishViewController
+        publishViewCtrl.pwDelegate = self;
+        //invio in avanti le user coordinate se ho spinto il bottone "segnala" o c'è stato un long tap
+        publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
+        //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
+        //carico la view come vista modale
+        [self presentModalViewController:publishViewCtrl animated:YES];
+        [publishViewCtrl release];
+    } 
+    else if (buttonIndex == 1) {
+        //modifica la vista mostrando una view con un help ed un button
+        NSLog(@"segnala altrove premuto");
+        //ora il è in è "draggabile"
+        isDragable = YES;
+        [UIView transitionFromView:toolBar toView:alternativeToolbar duration:0.8 options:UIViewAnimationOptionTransitionCurlUp completion:nil];
+    }
+    else if (buttonIndex == 2) {
+        //annulla
+    }
+    
+}
+
 #pragma mark - PublishViewControllerDelegate
 
 //dismette la modal view

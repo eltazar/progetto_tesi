@@ -32,6 +32,7 @@
     
     UILongPressGestureRecognizer *longPressGesture;
     
+    BOOL isDragable;
     
     //PublishViewController *publishViewCtrl;
 //    ConfigViewController *configView;

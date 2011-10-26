@@ -33,6 +33,15 @@
 
 #pragma mark - MKMapViewDelegate
 
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+	
+	if (oldState == MKAnnotationViewDragStateDragging) {
+        NSLog(@"CAMBIO DI STATO: lat = %f , long = %f",annotationView.annotation.coordinate.latitude, annotationView.annotation.coordinate.longitude);
+        NSLog(@"JOBTOPUBLISH CAMBIO STATO: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
+	}
+}
+
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     /*attivo il pulsante refresh in base alla user location. Se la localizzazione èdisabilitata dopo un po la userLocation assume i valori di default, quindi disattivol il pulsante.
@@ -83,23 +92,33 @@
     MKPinAnnotationView* pinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"Pin" ];
     
     //se non sono riuscito a riciclare un pin, lo creo
-    if(pinView == nil){
+    if(pinView == nil){     
+        
+        NSLog(@"?????????????????????????");
         pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"Pin"];// autorelease];
-        //setto colore, disclosure button ed animazione
+        //setto colore, disclosure button ed animazione     
         pinView.canShowCallout = YES;
-        pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        if(((Job *)annotation).isAnimated)
-            pinView.animatesDrop = YES;
-        else pinView.animatesDrop = NO;
+        
+        pinView.animatesDrop = YES;
+        pinView.pinColor = MKPinAnnotationColorGreen;
+        if(isDragable){
+            [pinView setDraggable:YES];
+        }
+        else pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        
+//        else [pinView setDraggable:NO];
+//        if(((Job *)annotation).isAnimated)
+//            pinView.animatesDrop = YES;
+//        else pinView.animatesDrop = NO;
     }
     else pinView.annotation = annotation;
     
-    if([annotation isMultiple])
-        pinView.pinColor = MKPinAnnotationColorRed;
-    else
-        pinView.pinColor = MKPinAnnotationColorGreen;
-    //NSLog(@"Annotation: %p -> View: %p", annotation, pinView);
-   
+//    if([annotation isMultiple])
+//        pinView.pinColor = MKPinAnnotationColorRed;
+//    else
+//        pinView.pinColor = MKPinAnnotationColorGreen;
+    //NSLog(@"Annotation: %p -> View: %p", annotation, pinView); 
+    
     return pinView;
 }
 
@@ -345,18 +364,17 @@
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
 {
     //Se sto dentro la region minima attivo la possibilità di inserire i job con il tap su map
-    if(map.region.span.latitudeDelta <= MIN_LATITUDE && map.region.span.longitudeDelta <= MIN_LONGITUDE){
+    if(isDragable){        
         // This is important if you only want to receive one tap and hold event
         if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
-            //[self publishBtnClicked:self coordinate:locCoord];
             return;
         }
         else{
             // Here we get the CGPoint for the touch and convert it to latitude and longitude coordinates to display on the map
             CGPoint point = [sender locationInView:self.map];
             CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
-            
-            [self publishBtnClicked:self coordinate:locCoord];
+            jobToPublish = [[Job alloc]initWithCoordinate:locCoord];
+            [map addAnnotation:jobToPublish];
         }
     }
 }
@@ -369,24 +387,14 @@
 -(void)didInsertNewJob:(Job *)newJob
 {
     //ricevo il job dalla vista modale già pronto per essere inviato su server
-    jobToPublish = [newJob retain]; //fare un retain di newJob e alla fine del metodo un release?   
-                                    //così prendo l'ownership di tale oggetto??
-
-//    //debug
-//    NSLog(@"************** MAP_VIEW: *************************");
-//    NSLog(@"job.employee = %@",jobToPublish.employee);
-//    NSLog(@"job.address = %@",jobToPublish.address);
-//    NSLog(@"job.description= %@",jobToPublish.description);
-//    NSLog(@"job.phone = %@",jobToPublish.phone);
-//    NSLog(@"job.email = %@",jobToPublish.email);
-//    NSLog(@"job.url = %@",jobToPublish.url);
-//    NSLog(@"jobToPublish.coordinate LONG %F | LAT %F",jobToPublish.coordinate.longitude,jobToPublish.coordinate.latitude);
-//    NSLog(@"*************************************************");
+     //fare un retain di newJob e alla fine del metodo un release? così prendo l'ownership di tale oggetto??
+    jobToPublish = [newJob retain];
 
     //lo aggiungo alla mappa per prova
-
+    NSLog(@"JOB ORIGINALE: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
+    
     [map addAnnotation:jobToPublish];
-       
+    isDragable = NO;
     [self dismissPublishView];  
     [jobToPublish release];
 }
@@ -436,6 +444,7 @@
     
     
     
+    //istanzio il gesture recognizer
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.map addGestureRecognizer:longPressGesture];
     

@@ -26,7 +26,7 @@
     BOOL isURLvalid;
     CLLocationCoordinate2D coordinate;
 }
-
+@property(nonatomic, retain) NSString *subtitle;
 @property(nonatomic, retain) NSString *employee;
 @property(nonatomic, retain) NSString *date;
 @property(nonatomic, retain) NSString *address;

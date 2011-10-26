@@ -10,7 +10,7 @@
 
 @implementation Job
 
-@synthesize employee, date, address, city, description, phone, url, email, coordinate;
+@synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle;
 @synthesize isAnimated, isMultiple;
 
 - (id)init
@@ -52,11 +52,15 @@
 //}
 
 - (NSString *)title {
-    return employee;
+    if(employee != nil)
+        return employee;
+    return @"Nuova segnalazione";
 }
 
 - (NSString *)subtitle {
-    return [NSString stringWithFormat:@"Inserito: %@", date];
+    if(date != nil)
+        return [NSString stringWithFormat:@"Inserito: %@", date];
+    else return @"";
 }
 
 

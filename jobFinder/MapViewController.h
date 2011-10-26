@@ -21,6 +21,7 @@
     UIBarButtonItem *publishBtn; // bottone "segnala"
     UIBarButtonItem *refreshBtn; //bottone "refresh"
     UIBarButtonItem *infoBarButtonItem;
+    UIBarButtonItem *filterButton;
     UIBarButtonItem *bookmarkButtonItem;
     Job *jobToPublish;
     Job *jobDiprova;
@@ -48,6 +49,7 @@
 @property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;
 @property(nonatomic, retain) IBOutlet MKMapView *map;
 @property(nonatomic, retain) IBOutlet UIToolbar *toolBar;
+@property(nonatomic, retain)  IBOutlet UIBarButtonItem *filterButton;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *publishBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *refreshBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *bookmarkButtonItem;
@@ -62,4 +64,5 @@
 -(IBAction) showUserLocationButtonClicked:(id)sender;
 -(IBAction)backBtnClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;
+-(IBAction)filterBtnClicked:(id)sender;
 @end

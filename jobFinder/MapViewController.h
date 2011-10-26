@@ -14,7 +14,7 @@
 #import "Job.h"
 #import "FavouriteAnnotation.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  
@@ -48,7 +48,7 @@
 //@property(nonatomic, retain) ConfigViewController *configView;
 //@property(nonatomic, retain) RootJobViewController *infoJobView;
 
--(IBAction)publishBtnClicked:(id)sender coordinate:(CLLocationCoordinate2D)coord;
+-(IBAction)showKindOfPublishingJob:(id)sender;
 -(IBAction)bookmarkBtnClicked:(id)sender;
 -(IBAction)infoButtonClicked:(id)sender;
 -(IBAction) showUserLocationButtonClicked:(id)sender;

@@ -243,28 +243,50 @@
 
 #pragma mark - gestione click bottoni della view
 
-//in teoria presenta solo la vista modale
--(IBAction)publishBtnClicked:(id)sender coordinate:(CLLocationCoordinate2D)coord 
+//mostra la action sheet con la scelta del tipo di segnalazione
+-(IBAction)showKindOfPublishingJob:(id)sender 
 {
         
-    NSLog(@"SENDER = %@",sender);
-    //istanzio la view
+    UIActionSheet *azione = [[UIActionSheet alloc]initWithTitle:@"Scegli dove segnalare" delegate:self cancelButtonTitle:@"Annulla" destructiveButtonTitle:nil otherButtonTitles:@"Segnala nella tua posizione",@"Segnala altrove", nil];
+    azione.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    [azione showInView:self.view];
+    [azione release];
+    
+    
+    
+    //26 ottobre
+    
+//    NSLog(@"SENDER = %@",sender);
+//    //istanzio la view
+//    PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
+//    
+//    //registro la classe come delegato del publishViewController
+//    publishViewCtrl.pwDelegate = self;
+//    
+//    //invio in avanti le user coordinate se ho spinto il bottone "segnala" o c'è stato un long tap
+//    if(sender != self)
+//        publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
+//    else publishViewCtrl.jobCoordinate = coord; //altrimenti setto quelle del tocco
+//    
+//    //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
+//    
+//    //carico la view come vista modale
+//    [self presentModalViewController:publishViewCtrl animated:YES];
+//    [publishViewCtrl release];
+    
+}
+
+//inserisce un job in una posizione che non è la userLocation dopo il tap sul tasto SEGNALA
+-(IBAction)publishAjob:(id)sender
+{
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
-    
-    //registro la classe come delegato del publishViewController
     publishViewCtrl.pwDelegate = self;
+    publishViewCtrl.jobCoordinate = jobToPublish.coordinate;
+    [jobToPublish release];
+    jobToPublish = nil;
     
-    //invio in avanti le user coordinate se ho spinto il bottone "segnala"
-    if(sender != self)
-        publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
-    else publishViewCtrl.jobCoordinate = coord; //altrimenti setto quelle del tocco
-    
-    //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
-    
-    //carico la view come vista modale
     [self presentModalViewController:publishViewCtrl animated:YES];
     [publishViewCtrl release];
-    
 }
 
 //carica view info nella gerarchia

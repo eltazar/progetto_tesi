@@ -163,9 +163,8 @@
         
     firsTime = TRUE;    
     //elementi da visualizzare nella tabella
-	list = [[NSMutableArray alloc] initWithObjects:@"iPhone", @"iPod",
-            @"iPod Touch", @"iMac", @"iBook", @"MacBook", @"MacBook Pro", @"Mac Pro",
-            @"PowerBook", nil];
+	list = [[NSMutableArray alloc] initWithObjects:@"Settore 1", @"Settore 2",
+            @"Settore 3", @"Settore 4", @"Settore 5", @"Settore 6", @"Settore 7", @"Settore 8", @"Settore 9", @"Settore 10", nil];
     //NSLog(@"list grande = %d",list.count);
     
     for(int i=0;i<list.count;i++)

@@ -24,6 +24,9 @@
     UIBarButtonItem *bookmarkButtonItem;
     Job *jobToPublish;
     Job *jobDiprova;
+    UIView *alternativeToolbar;
+    UIButton *publishAlternativeBtn;
+    UIButton *back;
     
     CLLocationDegrees lastSpan;
     NSMutableArray *arrayJOBtemp; 
@@ -40,6 +43,9 @@
     
 }
 
+@property(nonatomic, retain) IBOutlet UIButton *back;
+@property(nonatomic, retain) IBOutlet UIButton *publishAlternativeBtn;
+@property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;
 @property(nonatomic, retain) IBOutlet MKMapView *map;
 @property(nonatomic, retain) IBOutlet UIToolbar *toolBar;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *publishBtn;
@@ -50,8 +56,10 @@
 //@property(nonatomic, retain) RootJobViewController *infoJobView;
 
 -(IBAction)showKindOfPublishingJob:(id)sender;
+-(IBAction)publishAjob:(id)sender;
 -(IBAction)bookmarkBtnClicked:(id)sender;
 -(IBAction)infoButtonClicked:(id)sender;
 -(IBAction) showUserLocationButtonClicked:(id)sender;
+-(IBAction)backBtnClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;
 @end

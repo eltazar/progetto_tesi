@@ -20,6 +20,7 @@
 @implementation MapViewController 
 @synthesize map, publishBtn, infoBtn, toolBar, refreshBtn /*, publishViewCtrl, configView , infoJobView*/;
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem /*, publishViewCtrl, configView , infoJobView*/;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, publishAlternativeBtn, back /*, publishViewCtrl, configView , infoJobView*/;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -352,6 +353,11 @@
     }
 }
 
+-(IBAction)backBtnClicked:(id)sender
+{
+    [UIView transitionFromView:alternativeToolbar toView:toolBar duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:nil];
+}
+
 #pragma mark - PublishViewControllerDelegate
 
 //dismette la modal view
@@ -428,6 +434,12 @@
     
     //inizializzazione span
     lastSpan = map.region.span.latitudeDelta;  //ciao
+    
+    //setto il frame dell'alternativeToolbar, posizione bottom
+    CGRect a = CGRectMake(alternativeToolbar.frame.origin.x, self.view.frame.size.height-toolBar.frame.size.height-5,alternativeToolbar.frame.size.width,alternativeToolbar.frame.size.height);
+    [alternativeToolbar setFrame:a];
+    //di default i pin non possono esser "draggati"
+    isDragable = NO;
           
     //aggiungo bottone Info alla navigation bar
     UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];

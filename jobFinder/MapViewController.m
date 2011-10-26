@@ -459,37 +459,49 @@
     // Do any additional setup after loading the view from its nib.
     [super viewDidLoad];
     
-    //lastSpan = 180/floor( 180/map.region.span.latitudeDelta);
+    /*inizializzazione pulsanti
+    */
     
-    //inizializzazione span
-    lastSpan = map.region.span.latitudeDelta;  //ciao
-    
-    //setto il frame dell'alternativeToolbar, posizione bottom
-    CGRect a = CGRectMake(alternativeToolbar.frame.origin.x, self.view.frame.size.height-toolBar.frame.size.height-5,alternativeToolbar.frame.size.width,alternativeToolbar.frame.size.height);
-    [alternativeToolbar setFrame:a];
-    //di default i pin non possono esser "draggati"
-    isDragable = NO;
-          
     //aggiungo bottone Info alla navigation bar
     UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 	[tempInfoButton addTarget:self action:@selector(infoButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-	
     infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tempInfoButton];
 	self.navigationItem.leftBarButtonItem = infoBarButtonItem;
     
-    //[tempInfoButton release];
+    //tasto refresh è disabilitato di default
+    refreshBtn.enabled = NO;
+    //tasto publish è disabilitato di default
+    //publishBtn.enabled = NO;
+    //tasto publishAlternativeBtn è disabilitato di default
+    publishAlternativeBtn.enabled = NO;
     
-    //posso passargli un array di jobAnnotation
-    //aggiunge un oggetto annotazione al mapView, ma non la vista dell'annotazione
-//    [map addAnnotation:[[[JobAnnotation alloc] init] autorelease]];
     
+    /*Inizializzazione frame delle sotto viste
+     */
+    //setto il frame dell'alternativeToolbar, posizione bottom
+    CGRect a = CGRectMake(alternativeToolbar.frame.origin.x, self.view.frame.size.height-toolBar.frame.size.height-5,alternativeToolbar.frame.size.width,alternativeToolbar.frame.size.height);
+    [alternativeToolbar setFrame:a];
     
-    
-    //istanzio il gesture recognizer
+    /* Inizializzazione del gesture recognizer
+     */
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.map addGestureRecognizer:longPressGesture];
     
     
+    
+    /*Inizializzazione proprietà mapView
+     */
+    lastSpan = map.region.span.latitudeDelta;  //ciao
+    //lastSpan = 180/floor( 180/map.region.span.latitudeDelta);
+
+    
+    /* Inizializzazione valori booleani della classe
+     */
+    //di default i pin non possono esser "draggati"
+    isDragable = NO;
+          
+    /* Gestione delle configurazioni preferite dell'utente
+     */
     //recupero e setto le coordinate preferite all'avvio dell'app
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if([prefs objectForKey: @"lat"] != nil && [prefs objectForKey: @"long"] != nil){
@@ -498,10 +510,14 @@
         favouriteAnnotation = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
         [map addAnnotation:favouriteAnnotation];   
     }   
-    else NSLog(@"STRONZOOOoooooooooooo");
+
     
-    //di default il tasto refresh è disabilitato
-    refreshBtn.enabled = NO;
+    /**** PROVE DA CANCELLARE ****/
+   
+    //posso passargli un array di jobAnnotation
+    //aggiunge un oggetto annotazione al mapView, ma non la vista dell'annotazione
+//    [map addAnnotation:[[[JobAnnotation alloc] init] autorelease]];
+    
     //########## prove di inserimento jobs
     
     
@@ -514,18 +530,40 @@
 ////    jobDiprova.email = @"studioArch@bla.it";
 ////    jobDiprova.url = @"http://www.ciao.it";
 //    jobDiprova.address = @"prova";
+
     
-    
-    //array di job di prova
-    arrayJOBtemp = [[NSMutableArray alloc] initWithCapacity:1000];
-//    for(int i=0;i < 1000; i++){
-//        CGFloat latDelta = rand()*.035/RAND_MAX -.02;
-//        CGFloat longDelta = rand()*.03/RAND_MAX -.015;
-//        CLLocationCoordinate2D newCoord = {37.331693+ latDelta,-122.030457+ longDelta };
+//    NSString *template = @"(NULL ,  '%@',  '%@',  NULL, NULL,  '%@',  '%f',  '%f',  '%d'),";
+//    
+//    //array di job di prova
+//    arrayJOBtemp = [[NSMutableArray alloc] initWithCapacity:500];
+//    
+//    NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+//    [formatter setDateFormat:@"yyyy-MM-dd"];
+//    
+//
+//    NSMutableString *superQuery = [[NSMutableString alloc]initWithFormat:@"%@",@"INSERT INTO  `my_jobfinder`.`job` (`id` ,`description` ,`phone` ,`email` ,`url` ,`date` ,`latitude` ,`longitude` ,`field`)VALUES"];
+//    
+//    for(int i=0;i < 500; i++){
+//        
+//        
+//        CGFloat latDelta = rand()*.11/RAND_MAX -.02;
+//        CGFloat longDelta = rand()*.11/RAND_MAX -.015;
+//        CLLocationCoordinate2D newCoord = {41.891672+ latDelta,12.493515+ longDelta };
 //        Job *jobAnn = [[Job alloc] initWithCoordinate:newCoord];
 //        jobAnn.employee = [NSString stringWithFormat:@"%d",i];
+//        jobAnn.description = @"bla";
+//        jobAnn.phone = @"1234";
+//        jobAnn.date = [formatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:[self fRand]]];
+//        NSLog(@"DATaaaa ############ %@",jobAnn.date);
 //        [arrayJOBtemp addObject:jobAnn];
+//        NSMutableString *query = [[NSString alloc] initWithFormat:template,jobAnn.description, jobAnn.phone,jobAnn.date,jobAnn.coordinate.latitude,jobAnn.coordinate.longitude,i];
+//        [superQuery appendString:query];
+//
 //    }
+//    [superQuery replaceCharactersInRange: NSMakeRange(superQuery.length-1,1) withString:@";"];
+//    NSLog(superQuery);
+    
+    
 //    [arrayJOBtemp addObject:jobDiprova];
 //    [map addAnnotations:arrayJOBtemp];
 

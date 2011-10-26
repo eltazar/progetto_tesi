@@ -93,7 +93,7 @@
     NSError *theError = NULL;
     dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
     
-    NSLog(@"%@",dictionary);
+    //NSLog(@"%@",dictionary);
 //    NSLog(@"JSON is: %@",jsonResult);
     
     [delegate didReceivedGeoDecoderData:dictionary];
@@ -102,6 +102,7 @@
 
 -(void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error
 {
+    NSLog(@"ERRORE GEOCODING %@", [error localizedFailureReason] );
     // Handle the error properly
 }
 

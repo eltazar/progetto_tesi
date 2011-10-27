@@ -222,7 +222,7 @@
                          @"bookmarks",              @"DataKey",
                          @"InfoCell",               @"kind",
                          [prefs objectForKey:@"address"], @"label",
-                         @"favourite.png",                       @"img",
+                         @"star.png",                       @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 0];
 
@@ -238,7 +238,7 @@
                          @"email",            @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Contattaci",       @"label",
-                         @"",                 @"img",
+                         @"mail.png",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil] autorelease] atIndex: 0];
     

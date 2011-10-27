@@ -17,6 +17,9 @@
 		// Custom initialization
         [self setSelectionStyle:UITableViewCellSelectionStyleBlue]; 
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        UIImage *image = [UIImage imageNamed: [NSString stringWithFormat:@"%@",[dictionary objectForKey:@"img"]]];
+        self.imageView.image = image;
+        NSLog(@"IMAGE SIZE action %f, %f",image.size.width,image.size.height);
         
     }
     return self;

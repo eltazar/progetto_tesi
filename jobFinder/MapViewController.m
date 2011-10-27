@@ -18,8 +18,6 @@
 #define DEFAULT_COORDINATE -180
 
 @implementation MapViewController 
-@synthesize map, publishBtn, infoBtn, toolBar, refreshBtn /*, publishViewCtrl, configView , infoJobView*/;
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem /*, publishViewCtrl, configView , infoJobView*/;
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, publishAlternativeBtn, back /*, publishViewCtrl, configView , infoJobView*/;
 
 
@@ -36,9 +34,11 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
 	
+    NSLog(@"DRAG STATE %d",annotationView.dragState);
+    
 	if (oldState == MKAnnotationViewDragStateDragging) {
-        NSLog(@"CAMBIO DI STATO: lat = %f , long = %f",annotationView.annotation.coordinate.latitude, annotationView.annotation.coordinate.longitude);
-        NSLog(@"JOBTOPUBLISH CAMBIO STATO: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
+        //NSLog(@"CAMBIO DI STATO: lat = %f , long = %f",annotationView.annotation.coordinate.latitude, annotationView.annotation.coordinate.longitude);
+        //NSLog(@"JOBTOPUBLISH CAMBIO STATO: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
 	}
 }
 
@@ -61,16 +61,17 @@
     
     //zoom sulla posizione dell'utente
     for (MKAnnotationView *annotationView in views) {
+        NSLog(@"annotation view %p",annotationView);
         if (annotationView.annotation == mapView.userLocation) {
             //NSLog(@"posizione %f - %f |||| %f %f", mapView.userLocation.coordinate.longitude, mapView.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude,map.userLocation.coordinate.latitude);
-            MKCoordinateSpan span = MKCoordinateSpanMake(0.3, 0.3);
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
             MKCoordinateRegion region = MKCoordinateRegionMake(mapView.userLocation.coordinate, span);
             [mapView setRegion:region animated:YES];
+            NSLog(@"USER LOCATION view %p",annotationView);
         }
     }
 }
 
-//gestisce le annotation durante lo zooming e il panning
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
 {    
     //se la annotation è la nostra posizione, ritorna annotationView standard
@@ -95,7 +96,6 @@
     //se non sono riuscito a riciclare un pin, lo creo
     if(pinView == nil){     
         
-        NSLog(@"?????????????????????????");
         pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"Pin"];// autorelease];
         //setto colore, disclosure button ed animazione     
         pinView.canShowCallout = YES;
@@ -136,38 +136,38 @@
     return pinView;
 }
 
-- (void)mapView:(MKMapView *)mv didUpdateUserLocation:(MKUserLocation *)userLocation
-{
-//    CLLocationCoordinate2D userCoordinate = userLocation.location.coordinate;
-//
-//    for(int i = 1; i<=5;i++)
-//    {
-//        CGFloat latDelta = rand()*.035/RAND_MAX -.02;
-//        CGFloat longDelta = rand()*.03/RAND_MAX -.015;
-//        CLLocationCoordinate2D newCoord = { userCoordinate.latitude + latDelta, userCoordinate.longitude + longDelta };
-//        JobAnnotation *jobAnn = [[JobAnnotation alloc] initWithCoordinate:newCoord];    
-//        [map addAnnotation:jobAnn];
-//        [jobAnn release];
-//    }    
-}
+//- (void)mapView:(MKMapView *)mv didUpdateUserLocation:(MKUserLocation *)userLocation
+//{
+////    CLLocationCoordinate2D userCoordinate = userLocation.location.coordinate;
+////
+////    for(int i = 1; i<=5;i++)
+////    {
+////        CGFloat latDelta = rand()*.035/RAND_MAX -.02;
+////        CGFloat longDelta = rand()*.03/RAND_MAX -.015;
+////        CLLocationCoordinate2D newCoord = { userCoordinate.latitude + latDelta, userCoordinate.longitude + longDelta };
+////        JobAnnotation *jobAnn = [[JobAnnotation alloc] initWithCoordinate:newCoord];    
+////        [map addAnnotation:jobAnn];
+////        [jobAnn release];
+////    }    
+//}
 
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     //qui devo interrogare il database?? ovvero quando mi sposto di region prendo il centro di questa e in base alle sue coordinate scarico le annotation dal db?
-    NSLog(@"region.center.longitude %f \n region.center.latitude %f", mapView.region.center.longitude, mapView.region.center.latitude);
-    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
-    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
+    
+    //fare controllo disponibilità connessioen di rete
+    
+//    NSLog(@"region.center.longitude %f \n region.center.latitude %f", mapView.region.center.longitude, mapView.region.center.latitude);
+//    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
+//    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
 
-    [self filterAnnotation:arrayJOBtemp];
+    //[self filterAnnotation:arrayJOBtemp];
 }
 
 //per gestire il tap sul disclosure
 - (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
-	// Handle it, such as showing another view controller    
-    //BUONO
-    
     InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
     [self.navigationController pushViewController:infoJobView animated: YES];
     [infoJobView release];
@@ -315,8 +315,6 @@
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;
     publishViewCtrl.jobCoordinate = jobToPublish.coordinate;
-    [jobToPublish release];
-    jobToPublish = nil;
     
     isDragable = NO;
     [self presentModalViewController:publishViewCtrl animated:YES];
@@ -334,7 +332,7 @@
     //animazione e push della view
     [UIView 
      transitionWithView:self.navigationController.view
-     duration:1.0
+     duration:0.8
      options:UIViewAnimationOptionTransitionFlipFromRight
      animations:^{ 
          [self.navigationController 
@@ -410,11 +408,6 @@
 
 #pragma mark - PublishViewControllerDelegate
 
-//dismette la modal view
--(void) dismissPublishView
-{
-    [self dismissModalViewControllerAnimated:YES];
-}
 
 
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
@@ -616,6 +609,17 @@
 
 }
 
+-(IBAction)filterBtnClicked:(id)sender
+{
+    NSLog(@"CIAOOOOOOOOOOOOOOOO");
+}
+
+-(double)fRand
+{
+    double f = ((double)rand()) / RAND_MAX;
+    return  f * 2.6e6;
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -623,17 +627,12 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 
 #pragma mark - memory management
 
 - (void)dealloc
 {
+    [filterButton release];
     [favouriteAnnotation release];
     [map release];
     [toolBar release];  

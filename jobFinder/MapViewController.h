@@ -44,7 +44,6 @@
     //InfoJobViewController *infoJobView;
     
 }
-
 @property(nonatomic, retain) IBOutlet UIButton *back;
 @property(nonatomic, retain) IBOutlet UIButton *publishAlternativeBtn;
 @property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;
@@ -65,5 +64,7 @@
 -(IBAction) showUserLocationButtonClicked:(id)sender;
 -(IBAction)backBtnClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;
+-(double) fRand;
 -(IBAction)filterBtnClicked:(id)sender;
 @end
+

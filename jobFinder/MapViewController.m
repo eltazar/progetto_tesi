@@ -297,7 +297,7 @@
 }
 
 //inserisce un job in una posizione che non è la userLocation dopo il tap sul tasto SEGNALA
--(IBAction)publishAjob:(id)sender
+-(IBAction)publishAlternativeBtnClicked:(id)sender
 {
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;

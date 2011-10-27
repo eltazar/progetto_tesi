@@ -58,7 +58,7 @@
 //@property(nonatomic, retain) RootJobViewController *infoJobView;
 
 -(IBAction)showKindOfPublishingJob:(id)sender;
--(IBAction)publishAjob:(id)sender;
+-(IBAction)publishAlternativeBtnClicked:(id)sender;
 -(IBAction)bookmarkBtnClicked:(id)sender;
 -(IBAction)infoButtonClicked:(id)sender;
 -(IBAction) showUserLocationButtonClicked:(id)sender;

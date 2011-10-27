@@ -10,6 +10,7 @@
 #import "MapViewController.h"
 #import "InfoJobViewController.h"
 #import "FavouriteAnnotation.h"
+#import "DatabaseAccess.h"
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
@@ -454,7 +455,7 @@
     isDragPinOnMap = NO;
     publishAlternativeBtn.enabled = NO;
     jobToPublish.isDraggable = NO;
-
+    [dbAccess jobWriteRequest:jobToPublish];
     if(jobToPublish != nil){
         [map removeAnnotation:jobToPublish];
         [map addAnnotation:jobToPublish];
@@ -556,7 +557,10 @@
         //creo ed aggiungo l'annotatione alla mappa
         favouriteAnnotation = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
         [map addAnnotation:favouriteAnnotation];   
-    }   
+        
+    } 
+    dbAccess = [[DatabaseAccess alloc] init];
+
 
     
     /**** PROVE DA CANCELLARE ****/
@@ -647,6 +651,7 @@
     [infoBarButtonItem release];
     [publishBtn release];
     [longPressGesture release];
+    [dbAccess release];
     [super dealloc];
 }
 

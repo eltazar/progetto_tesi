@@ -13,6 +13,7 @@
 #import "ConfigViewController.h"
 #import "Job.h"
 #import "FavouriteAnnotation.h"
+#import "DatabaseAccess.h"
 
 @interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate>{
     
@@ -42,6 +43,8 @@
     //PublishViewController *publishViewCtrl;
 //    ConfigViewController *configView;
     //InfoJobViewController *infoJobView;
+    
+    DatabaseAccess *dbAccess;
     
 }
 @property(nonatomic, retain) IBOutlet UIButton *back;

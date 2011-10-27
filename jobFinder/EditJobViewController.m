@@ -4,7 +4,7 @@
 //
 //  Created by mario greco on 03/10/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
+
 
 #import "EditJobViewController.h"
 #import "SectorTableViewController.h"
@@ -139,7 +139,7 @@
  {   
      [super viewDidLoad];
      
-     job = [[Job alloc]initWithCoordinate:CLLocationCoordinate2DMake(0,0)];
+//     job = [[Job alloc]initWithCoordinate:CLLocationCoordinate2DMake(0,0)];
      //NSLog(@"job in EDTI_VIEW: %p",job);
      
      NSMutableArray *secA = [[NSMutableArray alloc] init];
@@ -241,7 +241,6 @@
 
 -(void) dealloc
 {
-    [job release];  
     [super dealloc];
 
 //    NSLog(@"dea job = %p, count = %d",job, job.retainCount);

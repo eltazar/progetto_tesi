@@ -16,7 +16,7 @@
     Job *job;
 }
 
-@property(nonatomic, retain, readonly) Job *job;
+@property(nonatomic, retain) Job *job;
 
 
 @end

@@ -112,8 +112,9 @@
         pinView.annotation = annotation;
     }
     
-    if(isDragable){
+    if(jobToPublish.isDraggable){
         NSLog(@" IS DRAGGABLE");
+        pinView.rightCalloutAccessoryView = nil;
         [pinView setDraggable:YES];
         pinView.pinColor = MKPinAnnotationColorRed;
     }
@@ -314,11 +315,10 @@
 {
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;
-    publishViewCtrl.jobCoordinate = jobToPublish.coordinate;
-    
-    isDragable = NO;
+    publishViewCtrl.newJob = jobToPublish;
+//    jobToPublish.isDraggable = NO;
     [self presentModalViewController:publishViewCtrl animated:YES];
-    [map removeAnnotation:jobToPublish];
+//    [map removeAnnotation:jobToPublish];
 
     [publishViewCtrl release];
 }
@@ -369,12 +369,14 @@
 
 -(IBAction)backBtnClicked:(id)sender
 {
-    if(jobToPublish != nil && isDragable == YES)
+    isLongTapEnabled = NO;
+    
+    if(jobToPublish != nil && jobToPublish.isDraggable == YES)
         [map removeAnnotation:jobToPublish];
-    else{
-        [jobToPublish release];
-        jobToPublish = nil;
-    }
+
+    [jobToPublish release];
+    jobToPublish = nil;
+    
     [UIView transitionFromView:alternativeToolbar toView:toolBar duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:nil];
 }
 
@@ -388,13 +390,15 @@
         //registro la classe come delegato del publishViewController
         publishViewCtrl.pwDelegate = self;
         //invio in avanti le user coordinate se ho spinto il bottone "segnala" o c'è stato un long tap
-        publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
+        jobToPublish = [[Job alloc] initWithCoordinate:map.userLocation.coordinate];
+        publishViewCtrl.newJob = jobToPublish;
         //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
         //carico la view come vista modale
         [self presentModalViewController:publishViewCtrl animated:YES];
         [publishViewCtrl release];
     } 
     else if (buttonIndex == 1) {
+        isLongTapEnabled = YES;
         //modifica la vista mostrando una view con un help ed un button
         NSLog(@"segnala altrove premuto");
         isDragPinOnMap = NO;
@@ -408,11 +412,9 @@
 
 #pragma mark - PublishViewControllerDelegate
 
-
-
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
 {
-    if(!isDragPinOnMap){
+    if(!isDragPinOnMap && isLongTapEnabled){
         //Se sto dentro la region minima attivo la possibilità di inserire i job con il tap su map
         // This is important if you only want to receive one tap and hold event
         if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
@@ -424,7 +426,7 @@
             CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
             jobToPublish = [[Job alloc]initWithCoordinate:locCoord];
             NSLog(@"JOB TO PUBLISH LONG TAP %p",jobToPublish);
-            isDragable = YES;
+            jobToPublish.isDraggable = YES;
             isDragPinOnMap = YES;
             [map addAnnotation:jobToPublish];
             publishAlternativeBtn.enabled = YES;
@@ -442,19 +444,24 @@
 {
     //ricevo il job dalla vista modale già pronto per essere inviato su server
      //fare un retain di newJob e alla fine del metodo un release? così prendo l'ownership di tale oggetto??
-    [jobToPublish release];
-    jobToPublish = nil;
-    jobToPublish = [newJob retain];
+    //[jobToPublish release];
+    //jobToPublish = nil;
+    //jobToPublish = [newJob retain];
     
     //lo aggiungo alla mappa per prova
     //NSLog(@"JOB ORIGINALE: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
     
-    if(jobToPublish != nil)
+    isDragPinOnMap = NO;
+    publishAlternativeBtn.enabled = NO;
+    jobToPublish.isDraggable = NO;
+
+    if(jobToPublish != nil){
+        [map removeAnnotation:jobToPublish];
         [map addAnnotation:jobToPublish];
+    }
     
     [self dismissPublishView];  
-    [jobToPublish release];
-    jobToPublish = nil;
+
 }
 
 //metodo delegate: richiamato dalla view modale dopo il click su annulla
@@ -462,8 +469,12 @@
 {
 //    if(jobToPublish != nil)
 //        [map removeAnnotation:jobToPublish];
-    [jobToPublish release];
-    jobToPublish = nil;
+//    [jobToPublish release];
+//    jobToPublish = nil;
+    
+    isDragPinOnMap = YES;
+    publishAlternativeBtn.enabled = YES;
+    
     [self dismissPublishView];
 }
 
@@ -471,11 +482,7 @@
 //dismette la modal view
 -(void) dismissPublishView
 {
-    isDragPinOnMap = NO;
-    publishAlternativeBtn.enabled = NO;
-    //    if(jobToPublish != nil)
-    //        [map removeAnnotation:jobToPublish];
-    //    else NSLog(@"JOB è NIL");
+
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -537,8 +544,8 @@
     /* Inizializzazione valori booleani della classe
      */
     //di default i pin non possono esser "draggati"
-    isDragable = NO;
     isDragPinOnMap = NO;
+    isLongTapEnabled = NO;
     
     /* Gestione delle configurazioni preferite dell'utente
      */

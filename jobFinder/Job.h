@@ -24,8 +24,10 @@
     
     BOOL isEmailValid;
     BOOL isURLvalid;
+    BOOL isDraggable;
     CLLocationCoordinate2D coordinate;
 }
+@property(nonatomic, assign) BOOL isDraggable;
 @property(nonatomic, retain) NSString *subtitle;
 @property(nonatomic, retain) NSString *employee;
 @property(nonatomic, retain) NSString *date;

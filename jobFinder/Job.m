@@ -11,7 +11,7 @@
 @implementation Job
 
 @synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle;
-@synthesize isAnimated, isMultiple;
+@synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init
 {
@@ -22,6 +22,7 @@
         isAnimated = TRUE;
         isEmailValid = TRUE;
         isURLvalid = TRUE;
+        isDraggable = NO;
     }
     
     return self;

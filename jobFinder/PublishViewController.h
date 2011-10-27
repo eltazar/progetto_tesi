@@ -31,6 +31,7 @@
     NSString *addressGeocoding;
 }
 
+@property(nonatomic, retain) Job *newJob;
 @property(nonatomic, assign) id<PublishViewControllerDelegate> pwDelegate;
 @property(nonatomic, assign) CLLocationCoordinate2D jobCoordinate;
 @property(nonatomic, retain) NSString *addressGeocoding;

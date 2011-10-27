@@ -12,7 +12,7 @@
 #import "MapKit/MKAnnotation.h"
 
 @implementation PublishViewController
-@synthesize pwDelegate, jobCoordinate, addressGeocoding;
+@synthesize pwDelegate, jobCoordinate, addressGeocoding, newJob;
 
 
 
@@ -24,6 +24,7 @@
     
     if(self)
     {
+        self.newJob = nil;
     }
     
     return self;
@@ -37,8 +38,8 @@
     [self.view endEditing:TRUE];
 #warning 
     //ricavo il job dalla tabella
-    newJob = [((EditJobViewController *) tableView).job retain];  //???retain???
-    newJob.coordinate =  CLLocationCoordinate2DMake(jobCoordinate.latitude,jobCoordinate.longitude);
+    //newJob = [((EditJobViewController *) tableView).job retain];  //???retain???
+    //newJob.coordinate =  CLLocationCoordinate2DMake(jobCoordinate.latitude,jobCoordinate.longitude);
 
     //setto data creazione annuncio
     NSLocale *locale = [NSLocale currentLocale];
@@ -53,7 +54,7 @@
         [pwDelegate didInsertNewJob:newJob];
     }
     
-    [newJob release];
+    //[newJob release];
 }
 
 -(IBAction)cancelBtnPressed:(id)sender{
@@ -102,12 +103,19 @@
 
 #pragma mark - View lifecycle
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    ((EditJobViewController *) tableView).job = self.newJob;
+    NSLog(@"WILL: NEW JOB PUNTA A: %p", newJob);
+
+}
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
+     
     // NSLog(@"VIEWLoad user coordinate %f %f",userCoordinate.latitude,userCoordinate.longitude);    
     
     //setto la naviationBar

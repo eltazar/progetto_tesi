@@ -29,5 +29,13 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "thread_start:(null)">
+         <PersistentStrings>
+            <PersistentString
+               value = "0x638ca70">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>

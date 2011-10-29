@@ -42,8 +42,6 @@
     return 0;
 }
 
-
-//rendere più pulito e dinamico??
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
@@ -118,7 +116,7 @@
                 if([MFMailComposeViewController canSendMail]){
                     [mail setToRecipients:[NSArray arrayWithObjects:EMAIL_CONTACT, nil]];
                     [mail setSubject:@"Oggetto della mail"];
-                    [mail setMessageBody:@"Corpo del messaggio della nostra e-mail" isHTML:NO];
+                    [mail setMessageBody:@"" isHTML:NO];
                     [self presentModalViewController:mail animated:YES];
                     [mail release];
                 }
@@ -126,14 +124,13 @@
             case 1:
                 NSLog(@"url didSelectRow");
                 url = [NSURL URLWithString:URL_INFO];
-                //this will open the selected URL into the safari
                 [[UIApplication sharedApplication]openURL: url ]; 
                 break; 
                 
         }
     }
     
-    //deseleziona cella
+    //deseleziona la cella
     [tableView deselectRowAtIndexPath:indexPath animated:YES];  
     
 }
@@ -142,11 +139,7 @@
 
 -(void) doneButtonClicked: (id) sender
 {
-    // This is suggested to synch prefs, but is not needed (I didn't put it in my tut)
-    [self.view endEditing:YES];
-    
-    
-    //rimuovi vista
+    //rimuove vista
     [UIView 
      transitionWithView:self.navigationController.view
      duration:0.8
@@ -178,7 +171,7 @@
 
 -(void) didSelectedPreferredAddress:(NSString *)address withLatitude:(CLLocationDegrees)latitude andLongitude:(CLLocationDegrees) longitude
 {
-    
+    //una volta selezionata la zona preferita viene salvata nelle impostazioni personali dell'utente
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
    [prefs setObject:address forKey:@"address"];
    [prefs setObject: [NSNumber numberWithDouble:latitude] forKey: @"lat"];
@@ -187,8 +180,10 @@
     //    NSLog(@"dato nel prefs: %@",[prefs objectForKey:cell.dataKey]);
     //    [prefs synchronize];
     
+    //aggiorno il model per mostrare i cambiamenti fatti alla tabella
     [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:address forKey:@"label"];
     [self.tableView reloadData];    
+    //avviso il delegato cnhe ho scelto la zona preferita e gli passo le coordinate
     [delegate didSelectedFavouriteZone:CLLocationCoordinate2DMake(latitude,longitude)]; 
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -229,7 +224,7 @@
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"search",           @"DataKey",
                          @"ActionCell",       @"kind",
-                         @"Cerca zona",  @"label",
+                         @"Cerca zona",       @"label",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 1];
@@ -238,7 +233,7 @@
                          @"email",            @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Contattaci",       @"label",
-                         @"mail.png",                 @"img",
+                         @"mail.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil] autorelease] atIndex: 0];
     

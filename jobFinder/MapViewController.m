@@ -19,7 +19,7 @@
 #define DEFAULT_COORDINATE -180
 
 @implementation MapViewController 
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, publishAlternativeBtn, back /*, publishViewCtrl, configView , infoJobView*/;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, publishAlternativeBtn, back;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -285,30 +285,7 @@
     UIActionSheet *azione = [[UIActionSheet alloc]initWithTitle:@"Scegli dove segnalare" delegate:self cancelButtonTitle:@"Annulla" destructiveButtonTitle:nil otherButtonTitles:@"Segnala nella tua posizione",@"Segnala altrove", nil];
     azione.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     [azione showInView:self.view];
-    [azione release];
-    
-    
-    
-    //26 ottobre
-    
-//    NSLog(@"SENDER = %@",sender);
-//    //istanzio la view
-//    PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
-//    
-//    //registro la classe come delegato del publishViewController
-//    publishViewCtrl.pwDelegate = self;
-//    
-//    //invio in avanti le user coordinate se ho spinto il bottone "segnala" o c'è stato un long tap
-//    if(sender != self)
-//        publishViewCtrl.jobCoordinate = map.userLocation.coordinate;
-//    else publishViewCtrl.jobCoordinate = coord; //altrimenti setto quelle del tocco
-//    
-//    //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
-//    
-//    //carico la view come vista modale
-//    [self presentModalViewController:publishViewCtrl animated:YES];
-//    [publishViewCtrl release];
-    
+    [azione release];   
 }
 
 //inserisce un job in una posizione che non è la userLocation dopo il tap sul tasto SEGNALA
@@ -317,10 +294,7 @@
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;
     publishViewCtrl.newJob = jobToPublish;
-//    jobToPublish.isDraggable = NO;
     [self presentModalViewController:publishViewCtrl animated:YES];
-//    [map removeAnnotation:jobToPublish];
-
     [publishViewCtrl release];
 }
 
@@ -370,11 +344,13 @@
 
 -(IBAction)backBtnClicked:(id)sender
 {
+    //setto a NO per far si che sulla view precedente non sia abilitata la segnalazione "ovunque"
     isLongTapEnabled = NO;
     
     if(jobToPublish != nil && jobToPublish.isDraggable == YES)
         [map removeAnnotation:jobToPublish];
 
+    //rilascio jobToPublish istanziato nel metodo handleLongTap
     [jobToPublish release];
     jobToPublish = nil;
     
@@ -390,7 +366,7 @@
         PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
         //registro la classe come delegato del publishViewController
         publishViewCtrl.pwDelegate = self;
-        //invio in avanti le user coordinate se ho spinto il bottone "segnala" o c'è stato un long tap
+        //invio in avanti il jobToPublish
         jobToPublish = [[Job alloc] initWithCoordinate:map.userLocation.coordinate];
         publishViewCtrl.newJob = jobToPublish;
         //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
@@ -399,9 +375,11 @@
         [publishViewCtrl release];
     } 
     else if (buttonIndex == 1) {
+        //segnala job altrove, modifica la vista mostrando una view con un help ed un button
+        
+        //abilita il long tap per segnalare ovunque sulla mappa
         isLongTapEnabled = YES;
-        //modifica la vista mostrando una view con un help ed un button
-        NSLog(@"segnala altrove premuto");
+        //appena caricata la vista non c'è nessun pin draggabile sulla mappa
         isDragPinOnMap = NO;
         [UIView transitionFromView:toolBar toView:alternativeToolbar duration:0.8 options:UIViewAnimationOptionTransitionCurlUp completion:nil];
     }
@@ -415,8 +393,8 @@
 
 -(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
 {
+    //se non c'è un altro pin draggabile sulla mappa e se la funzione è abilitata
     if(!isDragPinOnMap && isLongTapEnabled){
-        //Se sto dentro la region minima attivo la possibilità di inserire i job con il tap su map
         // This is important if you only want to receive one tap and hold event
         if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
                 return;
@@ -427,9 +405,12 @@
             CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
             jobToPublish = [[Job alloc]initWithCoordinate:locCoord];
             NSLog(@"JOB TO PUBLISH LONG TAP %p",jobToPublish);
+            //così il pin sarà draggabile
             jobToPublish.isDraggable = YES;
+            //ora c'è un pin draggabile sulla mappa
             isDragPinOnMap = YES;
             [map addAnnotation:jobToPublish];
+            //abilito tasto per la segnalazione
             publishAlternativeBtn.enabled = YES;
         }
    }
@@ -437,25 +418,20 @@
 }
 
 
-/*richiamato dalla view modale dopo il click su inserisci, e gli viene passato il nuovoJob da
- * inviare al db
+/*richiamato dalla view modale dopo il click su inserisci. spedisce i dati sul db
  */
-#warning leggere sotto
 -(void)didInsertNewJob:(Job *)newJob
-{
-    //ricevo il job dalla vista modale già pronto per essere inviato su server
-     //fare un retain di newJob e alla fine del metodo un release? così prendo l'ownership di tale oggetto??
-    //[jobToPublish release];
-    //jobToPublish = nil;
-    //jobToPublish = [newJob retain];
-    
-    //lo aggiungo alla mappa per prova
-    //NSLog(@"JOB ORIGINALE: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
-    
+{    
+    //segnala che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO;
+    //disabilita pulsante per segnalazione alternativa
     publishAlternativeBtn.enabled = NO;
+    //il pin del job segnalato non deve essere più draggabile
     jobToPublish.isDraggable = NO;
+    //richiedo scrittura su db dei dati
     [dbAccess jobWriteRequest:jobToPublish];
+    
+    //rimuovo il pin rosso e metto quello verde (drag-noDrag)
     if(jobToPublish != nil){
         [map removeAnnotation:jobToPublish];
         [map addAnnotation:jobToPublish];
@@ -468,11 +444,7 @@
 //metodo delegate: richiamato dalla view modale dopo il click su annulla
 -(void) didCancelNewJob:(PublishViewController *)viewController
 {
-//    if(jobToPublish != nil)
-//        [map removeAnnotation:jobToPublish];
-//    [jobToPublish release];
-//    jobToPublish = nil;
-    
+    //se l'operazione di inserimento è annullata il pin è ancora draggabile
     isDragPinOnMap = YES;
     publishAlternativeBtn.enabled = YES;
     
@@ -483,18 +455,19 @@
 //dismette la modal view
 -(void) dismissPublishView
 {
-
     [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - ConfigViewControllerDelegate
+
+//gestisce il pin relativo all'annotation favourite
 -(void)didSelectedFavouriteZone:(CLLocationCoordinate2D)coordinate
 {
+    //rimuovo la vecchia
     if(favouriteAnnotation != nil){
         [map removeAnnotation:favouriteAnnotation];
     }
-//    [favouriteAnnotation release];
-//    favouriteAnnotation = nil;
+    //aggiungo la nuova
     favouriteAnnotation = [[[FavouriteAnnotation alloc]initWithCoordinate:coordinate] autorelease];
     [map addAnnotation:favouriteAnnotation];
 }
@@ -559,6 +532,10 @@
         [map addAnnotation:favouriteAnnotation];   
         
     } 
+    
+    /* inizializzazione classi necessarie al view controller
+     */
+    //alloco l'istanza per accesso al db
     dbAccess = [[DatabaseAccess alloc] init];
 
 
@@ -573,7 +550,7 @@
     
     
     //PROVA
-    jobDiprova = [[Job alloc] initWithCoordinate:CLLocationCoordinate2DMake(41.485997, 12.606361)];
+//    jobDiprova = [[Job alloc] initWithCoordinate:CLLocationCoordinate2DMake(41.485997, 12.606361)];
 //    jobDiprova.employee = @"Architettura";
 //    jobDiprova.date = @"01/04/2011";
 //    jobDiprova.description = @"cercasi architettetto per stage di 5 mesi, rimborso spese 500 euro. Minima esperienza nel settore. Bla bla bla bla bla bla bla bla bla bla bla bla";

@@ -124,4 +124,42 @@
 {
     [super dealloc];    
 }
+
+#warning fare i getter in modo tale che se la stringhe puntano a nil ritorna stringa @""
+
+
+- (NSString *)description
+{    
+    if(description == nil){
+        description = [[NSString alloc] initWithString:@""];
+    }
+    return [[ description retain] autorelease];
+}
+
+- (NSString *)email
+{    
+    if(email == nil){
+        email = [[NSString alloc] initWithString:@""];
+    }
+    return [[ email retain] autorelease];
+}
+
+- (NSString *)phone
+{    
+    if(phone == nil){
+       phone = [[NSString alloc] initWithString:@""];
+    }
+    return [[ phone retain] autorelease];
+}
+
+//- (NSURL *)url
+//{    
+//    if(url == nil){
+//        url = [[[NSURL alloc] initWithString:@""]autorelease];
+//        NSLog(@"URL é : %@",[url absoluteString]);
+//    }
+//    return [[ url retain] autorelease];
+//}
+
+
 @end

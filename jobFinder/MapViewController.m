@@ -325,7 +325,7 @@
 }
 
 //carica view info nella gerarchia
--(IBAction)infoButtonClicked:(id)sender
+-(IBAction)configBtnClicked:(id)sender
 {
     
     ConfigViewController *configView = [[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil];
@@ -511,7 +511,7 @@
     
     //aggiungo bottone Info alla navigation bar
     UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-	[tempInfoButton addTarget:self action:@selector(infoButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+	[tempInfoButton addTarget:self action:@selector(configBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tempInfoButton];
 	self.navigationItem.leftBarButtonItem = infoBarButtonItem;
     

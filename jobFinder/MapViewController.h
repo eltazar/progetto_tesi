@@ -63,7 +63,7 @@
 -(IBAction)showKindOfPublishingJob:(id)sender;
 -(IBAction)publishAlternativeBtnClicked:(id)sender;
 -(IBAction)bookmarkBtnClicked:(id)sender;
--(IBAction)infoButtonClicked:(id)sender;
+-(IBAction)configBtnClicked:(id)sender;
 -(IBAction) showUserLocationButtonClicked:(id)sender;
 -(IBAction)backBtnClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;

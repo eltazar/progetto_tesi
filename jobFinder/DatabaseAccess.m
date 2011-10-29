@@ -24,13 +24,12 @@
 
 
 -(void)jobWriteRequest:(Job *)job
-{
-    
+{ 
     //NSLog(@"@@@@@@@@@@@@@@@@");
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/write.php"];    
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
-    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
+    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     NSString *postFormatString = @"description=%@&phone=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=0";

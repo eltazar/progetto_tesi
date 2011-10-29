@@ -54,6 +54,8 @@
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     if(connection){
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+
         receivedData = [[NSMutableData data] retain];
     }
     else{
@@ -72,12 +74,16 @@
 }
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
     NSLog(@"ERROR with theConenction");
     [connection release];
     [receivedData release];
 }
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
     NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
     NSString *json = [[NSString alloc] initWithBytes: [receivedData mutableBytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
     NSLog(@"JSON %p %@",json, json);

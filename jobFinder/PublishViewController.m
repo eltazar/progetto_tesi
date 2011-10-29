@@ -8,7 +8,6 @@
 
 #import "PublishViewController.h"
 #import "EditJobViewController.h"
-#import "MapKit/MKReverseGeocoder.h"
 #import "MapKit/MKAnnotation.h"
 
 @implementation PublishViewController
@@ -36,10 +35,6 @@
 {   
     //fa si che il testo inserito nei texfield sia preso anche se non è stata dismessa la keyboard
     [self.view endEditing:TRUE];
-#warning 
-    //ricavo il job dalla tabella
-    //newJob = [((EditJobViewController *) tableView).job retain];  //???retain???
-    //newJob.coordinate =  CLLocationCoordinate2DMake(jobCoordinate.latitude,jobCoordinate.longitude);
 
     //setto data creazione annuncio
     NSLocale *locale = [NSLocale currentLocale];
@@ -49,6 +44,7 @@
     [formatter setLocale:locale];
     newJob.date = [formatter stringFromDate:[NSDate date]];
        
+    //controllo la validità dei campi inseriti
     if([self validate:newJob]){    
         //passo al delegato il nuovo job;
         [pwDelegate didInsertNewJob:newJob];
@@ -65,6 +61,7 @@
 
 -(void)activeInsertBtn:(id)sender
 {
+    //abilita il tasto inserisci se è stato scelto il settore
     tableView.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
@@ -73,17 +70,6 @@
 -(BOOL)validate:(Job*) job
 {
     BOOL rtn = YES; 
-
-    //job.phone rimuovere spazi, - , /, tutto ciò che non è un numero
-    //job.url inserire http:// davanti ad indirizzi che non lo hanno
-    
-//    // validate email address
-//    NSString* emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
-//    NSPredicate* emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    
-//    
-//    if(!([newJob.email isEqualToString:@""] || newJob.email == nil))
-//        rtn = [emailTest evaluateWithObject:newJob.email];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     
@@ -94,10 +80,7 @@
         [alert setMessage:NSLocalizedString(message, @"")];
         [alert show];		
     }
-
     [alert release];
-
-    
     return rtn;
 }
 
@@ -106,9 +89,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    //passo il newJob alla tabella per esser riempito
     ((EditJobViewController *) tableView).job = self.newJob;
-    NSLog(@"WILL: NEW JOB PUNTA A: %p", newJob);
-
+    //NSLog(@"WILL: NEW JOB PUNTA A: %p", newJob);
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -118,7 +101,7 @@
      
     // NSLog(@"VIEWLoad user coordinate %f %f",userCoordinate.latitude,userCoordinate.longitude);    
     
-    //setto la naviationBar
+    //setto la navigationBar
     self.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationBar.translucent = YES;
     tableView.navigationItem.title = @"Inserisci";
@@ -129,9 +112,10 @@
     tableView.navigationItem.rightBarButtonItem = insertButton;
     tableView.navigationItem.leftBarButtonItem = cancelButton;
     
+    //di default insertButton è disabilitato
     insertButton.enabled = NO;
     
-    //attende il segnale di avvenuta selezione di una categoria di lavoro per far attivare il tasto "inserisci"
+    //attende il segnale di avvenuta selezione di un settore di lavoro per far attivare il tasto "inserisci"
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activeInsertBtn:) name:@"employeeDidSet" object:nil];
     
     [insertButton release];
@@ -156,12 +140,8 @@
 
 - (void) dealloc
 {
-    //per ora li metto ma non so se è giusto
-    //    [newJob release];
-    //[tableView release];
-    //    [pwDelegate release];
-    [super dealloc];
     [tableView release];
+    [super dealloc];
 }
 
 @end

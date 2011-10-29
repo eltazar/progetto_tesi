@@ -65,6 +65,7 @@
     // SomeService is just a dummy class representing some 
     // api that you are using to do the search
     
+    //controllo presenza connessione ad internet
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] retain];
     [internetReach startNotifier];
     NetworkStatus netStatus = [internetReach currentReachabilityStatus];
@@ -77,18 +78,13 @@
         [alert release];
         return;
     }
-
+    
+    //se presente, avvio il geocoding
     GeoDecoder *geoDec = [[GeoDecoder alloc] init];
-    [geoDec setDelegate:self];
-    
+    [geoDec setDelegate:self]; 
+    //passo indirizzo per calcolare coordinate
     [geoDec searchCoordinatesForAddress:searchBar.text];
-    
     [self searchBar:searchBar activate:NO];
-	
-//    [self.tableData removeAllObjects];
-//    [self.tableData addObjectsFromArray:results];
-//    [self.theTableView reloadData];
-    
     [geoDec release];
     
 }
@@ -99,7 +95,8 @@
 // Show/Hide the UISearchBar Cancel button
 // Fade the screen In/Out with the disableViewOverlay and 
 // simple Animations
-- (void)searchBar:(UISearchBar *)searchBar activate:(BOOL) active{	
+- (void)searchBar:(UISearchBar *)searchBar activate:(BOOL) active
+{	
     self.theTableView.allowsSelection = !active;
     self.theTableView.scrollEnabled = !active;
     if (!active) {
@@ -130,6 +127,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int row = indexPath.row;
+    //informo ed invio al delegato l'indirizzo scelto
     [delegate didSelectedPreferredAddress:[[tableData objectAtIndex:row] objectForKey:@"address"] withLatitude:[[[tableData objectAtIndex:row] objectForKey:@"lat"] doubleValue]  andLongitude:[[[tableData objectAtIndex:row] objectForKey:@"long"] doubleValue] ];
     
      [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -158,6 +156,7 @@
     
 	//NSLog( @"Table cell text: %@", [[transactionHistory objectAtIndex:row] description] );
     
+    //per gestire linee di testo multiple nella cella
     cell.textLabel.text = @"";
     cell.detailTextLabel.text = [data objectForKey:@"address"];
     cell.detailTextLabel.numberOfLines = 2;
@@ -190,6 +189,7 @@
     NSArray *resultsArray = [geoData objectForKey:@"results"];
     NSMutableArray *addresses = [[[NSMutableArray alloc] initWithCapacity:resultsArray.count] autorelease];
     
+    //calcolo gli indirizzi e le loro coordinate
     for(int i=0; i < resultsArray.count; i++){
         
         NSDictionary *result = [resultsArray objectAtIndex:i];
@@ -208,6 +208,7 @@
 //    [addresses addObject:@"<html>ciao come stai <br> bene grazie ciao</html>"];
 //    NSLog(@"ARRAY ADDRESSES: %@",addresses);
     
+    //aggiorno il model con i nuovi dati
     [self.tableData removeAllObjects];
     [self.tableData addObjectsFromArray:addresses];
     [self.theTableView reloadData];

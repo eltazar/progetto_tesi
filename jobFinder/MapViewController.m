@@ -362,17 +362,26 @@
     
     if (buttonIndex == 0) {
         //segnalo un job nella userLocation
-        
-        PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
-        //registro la classe come delegato del publishViewController
-        publishViewCtrl.pwDelegate = self;
-        //invio in avanti il jobToPublish
-        jobToPublish = [[Job alloc] initWithCoordinate:map.userLocation.coordinate];
-        publishViewCtrl.newJob = jobToPublish;
-        //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
-        //carico la view come vista modale
-        [self presentModalViewController:publishViewCtrl animated:YES];
-        [publishViewCtrl release];
+       
+        if(![CLLocationManager locationServicesEnabled] || 
+           [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"JobFinder non è in grado di determinare la tua posizione corrente" message:@"Controlla le impostazioni di localizzazione e riprova" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+            [alert show];
+            [alert release];
+        }
+        else{
+            PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
+            //registro la classe come delegato del publishViewController
+            publishViewCtrl.pwDelegate = self;
+            //invio in avanti il jobToPublish
+            jobToPublish = [[Job alloc] initWithCoordinate:map.userLocation.coordinate];
+            publishViewCtrl.newJob = jobToPublish;
+            //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
+            //carico la view come vista modale
+            [self presentModalViewController:publishViewCtrl animated:YES];
+            [publishViewCtrl release];
+        }
     } 
     else if (buttonIndex == 1) {
         //segnala job altrove, modifica la vista mostrando una view con un help ed un button

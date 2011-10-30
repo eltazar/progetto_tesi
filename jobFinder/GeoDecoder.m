@@ -42,6 +42,8 @@
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
     [connection release];
     [request release];
 }
@@ -63,6 +65,8 @@
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     [connection release];
     [request release];
@@ -89,6 +93,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+   [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
     NSString *jsonResult = [[[NSString alloc] initWithData:receivedGeoData encoding:NSUTF8StringEncoding] autorelease]; //giusto sto autorelease?
     NSError *theError = NULL;
     dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
@@ -102,6 +108,8 @@
 
 -(void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error
 {
+   [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
     NSLog(@"ERRORE GEOCODING %@", [error localizedFailureReason] );
     // Handle the error properly
 }

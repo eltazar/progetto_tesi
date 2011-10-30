@@ -60,6 +60,7 @@
     }
     else{
         NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita
     }
 }
 
@@ -72,6 +73,8 @@
     //NSLog(@"XXXX %@",data);
     [receivedData appendData:data];
 }
+
+//If an error is encountered during the download, the delegate receives a connection:didFailWithError:
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -80,6 +83,8 @@
     [connection release];
     [receivedData release];
 }
+
+//if the connection succeeds in downloading the request, the delegate receives the connectionDidFinishLoading:
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -87,22 +92,12 @@
     NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
     NSString *json = [[NSString alloc] initWithBytes: [receivedData mutableBytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
     NSLog(@"JSON %p %@",json, json);
+    
+    //rilascio risorse, come spiegato sula documentazione apple
     [json release];
+    [connection release];
+    [receivedData release];
 }
-
-//- (void)requestFinished:(id *)request
-//{
-//    // Use when fetching text data
-//    NSString *responseString = [request responseString];
-//    NSLog(@"STRINGA DOPO POST REQUEST = %@", responseString);
-//}
-//
-//- (void)requestFailed:(id *)request
-//{
-//   // NSLog(@"REQUEST ERROR!");
-//    NSError *error = [request error];
-//    NSLog(@"%@",error.localizedFailureReason);
-//}
 
 -(void)enqueueJobWriteRequest:(Job*)job
 {

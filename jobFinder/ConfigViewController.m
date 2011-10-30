@@ -56,6 +56,14 @@
 	if (cell == nil) {
         cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
+    
+//    if(indexPath.section == 0 && indexPath.row == 0){
+//        //per gestire linee di testo multiple nella cella
+//        cell.textLabel.text = @"";
+//        cell.detailTextLabel.text = [[[sectionData objectAtIndex:0] objectAtIndex:0] objectForKey:@"label"];
+//        cell.detailTextLabel.numberOfLines = 2;
+//        cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
+//    }
 
     return cell;
 }
@@ -217,7 +225,8 @@
                          @"bookmarks",              @"DataKey",
                          @"InfoCell",               @"kind",
                          [prefs objectForKey:@"address"], @"label",
-                         @"star.png",                       @"img",
+                         @"",                       @"detailLabel",
+                         @"star.png",               @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 0];
 
@@ -225,7 +234,7 @@
                          @"search",           @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Cerca zona",       @"label",
-                         @"",                 @"img",
+                         @"search.png",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 1];
     
@@ -241,7 +250,7 @@
                          @"site",             @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Visita il sito",   @"label",
-                         @"",                 @"img",
+                         @"home.png",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil]autorelease] atIndex: 1];
     

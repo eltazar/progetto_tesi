@@ -20,7 +20,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         UIImage *image = [UIImage imageNamed: [NSString stringWithFormat:@"%@",[dictionary objectForKey:@"img"]]];
         self.imageView.image = image; 
-        NSLog(@"IMAGE SIZE info %f, %f",image.size.width,image.size.height);
+        //NSLog(@"IMAGE SIZE info %f, %f",image.size.width,image.size.height);
 
     }
     return self;

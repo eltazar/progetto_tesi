@@ -474,6 +474,19 @@
 
 #pragma  mark - View lyfe cicle
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //serve per riabilitare il tasto refreshBtn dopo un memory warnings
+    if(map.userLocation.coordinate.latitude != DEFAULT_COORDINATE &&
+       map.userLocation.coordinate.longitude != DEFAULT_COORDINATE){
+        refreshBtn.enabled = YES;
+    }
+    else{
+        refreshBtn.enabled = NO;
+    }
+}
+
 - (void)viewDidLoad
 {
     // Do any additional setup after loading the view from its nib.
@@ -638,7 +651,6 @@
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
     // Release any cached data, images, etc that aren't in use.
 }
 

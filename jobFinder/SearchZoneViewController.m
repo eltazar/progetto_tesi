@@ -227,10 +227,14 @@
                                initWithFrame:CGRectMake(0.0f,86.0f,320.0f,416.0f)]autorelease];
     self.disableViewOverlay.backgroundColor=[UIColor blackColor];
     self.disableViewOverlay.alpha = 0;
-//    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0,0, 45,320)];
-//    label.text = @"Puoi inserire un indirizzo specifico oppure una città";
-//    label.textColor = [UIColor whiteColor];
-//    [self.disableViewOverlay addSubview:label];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(5,5,320,70)];
+    
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor whiteColor];
+    label.numberOfLines = 2;
+    label.lineBreakMode = UILineBreakModeWordWrap;
+    label.text = @"Inserisci un indirizzo, una zona, un codice postale o una città.";
+    [self.disableViewOverlay addSubview:label];
 }
 
 - (void)viewDidUnload

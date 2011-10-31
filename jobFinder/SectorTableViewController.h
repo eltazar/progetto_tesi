@@ -13,12 +13,14 @@
 @interface SectorTableViewController : UITableViewController{
    
     id<SectorTableDelegate> secDelegate;
+    NSArray *structureFromPlist;
     NSDictionary *tableStructure;
     NSArray *sections;
     NSString *plistName;
 
 }
 
+@property(nonatomic, retain) NSArray *structureFromPlist;
 @property(nonatomic, retain) NSDictionary *tableStructure;
 @property(nonatomic, retain) NSArray *sections;
 @property(nonatomic,assign) id<SectorTableDelegate> secDelegate;

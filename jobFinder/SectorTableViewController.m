@@ -10,7 +10,7 @@
 #import "BaseCell.h"
 
 @implementation SectorTableViewController
-@synthesize selectedCell,secDelegate, tableStructure, sections;
+@synthesize secDelegate, tableStructure, sections,structureFromPlist;
 
 -(id) initWithPlist:(NSString *)plist
 {
@@ -60,14 +60,12 @@
     }
     else{
         NSLog(@"CELLA RICICLATA");
-        //cell.textLabel.text = [rowDesc objectForKey:@"label"];
+        cell.textLabel.text = [rowDesc objectForKey:@"label"];
     }    
     
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-    
-    //cell.detailTextLabel.text = @"CAZOOOOoooooooo ooooo oooooo ooooooo oooooo ooo";
-    
+        
     return cell;
 
 }
@@ -116,13 +114,14 @@
 {
     [super viewDidLoad];
     
-    self.title = @"Settori";
-    
     NSString *plisStructure = [[NSBundle mainBundle] pathForResource:plistName ofType:@"plist"];
-    self.tableStructure = [NSDictionary dictionaryWithContentsOfFile:plisStructure];
+    self.structureFromPlist = [NSArray arrayWithContentsOfFile:plisStructure];
+    
+    self.title = [[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
+    
+    self.tableStructure = [structureFromPlist objectAtIndex:1];
     self.sections = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
 }
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];

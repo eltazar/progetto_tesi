@@ -58,7 +58,7 @@
     if(section == 0 && row == 0){
 
         SectorTableViewController *sectorTable = [[SectorTableViewController alloc] initWithPlist:@"sector-table"];
-        //sectorTable.secDelegate = self;
+        sectorTable.secDelegate = self;
         [self.navigationController pushViewController:sectorTable animated:YES];
     }
 }
@@ -111,6 +111,8 @@
     
     [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:placeholder forKey:@"placeholder"];
     [self.tableView reloadRowsAtIndexPaths: [[[NSArray alloc] initWithObjects:indexPath,nil] autorelease] withRowAnimation:UITableViewRowAnimationNone];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

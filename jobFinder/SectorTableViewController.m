@@ -8,6 +8,7 @@
 
 #import "SectorTableViewController.h"
 #import "BaseCell.h"
+#import "SubSectorTableViewController.h"
 
 @implementation SectorTableViewController
 @synthesize secDelegate, tableStructure, sections,structureFromPlist;
@@ -81,31 +82,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-//    if(firsTime){
-//        indexPathSelected = indexPath;
-//        firsTime = FALSE;
-//        [tableView cellForRowAtIndexPath:indexPath].accessoryType = 
-//            UITableViewCellAccessoryCheckmark;
-//        [selectedCells replaceObjectAtIndex:indexPath.row 
-//                                 withObject:@"selected"];
-//        }
-//    
-//    if(indexPath.row != indexPathSelected.row){
-//        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
-//        [selectedCells replaceObjectAtIndex:indexPath.row 
-//                                 withObject:@"selected"];
-//        [tableView cellForRowAtIndexPath:indexPathSelected].accessoryType = UITableViewCellAccessoryNone;
-//        [selectedCells replaceObjectAtIndex:indexPathSelected.row 
-//                                 withObject:@"noSelected"];
-//       // [selectedCells insertObject:@"notSelected" atIndex:indexPath.row];
-//        indexPathSelected = indexPath;
-//    }
-//    
-//    selectedCell = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-//    [secDelegate receiveSectorFromTable:selectedCell];   
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"employeeDidSet" object:self userInfo:nil]; 
-//    
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
+    //recupero i settori che cominciano con una data lettera (es: tutti i settori con la A)
+    NSArray *sectorWithLetter = [tableStructure objectForKey:[sections objectAtIndex:indexPath.section] ];
+    //NSLog(@"JOB SECTOR %@",sector);
+    //ricavo un preciso settore e costruisco il nome del relativo file plist
+    NSDictionary *sector = [sectorWithLetter objectAtIndex:indexPath.row];
+    NSString *plistString = [NSString stringWithFormat:@"%@sectors-table", [sector objectForKey:@"code"]];
+    SubSectorTableViewController *subSector = [[SubSectorTableViewController alloc] initWithPlist:plistString];
+    subSector.secDelegate = self.secDelegate;
+    [self.navigationController pushViewController:subSector animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
 }
 
 #pragma mark - View lifecycle
@@ -114,6 +100,8 @@
 {
     [super viewDidLoad];
     
+    showSubSector = NO;
+    
     NSString *plisStructure = [[NSBundle mainBundle] pathForResource:plistName ofType:@"plist"];
     self.structureFromPlist = [NSArray arrayWithContentsOfFile:plisStructure];
     
@@ -121,6 +109,8 @@
     
     self.tableStructure = [structureFromPlist objectAtIndex:1];
     self.sections = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSLog(@"### DELEGATO è: %p",secDelegate);
 }
 - (void)viewDidUnload
 {

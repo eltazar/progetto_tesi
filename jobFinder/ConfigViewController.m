@@ -64,8 +64,8 @@
 //        cell.detailTextLabel.numberOfLines = 2;
 //        cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
 //    }
-
-    return cell;
+    cell.textLabel.numberOfLines = 2;
+    cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;    return cell;
 }
 
 //setta gli header delle sezioni

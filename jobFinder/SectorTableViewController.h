@@ -11,16 +11,20 @@
 @protocol SectorTableDelegate;
 
 @interface SectorTableViewController : UITableViewController{
-    NSArray *list;
-    NSString *selectedCell;
-    NSMutableArray *selectedCells;
-    NSIndexPath *indexPathSelected;
-    BOOL firsTime;
+   
     id<SectorTableDelegate> secDelegate;
+    NSDictionary *tableStructure;
+    NSArray *sections;
+    NSString *plistName;
+
 }
 
-@property(nonatomic,readonly) NSString *selectedCell;
+@property(nonatomic, retain) NSDictionary *tableStructure;
+@property(nonatomic, retain) NSArray *sections;
 @property(nonatomic,assign) id<SectorTableDelegate> secDelegate;
+
+-(id) initWithPlist:(NSString *)plist;
+
 @end
 
 @protocol SectorTableDelegate <NSObject>

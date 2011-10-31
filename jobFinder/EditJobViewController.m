@@ -47,6 +47,8 @@
 //ATTENZIONE: faccio il release del job nel metodo dealloc, ma non sono sicuro se è giusto e cosa accade una volta che tale job lo passo ad altre view. viene copiato? retain + 1?
 
 
+#pragma mark - TableViewDelegate
+
 //azioni per le celle selezionate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -55,8 +57,8 @@
     
     if(section == 0 && row == 0){
 
-        SectorTableViewController *sectorTable = [[SectorTableViewController alloc] initWithNibName:nil bundle:nil];
-        sectorTable.secDelegate = self;
+        SectorTableViewController *sectorTable = [[SectorTableViewController alloc] initWithPlist:@"sector-table"];
+        //sectorTable.secDelegate = self;
         [self.navigationController pushViewController:sectorTable animated:YES];
     }
 }

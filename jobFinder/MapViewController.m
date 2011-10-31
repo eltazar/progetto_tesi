@@ -11,6 +11,7 @@
 #import "InfoJobViewController.h"
 #import "FavouriteAnnotation.h"
 #import "DatabaseAccess.h"
+#import "FilterViewController.h"
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
@@ -357,6 +358,13 @@
     [UIView transitionFromView:alternativeToolbar toView:toolBar duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:nil];
 }
 
+-(IBAction)filterBtnClicked:(id)sender
+{
+    FilterViewController *filterTable = [[FilterViewController alloc] initWithPlist:@"sector-table"];    //sectorTable.secDelegate = self;
+    [self.navigationController pushViewController:filterTable animated:YES];
+    [filterTable release];
+}
+
 #pragma mark - ActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
@@ -617,11 +625,6 @@
 //    [arrayJOBtemp addObject:jobDiprova];
 //    [map addAnnotations:arrayJOBtemp];
 
-}
-
--(IBAction)filterBtnClicked:(id)sender
-{
-    NSLog(@"CIAOOOOOOOOOOOOOOOO");
 }
 
 -(double)fRand

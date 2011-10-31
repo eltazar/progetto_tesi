@@ -17,6 +17,8 @@
 		// Custom initialization
         [self setSelectionStyle:UITableViewCellSelectionStyleBlue]; 
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [self.textLabel setAdjustsFontSizeToFitWidth:YES];
+        self.textLabel.minimumFontSize = 11;
         UIImage *image = [UIImage imageNamed: [NSString stringWithFormat:@"%@",[dictionary objectForKey:@"img"]]];
         self.imageView.image = image;
         //NSLog(@"IMAGE SIZE action %f, %f",image.size.width,image.size.height);
@@ -25,15 +27,15 @@
     return self;
 }
 
-- (void)layoutSubviews {
-	[super layoutSubviews];
-    
-	CGRect labelRect = CGRectMake(self.textLabel.frame.origin.x,
-                                  self.textLabel.frame.origin.y,
-                                  self.contentView.frame.size.width * .35,
-                                  self.textLabel.frame.size.height);
-	[self.textLabel setFrame:labelRect];
-}
+//- (void)layoutSubviews {
+//	[super layoutSubviews];
+//    
+//	CGRect labelRect = CGRectMake(self.textLabel.frame.origin.x,
+//                                  self.textLabel.frame.origin.y,
+//                                  self.contentView.frame.size.width * .35,
+//                                  self.textLabel.frame.size.height);
+//	[self.textLabel setFrame:labelRect];
+//}
 
 
 @end

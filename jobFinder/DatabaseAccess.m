@@ -10,22 +10,33 @@
 #import "NSDictionary_JSONExtensions.h"
 #import "Job.h"
 
+NSString* key(NSURLConnection* con)
+{
+    return [NSString stringWithFormat:@"%p",con];
+}
+
 @implementation DatabaseAccess
+@synthesize delegate;
 
 - (id)init
 {
     self = [super init];
     if (self) {
         // Initialization code here.
+        //connectionDictionary = [[NSMutableDictionary alloc] init];
+        dataDictionary = [[NSMutableDictionary alloc] init];
     }
     
     return self;
 }
 
+-(void)jobReadRequest:(MKCoordinateRegion)region
+{
+    
+}
 
 -(void)jobWriteRequest:(Job *)job
 { 
-    //NSLog(@"@@@@@@@@@@@@@@@@");
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/write.php"];    
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
@@ -54,9 +65,13 @@
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
-        receivedData = [[NSMutableData data] retain];
+        NSMutableData *receivedData = [[NSMutableData data] retain];
+        //[connectionDictionary setObject:connection forKey:key(connection)];
+        [dataDictionary setObject:receivedData forKey:key(connection)];
+        //NSLog(@"RECEIVED DATA FROM DICTIONARY : %p",[dataDictionary objectForKey:connection]);
     }
     else{
         NSLog(@"theConnection is NULL");
@@ -66,18 +81,27 @@
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+    //NSLog(@"DID RECEIVE RESPONSE");
+    
+    NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
+
     [receivedData setLength: 0];
 }
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    //NSLog(@"XXXX %@",data);
+    NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
+    NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
+
     [receivedData appendData:data];
+    //NSLog(@"RECEIVED DATA AFTER APPENDING %@",receivedData);
 }
 
 //If an error is encountered during the download, the delegate receives a connection:didFailWithError:
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
+    [dataDictionary removeObjectForKey:key(connection)];
     
     NSLog(@"ERROR with theConenction");
     [connection release];
@@ -88,19 +112,26 @@
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
 
-    NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
+    //NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
     NSString *json = [[NSString alloc] initWithBytes: [receivedData mutableBytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
-    NSLog(@"JSON %p %@",json, json);
-    
+    //NSLog(@"JSON %p %@",json, json);
+    [delegate didReceiveResponsFromServer:json];
     //rilascio risorse, come spiegato sula documentazione apple
     [json release];
+    
+    [dataDictionary removeObjectForKey:key(connection)];
+    
     [connection release];
     [receivedData release];
 }
 
--(void)enqueueJobWriteRequest:(Job*)job
+
+-(void)dealloc
 {
+    [dataDictionary release];
+    [super dealloc];
 }
 
 @end

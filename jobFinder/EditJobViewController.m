@@ -136,7 +136,14 @@
          ((TextFieldCell *)cell).textField.text = [job.url absoluteString]; 
 }
 
+
 #pragma mark - View lifecycle
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    //return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
 
  // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
  - (void)viewDidLoad
@@ -226,12 +233,6 @@
     // e.g. self.myOutlet = nil;
 }
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
 
 #pragma mark - Memory management
 

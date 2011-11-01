@@ -88,19 +88,25 @@
     //ricavo un preciso settore e costruisco il nome del relativo file plist
     NSDictionary *sector = [sectorWithLetter objectAtIndex:indexPath.row];
     NSString *plistString = [NSString stringWithFormat:@"%@sectors-table", [sector objectForKey:@"code"]];
+    NSLog(@"PATH PLIST %@",plistString);
     SubSectorTableViewController *subSector = [[SubSectorTableViewController alloc] initWithPlist:plistString];
     subSector.secDelegate = self.secDelegate;
     [self.navigationController pushViewController:subSector animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
 }
 
+
 #pragma mark - View lifecycle
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    //return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    showSubSector = NO;
     
     NSString *plisStructure = [[NSBundle mainBundle] pathForResource:plistName ofType:@"plist"];
     self.structureFromPlist = [NSArray arrayWithContentsOfFile:plisStructure];
@@ -109,8 +115,6 @@
     
     self.tableStructure = [structureFromPlist objectAtIndex:1];
     self.sections = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSLog(@"### DELEGATO è: %p",secDelegate);
 }
 - (void)viewDidUnload
 {

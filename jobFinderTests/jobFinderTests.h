@@ -7,7 +7,12 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-
-@interface jobFinderTests : SenTestCase
+#import "DatabaseAccess.h"
+@interface jobFinderTests : SenTestCase <DatabaseAccessDelegate>{
+    DatabaseAccess *db;
+    NSMutableArray *jobs;
+    NSString *controlString;
+    int testCompleteness;
+}
 
 @end

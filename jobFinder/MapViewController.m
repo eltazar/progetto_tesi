@@ -20,7 +20,7 @@
 #define DEFAULT_COORDINATE -180
 
 @implementation MapViewController 
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, publishAlternativeBtn, back;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, back;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -69,8 +69,12 @@
             MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
             MKCoordinateRegion region = MKCoordinateRegionMake(mapView.userLocation.coordinate, span);
             [mapView setRegion:region animated:YES];
-            NSLog(@"USER LOCATION view %p",annotationView);
+            //NSLog(@"USER LOCATION view %p",annotationView);
         }
+        //se il pin è draggabile viene mostrato con il callout già aperto
+        if([annotationView.annotation isKindOfClass:[Job class]])
+            if(((Job*)annotationView.annotation).isDraggable)
+                [mapView selectAnnotation:annotationView.annotation animated:YES];
     }
 }
 
@@ -84,10 +88,11 @@
     
     //se la annotatione è di tipo FavouriteAnnotation la creo e salvo 
     if([annotation isKindOfClass:[FavouriteAnnotation class]]){
-        MKAnnotationView *favouritePinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
+        MKPinAnnotationView *favouritePinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
         favouritePinView.tag = 122;
         favouritePinView.canShowCallout = YES;
-        favouritePinView.image=[UIImage imageNamed:@"favouritePin.png"];
+        //favouritePinView.image=[UIImage imageNamed:@"favouritePin.png"];
+        favouritePinView.pinColor = MKPinAnnotationColorPurple;
         //NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;
     }
@@ -124,7 +129,7 @@
         NSLog(@"IS NOT DRAGGABLE");
         pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
         [pinView setDraggable:NO];
-        pinView.pinColor = MKPinAnnotationColorGreen;        
+        pinView.pinColor = MKPinAnnotationColorGreen; 
     }
 
     
@@ -280,20 +285,64 @@
 #pragma mark - gestione click bottoni della view
 
 //mostra la action sheet con la scelta del tipo di segnalazione
--(IBAction)showKindOfPublishingJob:(id)sender 
-{
+-(IBAction)publishBtnClicked:(id)sender 
+{    
+    CLLocationCoordinate2D coordinate;
+    
+    if(map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE){
         
-    UIActionSheet *azione = [[UIActionSheet alloc]initWithTitle:@"Scegli dove segnalare" delegate:self cancelButtonTitle:@"Annulla" destructiveButtonTitle:nil otherButtonTitles:@"Segnala nella tua posizione",@"Segnala altrove", nil];
-    azione.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-    [azione showInView:self.view];
-    [azione release];   
+        //mostra avviso che gps spento 
+        
+        //setta le coordinate del punto draggabile come quelle del centro della region
+        coordinate = CLLocationCoordinate2DMake(map.region.center.latitude,map.region.center.longitude);
+    }
+    else{
+        //setta coordinate del punto draggabile come quelle della user location
+        coordinate = CLLocationCoordinate2DMake(map.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude);
+    }
+    
+    //alloco il job da pubblicare
+    jobToPublish = [[Job alloc] initWithCoordinate:coordinate];
+    //così il pin sarà draggabile
+    jobToPublish.isDraggable = YES;
+    
+    
+    //aggiungo il pin draggabile alla mappa
+    if(jobToPublish != nil){
+        [map addAnnotation:jobToPublish];
+        //segnalo che c'è un pin draggabile sulla mappa
+        isDragPinOnMap = YES;
+        
+        //sposta la vista nella region in cui è stato inserito il pin
+        MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+        MKCoordinateRegion region = MKCoordinateRegionMake(coordinate,span);
+        [map setRegion:region animated:YES];
+    }
+        
+    /*se è stato inserito un pin draggabile disattivo il tasto segnala ed attio quello per il salvataggio del job nella posizione scelta
+     */
+    if(isDragPinOnMap){
+        publishBtn.enabled = NO;
+        saveJobInPositionBtn.enabled = YES;
+    }
+    
+    //carica l'alternativeToolbar con uno slide
+    [self.map addSubview:alternativeToolbar];
+    alternativeToolbar.frame = CGRectMake(0, self.view.frame.size.height, self.map.frame.size.width,alternativeToolbar.frame.size.height);
+    [UIView animateWithDuration:.85 
+                     animations:^{
+                         alternativeToolbar.frame = CGRectMake(0,map.frame.size.height - alternativeToolbar.frame.size.height , self.map.frame.size.width, alternativeToolbar.frame.size.height);
+                     }
+     ];
+
 }
 
 //inserisce un job in una posizione che non è la userLocation dopo il tap sul tasto SEGNALA
--(IBAction)publishAlternativeBtnClicked:(id)sender
+-(IBAction)saveNewJobInPositionBtnClicked:(id)sender
 {
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;
+    //prima di fare l'istruzione a riga 339 controllare che jobTopublish != nil ???
     publishViewCtrl.newJob = jobToPublish;
     [self presentModalViewController:publishViewCtrl animated:YES];
     [publishViewCtrl release];
@@ -345,17 +394,32 @@
 
 -(IBAction)backBtnClicked:(id)sender
 {
-    //setto a NO per far si che sulla view precedente non sia abilitata la segnalazione "ovunque"
-    isLongTapEnabled = NO;
     
+    //fa sparire con uno slide la alternativeToolbar
+    CGRect alternativeToolBarFrame = alternativeToolbar.frame;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:1];
+    alternativeToolBarFrame.origin.y = map.frame.size.height;
+    alternativeToolbar.frame = alternativeToolBarFrame;
+    [UIView commitAnimations]; 
+    
+    //rimuovo il pin draggabile dalla mappa
     if(jobToPublish != nil && jobToPublish.isDraggable == YES)
         [map removeAnnotation:jobToPublish];
+    
+    //segnalo che non ci sono pin draggabili sulla mappa
+    isDragPinOnMap = NO;
+    //riabilito il pulsante segnala
+    publishBtn.enabled = YES;
+        
+//    if(jobToPublish != nil && jobToPublish.isDraggable == YES)
+//        [map removeAnnotation:jobToPublish];
 
     //rilascio jobToPublish istanziato nel metodo handleLongTap
     [jobToPublish release];
     jobToPublish = nil;
     
-    [UIView transitionFromView:alternativeToolbar toView:toolBar duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:nil];
+    //[UIView transitionFromView:alternativeToolbar toView:toolBar duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:nil];
 }
 
 -(IBAction)filterBtnClicked:(id)sender
@@ -365,75 +429,10 @@
     [filterTable release];
 }
 
-#pragma mark - ActionSheetDelegate
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (buttonIndex == 0) {
-        //segnalo un job nella userLocation
-       
-        if(![CLLocationManager locationServicesEnabled] || 
-           [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"JobFinder non è in grado di determinare la tua posizione corrente" message:@"Controlla le impostazioni di localizzazione e riprova" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
-            [alert show];
-            [alert release];
-        }
-        else{
-            PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
-            //registro la classe come delegato del publishViewController
-            publishViewCtrl.pwDelegate = self;
-            //invio in avanti il jobToPublish
-            jobToPublish = [[Job alloc] initWithCoordinate:map.userLocation.coordinate];
-            publishViewCtrl.newJob = jobToPublish;
-            //    NSLog(@"USER COORDINATE IN MAPVIEW %f %f",map.userLocation.coordinate.latitude, map.userLocation.coordinate.longitude);
-            //carico la view come vista modale
-            [self presentModalViewController:publishViewCtrl animated:YES];
-            [publishViewCtrl release];
-        }
-    } 
-    else if (buttonIndex == 1) {
-        //segnala job altrove, modifica la vista mostrando una view con un help ed un button
-        
-        //abilita il long tap per segnalare ovunque sulla mappa
-        isLongTapEnabled = YES;
-        //appena caricata la vista non c'è nessun pin draggabile sulla mappa
-        isDragPinOnMap = NO;
-        [UIView transitionFromView:toolBar toView:alternativeToolbar duration:0.8 options:UIViewAnimationOptionTransitionCurlUp completion:nil];
-    }
-    else if (buttonIndex == 2) {
-        //annulla
-    }
-    
-}
 
 #pragma mark - PublishViewControllerDelegate
 
--(void)handleLongPressGesture:(UIGestureRecognizer*)sender 
-{
-    //se non c'è un altro pin draggabile sulla mappa e se la funzione è abilitata
-    if(!isDragPinOnMap && isLongTapEnabled){
-        // This is important if you only want to receive one tap and hold event
-        if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateChanged){
-                return;
-        }
-        else{
-            // Here we get the CGPoint for the touch and convert it to latitude and longitude coordinates to display on the map
-            CGPoint point = [sender locationInView:self.map];
-            CLLocationCoordinate2D locCoord = [self.map convertPoint:point toCoordinateFromView:self.map];
-            jobToPublish = [[Job alloc]initWithCoordinate:locCoord];
-            NSLog(@"JOB TO PUBLISH LONG TAP %p",jobToPublish);
-            //così il pin sarà draggabile
-            jobToPublish.isDraggable = YES;
-            //ora c'è un pin draggabile sulla mappa
-            isDragPinOnMap = YES;
-            [map addAnnotation:jobToPublish];
-            //abilito tasto per la segnalazione
-            publishAlternativeBtn.enabled = YES;
-        }
-   }
-    
-}
-
+#warning creare array di jobToPublish per non fare leak quando si alloca un nuovo jobToPublish ?????
 
 /*richiamato dalla view modale dopo il click su inserisci. spedisce i dati sul db
  */
@@ -442,9 +441,12 @@
     //segnala che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO;
     //disabilita pulsante per segnalazione alternativa
-    publishAlternativeBtn.enabled = NO;
+    saveJobInPositionBtn.enabled = NO;
     //il pin del job segnalato non deve essere più draggabile
     jobToPublish.isDraggable = NO;
+    
+    
+    //INSERIRE CONTROLLO SE INSERIMENTO SU DB è ANDATO A BUON FINE PRIMA DI INSERIRE IL PIN VERDE SULLA MAPPA????
     //richiedo scrittura su db dei dati
     [dbAccess jobWriteRequest:jobToPublish];
     
@@ -454,6 +456,17 @@
         [map addAnnotation:jobToPublish];
     }
     
+    //fa sparire con uno slide la alternativeToolbar
+    CGRect alternativeToolBarFrame = alternativeToolbar.frame;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:1];
+    alternativeToolBarFrame.origin.y = map.frame.size.height;
+    alternativeToolbar.frame = alternativeToolBarFrame;
+    [UIView commitAnimations];
+    
+    //riattivo pulsante segnalazione
+    publishBtn.enabled = YES;
+    
     [self dismissPublishView];  
 
 }
@@ -461,10 +474,19 @@
 //metodo delegate: richiamato dalla view modale dopo il click su annulla
 -(void) didCancelNewJob:(PublishViewController *)viewController
 {
-    //se l'operazione di inserimento è annullata il pin è ancora draggabile
-    isDragPinOnMap = YES;
-    publishAlternativeBtn.enabled = YES;
+    //se l'operazione di inserimento è annullata il pin draggabile sarà eliminato dalla mappa e rilasciato
     
+    [self backBtnClicked:self];
+    
+    //    if(jobToPublish != nil && jobToPublish.isDraggable == YES){
+//        [map removeAnnotation:jobToPublish];
+//        [jobToPublish release];
+//        jobToPublish = nil;
+//    }
+//    
+//    isDragPinOnMap = NO;
+//    publishBtn.enabled = YES;
+
     [self dismissPublishView];
 }
 
@@ -520,23 +542,8 @@
     
     //tasto refresh è disabilitato di default
     refreshBtn.enabled = NO;
-    //tasto publish è disabilitato di default
-    //publishBtn.enabled = NO;
     //tasto publishAlternativeBtn è disabilitato di default
-    publishAlternativeBtn.enabled = NO;
-    
-    
-    /*Inizializzazione frame delle sotto viste
-     */
-    //setto il frame dell'alternativeToolbar, posizione bottom
-    CGRect a = CGRectMake(alternativeToolbar.frame.origin.x, self.view.frame.size.height-toolBar.frame.size.height-5,alternativeToolbar.frame.size.width,alternativeToolbar.frame.size.height);
-    [alternativeToolbar setFrame:a];
-    
-    /* Inizializzazione del gesture recognizer
-     */
-    longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
-    [self.map addGestureRecognizer:longPressGesture];
-    
+    saveJobInPositionBtn.enabled = NO;
     
     
     /*Inizializzazione proprietà mapView
@@ -549,7 +556,6 @@
      */
     //di default i pin non possono esser "draggati"
     isDragPinOnMap = NO;
-    isLongTapEnabled = NO;
     
     /* Gestione delle configurazioni preferite dell'utente
      */
@@ -559,6 +565,8 @@
         CLLocationCoordinate2D favouriteCoord = CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue]);
         //creo ed aggiungo l'annotatione alla mappa
         favouriteAnnotation = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
+//        if([prefs objectForKey:@"address"] != nil)
+//            favouriteAnnotation.address = [prefs objectForKey:@"address"];
         [map addAnnotation:favouriteAnnotation];   
         
     } 

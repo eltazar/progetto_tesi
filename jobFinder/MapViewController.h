@@ -27,28 +27,20 @@
     Job *jobToPublish;
     Job *jobDiprova;
     UIView *alternativeToolbar;
-    UIButton *publishAlternativeBtn;
+    UIButton *saveJobInPositionBtn;
     UIButton *back;
     
     CLLocationDegrees lastSpan;
     NSMutableArray *arrayJOBtemp; 
-    MKAnnotationView *favouriteAnnView;
     FavouriteAnnotation *favouriteAnnotation;
-    
-    UILongPressGestureRecognizer *longPressGesture;
-    
+        
     BOOL isDragPinOnMap;
-    BOOL isLongTapEnabled;
-    
-    //PublishViewController *publishViewCtrl;
-//    ConfigViewController *configView;
-    //InfoJobViewController *infoJobView;
-    
+
     DatabaseAccess *dbAccess;
     
 }
 @property(nonatomic, retain) IBOutlet UIButton *back;
-@property(nonatomic, retain) IBOutlet UIButton *publishAlternativeBtn;
+@property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
 @property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;
 @property(nonatomic, retain) IBOutlet MKMapView *map;
 @property(nonatomic, retain) IBOutlet UIToolbar *toolBar;
@@ -56,15 +48,13 @@
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *publishBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *refreshBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *bookmarkButtonItem;
-//@property(nonatomic, retain) PublishViewController *publishViewCtrl;
-//@property(nonatomic, retain) ConfigViewController *configView;
-//@property(nonatomic, retain) RootJobViewController *infoJobView;
 
--(IBAction)showKindOfPublishingJob:(id)sender;
--(IBAction)publishAlternativeBtnClicked:(id)sender;
+
+-(IBAction)publishBtnClicked:(id)sender;
+-(IBAction)saveNewJobInPositionBtnClicked:(id)sender;
 -(IBAction)bookmarkBtnClicked:(id)sender;
 -(IBAction)configBtnClicked:(id)sender;
--(IBAction) showUserLocationButtonClicked:(id)sender;
+-(IBAction)showUserLocationButtonClicked:(id)sender;
 -(IBAction)backBtnClicked:(id)sender;
 -(void)filterAnnotation:(NSArray *) annotations;
 -(double) fRand;

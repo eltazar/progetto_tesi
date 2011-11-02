@@ -55,7 +55,7 @@
 - (NSString *)title {
     if(employee != nil)
         return employee;
-    return @"Nuova segnalazione";
+    return @"Sposta il pin se vuoi";
 }
 
 - (NSString *)subtitle {

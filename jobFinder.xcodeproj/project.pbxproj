@@ -48,12 +48,17 @@
 		AC8C34E914541E5B007BEE76 /* star_64.png in Resources */ = {isa = PBXBuildFile; fileRef = AC8C34E814541E5B007BEE76 /* star_64.png */; };
 		AC8C34EC1454359D007BEE76 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC8C34EB1454359D007BEE76 /* SystemConfiguration.framework */; };
 		AC8C34EF14543642007BEE76 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8C34EE14543642007BEE76 /* Reachability.m */; };
+		AC9FB384145EE736006227B6 /* A1sectors-table.plist in Resources */ = {isa = PBXBuildFile; fileRef = AC9FB383145EE736006227B6 /* A1sectors-table.plist */; };
+		AC9FB388145EEAC4006227B6 /* SubSectorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB387145EEAC4006227B6 /* SubSectorTableViewController.m */; };
+		ACA915E2145EA10500806FD3 /* sector-table.plist in Resources */ = {isa = PBXBuildFile; fileRef = ACA915E1145EA10500806FD3 /* sector-table.plist */; };
 		ACB6C5471424F0B200693952 /* Job.m in Sources */ = {isa = PBXBuildFile; fileRef = ACB6C5461424F0B200693952 /* Job.m */; };
 		ACB8693D1459BF430055ED47 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB8693B1459BF420055ED47 /* star.png */; };
 		ACB8693E1459BF430055ED47 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB8693C1459BF420055ED47 /* star@2x.png */; };
 		ACB869401459C68F0055ED47 /* myPosition@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB8693F1459C68F0055ED47 /* myPosition@2x.png */; };
 		ACB869471459CCBD0055ED47 /* mail.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB869451459CCBC0055ED47 /* mail.png */; };
 		ACB869481459CCBD0055ED47 /* mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB869461459CCBD0055ED47 /* mail@2x.png */; };
+		ACC54A80145DFF0F002F41D3 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */; };
+		ACC54A81145DFF0F002F41D3 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */; };
 		ACC54DBC1456E73300A51364 /* DatabaseAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54DBB1456E73300A51364 /* DatabaseAccess.m */; };
 		ACC54E121456FB4600A51364 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC54E111456FB4600A51364 /* MobileCoreServices.framework */; };
 		ACC54E161457176F00A51364 /* favourite.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC54E151457176F00A51364 /* favourite.png */; };
@@ -151,6 +156,10 @@
 		AC8C34EB1454359D007BEE76 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		AC8C34ED14543642007BEE76 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		AC8C34EE14543642007BEE76 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		AC9FB383145EE736006227B6 /* A1sectors-table.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "A1sectors-table.plist"; sourceTree = "<group>"; };
+		AC9FB386145EEAC4006227B6 /* SubSectorTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubSectorTableViewController.h; sourceTree = "<group>"; };
+		AC9FB387145EEAC4006227B6 /* SubSectorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubSectorTableViewController.m; sourceTree = "<group>"; };
+		ACA915E1145EA10500806FD3 /* sector-table.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sector-table.plist"; sourceTree = "<group>"; };
 		ACB6C5451424F0B200693952 /* Job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Job.h; sourceTree = "<group>"; };
 		ACB6C5461424F0B200693952 /* Job.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Job.m; sourceTree = "<group>"; };
 		ACB8693B1459BF420055ED47 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = icons/star.png; sourceTree = SOURCE_ROOT; };
@@ -158,6 +167,9 @@
 		ACB8693F1459C68F0055ED47 /* myPosition@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myPosition@2x.png"; path = "icons/myPosition@2x.png"; sourceTree = SOURCE_ROOT; };
 		ACB869451459CCBC0055ED47 /* mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mail.png; path = icons/mail.png; sourceTree = SOURCE_ROOT; };
 		ACB869461459CCBD0055ED47 /* mail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mail@2x.png"; path = "icons/mail@2x.png"; sourceTree = SOURCE_ROOT; };
+		ACC54A7D145DFF0F002F41D3 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
+		ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
+		ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
 		ACC54DBA1456E73300A51364 /* DatabaseAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseAccess.h; sourceTree = "<group>"; };
 		ACC54DBB1456E73300A51364 /* DatabaseAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseAccess.m; sourceTree = "<group>"; };
 		ACC54E0F1456FB3100A51364 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -232,6 +244,8 @@
 				AC154CD9143A343600AE5FAD /* InfoJobViewController.m */,
 				AC0363E71445CD2400060465 /* SectorTableViewController.h */,
 				AC0363E81445CD2400060465 /* SectorTableViewController.m */,
+				AC9FB386145EEAC4006227B6 /* SubSectorTableViewController.h */,
+				AC9FB387145EEAC4006227B6 /* SubSectorTableViewController.m */,
 				AC154CDB143A377200AE5FAD /* CellsType */,
 			);
 			name = TableModel;
@@ -301,6 +315,9 @@
 				AC4A04C7142239E300FE96F7 /* MapViewController.h */,
 				AC4A04C8142239E300FE96F7 /* MapViewController.m */,
 				AC4A04C9142239E300FE96F7 /* MapViewController.xib */,
+				ACC54A7D145DFF0F002F41D3 /* FilterViewController.h */,
+				ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */,
+				ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */,
 				ACFAB5101435E88700AB1490 /* PublishViewController.h */,
 				ACFAB5111435E88700AB1490 /* PublishViewController.m */,
 				AC736EFB1434D176003626F7 /* ConfigViewController.h */,
@@ -330,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				ACD58178145862DB00CCB281 /* Icons */,
+				ACA915D9145E994E00806FD3 /* table plists */,
 				AC4A04991422369200FE96F7 /* jobFinder-Info.plist */,
 				AC4A049A1422369200FE96F7 /* InfoPlist.strings */,
 				AC4A049D1422369200FE96F7 /* main.m */,
@@ -408,6 +426,15 @@
 				AC7ED94D145189C80070DA49 /* JSONRepresentation.h */,
 			);
 			path = JSON;
+			sourceTree = "<group>";
+		};
+		ACA915D9145E994E00806FD3 /* table plists */ = {
+			isa = PBXGroup;
+			children = (
+				ACA915E1145EA10500806FD3 /* sector-table.plist */,
+				AC9FB383145EE736006227B6 /* A1sectors-table.plist */,
+			);
+			name = "table plists";
 			sourceTree = "<group>";
 		};
 		ACCBD83B144DC6B400EEAC2A /* Networking */ = {
@@ -529,6 +556,9 @@
 				ACCAC505145D7E48008B0B9F /* home@2x.png in Resources */,
 				ACCAC508145D80B3008B0B9F /* search.png in Resources */,
 				ACCAC509145D80B3008B0B9F /* search@2x.png in Resources */,
+				ACC54A81145DFF0F002F41D3 /* FilterViewController.xib in Resources */,
+				ACA915E2145EA10500806FD3 /* sector-table.plist in Resources */,
+				AC9FB384145EE736006227B6 /* A1sectors-table.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +624,8 @@
 				AC8C34EF14543642007BEE76 /* Reachability.m in Sources */,
 				ACE44CE9145593ED0041A5FC /* FavouriteAnnotation.m in Sources */,
 				ACC54DBC1456E73300A51364 /* DatabaseAccess.m in Sources */,
+				ACC54A80145DFF0F002F41D3 /* FilterViewController.m in Sources */,
+				AC9FB388145EEAC4006227B6 /* SubSectorTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

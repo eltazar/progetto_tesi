@@ -30,10 +30,41 @@ NSString* key(NSURLConnection* con)
     return self;
 }
 
--(void)jobReadRequest:(MKCoordinateRegion)region
+-(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field
 {
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/read.php"];
+    [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
+    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
     
-}
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *postFormatString = @"latitude=%f&longitude=%f&latSpan=%f&longSpan=%f&field=%d";
+    NSString *postString = [NSString stringWithFormat:postFormatString,
+                            region.center.latitude,region.center.longitude,region.span.latitudeDelta,region.span.longitudeDelta,0];
+    
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    [request setHTTPBody:postData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+        NSMutableData *receivedData = [[NSMutableData data] retain];
+        //[connectionDictionary setObject:connection forKey:key(connection)];
+        [dataDictionary setObject:receivedData forKey:key(connection)];
+        //NSLog(@"RECEIVED DATA FROM DICTIONARY : %p",[dataDictionary objectForKey:connection]);
+    }
+    else{
+        NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita
+    }
+}   
 
 -(void)jobWriteRequest:(Job *)job
 { 
@@ -87,6 +118,7 @@ NSString* key(NSURLConnection* con)
 
     [receivedData setLength: 0];
 }
+
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);

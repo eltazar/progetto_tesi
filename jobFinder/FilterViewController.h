@@ -15,7 +15,7 @@
     NSMutableArray *sections;
     NSString *plistName;
     UISwitch *aSwitch;
-
+    
     NSMutableArray *rowInSection;
 }
 @property(nonatomic,retain) NSString *plistName;

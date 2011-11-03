@@ -12,22 +12,22 @@
 @interface FilterViewController : UITableViewController{
     NSArray *structureFromPlist;
     NSDictionary *tableStructure;
-    NSArray *sections;
+    NSMutableArray *sections;
     NSString *plistName;
+    UISwitch *aSwitch;
+
+    NSMutableArray *rowInSection;
 }
+@property(nonatomic,retain) NSString *plistName;
 @property(nonatomic, retain) NSArray *structureFromPlist;
 @property(nonatomic, retain) NSDictionary *tableStructure;
-@property(nonatomic, retain) NSArray *sections;
-@property(nonatomic,readonly) NSString *selectedCell;
+@property(nonatomic, retain) NSMutableArray *sections;
 //@property(nonatomic,assign) id<FilterDelegate> filtDelegate;
 
 -(id) initWithPlist:(NSString *)plist;
+-(void)switchChanged;
 @end
 
-@protocol SectorTableDelegate <NSObject>
-
--(void)receiveSectorFromTable:(NSString*)jobSector;
-@end
 
 //@protocol FilterDelegate <NSObject>
 

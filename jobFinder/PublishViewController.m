@@ -59,6 +59,7 @@
         }
         else    [pwDelegate didInsertNewJob:newJob]; //passo al delegato il nuovo job;
         
+        [internetReach release]; //aggiunto autorelease il 3 novembre
     }
     
     //[newJob release];

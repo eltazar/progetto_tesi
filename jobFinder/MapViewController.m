@@ -110,7 +110,7 @@
     //se non sono riuscito a riciclare un pin, lo creo
     if(pinView == nil){     
         
-        pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pin"];// autorelease];
+        pinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pin"]autorelease]; //aggiunto autorelease il 3 novembre
         NSLog(@"PIN VIEW ALLOCATO: %p",pinView);
         //setto colore, disclosure button ed animazione     
         pinView.canShowCallout = YES;

@@ -235,6 +235,7 @@
     label.lineBreakMode = UILineBreakModeWordWrap;
     label.text = @"Inserisci un indirizzo, una zona, un codice postale o una città.";
     [self.disableViewOverlay addSubview:label];
+    [label release];
 }
 
 - (void)viewDidUnload

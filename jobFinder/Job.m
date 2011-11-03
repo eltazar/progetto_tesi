@@ -131,7 +131,7 @@
 - (NSString *)description
 {    
     if(description == nil){
-        description = [[NSString alloc] initWithString:@""];
+        description = @"";
     }
     return [[ description retain] autorelease];
 }

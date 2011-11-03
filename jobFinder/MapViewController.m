@@ -12,6 +12,7 @@
 #import "FavouriteAnnotation.h"
 #import "DatabaseAccess.h"
 #import "FilterViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
@@ -20,7 +21,7 @@
 #define DEFAULT_COORDINATE -180
 
 @implementation MapViewController 
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, back;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -587,6 +588,18 @@
         
     } 
     
+    /* configurazione pulsanti della view
+     */
+    saveJobInPositionBtn.layer.cornerRadius = 8;
+    saveJobInPositionBtn.layer.borderWidth = 1;
+    saveJobInPositionBtn.layer.borderColor = [UIColor grayColor].CGColor;
+    saveJobInPositionBtn.clipsToBounds = YES;
+    
+    backBtn.layer.cornerRadius = 8;
+    backBtn.layer.borderWidth = 1;
+    backBtn.layer.borderColor = [UIColor grayColor].CGColor;
+    backBtn.clipsToBounds = YES;
+        
     /* inizializzazione classi necessarie al view controller
      */
     //alloco l'istanza per accesso al db

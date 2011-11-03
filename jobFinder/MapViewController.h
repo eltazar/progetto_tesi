@@ -28,7 +28,7 @@
     Job *jobDiprova;
     UIView *alternativeToolbar;
     UIButton *saveJobInPositionBtn;
-    UIButton *back;
+    UIButton *backBtn;
     
     CLLocationDegrees lastSpan;
     NSMutableArray *arrayJOBtemp; 
@@ -39,7 +39,7 @@
     DatabaseAccess *dbAccess;
     
 }
-@property(nonatomic, retain) IBOutlet UIButton *back;
+@property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
 @property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;
 @property(nonatomic, retain) IBOutlet MKMapView *map;

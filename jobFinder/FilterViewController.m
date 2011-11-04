@@ -121,7 +121,7 @@
             NSDictionary *tempDict = [structureFromPlist objectAtIndex:i];   
             //NSLog(@"++++++ TEMP DICTIO %@",tempDict);
             
-            [tableStructure addEntriesFromDictionary:tempDict];
+            [self.tableStructure addEntriesFromDictionary:tempDict];
         //    NSLog(@"Table structure content = %@",tableStructure);
         }
         
@@ -147,12 +147,26 @@
         range.length = sections.count - 1;
         [self.tableView beginUpdates];
         //[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:YES];
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:YES];
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationBottom];
         //[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:YES];
         [self.tableView endUpdates];
     }
     else{
-        //eliminare dal model tutte le sezioni tranne la prima e rifare l'update
+        NSRange range;
+        range.location = 1;
+        range.length = sections.count - 1;
+        
+        //elimino dal model tutte le sezioni tranne la prima e rifare l'update
+        
+        [self.tableStructure removeObjectsForKeys:[sections objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]]];
+        //NSLog(@"TABLE STRUCTURE = %@",tableStructure);
+        
+        [self.sections removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+        //NSLog(@"SECTIONS = %@",sections);
+        
+        [self.tableView beginUpdates];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView endUpdates];
     }
     
 }

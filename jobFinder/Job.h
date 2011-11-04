@@ -11,7 +11,7 @@
 #import <MapKit/MapKit.h>
 
 @interface Job : NSObject <MKAnnotation>{
-    
+    NSInteger idDb;
     NSString *employee;
     NSString *date;
     NSString *description;
@@ -27,6 +27,8 @@
     BOOL isDraggable;
     CLLocationCoordinate2D coordinate;
 }
+
+@property(nonatomic, assign) NSInteger idDb;
 @property(nonatomic, assign) BOOL isDraggable;
 @property(nonatomic, retain) NSString *subtitle;
 @property(nonatomic, retain) NSString *employee;
@@ -47,5 +49,6 @@
 -(void) setUrlWithString:(NSString *) urlString;
 -(BOOL) isValid;
 -(NSString*) invalidReason;
+-(NSString*)urlAsString;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation Job
 
-@synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle;
+@synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle, idDb;
 @synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init
@@ -18,6 +18,7 @@
     self = [super init];
     if (self) {
         // Initialization code here.
+        idDb = 0;
         isMultiple = FALSE;
         isAnimated = TRUE;
         isEmailValid = TRUE;
@@ -69,11 +70,17 @@
 {
     NSString* emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
     NSPredicate* emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-
-    if(([newEmail isEqualToString:@""] || newEmail == nil))
+    
+    if(newEmail == nil)
         isEmailValid = TRUE;
+    else if([newEmail isKindOfClass:[NSNull class]] || [newEmail isEqualToString:@""]){
+        isEmailValid = TRUE;
+        [newEmail release];
+        newEmail = nil;
+    }
     else isEmailValid = [emailTest evaluateWithObject:newEmail];
   
+    
     if(isEmailValid){
         [newEmail retain];
         [email release];
@@ -81,28 +88,69 @@
     }
 }
 
--(void) setUrlWithString:(NSString *) urlString
+-(void)setPhone:(NSString *)newPhone
 {
-    if([urlString isEqualToString:@""] || urlString == nil){
+    /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
+    
+    if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
+        [newPhone release];
+        newPhone = nil;
+    }
+   
+    [newPhone retain];
+    [phone release];
+    phone = newPhone;
+}
+
+-(void)setDescription:(NSString *)newDescription
+{
+    /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
+    
+    if([newDescription isKindOfClass:[NSNull class]] || [newDescription isEqualToString:@""]){
+        [newDescription release];
+        newDescription = nil;
+    }
+    
+    [newDescription retain];
+    [description release];
+    description = newDescription;
+}
+
+-(void) setUrlWithString:(NSString *) newUrlString
+{
+    NSURL *tmpUrl;
+    
+    if(newUrlString == nil)
         isURLvalid = TRUE;
-        self.url = nil;
-    }    
-    else {
-        NSURL *tmpUrl = [[[NSURL alloc] initWithString:urlString]autorelease] ;
+    else if([newUrlString isKindOfClass:[NSNull class]] || [newUrlString isEqualToString:@""]){
+        isURLvalid = TRUE;
+        [newUrlString release];
+        newUrlString = nil;
+    }
+    else  {
+        tmpUrl = [[[NSURL alloc] initWithString:newUrlString]autorelease] ;
         if(tmpUrl == nil)
             isURLvalid = FALSE;
         else{
             if(tmpUrl.scheme == nil){ 
-                NSString* modifiedURLString = [NSString stringWithFormat:@"http://%@", urlString];
-                tmpUrl = [[[NSURL alloc] initWithString:modifiedURLString]autorelease];
+                NSString* modifiedURLString = [NSString stringWithFormat:@"http://%@", newUrlString];
+                tmpUrl = [[NSURL alloc] initWithString:modifiedURLString];//autorelease];
             }
             isURLvalid = TRUE;
-            self.url = tmpUrl;
-//            [tmpUrl release];
+            
         }
-        //[tmpUrl release];
     }
-    //NSLog(@"url in job = %@, resource specifier: %@", [url absoluteString], url.scheme);
+    
+    if(isURLvalid){
+        if(newUrlString == nil){
+            [url release];
+            url = nil;
+        }
+        else{
+            [url release];
+            url = tmpUrl;
+        }
+    }
     
 }
 
@@ -129,27 +177,41 @@
 
 
 - (NSString *)description
-{    
+{
+    NSString *tmpDescription;
     if(description == nil){
-        description = @"";
+        tmpDescription = @"";
     }
-    return [[ description retain] autorelease];
+    else{
+        tmpDescription = description;
+    }
+#warning come cazzo funzionano i getter con le properTy???
+    return [[tmpDescription  retain] autorelease];
 }
 
 - (NSString *)email
 {    
+    NSString *tempEmail;
     if(email == nil){
-        email = [[NSString alloc] initWithString:@""];
+        tempEmail = [[NSString alloc] initWithString:@""];
     }
-    return [[ email retain] autorelease];
+    else{
+        tempEmail = email;
+    }
+    return [[ tempEmail retain] autorelease];
 }
 
 - (NSString *)phone
 {    
+    NSString *tempPhone;
+    
     if(phone == nil){
-       phone = [[NSString alloc] initWithString:@""];
+       tempPhone = [[NSString alloc] initWithString:@""];
     }
-    return [[ phone retain] autorelease];
+    else{
+        tempPhone = phone;
+    }
+    return [[ tempPhone retain] autorelease];
 }
 
 //- (NSURL *)url
@@ -160,6 +222,15 @@
 //    }
 //    return [[ url retain] autorelease];
 //}
+
+-(NSString*)urlAsString
+{
+    if(url == nil)
+        return @"";
+    else{
+        return [url absoluteString];
+    }
+}
 
 
 @end

@@ -70,25 +70,25 @@
             break;
         case 1:
             if(row == 0){
-                if(job.description != nil && ! [job.description isEqualToString:@""])
+                if(![job.description isEqualToString:@""])
                     ((TextAreaCell*)cell).textView.text = job.description;
                 else ((TextAreaCell*)cell).textView.text = @"Descrizione non disponibile";
             }
                 break;
         case 2:
             if(row == 0){
-                if(job.phone != nil && ! [job.phone isEqualToString:@""])
+                if(![job.phone isEqualToString:@""])
                     cell.detailTextLabel.text = job.phone;
                 else cell.detailTextLabel.text = @"Non disponibile";
             }
             else if(row == 1){
-                if(job.email != nil && ! [job.email isEqualToString:@""])
+                if(![job.email isEqualToString:@""])
                     cell.detailTextLabel.text = job.email;
                 else cell.detailTextLabel.text = @"Non disponibile";
             } 
             else if(row == 2){
-                if(job.url != nil && ! [[job.url absoluteString ]isEqualToString:@""])
-                    cell.detailTextLabel.text = [job.url absoluteString];
+                if(![job.urlAsString isEqualToString:@""])
+                    cell.detailTextLabel.text = job.urlAsString;
                 else cell.detailTextLabel.text = @"Non disponibile";
             }
             break;
@@ -175,6 +175,7 @@
     // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
+//DA CANCELLARE ???? 30 ottobre
 -(void) setJob:(Job*) newJob{
     if(job != newJob){
         [newJob retain];
@@ -199,6 +200,7 @@
     
 #warning fatto a mano ma deve farlo se c'è errore nel reverse gecoding, CORREGGERE!!!!
     NSString *address = @""; //dove mettere "non disponibile" ?
+#warning  CONTROLLARE dataArray quanti elementi ha l'array.
     NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
     NSString *number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"];    
     //formatto la stringa address 

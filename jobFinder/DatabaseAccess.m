@@ -25,6 +25,8 @@ NSString* key(NSURLConnection* con)
         // Initialization code here.
         //connectionDictionary = [[NSMutableDictionary alloc] init];
         dataDictionary = [[NSMutableDictionary alloc] init];
+        readConnections = [[NSMutableArray alloc]init];
+        writeConnections = [[NSMutableArray alloc]init];
     }
     
     return self;
@@ -39,7 +41,7 @@ NSString* key(NSURLConnection* con)
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     NSString *postFormatString = @"latitude=%f&longitude=%f&latSpan=%f&longSpan=%f&field=%d";
     NSString *postString = [NSString stringWithFormat:postFormatString,
-                            region.center.latitude,region.center.longitude,region.span.latitudeDelta,region.span.longitudeDelta,0];
+                            region.center.latitude,region.center.longitude,region.span.latitudeDelta,region.span.longitudeDelta,field];
     
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
@@ -54,6 +56,8 @@ NSString* key(NSURLConnection* con)
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+        [readConnections addObject:connection];
         
         NSMutableData *receivedData = [[NSMutableData data] retain];
         //[connectionDictionary setObject:connection forKey:key(connection)];
@@ -79,7 +83,7 @@ NSString* key(NSURLConnection* con)
         job.description,
         job.phone,
         job.email,
-        job.url,
+        job.urlAsString,
         @"2011-01-03",
         job.coordinate.latitude,
         job.coordinate.longitude
@@ -99,6 +103,8 @@ NSString* key(NSURLConnection* con)
         //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
+        [writeConnections addObject:connection];
+        
         NSMutableData *receivedData = [[NSMutableData data] retain];
         //[connectionDictionary setObject:connection forKey:key(connection)];
         [dataDictionary setObject:receivedData forKey:key(connection)];
@@ -121,7 +127,8 @@ NSString* key(NSURLConnection* con)
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
+    //sto log crea memory leak
+    //NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
     NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
 
     [receivedData appendData:data];
@@ -134,6 +141,9 @@ NSString* key(NSURLConnection* con)
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
     [dataDictionary removeObjectForKey:key(connection)];
+    
+    [readConnections removeObject:connection];
+    [writeConnections removeObject:connection];
     
     NSLog(@"ERROR with theConenction");
     [connection release];
@@ -148,12 +158,49 @@ NSString* key(NSURLConnection* con)
 
     //NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
     NSString *json = [[NSString alloc] initWithBytes: [receivedData mutableBytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
-    //NSLog(@"JSON %p %@",json, json);
-    [delegate didReceiveResponsFromServer:json];
-    //rilascio risorse, come spiegato sula documentazione apple
+    NSLog(@"JSON %p %@",json, json);
+    
+    if([readConnections containsObject:connection]){
+        //creo array di job
+        NSError *theError = NULL;
+        NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
+       // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
+       NSLog(@"%@",dictionary);
+        NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
+    
+       for(int i=0; i < dictionary.count-1; i++){
+           NSDictionary *tempDict = [dictionary objectAtIndex:i];
+           CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
+           Job *job = [[Job alloc] initWithCoordinate:coordinate];
+            
+            //sistemare il tipo ritornato da field e da date
+           job.idDb = [[tempDict objectForKey:@"id"] integerValue];
+           job.employee = [tempDict objectForKey:@"field"];
+           job.date = [tempDict objectForKey:@"date"];
+           job.description = [tempDict objectForKey:@"description"];
+           job.phone = [tempDict objectForKey:@"phone"];
+           NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
+           job.email = [tempDict objectForKey:@"email"];
+           [job setUrlWithString:[tempDict objectForKey:@"url"]];
+            
+            [jobsArray addObject:job];
+        }
+        
+        [delegate didReceiveJobList:jobsArray];
+        [readConnections removeObject:connection];
+    
+        
+    }else{        
+        [delegate didReceiveResponsFromServer:json];
+        [writeConnections removeObject:connection];
+    }
+        //rilascio risorse, come spiegato sula documentazione apple
     [json release];
     
     [dataDictionary removeObjectForKey:key(connection)];
+    
+//    [readConnections removeObject:connection];
+//    [writeConnections removeObject:connection];
     
     [connection release];
     [receivedData release];

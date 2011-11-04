@@ -19,6 +19,8 @@ NSString* key(NSURLConnection* con);
     id<DatabaseAccessDelegate> delegate;
     //NSMutableDictionary *connectionDictionary;
     NSMutableDictionary *dataDictionary;
+    NSMutableArray *readConnections;
+    NSMutableArray *writeConnections;
 }
 
 

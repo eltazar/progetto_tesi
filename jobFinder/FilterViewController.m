@@ -7,6 +7,7 @@
 //
 
 #import "FilterViewController.h"
+#import "NSDictionary+Merge.h"
 
 @implementation FilterViewController
 @synthesize tableStructure, sections, structureFromPlist, plistName;
@@ -77,11 +78,13 @@
     //    if(section == 0 && !aSwitch.on)
     //        return 1;
     
-    return [[rowInSection objectAtIndex:section] intValue];
+    //return [[rowInSection objectAtIndex:section] intValue];
+    //NSLog(@"SECTION = %d",section);
     
-    //    NSString *key=[sections objectAtIndex:section];
-    //    NSArray *values = [tableStructure  objectForKey:key];
-    //    return [values count];
+    NSString *key=[sections objectAtIndex:section];
+    //NSLog(@"KEY = %@",key);
+    NSArray *values = [tableStructure  objectForKey:key];
+    return [values count];
     
 }
 
@@ -89,9 +92,10 @@
 {
     // Return the number of sections.
     //    NSLog(@"sections in sec = %d",sections.count);
-    if(!aSwitch.on)
-        return 1;
+//    if(!aSwitch.on)
+//        return 1;
     //return sections.count > 0 ? sections.count : 0;
+    //NSLog(@"SECTION COUNT = %d",sections.count);
     return sections.count;
 }
 
@@ -130,9 +134,47 @@
 -(void)switchChanged
 {
     NSLog(@"SWITCH CAMBIATO");
-    //[self reloadInputViews];
-    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];    
-    [self.tableView reloadData];
+    
+    //cambio il model
+    
+    for(int i = 1; i < structureFromPlist.count;i++){
+        
+    NSDictionary *tempDict = [structureFromPlist objectAtIndex:i];   
+    //NSLog(@"++++++ TEMP DICTIO %@",tempDict);
+    
+    [tableStructure addEntriesFromDictionary:tempDict];
+//    NSLog(@"Table structure content = %@",tableStructure);
+    }
+    
+    NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
+//    NSLog(@"***** TEMP ARRAY = %@",tempArray);
+//    NSLog(@"***** SECTIONS = %@",sections);
+   
+    [self.sections addObjectsFromArray:tempArray];
+    //NSLog(@"***** TEMP ARRAY = %@",tempArray);
+//    NSLog(@"####### SECTIONS = %@",sections);
+    [self.sections removeObjectAtIndex: sections.count - 1 ];
+//     NSLog(@"*@@@@@@ SECTIONS = %@",sections);                                                  
+
+    NSLog(@"*@@@@@@ Table structure content = %@",tableStructure);
+    NSLog(@"*@@@@@@ SECTIONS = %@",sections);
+    
+//    for(int i=0; i < sections.count ; i++)
+//        for(int j = 0 ; j < 
+    
+//    NSIndexPath *ip = [NSIndexPath indexPathForRow:[[NSNumber numberWithInt:1] intValue] inSection:[[NSNumber numberWithInt:1] intValue]];
+//    
+    
+    NSRange range;
+    range.location = 1;
+    range.length = sections.count - 1;
+    [self.tableView beginUpdates];
+    //[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:YES];
+    [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:YES];
+    //[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:YES];
+    [self.tableView endUpdates];
+
+    
 }
 
 #pragma mark - View lifecycle
@@ -141,32 +183,33 @@
 {
     [super viewDidLoad];
     
-    //    aSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-    //    [aSwitch addTarget:self action:@selector(switchChanged) forControlEvents:UIControlEventValueChanged];
-    //    aSwitch.on = NO;
-    
     //recupero path del file plist
     NSString *plisStructure = [[NSBundle mainBundle] pathForResource:plistName ofType:@"plist"];
     //recupero array
     self.structureFromPlist = [NSArray arrayWithContentsOfFile:plisStructure];
     
     //struttura della tabella, ovvero il dizionario con i settori di lavoro
-    self.tableStructure = [structureFromPlist objectAtIndex:1]; 
+    self.tableStructure = [[NSMutableDictionary alloc] initWithDictionary:[structureFromPlist objectAtIndex:0]]; 
     
     //creao array di settori indicizzati e in ordine alfabetico (0=A,1=B,...)
     NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
     self.sections  = [[NSMutableArray alloc] initWithArray:tempArray];
     //aggiungo sezione in indice zero senza nome, serve per la cella switch
-    [self.sections insertObject: [[self.structureFromPlist objectAtIndex:2] objectForKey:@"switch"] atIndex:0];
+    //[self.sections insertObject: [[self.structureFromPlist objectAtIndex:1] objectForKey:@"switch"] atIndex:0];
+    NSLog(@"*****************************************************");
+    NSLog(@"Table structure TYPE = %@",[tableStructure class]);
+
+    NSLog(@"TABLE STRUCTURE = %@",tableStructure);
+    NSLog(@"SECTIONS = %@",sections);
+    NSLog(@"*****************************************************");
+
     
-    
-    
-    rowInSection = [[NSMutableArray alloc]init];
-    [rowInSection insertObject: [NSNumber numberWithInt:1] atIndex:0];
-    
-    [rowInSection insertObject: [NSNumber numberWithInt:[[tableStructure objectForKey:@"A"] count]] atIndex:1];  
-    [rowInSection insertObject: [NSNumber numberWithInt:[[tableStructure objectForKey:@"B"] count]] atIndex:2];  
-    [rowInSection insertObject: [NSNumber numberWithInt:[[tableStructure objectForKey:@"C"] count]] atIndex:3];  
+//    rowInSection = [[NSMutableArray alloc]init];
+//    [rowInSection insertObject: [NSNumber numberWithInt:1] atIndex:0];
+//    
+//    [rowInSection insertObject: [NSNumber numberWithInt:[[tableStructure objectForKey:@"A"] count]] atIndex:1];  
+//    [rowInSection insertObject: [NSNumber numberWithInt:[[tableStructure objectForKey:@"B"] count]] atIndex:2];  
+//    [rowInSection insertObject: [NSNumber numberWithInt:[[tableStructure objectForKey:@"C"] count]] atIndex:3];  
     //    NSLog(@"ARRAY ROWINSECTION: %d", [[rowInSection objectAtIndex:0] intValue]);
     //    NSLog(@"ARRAY ROWINSECTION: %d", [[rowInSection objectAtIndex:1] intValue]);
     //    NSLog(@"ARRAY ROWINSECTION: %d", [[rowInSection objectAtIndex:2] intValue]);
@@ -182,6 +225,7 @@
     
     
     //NSLog(@"TABLE STRUCTURE %@",tableStructure);
+    //[tempArray release];
     
 }
 

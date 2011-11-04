@@ -11,7 +11,7 @@
 
 @interface FilterViewController : UITableViewController{
     NSArray *structureFromPlist;
-    NSDictionary *tableStructure;
+    NSMutableDictionary *tableStructure;
     NSMutableArray *sections;
     NSString *plistName;
     UISwitch *aSwitch;
@@ -20,7 +20,7 @@
 }
 @property(nonatomic,retain) NSString *plistName;
 @property(nonatomic, retain) NSArray *structureFromPlist;
-@property(nonatomic, retain) NSDictionary *tableStructure;
+@property(nonatomic, retain) NSMutableDictionary *tableStructure;
 @property(nonatomic, retain) NSMutableArray *sections;
 //@property(nonatomic,assign) id<FilterDelegate> filtDelegate;
 

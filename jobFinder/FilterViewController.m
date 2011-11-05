@@ -19,7 +19,7 @@
         aSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         [aSwitch addTarget:self action:@selector(switchChanged) forControlEvents:UIControlEventValueChanged];
         aSwitch.on = NO;
-        
+        //NSLog(@"init");
     }
     return self;
     
@@ -30,6 +30,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    NSLog(@"cell for row");
+    
     static NSString *CellIdentifier = @"cell";
     NSString *key = [sections objectAtIndex:indexPath.section];
     NSArray *valuesSection = [tableStructure objectForKey:key];
@@ -39,17 +41,18 @@
     
     if (cell == nil) {        
         cell = [[[UITableViewCell alloc ]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        NSLog(@"ALLOCATA cella %p",cell);
+        //NSLog(@"ALLOCATA cella %p",cell);
     }
     else{
-        NSLog(@"RICICLO cella %p",cell);
+        //NSLog(@"RICICLO cella %p",cell);
     }
     
     
     
     if(indexPath.section == 0){
         cell.textLabel.text = @"Filtro";
-        cell.accessoryView = aSwitch;      
+        cell.accessoryView = aSwitch; 
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else{
         cell.textLabel.text = [rowDesc objectForKey:@"label"];
@@ -68,6 +71,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {    
+    //NSLog(@"number row");
     NSString *key=[sections objectAtIndex:section];
     NSArray *values = [tableStructure  objectForKey:key];
     return [values count];
@@ -75,46 +79,36 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    //NSLog(@"number section");
     return sections.count;
 }
 
-#warning pulire if-if
 #pragma mark - Table view delegate
 
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{    
-//    if(firsTime){
-//        indexPathSelected = indexPath;
-//        firsTime = FALSE;
-//        [tableView cellForRowAtIndexPath:indexPath].accessoryType = 
-//        UITableViewCellAccessoryCheckmark;
-//        [selectedCells replaceObjectAtIndex:indexPath.row 
-//                                 withObject:@"selected"];
-//    }
-//    
-//    if(indexPath.row != indexPathSelected.row){
-//        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
-//        [selectedCells replaceObjectAtIndex:indexPath.row 
-//                                 withObject:@"selected"];
-//        [tableView cellForRowAtIndexPath:indexPathSelected].accessoryType = UITableViewCellAccessoryNone;
-//        [selectedCells replaceObjectAtIndex:indexPathSelected.row 
-//                                 withObject:@"noSelected"];
-//        // [selectedCells insertObject:@"notSelected" atIndex:indexPath.row];
-//        indexPathSelected = indexPath;
-//    }
-//    
-//    selectedCell = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-//    [filtDelegate didSelectedFilterFromTable:selectedCell];   
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"employeeDidSet" object:self userInfo:nil]; 
-//    
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
-//}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{   
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if(cell.accessoryType != UITableViewCellAccessoryCheckmark){
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [selectedCells addObject:indexPath];
+    }
+    else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [selectedCells removeObject:indexPath];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
+}
 
 -(void)switchChanged
-{
-    NSLog(@"SWITCH CAMBIATO");
+{   
+    //imposto il range per le nuove sezioni da inserire nella tableView
+    NSRange range;
+    range.location = 1;
     
     if(aSwitch.on){
+        //NSLog(@"SWITCH ON");
         
         //cambio il model aggiungendogli le informazioni sulle nuove sezioni e celle
         for(int i = 1; i < structureFromPlist.count;i++){
@@ -126,7 +120,7 @@
         }
         
         NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    //    NSLog(@"***** TEMP ARRAY = %@",tempArray);
+        //NSLog(@"***** TEMP ARRAY = %@",tempArray);
     //    NSLog(@"***** SECTIONS = %@",sections);
        
         //aggiungo  all'array che contiene i nomi delle sezioni le nuove sezioni
@@ -138,25 +132,20 @@
     //     NSLog(@"*@@@@@@ SECTIONS = %@",sections);                                                  
 
 //        NSLog(@"*@@@@@@ Table structure content = %@",tableStructure);
-//        NSLog(@"*@@@@@@ SECTIONS = %@",sections);
+       //NSLog(@"*@@@@@@ SECTIONS = %@",sections);
 
-        
-        NSRange range;
-        //imposto il range per le nuove sezioni da inserire nella tableView
-        range.location = 1;
         range.length = sections.count - 1;
+        
         [self.tableView beginUpdates];
         //[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:YES];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationBottom];
         //[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:YES];
-        [self.tableView endUpdates];
+        [self.tableView endUpdates];        
     }
     else{
-        NSRange range;
-        range.location = 1;
         range.length = sections.count - 1;
         
-        //elimino dal model tutte le sezioni tranne la prima e rifare l'update
+        //elimino dal model tutte le sezioni tranne la prima e rifaccio l'update
         
         [self.tableStructure removeObjectsForKeys:[sections objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]]];
         //NSLog(@"TABLE STRUCTURE = %@",tableStructure);
@@ -168,26 +157,75 @@
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView endUpdates];
     }
-    
 }
 
 #pragma mark - View lifecycle
 
+//-(void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    
+//    if([prefs objectForKey:@"tableStructure"] != nil){
+//        self.tableStructure = [prefs objectForKey:@"tableStructure"];
+//    }
+//    NSLog(@"WILL APPEAR: %@",tableStructure);
+//    //NSLog(@"VIEW WILL APP: %@",[prefs objectForKey:@"tableStructure"]);
+//    
+//}
+//
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    //quando la view sarà dismessa salva la struttura della tabella
+    [prefs removeObjectForKey:@"tableStructure"];
+    [prefs removeObjectForKey:@"sections"];
+    [prefs setObject:tableStructure forKey:@"tableStructure"];
+    [prefs setObject:sections forKey:@"sections"];
+    [prefs removeObjectForKey:@"switch"];
+    [prefs setBool:aSwitch.on forKey:@"switch"];
+    [prefs synchronize];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"did load");
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     //recupero path del file plist
     NSString *plisStructure = [[NSBundle mainBundle] pathForResource:plistName ofType:@"plist"];
     //recupero array
     self.structureFromPlist = [NSArray arrayWithContentsOfFile:plisStructure];
     
-    //struttura della tabella composta da una sola sezione e una sola cella (il primo dizionario)
-    self.tableStructure = [[NSMutableDictionary alloc] initWithDictionary:[structureFromPlist objectAtIndex:0]]; 
+    //chiamato al PRIMO avvio dell'app quando si spinge il tasto "filtro"
+    if([prefs objectForKey:@"tableStructure"] == nil){
+        
+        //NSLog(@"prefs = nil");
+
+        //struttura della tabella composta da una sola sezione e una sola cella (il primo dizionario)
+        self.tableStructure = [[[NSMutableDictionary alloc] initWithDictionary:[structureFromPlist objectAtIndex:0]]autorelease]; 
+        
+        //creao array di settori indicizzati e in ordine alfabetico (0=A,1=B,...)
+        NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
+        self.sections  = [[[NSMutableArray alloc] initWithArray:tempArray] autorelease];
+        
+        //aSwitch.on = NO;
+        
+    }
+    else{
+        /*chimato ogni volta che esiste salvata in memoria una struttura della tabella lasciata ad un passaggio precedente da questa vista*/
+        //NSLog(@"prefs != nil");
+        self.tableStructure = [[[prefs objectForKey:@"tableStructure"] mutableCopy] autorelease];
+        NSLog(@"%@",tableStructure);
+        self.sections = [[[prefs objectForKey:@"sections"] mutableCopy] autorelease];
+        aSwitch.on = [prefs boolForKey:@"switch"];
+    }
     
-    //creao array di settori indicizzati e in ordine alfabetico (0=A,1=B,...)
-    NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    self.sections  = [[NSMutableArray alloc] initWithArray:tempArray];
+
 
 //    NSLog(@"*****************************************************");
 //    NSLog(@"Table structure TYPE = %@",[tableStructure class]);
@@ -196,6 +234,18 @@
 //    NSLog(@"SECTIONS = %@",sections);
 //    NSLog(@"*****************************************************");
 
+    //selectedCells = [[NSMutableArray alloc]init];
+    
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    [prefs setObject:self.tableStructure forKey:@"tableStructure"];
+    
+        
+//    if([prefs objectForKey:@"tableStructure"] != nil){
+//        self.tableStructure = [prefs objectForKey:@"tableStructure"];
+//    }
+
+   // NSLog(@"DID LOAD %@",tableStructure);
+    
     self.title = @"Imposta filtro";//[[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
 }
 
@@ -219,8 +269,8 @@
 
 -(void) dealloc
 {
+    [structureFromPlist release];
     [aSwitch release];
-    [rowInSection release];
     [tableStructure release];
     [sections release];
     [super dealloc];

@@ -17,14 +17,20 @@
         <key>A</key>
         <array>
             <dict>
+                <key>enum</key>
+                <string>0</string>
                 <key>label</key>
                 <string>A1</string>
             </dict>
             <dict>
+                <key>enum</key>
+                <string>1</string>
                 <key>label</key>
                 <string>A2</string>
             </dict>
             <dict>
+                <key>enum</key>
+                <string>2</string>
                 <key>label</key>
                 <string>A3</string>
             </dict>
@@ -34,15 +40,20 @@
     <dict>
         <key>B</key>
         <array>
-            <dict>
+            <dict><key>enum</key>
+                <string>3</string>
                 <key>label</key>
                 <string>A1</string>
             </dict>
             <dict>
+                <key>enum</key>
+                <string>4</string>
                 <key>label</key>
                 <string>A2</string>
             </dict>
             <dict>
+                <key>enum</key>
+                <string>5</string>
                 <key>label</key>
                 <string>A3</string>
             </dict>

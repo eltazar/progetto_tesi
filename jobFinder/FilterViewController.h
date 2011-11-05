@@ -16,7 +16,8 @@
     NSString *plistName;
     UISwitch *aSwitch;
     
-    NSMutableArray *rowInSection;
+    NSMutableArray *selectedCells;
+    
 }
 @property(nonatomic,retain) NSString *plistName;
 @property(nonatomic, retain) NSArray *structureFromPlist;

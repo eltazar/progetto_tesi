@@ -16,9 +16,9 @@
     NSString *plistName;
     UISwitch *aSwitch;
     
-    NSMutableArray *selectedCells;
     
 }
+@property(nonatomic,retain) NSMutableArray *selectedCells;
 @property(nonatomic,retain) NSString *plistName;
 @property(nonatomic, retain) NSArray *structureFromPlist;
 @property(nonatomic, retain) NSMutableDictionary *tableStructure;

@@ -9,7 +9,7 @@
 #import "FilterViewController.h"
 
 @implementation FilterViewController
-@synthesize tableStructure, sections, structureFromPlist, plistName;
+@synthesize tableStructure, sections, structureFromPlist, plistName, selectedCells;
 
 -(id) initWithPlist:(NSString *)plist
 {
@@ -47,8 +47,6 @@
         //NSLog(@"RICICLO cella %p",cell);
     }
     
-    
-    
     if(indexPath.section == 0){
         cell.textLabel.text = @"Filtro";
         cell.accessoryView = aSwitch; 
@@ -60,6 +58,14 @@
         cell.textLabel.numberOfLines = 2;
         cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
         cell.accessoryView = nil;
+    }
+    
+    //riassegna il checkmark alle celle che lo avevano
+    if(selectedCells != nil && [selectedCells containsObject:[rowDesc objectForKey:@"enum"]]){
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
 }
@@ -87,17 +93,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {   
+    //reperisco informazioni su una determinata cella
+    NSString *key = [sections objectAtIndex:indexPath.section];
+    NSArray *valuesSection = [tableStructure objectForKey:key];
+    NSDictionary *rowDesc = [valuesSection objectAtIndex:indexPath.row];
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    if(cell.accessoryType != UITableViewCellAccessoryCheckmark){
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [selectedCells addObject:indexPath];
+    //assegno o tolgo il checkmark alle celle selezionate
+    if(indexPath.section != 0){    
+        if(cell.accessoryType != UITableViewCellAccessoryCheckmark){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [selectedCells addObject:[rowDesc objectForKey:@"enum"]];
+        }
+        else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            [selectedCells removeObject:[rowDesc objectForKey:@"enum"]];
+        }
     }
-    else{
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        [selectedCells removeObject:indexPath];
-    }
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
 }
 
@@ -110,36 +123,25 @@
     if(aSwitch.on){
         //NSLog(@"SWITCH ON");
         
-        //cambio il model aggiungendogli le informazioni sulle nuove sezioni e celle
+        //cambio il model aggiungendogli le informazioni sulle nuove sezioni e celle da aggiungere
         for(int i = 1; i < structureFromPlist.count;i++){
-            NSDictionary *tempDict = [structureFromPlist objectAtIndex:i];   
-            //NSLog(@"++++++ TEMP DICTIO %@",tempDict);
-            
+            NSDictionary *tempDict = [structureFromPlist objectAtIndex:i];             
             [self.tableStructure addEntriesFromDictionary:tempDict];
-        //    NSLog(@"Table structure content = %@",tableStructure);
         }
         
         NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
-        //NSLog(@"***** TEMP ARRAY = %@",tempArray);
-    //    NSLog(@"***** SECTIONS = %@",sections);
-       
+
         //aggiungo  all'array che contiene i nomi delle sezioni le nuove sezioni
         [self.sections addObjectsFromArray:tempArray];
-        //NSLog(@"***** TEMP ARRAY = %@",tempArray);
-    //    NSLog(@"####### SECTIONS = %@",sections);
+
         //rimuovo ultimo elemento che è la ripetizione del nome della prima sezione
-        [self.sections removeObjectAtIndex: sections.count - 1 ];
-    //     NSLog(@"*@@@@@@ SECTIONS = %@",sections);                                                  
+        [self.sections removeObjectAtIndex: 0];
 
-//        NSLog(@"*@@@@@@ Table structure content = %@",tableStructure);
-       //NSLog(@"*@@@@@@ SECTIONS = %@",sections);
-
+        //setto la lunghezza massima del range in base lunghezza effettiva array sections
         range.length = sections.count - 1;
         
         [self.tableView beginUpdates];
-        //[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:YES];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationBottom];
-        //[self.tableView insertSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:YES];
         [self.tableView endUpdates];        
     }
     else{
@@ -148,44 +150,35 @@
         //elimino dal model tutte le sezioni tranne la prima e rifaccio l'update
         
         [self.tableStructure removeObjectsForKeys:[sections objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]]];
-        //NSLog(@"TABLE STRUCTURE = %@",tableStructure);
         
+        //rimuovo tutte le sezioni tranne la prima
         [self.sections removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
-        //NSLog(@"SECTIONS = %@",sections);
+        
+        //rimuovo tutti i checkmarks dalle celle quando faccio switch off
+        [selectedCells removeAllObjects];
         
         [self.tableView beginUpdates];
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView endUpdates];
+        [self.tableView endUpdates]; 
     }
 }
 
 #pragma mark - View lifecycle
 
-//-(void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-//    
-//    if([prefs objectForKey:@"tableStructure"] != nil){
-//        self.tableStructure = [prefs objectForKey:@"tableStructure"];
-//    }
-//    NSLog(@"WILL APPEAR: %@",tableStructure);
-//    //NSLog(@"VIEW WILL APP: %@",[prefs objectForKey:@"tableStructure"]);
-//    
-//}
-//
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
-    //quando la view sarà dismessa salva la struttura della tabella
+    //quando la view sarà dismessa salva la struttura della tabella e le info sulle celle selezionate
     [prefs removeObjectForKey:@"tableStructure"];
     [prefs removeObjectForKey:@"sections"];
     [prefs setObject:tableStructure forKey:@"tableStructure"];
     [prefs setObject:sections forKey:@"sections"];
     [prefs removeObjectForKey:@"switch"];
     [prefs setBool:aSwitch.on forKey:@"switch"];
+    [prefs removeObjectForKey:@"selectedCells"];
+    [prefs setObject:selectedCells forKey:@"selectedCells"];
     [prefs synchronize];
 }
 
@@ -212,9 +205,8 @@
         //creao array di settori indicizzati e in ordine alfabetico (0=A,1=B,...)
         NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
         self.sections  = [[[NSMutableArray alloc] initWithArray:tempArray] autorelease];
-        
-        //aSwitch.on = NO;
-        
+                
+        self.selectedCells = [[[NSMutableArray alloc]init] autorelease];       
     }
     else{
         /*chimato ogni volta che esiste salvata in memoria una struttura della tabella lasciata ad un passaggio precedente da questa vista*/
@@ -223,28 +215,9 @@
         NSLog(@"%@",tableStructure);
         self.sections = [[[prefs objectForKey:@"sections"] mutableCopy] autorelease];
         aSwitch.on = [prefs boolForKey:@"switch"];
-    }
-    
-
-
-//    NSLog(@"*****************************************************");
-//    NSLog(@"Table structure TYPE = %@",[tableStructure class]);
-//
-//    NSLog(@"TABLE STRUCTURE = %@",tableStructure);
-//    NSLog(@"SECTIONS = %@",sections);
-//    NSLog(@"*****************************************************");
-
-    //selectedCells = [[NSMutableArray alloc]init];
-    
-//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-//    [prefs setObject:self.tableStructure forKey:@"tableStructure"];
-    
         
-//    if([prefs objectForKey:@"tableStructure"] != nil){
-//        self.tableStructure = [prefs objectForKey:@"tableStructure"];
-//    }
-
-   // NSLog(@"DID LOAD %@",tableStructure);
+        self.selectedCells = [[[prefs objectForKey:@"selectedCells"]mutableCopy]autorelease];
+    }
     
     self.title = @"Imposta filtro";//[[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
 }
@@ -269,6 +242,7 @@
 
 -(void) dealloc
 {
+    [selectedCells release];
     [structureFromPlist release];
     [aSwitch release];
     [tableStructure release];

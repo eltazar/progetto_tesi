@@ -187,29 +187,38 @@
 #pragma mark - GeodecoderDelegate
 -(void)didReceivedGeoDecoderData:(NSDictionary *)geoData
 {
-   NSArray *resultsArray = [geoData objectForKey:@"results"];
+    NSString *address;
+    
+    if([[geoData objectForKey:@"status"] isEqualToString:@"OK"]){
+        
+        NSArray *resultsArray = [geoData objectForKey:@"results"];
 
-    NSDictionary *data = [resultsArray objectAtIndex:0];
-    //NSLog(@"DICTIONARY ESTRATTO \n :%@",[data objectForKey:@"address_components"]); //array
-    //NSLog(@"CLASSE: %s", class_getName([[data objectForKey:@"address_components"] class]));
-    
-    NSArray *dataArray = [data objectForKey:@"address_components"];
-    
-//    NSLog(@"CLASSE: %s", class_getName([[dataArray objectAtIndex:0] class]));
-    //NSLog(@"DATA ARRAY: %@", [[dataArray objectAtIndex:0] objectForKey:@"long_name"]);// 0 = dizionario street number
-    
-#warning fatto a mano ma deve farlo se c'è errore nel reverse gecoding, CORREGGERE!!!!
-    NSString *address = @""; //dove mettere "non disponibile" ?
-#warning  CONTROLLARE dataArray quanti elementi ha l'array.
-    NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
-    NSString *number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"];    
-    //formatto la stringa address 
-    if(street != nil && !([street isEqualToString:@""])){
-        address = [NSString stringWithFormat:@"%@", street];
-        if( number != nil && !([number isEqualToString:@""]))
-            address = [NSString stringWithFormat:@"%@, %@", address, number];
-        job.address = address;
+        NSDictionary *data = [resultsArray objectAtIndex:0];
+        //NSLog(@"DICTIONARY ESTRATTO \n :%@",[data objectForKey:@"address_components"]); //array
+        //NSLog(@"CLASSE: %s", class_getName([[data objectForKey:@"address_components"] class]));
+        
+        NSArray *dataArray = [data objectForKey:@"address_components"];
+        
+    //    NSLog(@"CLASSE: %s", class_getName([[dataArray objectAtIndex:0] class]));
+        //NSLog(@"DATA ARRAY: %@", [[dataArray objectAtIndex:0] objectForKey:@"long_name"]);// 0 = dizionario street number
+        
+    #warning fatto a mano ma deve farlo se c'è errore nel reverse gecoding, CORREGGERE!!!!
+        address = @""; //dove mettere "non disponibile" ?
+    #warning  CONTROLLARE dataArray quanti elementi ha l'array.
+        NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
+        NSString *number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"];    
+        //formatto la stringa address 
+        if(street != nil && !([street isEqualToString:@""])){
+            address = [NSString stringWithFormat:@"%@", street];
+            if( number != nil && !([number isEqualToString:@""]))
+                address = [NSString stringWithFormat:@"%@, %@", address, number];
+            
+        }
     }
+    else{
+        address = @"Non disponibile";
+    }
+    job.address = address;
     //aggiorno il model usando la stringa address e ricarico i dati della tabella 
     [[[sectionData objectAtIndex:0] objectAtIndex:2] setObject:address forKey:@"detailLabel"];
     [self.tableView reloadData];        

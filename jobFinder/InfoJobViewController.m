@@ -295,14 +295,14 @@
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind",
                          @"Scrivi",           @"label",
-                         @"",                 @"img",
+                         @"mail.png",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil] autorelease] atIndex: 1];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind", 
                          @"Visita",           @"label",
-                         @"",                 @"img",
+                         @"home.png",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 2];
     

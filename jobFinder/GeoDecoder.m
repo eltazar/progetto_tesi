@@ -41,8 +41,15 @@
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+    if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    }
+    else{
+        NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita
+    }
     
     [connection release];
     [request release];

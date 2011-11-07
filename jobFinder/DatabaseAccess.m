@@ -168,6 +168,10 @@ NSString* key(NSURLConnection* con)
        NSLog(@"%@",dictionary);
         NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
     
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        //    return [f dateFromString:dateString];
+        //NSLog(@"FORMATTER = %p",formatter);
        for(int i=0; i < dictionary.count-1; i++){
            NSDictionary *tempDict = [dictionary objectAtIndex:i];
            CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
@@ -176,7 +180,7 @@ NSString* key(NSURLConnection* con)
             //sistemare il tipo ritornato da field e da date
            job.idDb = [[tempDict objectForKey:@"id"] integerValue];
            job.employee = [tempDict objectForKey:@"field"];
-           [job dateFromString:[tempDict objectForKey:@"date"]];
+           job.date = [formatter dateFromString: [tempDict objectForKey:@"date"]];
            job.description = [tempDict objectForKey:@"description"];
            job.phone = [tempDict objectForKey:@"phone"];
            //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
@@ -188,6 +192,8 @@ NSString* key(NSURLConnection* con)
         
         [delegate didReceiveJobList:jobsArray];
         [readConnections removeObject:connection];
+        [formatter release];
+        formatter = nil;
     
         
     }else{        

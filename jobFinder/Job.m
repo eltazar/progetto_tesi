@@ -89,25 +89,6 @@
     else return @"Non disponibile";
 }
 
--(NSDate*)dateFromString:(NSString*)dateString
-{
-    
-    
-    NSLog(@"DATESTRING = %@",dateString);
-    
-    NSDateFormatter *f = [[[NSDateFormatter alloc] init] autorelease];
-    [f setDateFormat:@"yyyy-MM-dd"];
-    NSDate *newDate = [f dateFromString:dateString];
-    
-    NSLog(@"DATE DOPO CONVERSIONE = %@", newDate);
-       
-    [newDate retain];
-    [date release];
-    date = newDate;
-    
-    return date;
-}
-
 -(void) setEmail:(NSString*)newEmail
 {
     NSString* emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
@@ -176,7 +157,7 @@
         else{
             if(tmpUrl.scheme == nil){ 
                 NSString* modifiedURLString = [NSString stringWithFormat:@"http://%@", newUrlString];
-                tmpUrl = [[NSURL alloc] initWithString:modifiedURLString];//autorelease];
+                tmpUrl = [[NSURL alloc] initWithString:modifiedURLString];//autorelease]; //add 7nov autorlease
             }
             isURLvalid = TRUE;
             
@@ -210,10 +191,6 @@
     else return nil;    
 }
 
--(void) dealloc
-{
-    [super dealloc];    
-}
 
 #warning fare i getter in modo tale che se la stringhe puntano a nil ritorna stringa @""
 
@@ -274,5 +251,18 @@
     }
 }
 
+
+-(void)dealloc{
+    [subtitle release];
+    [employee release];
+    [date release];
+    [address release];
+    [city release];
+    [phone release];
+    [email release];
+    [description release];
+   // [url release];
+    [super dealloc];
+}
 
 @end

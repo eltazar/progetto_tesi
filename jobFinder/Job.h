@@ -53,6 +53,5 @@
 -(NSString*) invalidReason;
 -(NSString*)urlAsString;
 -(NSString*)stringFromDate;
--(NSDate*)dateFromString:(NSString*)dateString;
 
 @end

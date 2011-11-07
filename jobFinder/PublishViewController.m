@@ -37,13 +37,9 @@
     //fa si che il testo inserito nei texfield sia preso anche se non è stata dismessa la keyboard
     [self.view endEditing:TRUE];
 
-    //setto data creazione annuncio
-    NSLocale *locale = [NSLocale currentLocale];
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease]; 
-    NSString *dateFormat = [NSDateFormatter dateFormatFromTemplate:@"E MMM d yyyy" options:0 locale:locale];
-    [formatter setDateFormat:dateFormat];
-    [formatter setLocale:locale];
-    newJob.date = [formatter stringFromDate:[NSDate date]];
+    //setto data creazione annuncio, il formato è tale per esser compatibile con mysql
+    newJob.date = [NSDate date];
+    NSLog(@"NSDATE IS : %@",newJob.date);
        
     //controllo la validità dei campi inseriti
     if([self validate:newJob]){    

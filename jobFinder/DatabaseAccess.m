@@ -84,11 +84,11 @@ NSString* key(NSURLConnection* con)
         job.phone,
         job.email,
         job.urlAsString,
-        @"2011-01-03",
+        job.date,
         job.coordinate.latitude,
         job.coordinate.longitude
     ];
-        
+    
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
     [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
@@ -158,14 +158,14 @@ NSString* key(NSURLConnection* con)
 
     //NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
     NSString *json = [[NSString alloc] initWithBytes: [receivedData mutableBytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
-    NSLog(@"JSON %p %@",json, json);
+    //NSLog(@"JSON %p %@",json, json);
     
     if([readConnections containsObject:connection]){
         //creo array di job
         NSError *theError = NULL;
         NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
        // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
-       NSLog(@"%@",dictionary);
+       //NSLog(@"%@",dictionary);
         NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
     
        for(int i=0; i < dictionary.count-1; i++){
@@ -179,7 +179,7 @@ NSString* key(NSURLConnection* con)
            job.date = [tempDict objectForKey:@"date"];
            job.description = [tempDict objectForKey:@"description"];
            job.phone = [tempDict objectForKey:@"phone"];
-           NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
+           //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
            job.email = [tempDict objectForKey:@"email"];
            [job setUrlWithString:[tempDict objectForKey:@"url"]];
             

@@ -34,6 +34,10 @@
     return @"Zona preferita";
 }
 
+-(NSString *) subtitle{
+    return address;
+}
+
 -(void) dealloc{
     self.address = nil;
     [super dealloc];

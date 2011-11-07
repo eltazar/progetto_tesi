@@ -165,7 +165,7 @@ NSString* key(NSURLConnection* con)
         NSError *theError = NULL;
         NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
        // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
-       NSLog(@"%@",dictionary);
+        NSLog(@"%@",dictionary);
         NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
     
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -175,7 +175,7 @@ NSString* key(NSURLConnection* con)
        for(int i=0; i < dictionary.count-1; i++){
            NSDictionary *tempDict = [dictionary objectAtIndex:i];
            CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
-           Job *job = [[Job alloc] initWithCoordinate:coordinate];
+           Job *job = [[[Job alloc] initWithCoordinate:coordinate] autorelease]; //aggiunto 7 nov
             
             //sistemare il tipo ritornato da field e da date
            job.idDb = [[tempDict objectForKey:@"id"] integerValue];
@@ -192,6 +192,7 @@ NSString* key(NSURLConnection* con)
         
         [delegate didReceiveJobList:jobsArray];
         [readConnections removeObject:connection];
+        [jobsArray release]; //aggiunto 7 novembre
         [formatter release];
         formatter = nil;
     

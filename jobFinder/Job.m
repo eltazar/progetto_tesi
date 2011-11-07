@@ -128,8 +128,8 @@
 -(void)setDescription:(NSString *)newDescription
 {
     /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
-    
-    if([newDescription isKindOfClass:[NSNull class]] || [newDescription isEqualToString:@""]){
+        
+    if([newDescription isKindOfClass:[NSNull class]]/* || [newDescription isEqualToString:@""]*/){ //aggiunto 7 novembre xchè app crash
         [newDescription release];
         newDescription = nil;
     }
@@ -212,7 +212,7 @@
 {    
     NSString *tempEmail;
     if(email == nil){
-        tempEmail = [[NSString alloc] initWithString:@""];
+        tempEmail = @"";
     }
     else{
         tempEmail = email;
@@ -225,7 +225,7 @@
     NSString *tempPhone;
     
     if(phone == nil){
-       tempPhone = [[NSString alloc] initWithString:@""];
+       tempPhone = @"";
     }
     else{
         tempPhone = phone;

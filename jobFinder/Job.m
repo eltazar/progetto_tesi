@@ -74,7 +74,7 @@
     else return @"";
 }
 
--(NSString*)stringDate
+-(NSString*)stringFromDate
 {
     if(date != nil){
         //setto data creazione annuncio
@@ -87,6 +87,25 @@
         return [NSString stringWithFormat:@"%@", [formatter stringFromDate:date]];
     }
     else return @"Non disponibile";
+}
+
+-(NSDate*)dateFromString:(NSString*)dateString
+{
+    
+    
+    NSLog(@"DATESTRING = %@",dateString);
+    
+    NSDateFormatter *f = [[[NSDateFormatter alloc] init] autorelease];
+    [f setDateFormat:@"yyyy-MM-dd"];
+    NSDate *newDate = [f dateFromString:dateString];
+    
+    NSLog(@"DATE DOPO CONVERSIONE = %@", newDate);
+       
+    [newDate retain];
+    [date release];
+    date = newDate;
+    
+    return date;
 }
 
 -(void) setEmail:(NSString*)newEmail

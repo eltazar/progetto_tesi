@@ -52,6 +52,7 @@
 -(BOOL) isValid;
 -(NSString*) invalidReason;
 -(NSString*)urlAsString;
--(NSString*)stringDate;
+-(NSString*)stringFromDate;
+-(NSDate*)dateFromString:(NSString*)dateString;
 
 @end

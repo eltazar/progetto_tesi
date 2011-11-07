@@ -165,7 +165,7 @@ NSString* key(NSURLConnection* con)
         NSError *theError = NULL;
         NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
        // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
-       //NSLog(@"%@",dictionary);
+       NSLog(@"%@",dictionary);
         NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
     
        for(int i=0; i < dictionary.count-1; i++){
@@ -176,7 +176,7 @@ NSString* key(NSURLConnection* con)
             //sistemare il tipo ritornato da field e da date
            job.idDb = [[tempDict objectForKey:@"id"] integerValue];
            job.employee = [tempDict objectForKey:@"field"];
-           job.date = [tempDict objectForKey:@"date"];
+           [job dateFromString:[tempDict objectForKey:@"date"]];
            job.description = [tempDict objectForKey:@"description"];
            job.phone = [tempDict objectForKey:@"phone"];
            //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );

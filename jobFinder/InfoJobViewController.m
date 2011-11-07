@@ -61,7 +61,7 @@
             if(row == 0)
                 cell.detailTextLabel.text = job.employee;
             else if(row == 1)
-                cell.detailTextLabel.text = [job stringDate];
+                cell.detailTextLabel.text = [job stringFromDate];
             else if(row == 2)
                 cell.detailTextLabel.text = job.address;
             else if(row == 3)

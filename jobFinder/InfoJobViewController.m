@@ -61,7 +61,7 @@
             if(row == 0)
                 cell.detailTextLabel.text = job.employee;
             else if(row == 1)
-                cell.detailTextLabel.text = job.date;
+                cell.detailTextLabel.text = [job stringDate];
             else if(row == 2)
                 cell.detailTextLabel.text = job.address;
             else if(row == 3)
@@ -120,7 +120,7 @@
                     }
                 }
                 else{
-                    UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Attenzione" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         [Notpermitted show];
                         [Notpermitted release];
                 }

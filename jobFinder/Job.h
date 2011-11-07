@@ -13,7 +13,7 @@
 @interface Job : NSObject <MKAnnotation>{
     NSInteger idDb;
     NSString *employee;
-    NSString *date;
+    NSDate *date;
     NSString *description;
     NSString *phone;
     NSString *email;
@@ -28,11 +28,13 @@
     CLLocationCoordinate2D coordinate;
 }
 
+#warning controllare attributi di queste property (fare readonly ecc???)
+
 @property(nonatomic, assign) NSInteger idDb;
 @property(nonatomic, assign) BOOL isDraggable;
 @property(nonatomic, retain) NSString *subtitle;
 @property(nonatomic, retain) NSString *employee;
-@property(nonatomic, retain) NSString *date;
+@property(nonatomic, retain) NSDate *date;
 @property(nonatomic, retain) NSString *address;
 @property(nonatomic, retain) NSString *city;
 @property(nonatomic, retain) NSString *phone;
@@ -50,5 +52,6 @@
 -(BOOL) isValid;
 -(NSString*) invalidReason;
 -(NSString*)urlAsString;
+-(NSString*)stringDate;
 
 @end

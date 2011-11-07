@@ -60,11 +60,34 @@
 }
 
 - (NSString *)subtitle {
-    if(date != nil)
-        return [NSString stringWithFormat:@"Inserito: %@", date];
+    
+    if(date != nil){
+        //setto data creazione annuncio
+        NSLocale *locale = [NSLocale currentLocale];
+        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease]; 
+        NSString *dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyyMMMd" options:0 locale:locale];
+        [formatter setDateFormat:dateFormat];
+        [formatter setLocale:locale];
+        
+        return [NSString stringWithFormat:@"Inserito: %@", [formatter stringFromDate:date]];
+    }
     else return @"";
 }
 
+-(NSString*)stringDate
+{
+    if(date != nil){
+        //setto data creazione annuncio
+        NSLocale *locale = [NSLocale currentLocale];
+        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease]; 
+        NSString *dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyyMMMd" options:0 locale:locale];
+        [formatter setDateFormat:dateFormat];
+        [formatter setLocale:locale];
+        
+        return [NSString stringWithFormat:@"%@", [formatter stringFromDate:date]];
+    }
+    else return @"Non disponibile";
+}
 
 -(void) setEmail:(NSString*)newEmail
 {

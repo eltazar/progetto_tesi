@@ -19,6 +19,10 @@
 #define MIN_LATITUDE 0.007477
 #define MIN_LONGITUDE 0.007677
 #define DEFAULT_COORDINATE -180
+@interface MapViewController()
+-(void) checkAndAddAnnotation:(NSArray*)annotations;
+-(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x;
+@end
 
 @implementation MapViewController 
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn;
@@ -180,6 +184,7 @@
 //    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
 
     //[self filterAnnotation:arrayJOBtemp];
+    [dbAccess jobReadRequest:mapView.region field: -1];
 }
 
 //per gestire il tap sul disclosure
@@ -196,18 +201,34 @@
     double delta = TOLLERANCE * (map.region.span.latitudeDelta/(self.view.frame.size.width));
     NSMutableArray *annotationInserted = [[[NSMutableArray alloc] init] autorelease];
     NSMutableArray *annotationToRemove = [[[NSMutableArray alloc] init] autorelease];
+-(void)checkAndAddAnnotation:(NSArray *)annotations
+{    
+    NSLog(@"§§§§§§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d",annotations.count, [map annotations].count);
     
-
-    if(map.region.span.latitudeDelta <= THRESHOLD && lastSpan > THRESHOLD){
-        for(Job *ja in annotations)
-            ja.isMultiple = FALSE;
-        [map removeAnnotations:annotations];
-        [map addAnnotations:annotations];        
+    NSMutableArray * mapAnnotations = [NSMutableArray arrayWithArray:[map annotations]];
+    
+    //O(n)
+    for(Job *an in [map annotations]){
+        if([an isKindOfClass:[MKUserLocation class]] ||
+             [an isKindOfClass:[FavouriteAnnotation class]])
+            [mapAnnotations removeObject:an];
     }
     
-    else{
-        
-        for( Job *ja in annotations){
+    NSLog(@"MAP ANNOTATIONS POST DELETING: %d",mapAnnotations.count);
+    
+    //ordino mapAnnotations, dentro nn c'è user location
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"idDb"
+                                                  ascending:YES] autorelease];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    [mapAnnotations sortUsingDescriptors:sortDescriptors];  
+    
+    
+    //#######################
+    
+    
+    //ordino le nuove annotations da valutare per inserimento
+    NSMutableArray *annotationsToAdd = [NSMutableArray arrayWithArray:annotations];
         
             ja.isMultiple = FALSE;
             BOOL show = TRUE;
@@ -230,15 +251,31 @@
                 }
                 
             }
+    [annotationsToAdd sortUsingDescriptors:sortDescriptors];    
+    
+    
+    //###################
+    
+    NSInteger indexToDelete;
+    
+    //NSLog(@"ANNOTATIONS: %@",annotationsToAdd);
+    NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc]init];
+
+    NSLog(@"ANNOTATIONS TO ADD PRE CHECK: %d",annotationsToAdd.count);
+    
+    if(mapAnnotations.count > 1){
+        for(int i=0; i<annotationsToAdd.count;i++){
+         //   NSLog(@"AN é TIPO: %@",[an class]);
+            indexToDelete = [self ricercaBinariaNonRicorsiva:mapAnnotations integer: ((Job*)[annotationsToAdd objectAtIndex:i]).idDb];
             
-            if(show){
-                [annotationInserted addObject:ja];     
-            }
+            if(indexToDelete != -1)
+                [indexes addIndex:i];               
         }
         
-        [map addAnnotations:annotationInserted];
-        [map removeAnnotations:annotationToRemove];
+        [annotationsToAdd removeObjectsAtIndexes:indexes];
     }
+   
+    NSLog(@"ANNOTATIONS TO ADD POST CHECK: %d",annotationsToAdd.count);
     
     lastSpan = map.region.span.latitudeDelta;
 //        
@@ -289,6 +326,46 @@
 //    }
 //    
 //    lastSpan = delta;
+//    set remov
+    
+    
+        //[map addAnnotations:totalAnnotationsArray];
+}
+-(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x
+{   
+//    NSLog(@"RICERCA BINARIA; ARRAY COUNT = %d",array.count);
+    NSLog(@"X = %d",x);
+    NSInteger p;
+    NSInteger u;
+    NSInteger m;
+    p = 0;
+    u = [array count] - 1;
+//    NSLog(@"U = %d",u);
+    while(p <= u) {
+        m = (p+u)/2;
+        NSLog(@"M = %d",m);
+        if(!([((Job*)[array objectAtIndex:m]) isKindOfClass:[MKUserLocation class]] ||
+             [((Job*)[array objectAtIndex:m]) isKindOfClass:[FavouriteAnnotation class]])){
+            
+            NSLog(@"M.IDDB = %d",((Job*)[array objectAtIndex:m]).idDb);
+            
+            if(((Job*)[array objectAtIndex:m]).idDb == x) 
+                return m; // valore x trovato alla posizione m
+            else if(((Job*)[array objectAtIndex:m]).idDb < x)
+                p = m+1;
+            else{
+                u = m-1;
+            }
+        
+            NSLog(@"P = %d ##### U = %d",p,u);
+
+        }
+    }
+    // se il programma arriva a questo punto vuol dire che 
+    // il valore x non è presente in lista, ma se ci fosse
+    // dovrebbe trovarsi alla posizione u (nota che qui p > u)
+    return -1;
+}
 }
 
 #pragma mark - gestione click bottoni della view

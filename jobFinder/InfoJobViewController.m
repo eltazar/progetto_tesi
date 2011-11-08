@@ -288,21 +288,21 @@
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind", 
                          @"Chiama",           @"label", 
-                         @"",                 @"img", 
+                         @"call.png",         @"img", 
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 0];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind",
                          @"Scrivi",           @"label",
-                         @"mail.png",                 @"img",
+                         @"mail.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil] autorelease] atIndex: 1];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind", 
                          @"Visita",           @"label",
-                         @"home.png",                 @"img",
+                         @"home.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 2];
     

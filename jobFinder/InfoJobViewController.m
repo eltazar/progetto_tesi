@@ -87,7 +87,7 @@
                 else cell.detailTextLabel.text = @"Non disponibile";
             } 
             else if(row == 2){
-                if(![job.urlAsString isEqualToString:@""])
+                if(![[job urlAsString] isEqualToString:@""])
                     cell.detailTextLabel.text = job.urlAsString;
                 else cell.detailTextLabel.text = @"Non disponibile";
             }

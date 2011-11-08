@@ -15,7 +15,7 @@
 #import "FavouriteAnnotation.h"
 #import "DatabaseAccess.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate, DatabaseAccessDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  
@@ -38,6 +38,8 @@
 
     DatabaseAccess *dbAccess;
     
+    CLLocationDegrees zoomLevel;
+    
 }
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
@@ -56,7 +58,6 @@
 -(IBAction)configBtnClicked:(id)sender;
 -(IBAction)showUserLocationButtonClicked:(id)sender;
 -(IBAction)backBtnClicked:(id)sender;
--(void)filterAnnotation:(NSArray *) annotations;
 -(double) fRand;
 -(IBAction)filterBtnClicked:(id)sender;
 @end

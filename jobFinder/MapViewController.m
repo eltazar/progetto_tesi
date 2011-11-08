@@ -13,6 +13,7 @@
 #import "DatabaseAccess.h"
 #import "FilterViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "MKMapView+Region.h"
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
@@ -25,6 +26,7 @@
 @interface MapViewController()
 -(void) checkAndAddAnnotation:(NSArray*)annotations;
 -(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x;
+-(void)filterAnnotations:(NSArray *)placesToFilter;
 @end
 
 @implementation MapViewController 
@@ -75,7 +77,7 @@
         //NSLog(@"annotation view %p",annotationView);
         if (annotationView.annotation == mapView.userLocation) {
             //NSLog(@"posizione %f - %f |||| %f %f", mapView.userLocation.coordinate.longitude, mapView.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude,map.userLocation.coordinate.latitude);
-            MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
             MKCoordinateRegion region = MKCoordinateRegionMake(mapView.userLocation.coordinate, span);
             [mapView setRegion:region animated:YES];
             //NSLog(@"USER LOCATION view %p",annotationView);
@@ -151,14 +153,14 @@
     //qui devo interrogare il database?? ovvero quando mi sposto di region prendo il centro di questa e in base alle sue coordinate scarico le annotation dal db?
     
     //fare controllo disponibilità connessioen di rete
-    
-//    NSLog(@"region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
+
+//    NSLog(@"NUOVA REGION: region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
 //    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
 //    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
 
-   
     [dbAccess jobReadRequest:mapView.region field: -1];
 
+    NSLog(@"###########  COUNT MAP PIN = %d",[[map annotations] count]);
 }
 
 //per gestire il tap sul disclosure
@@ -169,9 +171,11 @@
     [infoJobView release];
 }
 
+#pragma mark - Operazione su MKMapAnnotation
+
 -(void)checkAndAddAnnotation:(NSArray *)annotations
 {    
-    NSLog(@"§§§§§§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d",annotations.count, [map annotations].count);
+    //NSLog(@"§§§§§§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d",annotations.count, [map annotations].count);
     
     NSMutableArray * mapAnnotations = [NSMutableArray arrayWithArray:[map annotations]];
     
@@ -182,7 +186,7 @@
             [mapAnnotations removeObject:an];
     }
     
-    NSLog(@"MAP ANNOTATIONS POST DELETING: %d",mapAnnotations.count);
+    //NSLog(@"MAP ANNOTATIONS POST DELETING: %d",mapAnnotations.count);
     
     //ordino mapAnnotations, dentro nn c'è user location
     NSSortDescriptor *sortDescriptor;
@@ -208,7 +212,7 @@
     //NSLog(@"ANNOTATIONS: %@",annotationsToAdd);
     NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc]init];
 
-    NSLog(@"ANNOTATIONS TO ADD PRE CHECK: %d",annotationsToAdd.count);
+    //NSLog(@"ANNOTATIONS TO ADD PRE CHECK: %d",annotationsToAdd.count);
     
     if(mapAnnotations.count > 1){
         for(int i=0; i<annotationsToAdd.count;i++){
@@ -224,13 +228,17 @@
    
     NSLog(@"ANNOTATIONS TO ADD POST CHECK: %d",annotationsToAdd.count);
     
+    //[map addAnnotations:annotationsToAdd];
+    
+    [self filterAnnotations:annotationsToAdd];
+    
     [indexes release];
 
 }
 -(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x
 {   
 //    NSLog(@"RICERCA BINARIA; ARRAY COUNT = %d",array.count);
-    NSLog(@"X = %d",x);
+    //NSLog(@"X = %d",x);
     NSInteger p;
     NSInteger u;
     NSInteger m;
@@ -239,11 +247,11 @@
 //    NSLog(@"U = %d",u);
     while(p <= u) {
         m = (p+u)/2;
-        NSLog(@"M = %d",m);
+        //NSLog(@"M = %d",m);
         if(!([((Job*)[array objectAtIndex:m]) isKindOfClass:[MKUserLocation class]] ||
              [((Job*)[array objectAtIndex:m]) isKindOfClass:[FavouriteAnnotation class]])){
             
-            NSLog(@"M.IDDB = %d",((Job*)[array objectAtIndex:m]).idDb);
+            //NSLog(@"M.IDDB = %d",((Job*)[array objectAtIndex:m]).idDb);
             
             if(((Job*)[array objectAtIndex:m]).idDb == x) 
                 return m; // valore x trovato alla posizione m
@@ -253,7 +261,7 @@
                 u = m-1;
             }
         
-            NSLog(@"P = %d ##### U = %d",p,u);
+            //NSLog(@"P = %d ##### U = %d",p,u);
 
         }
     }
@@ -264,10 +272,11 @@
 }
 
 -(void)filterAnnotations:(NSArray *)placesToFilter{
+        
     float latDelta=map.region.span.latitudeDelta/iphoneScaleFactorLatitude;
     float longDelta=map.region.span.longitudeDelta/iphoneScaleFactorLongitude;
     
-    NSMutableArray *shopsToShow=[[NSMutableArray alloc] initWithCapacity:0];
+    NSMutableArray *jobToShow=[[NSMutableArray alloc] initWithCapacity:0];
     
     for (int i=0; i<[placesToFilter count]; i++) {
         Job *checkingLocation=[placesToFilter objectAtIndex:i];
@@ -275,7 +284,7 @@
         CLLocationDegrees longitude = [checkingLocation coordinate].longitude;
         
         bool found=FALSE;
-        for (Job *tempPlacemark in shopsToShow) {
+        for (Job *tempPlacemark in jobToShow) {
             if(fabs([tempPlacemark coordinate].latitude-latitude) < latDelta &&
                fabs([tempPlacemark coordinate].longitude-longitude) <longDelta ){
                 [map removeAnnotation:checkingLocation];
@@ -284,12 +293,12 @@
             }
         }
         if (!found) {
-            [shopsToShow addObject:checkingLocation];
+            [jobToShow addObject:checkingLocation];
             [map addAnnotation:checkingLocation];
         }
         
     }
-    [shopsToShow release];
+    [jobToShow release];
 }
 
 
@@ -297,8 +306,10 @@
 
 -(void)didReceiveJobList:(NSArray *)jobList
 {
-    if(jobList != nil)
+    if(jobList != nil){
         [self checkAndAddAnnotation:jobList];
+    }
+  //      [self checkAndAddAnnotation:jobList];
 }
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
@@ -416,7 +427,7 @@
     if(favouriteAnnotation != nil &&
        favouriteAnnotation.coordinate.latitude != 0 &&
        favouriteAnnotation.coordinate.longitude != 0){
-            MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
             MKCoordinateRegion region = MKCoordinateRegionMake(favouriteAnnotation.coordinate, span);
             [map setRegion:region animated:YES];
     }

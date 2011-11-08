@@ -19,6 +19,9 @@
 #define MIN_LATITUDE 0.007477
 #define MIN_LONGITUDE 0.007677
 #define DEFAULT_COORDINATE -180
+#define iphoneScaleFactorLatitude   9.0    
+#define iphoneScaleFactorLongitude  11.0
+
 @interface MapViewController()
 -(void) checkAndAddAnnotation:(NSArray*)annotations;
 -(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x;
@@ -86,7 +89,7 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id )annotation
 {    
-    NSLog(@"NUMERO DI ANNOTAZIONI = %d",[map annotations].count);
+    //NSLog(@"NUMERO DI ANNOTAZIONI = %d",[map annotations].count);
     
     
     //se la annotation è la nostra posizione, ritorna annotationView standard
@@ -116,19 +119,14 @@
     if(pinView == nil){     
         
         pinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pin"]autorelease]; //aggiunto autorelease il 3 novembre
-        NSLog(@"PIN VIEW ALLOCATO: %p",pinView);
+//        NSLog(@"PIN VIEW ALLOCATO: %p",pinView);
         //setto colore, disclosure button ed animazione     
         pinView.canShowCallout = YES;
         pinView.animatesDrop = YES;
-        
 
-        //        else [pinView setDraggable:NO];
-//        if(((Job *)annotation).isAnimated)
-//            pinView.animatesDrop = YES;
-//        else pinView.animatesDrop = NO;
     }
     else{ 
-        NSLog(@"PIN VIEW RICICLATO %p  !!!!",pinView);
+//        NSLog(@"PIN VIEW RICICLATO %p  !!!!",pinView);
         pinView.annotation = annotation;
     }
 
@@ -145,33 +143,8 @@
         pinView.pinColor = MKPinAnnotationColorGreen; 
     }
 
-    
-    
-    
-//    if([annotation isMultiple])
-//        pinView.pinColor = MKPinAnnotationColorRed;
-//    else
-//        pinView.pinColor = MKPinAnnotationColorGreen;
-    //NSLog(@"Annotation: %p -> View: %p", annotation, pinView); 
-    
     return pinView;
 }
-
-//- (void)mapView:(MKMapView *)mv didUpdateUserLocation:(MKUserLocation *)userLocation
-//{
-////    CLLocationCoordinate2D userCoordinate = userLocation.location.coordinate;
-////
-////    for(int i = 1; i<=5;i++)
-////    {
-////        CGFloat latDelta = rand()*.035/RAND_MAX -.02;
-////        CGFloat longDelta = rand()*.03/RAND_MAX -.015;
-////        CLLocationCoordinate2D newCoord = { userCoordinate.latitude + latDelta, userCoordinate.longitude + longDelta };
-////        JobAnnotation *jobAnn = [[JobAnnotation alloc] initWithCoordinate:newCoord];    
-////        [map addAnnotation:jobAnn];
-////        [jobAnn release];
-////    }    
-//}
-
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
@@ -179,12 +152,13 @@
     
     //fare controllo disponibilità connessioen di rete
     
-//    NSLog(@"region.center.longitude %f \n region.center.latitude %f", mapView.region.center.longitude, mapView.region.center.latitude);
+//    NSLog(@"region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
 //    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
 //    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
 
-    //[self filterAnnotation:arrayJOBtemp];
+   
     [dbAccess jobReadRequest:mapView.region field: -1];
+
 }
 
 //per gestire il tap sul disclosure
@@ -195,12 +169,6 @@
     [infoJobView release];
 }
 
-
--(void)filterAnnotation:(NSArray *) annotations
-{
-    double delta = TOLLERANCE * (map.region.span.latitudeDelta/(self.view.frame.size.width));
-    NSMutableArray *annotationInserted = [[[NSMutableArray alloc] init] autorelease];
-    NSMutableArray *annotationToRemove = [[[NSMutableArray alloc] init] autorelease];
 -(void)checkAndAddAnnotation:(NSArray *)annotations
 {    
     NSLog(@"§§§§§§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d",annotations.count, [map annotations].count);
@@ -230,27 +198,6 @@
     //ordino le nuove annotations da valutare per inserimento
     NSMutableArray *annotationsToAdd = [NSMutableArray arrayWithArray:annotations];
         
-            ja.isMultiple = FALSE;
-            BOOL show = TRUE;
-            CGPoint jaPoint = CGPointMake(ja.coordinate.latitude, ja.coordinate.longitude);
-            
-            for(Job *jai in annotationInserted){
-                
-                CGRect jaiRect = CGRectMake(jai.coordinate.latitude - delta, jai.coordinate.longitude - delta, 2*delta, 2 * delta);
-                if (CGRectContainsPoint(jaiRect, jaPoint)){
-                    show = FALSE;
-                    if(!jai.isMultiple){
-                        jai.isMultiple = TRUE;
-                        jai.isAnimated = FALSE;
-                        [map removeAnnotation:jai];
-                        [map addAnnotation:jai];
-                        jai.isAnimated = TRUE;
-                    }        
-                    [annotationToRemove addObject:ja];
-                    break;
-                }
-                
-            }
     [annotationsToAdd sortUsingDescriptors:sortDescriptors];    
     
     
@@ -277,59 +224,8 @@
    
     NSLog(@"ANNOTATIONS TO ADD POST CHECK: %d",annotationsToAdd.count);
     
-    lastSpan = map.region.span.latitudeDelta;
-//        
-//    NSInteger n = floor( 720/map.region.span.latitudeDelta);
-//    
-//    float delta = 180/n;
-//    
-//    double x0 = map.region.center.longitude - (map.region.span.longitudeDelta/2);
-//    double y0 = map.region.center.latitude - (map.region.span.latitudeDelta /2);
-//    
-//    double x1 = floor(x0/delta) * delta;
-//    double y1 = floor(y0/delta) * delta;
-//    
-//    double x = x1;
-//    double y = y1;
-//    static int count = 0;
-//    NSMutableArray * buffer = [[NSMutableArray alloc] initWithCapacity:30];
-//    
-//    CLLocationCoordinate2D coord;
-//    JobAnnotation *ja = [[[JobAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(89,-89)]retain];
-////    [buffer addObject:ja];
-////    NSLog(@"%p %d", map, ja.retainCount);
-////
-////    [map addAnnotation:ja];
-////       count++;
-//    
-//    
-//    if(delta != lastSpan){
-//        [map removeAnnotations:map.annotations];
-//        
-//        while (x < x1+map.region.span.latitudeDelta + 2*delta) {
-//            
-//            y = y1;
-//            while (y < y1+map.region.span.longitudeDelta + 2*delta) {
-//                
-//                coord.latitude = y;
-//                coord.longitude = x;
-//                ja = [[JobAnnotation alloc] initWithCoordinate:coord];
-//                [buffer addObject:ja];
-//                NSLog(@"Annotation: %p", ja);
-//                [map addAnnotation:ja];
-//                count++;
-//                y += delta;
-//                //[ja release];
-//            }
-//            x += delta;
-//        }    
-//    }
-//    
-//    lastSpan = delta;
-//    set remov
-    
-    
-        //[map addAnnotations:totalAnnotationsArray];
+    [indexes release];
+
 }
 -(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x
 {   
@@ -366,6 +262,48 @@
     // dovrebbe trovarsi alla posizione u (nota che qui p > u)
     return -1;
 }
+
+-(void)filterAnnotations:(NSArray *)placesToFilter{
+    float latDelta=map.region.span.latitudeDelta/iphoneScaleFactorLatitude;
+    float longDelta=map.region.span.longitudeDelta/iphoneScaleFactorLongitude;
+    
+    NSMutableArray *shopsToShow=[[NSMutableArray alloc] initWithCapacity:0];
+    
+    for (int i=0; i<[placesToFilter count]; i++) {
+        Job *checkingLocation=[placesToFilter objectAtIndex:i];
+        CLLocationDegrees latitude = [checkingLocation coordinate].latitude;
+        CLLocationDegrees longitude = [checkingLocation coordinate].longitude;
+        
+        bool found=FALSE;
+        for (Job *tempPlacemark in shopsToShow) {
+            if(fabs([tempPlacemark coordinate].latitude-latitude) < latDelta &&
+               fabs([tempPlacemark coordinate].longitude-longitude) <longDelta ){
+                [map removeAnnotation:checkingLocation];
+                found=TRUE;
+                break;
+            }
+        }
+        if (!found) {
+            [shopsToShow addObject:checkingLocation];
+            [map addAnnotation:checkingLocation];
+        }
+        
+    }
+    [shopsToShow release];
+}
+
+
+#pragma mark - DatabaseAccessDelegate
+
+-(void)didReceiveJobList:(NSArray *)jobList
+{
+    if(jobList != nil)
+        [self checkAndAddAnnotation:jobList];
+}
+
+-(void)didReceiveResponsFromServer:(NSString *)receivedData
+{
+    
 }
 
 #pragma mark - gestione click bottoni della view
@@ -461,11 +399,7 @@
 }
 
 -(IBAction) showUserLocationButtonClicked:(id)sender
-{
-//    if(jobToPublish.isDraggable)
-//        NSLog(@"USER: IL PIN IS DRAGGABLE");
-//    else NSLog(@"USER: IL PIN ISNT DRAGG");
-    
+{ 
     if(refreshBtn.enabled){
         //riposiziona la region alla userLocation
         MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
@@ -473,17 +407,11 @@
         //    MKCoordinateRegion region = MKCoordinateRegionMake(map.userLocation.coordinate, map.region.span);
         [map setRegion:region animated:YES];
     }
-//    if(jobToPublish.isDraggable)
-//        NSLog(@"USER: IL PIN IS DRAGGABLE");
-//    else NSLog(@"USER: IL PIN ISNT DRAGG");
 }
 
 -(IBAction)bookmarkBtnClicked:(id)sender
 {
-//    if(jobToPublish.isDraggable)
-//        NSLog(@"BOOKMARK: IL PIN IS DRAGGABLE");
-//    else NSLog(@"BOOKMARK: IL PIN ISNT DRAGG");
-    
+
 //    NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
     if(favouriteAnnotation != nil &&
        favouriteAnnotation.coordinate.latitude != 0 &&
@@ -492,11 +420,6 @@
             MKCoordinateRegion region = MKCoordinateRegionMake(favouriteAnnotation.coordinate, span);
             [map setRegion:region animated:YES];
     }
-    
-    
-//    if(jobToPublish.isDraggable)
-//        NSLog(@"BOOKMARK: IL PIN IS DRAGGABLE");
-//    else NSLog(@"BOOKMARK: IL PIN ISNT DRAGG");
 }
 
 -(IBAction)backBtnClicked:(id)sender
@@ -527,7 +450,7 @@
 
 -(IBAction)filterBtnClicked:(id)sender
 {
-    FilterViewController *filterTable = [[FilterViewController alloc] initWithPlist:@"sector-table"];    //sectorTable.secDelegate = self;
+    FilterViewController *filterTable = [[FilterViewController alloc] initWithPlist:@"filter-table"];    //sectorTable.secDelegate = self;
     [self.navigationController pushViewController:filterTable animated:YES];
     [filterTable release];
 }
@@ -681,63 +604,7 @@
      */
     //alloco l'istanza per accesso al db
     dbAccess = [[DatabaseAccess alloc] init];
-
-
-    
-    /**** PROVE DA CANCELLARE ****/
-   
-    //posso passargli un array di jobAnnotation
-    //aggiunge un oggetto annotazione al mapView, ma non la vista dell'annotazione
-//    [map addAnnotation:[[[JobAnnotation alloc] init] autorelease]];
-    
-    //########## prove di inserimento jobs
-    
-    
-    //PROVA
-//    jobDiprova = [[Job alloc] initWithCoordinate:CLLocationCoordinate2DMake(41.485997, 12.606361)];
-//    jobDiprova.employee = @"Architettura";
-//    jobDiprova.date = @"01/04/2011";
-//    jobDiprova.description = @"cercasi architettetto per stage di 5 mesi, rimborso spese 500 euro. Minima esperienza nel settore. Bla bla bla bla bla bla bla bla bla bla bla bla";
-////    jobDiprova.phone = @"312347589";
-////    jobDiprova.email = @"studioArch@bla.it";
-////    jobDiprova.url = @"http://www.ciao.it";
-//    jobDiprova.address = @"prova";
-
-    
-//    NSString *template = @"(NULL ,  '%@',  '%@',  NULL, NULL,  '%@',  '%f',  '%f',  '%d'),";
-//    
-//    //array di job di prova
-//    arrayJOBtemp = [[NSMutableArray alloc] initWithCapacity:500];
-//    
-//    NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
-//    [formatter setDateFormat:@"yyyy-MM-dd"];
-//    
-//
-//    NSMutableString *superQuery = [[NSMutableString alloc]initWithFormat:@"%@",@"INSERT INTO  `my_jobfinder`.`job` (`id` ,`description` ,`phone` ,`email` ,`url` ,`date` ,`latitude` ,`longitude` ,`field`)VALUES"];
-//    
-//    for(int i=0;i < 500; i++){
-//        
-//        
-//        CGFloat latDelta = rand()*.11/RAND_MAX -.02;
-//        CGFloat longDelta = rand()*.11/RAND_MAX -.015;
-//        CLLocationCoordinate2D newCoord = {41.891672+ latDelta,12.493515+ longDelta };
-//        Job *jobAnn = [[Job alloc] initWithCoordinate:newCoord];
-//        jobAnn.employee = [NSString stringWithFormat:@"%d",i];
-//        jobAnn.description = @"bla";
-//        jobAnn.phone = @"1234";
-//        jobAnn.date = [formatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:[self fRand]]];
-//        NSLog(@"DATaaaa ############ %@",jobAnn.date);
-//        [arrayJOBtemp addObject:jobAnn];
-//        NSMutableString *query = [[NSString alloc] initWithFormat:template,jobAnn.description, jobAnn.phone,jobAnn.date,jobAnn.coordinate.latitude,jobAnn.coordinate.longitude,i];
-//        [superQuery appendString:query];
-//
-//    }
-//    [superQuery replaceCharactersInRange: NSMakeRange(superQuery.length-1,1) withString:@";"];
-//    NSLog(superQuery);
-    
-    
-//    [arrayJOBtemp addObject:jobDiprova];
-//    [map addAnnotations:arrayJOBtemp];
+    [dbAccess setDelegate:self];
 
 }
 

@@ -114,7 +114,7 @@
 -(void)setPhone:(NSString *)newPhone
 {
     /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
-    
+    //NSLog(@"NEW PHONE = %@",newPhone);
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
         [newPhone release];
         newPhone = nil;
@@ -123,15 +123,23 @@
     [newPhone retain];
     [phone release];
     phone = newPhone;
+    
+//    NSLog(@"PHONE = %p, %@",phone,phone);
+    
 }
 
+
+//problemi con questo metodo, vedere commit 7 novembre
 -(void)setDescription:(NSString *)newDescription
 {
-    /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
+    //NSLog(@"NEW DESCR: %@",newDescription);
         
-    if([newDescription isKindOfClass:[NSNull class]]/* || [newDescription isEqualToString:@""]*/){ //aggiunto 7 novembre xchè app crash
-        [newDescription release];
-        newDescription = nil;
+    if([newDescription isKindOfClass:[NSNull class]] || [newDescription isEqualToString:@""]){ //aggiunto 7 novembre xchè app crash
+//        [newDescription release];
+//        newDescription = nil;
+        
+        description = @"";
+        return;
     }
     
     [newDescription retain];
@@ -141,40 +149,34 @@
 
 -(void) setUrlWithString:(NSString *) newUrlString
 {
-    NSURL *tmpUrl;
+    if(newUrlString == nil || [newUrlString isKindOfClass:[NSNull class]] || [newUrlString isEqualToString:@""]){
+        
+           isURLvalid = YES;
+           self.url = [NSURL URLWithString:@""];
+           return;
+    }    
     
-    if(newUrlString == nil)
-        isURLvalid = TRUE;
-    else if([newUrlString isKindOfClass:[NSNull class]] || [newUrlString isEqualToString:@""]){
-        isURLvalid = TRUE;
-        [newUrlString release];
-        newUrlString = nil;
+    NSURL *tmpURL;
+
+    if ([newUrlString rangeOfString:@"http://"].location == NSNotFound) {
+                    
+        NSString *stringModified = [NSString stringWithFormat:@"http://%@",newUrlString];
+        tmpURL = [[NSURL alloc]initWithString:stringModified];
     }
-    else  {
-        tmpUrl = [[[NSURL alloc] initWithString:newUrlString]autorelease] ;
-        if(tmpUrl == nil)
-            isURLvalid = FALSE;
-        else{
-            if(tmpUrl.scheme == nil){ 
-                NSString* modifiedURLString = [NSString stringWithFormat:@"http://%@", newUrlString];
-                tmpUrl = [[NSURL alloc] initWithString:modifiedURLString];//autorelease]; //add 7nov autorlease
-            }
-            isURLvalid = TRUE;
-            
-        }
+    else {
+        tmpURL = [[NSURL alloc] initWithString:newUrlString];
     }
+    
+    if(tmpURL == nil)
+        isURLvalid = NO;
+    else isURLvalid = YES;
     
     if(isURLvalid){
-        if(newUrlString == nil){
-            [url release];
-            url = nil;
-        }
-        else{
-            [url release];
-            url = tmpUrl;
-        }
+        self.url = tmpURL;
     }
     
+    [tmpURL release];
+
 }
 
 -(BOOL) isValid
@@ -244,6 +246,8 @@
 
 -(NSString*)urlAsString
 {
+    NSLog(@"URL = %@", [url absoluteString]);
+    
     if(url == nil)
         return @"";
     else{
@@ -261,7 +265,8 @@
     [phone release];
     [email release];
     [description release];
-   // [url release];
+    [url release];
+    url = nil;
     [super dealloc];
 }
 

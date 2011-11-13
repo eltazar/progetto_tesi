@@ -32,6 +32,45 @@ NSString* key(NSURLConnection* con)
     return self;
 }
 
+-(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSInteger)field
+{
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/read2.php"];
+    [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
+    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *postFormatString = @"oldLatitude=%f&oldLongitude=%f&oldLatSpan=%f&oldLongSpan=%f&newLatitude=%f&newLongitude=%f&newLatSpan=%f&newLongSpan=%f&field=%d";
+    NSString *postString = [NSString stringWithFormat:postFormatString,
+                            oldRegion.center.latitude,oldRegion.center.longitude,oldRegion.span.latitudeDelta,oldRegion.span.longitudeDelta,
+                                newRegion.center.latitude,newRegion.center.longitude,newRegion.span.latitudeDelta,newRegion.span.longitudeDelta,field];
+    
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    [request setHTTPBody:postData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+        [readConnections addObject:connection];
+        
+        NSMutableData *receivedData = [[NSMutableData data] retain];
+        //[connectionDictionary setObject:connection forKey:key(connection)];
+        [dataDictionary setObject:receivedData forKey:key(connection)];
+        //NSLog(@"RECEIVED DATA FROM DICTIONARY : %p",[dataDictionary objectForKey:connection]);
+    }
+    else{
+        NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita
+    }
+}   
+
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field
 {
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/read.php"];
@@ -165,7 +204,7 @@ NSString* key(NSURLConnection* con)
         NSError *theError = NULL;
         NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
        // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
-        NSLog(@"%@",dictionary);
+        //NSLog(@"%@",dictionary);
         NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
     
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

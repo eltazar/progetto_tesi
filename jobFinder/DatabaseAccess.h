@@ -23,12 +23,12 @@ NSString* key(NSURLConnection* con);
     NSMutableArray *writeConnections;
 }
 
-
+@property(nonatomic,assign) id<DatabaseAccessDelegate> delegate;
 
 -(void)jobWriteRequest:(Job*)job;
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field;
+-(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)oldRegion field:(NSInteger)field;
 
-@property(nonatomic,assign) id<DatabaseAccessDelegate> delegate;
 
 @end
 

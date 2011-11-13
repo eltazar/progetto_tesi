@@ -14,8 +14,9 @@
 #import "Job.h"
 #import "FavouriteAnnotation.h"
 #import "DatabaseAccess.h"
+#import "GeoDecoder.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate, DatabaseAccessDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate, DatabaseAccessDelegate,GeoDecoderDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  
@@ -40,6 +41,8 @@
     
     CLLocationDegrees zoomLevel;
     
+    MKCoordinateRegion oldRegion;
+        
 }
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;

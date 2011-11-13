@@ -14,6 +14,7 @@
 #import "FilterViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MKMapView+Region.h"
+#import "GeoDecoder.h"
 
 #define TOLLERANCE 20
 #define THRESHOLD 0.01
@@ -24,13 +25,15 @@
 #define iphoneScaleFactorLongitude  11.0
 
 @interface MapViewController()
+@property(nonatomic,retain) NSMutableArray *annotationsBuffer;
 -(void) checkAndAddAnnotation:(NSArray*)annotations;
 -(NSInteger)ricercaBinariaNonRicorsiva:(NSArray*)array integer:(NSInteger) x;
--(void)filterAnnotations:(NSArray *)placesToFilter;
+//-(void)filterAnnotations:(NSArray *)placesToFilter;
+-(void)filterAnnotationsInView:(NSArray*)annotations;
 @end
 
 @implementation MapViewController 
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, annotationsBuffer;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -57,6 +60,9 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
+    
+    NSLog(@"METODO USER LOC");
+    
     /*attivo il pulsante refresh in base alla user location. Se la localizzazione èdisabilitata dopo un po la userLocation assume i valori di default, quindi disattivol il pulsante.
      */
     if(userLocation.coordinate.latitude != DEFAULT_COORDINATE &&
@@ -105,8 +111,8 @@
         MKPinAnnotationView *favouritePinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
         favouritePinView.tag = 122;
         favouritePinView.canShowCallout = YES;
-        //favouritePinView.image=[UIImage imageNamed:@"favouritePin.png"];
-        favouritePinView.pinColor = MKPinAnnotationColorPurple;
+        favouritePinView.image=[UIImage imageNamed:@"favorites.png"];
+        //favouritePinView.pinColor = MKPinAnnotationColorPurple;
         //NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;
     }
@@ -133,6 +139,7 @@
     }
 
     if(((Job*)annotation).isDraggable){
+        
         //NSLog(@" IS DRAGGABLE");
         pinView.rightCalloutAccessoryView = nil;
         [pinView setDraggable:YES];
@@ -150,17 +157,40 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
+    static int count = 0;
+    
     //qui devo interrogare il database?? ovvero quando mi sposto di region prendo il centro di questa e in base alle sue coordinate scarico le annotation dal db?
     
     //fare controllo disponibilità connessioen di rete
 
+    //NSLog(@"VISIBLE MAP RECT = w:%f , h:%f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height);
+    
 //    NSLog(@"NUOVA REGION: region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
 //    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
 //    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
 
+//    if(count == 0){
+//        count++;
+//    }
+//    else if(count == 1){
+//        
+//        [dbAccess jobReadRequest:mapView.region field: -1];
+//        oldRegion = mapView.region; 
+//        count ++;
+//    }
+//    else if(count == 2){
+//        [dbAccess jobReadRequestOldRegion:oldRegion newRegion:mapView.region field:-1]; 
+//        MKMapRect oldRect = [map mapRectForCoordinateRegion:oldRegion];
+//        MKMapRect newRect = [map mapRectForCoordinateRegion:map.region];
+//        if(MKMapRectIsNull( MKMapRectIntersection(oldRect,newRect) ))
+//            NSLog(@"NO INTERSEZIONE");
+//        else NSLog(@"INTERSEZIONE");        
+//        oldRegion = mapView.region; 
+//    }
+
     [dbAccess jobReadRequest:mapView.region field: -1];
 
-    NSLog(@"###########  COUNT MAP PIN = %d",[[map annotations] count]);
+    //NSLog(@"###########  COUNT MAP PIN = %d",[[map annotations] count]);
 }
 
 //per gestire il tap sul disclosure
@@ -172,14 +202,51 @@
 }
 
 #pragma mark - Operazione su MKMapAnnotation
+-(void)updateVisibleAnnotations:(NSArray*)newAnnotations
+{
+    NSMutableArray *mapAnn = [[NSMutableArray alloc] initWithArray:[map annotations]];
+    NSMutableArray *newAnn = [[NSMutableArray alloc] initWithArray:newAnnotations];
+    
+    //O(n) // togliere anche l'annotation.isDraggable ?????
+    for(Job *an in [map annotations]){
+        if([an isKindOfClass:[MKUserLocation class]] ||
+           [an isKindOfClass:[FavouriteAnnotation class]] || an.isDraggable)
+            [mapAnn removeObject:an];
+    }
+    
+    //ordino mapAnnotations, dentro nn c'è user location
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"idDb"
+                                                  ascending:NO] autorelease];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    [mapAnn sortUsingDescriptors:sortDescriptors];  
+    [newAnn sortUsingDescriptors:sortDescriptors];  
+    
+    
+    for(Job* an in newAnn){
 
+        if([self ricercaBinariaNonRicorsiva:mapAnn integer:((Job*)an).idDb] == -1){
+            [map addAnnotation:an];            
+        }
+    }
+    
+    for(Job* an in mapAnn){
+        
+        if([self ricercaBinariaNonRicorsiva:newAnn integer:((Job*)an).idDb] == -1){
+            [map removeAnnotation:an];
+        }        
+    }
+    
+    
+    NSLog(@" PIN SU MAPPA : %d", [[map annotations] count]);
+}
 -(void)checkAndAddAnnotation:(NSArray *)annotations
 {    
     //NSLog(@"§§§§§§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d",annotations.count, [map annotations].count);
     
     NSMutableArray * mapAnnotations = [NSMutableArray arrayWithArray:[map annotations]];
     
-    //O(n)
+    //O(n) // togliere anche l'annotation.isDraggable ?????
     for(Job *an in [map annotations]){
         if([an isKindOfClass:[MKUserLocation class]] ||
              [an isKindOfClass:[FavouriteAnnotation class]])
@@ -191,7 +258,7 @@
     //ordino mapAnnotations, dentro nn c'è user location
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"idDb"
-                                                  ascending:YES] autorelease];
+                                                  ascending:NO] autorelease];
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     [mapAnnotations sortUsingDescriptors:sortDescriptors];  
     
@@ -214,23 +281,39 @@
 
     //NSLog(@"ANNOTATIONS TO ADD PRE CHECK: %d",annotationsToAdd.count);
     
-    if(mapAnnotations.count > 1){
-        for(int i=0; i<annotationsToAdd.count;i++){
-         //   NSLog(@"AN é TIPO: %@",[an class]);
-            indexToDelete = [self ricercaBinariaNonRicorsiva:mapAnnotations integer: ((Job*)[annotationsToAdd objectAtIndex:i]).idDb];
-            
-            if(indexToDelete != -1)
-                [indexes addIndex:i];               
-        }
+    
+    for(int i=0; i<annotationsToAdd.count;i++){
+     //   NSLog(@"AN é TIPO: %@",[an class]);
+        indexToDelete = [self ricercaBinariaNonRicorsiva:mapAnnotations integer: ((Job*)[annotationsToAdd objectAtIndex:i]).idDb];
         
-        [annotationsToAdd removeObjectsAtIndexes:indexes];
+        if(indexToDelete != -1)
+            [indexes addIndex:i];               
     }
+    
+    
+    for(int i=0; i<annotationsToAdd.count;i++){
+        //   NSLog(@"AN é TIPO: %@",[an class]);
+        indexToDelete = [self ricercaBinariaNonRicorsiva:annotationsBuffer integer: ((Job*)[annotationsToAdd objectAtIndex:i]).idDb];
+        
+        if(indexToDelete != -1)
+            [indexes addIndex:i];               
+    }
+    
+    [annotationsToAdd removeObjectsAtIndexes:indexes];
+    
    
     NSLog(@"ANNOTATIONS TO ADD POST CHECK: %d",annotationsToAdd.count);
     
     //[map addAnnotations:annotationsToAdd];
+
+    [self filterAnnotationsInView:annotationsToAdd];
     
-    [self filterAnnotations:annotationsToAdd];
+    //ordino le nuove annotations da valutare per inserimento
+    
+//    [annotationsToAdd sortUsingDescriptors:sortDescriptors];
+//    
+//    [annotationsToAdd addObjectsFromArray:mapAnnotations];
+//    [self filterAnnotations:annotationsToAdd];
     
     [indexes release];
 
@@ -253,9 +336,11 @@
             
             //NSLog(@"M.IDDB = %d",((Job*)[array objectAtIndex:m]).idDb);
             
-            if(((Job*)[array objectAtIndex:m]).idDb == x) 
+            if(((Job*)[array objectAtIndex:m]).idDb == x){ 
+                //NSLog(@"TROVATO");
                 return m; // valore x trovato alla posizione m
-            else if(((Job*)[array objectAtIndex:m]).idDb < x)
+            }
+            else if(((Job*)[array objectAtIndex:m]).idDb > x)
                 p = m+1;
             else{
                 u = m-1;
@@ -265,6 +350,8 @@
 
         }
     }
+    
+    //NSLog(@"NON TROVATO");
     // se il programma arriva a questo punto vuol dire che 
     // il valore x non è presente in lista, ma se ci fosse
     // dovrebbe trovarsi alla posizione u (nota che qui p > u)
@@ -272,7 +359,7 @@
 }
 
 -(void)filterAnnotations:(NSArray *)placesToFilter{
-        
+    
     float latDelta=map.region.span.latitudeDelta/iphoneScaleFactorLatitude;
     float longDelta=map.region.span.longitudeDelta/iphoneScaleFactorLongitude;
     
@@ -301,13 +388,95 @@
     [jobToShow release];
 }
 
+-(void)filterAnnotationsInView:(NSArray*)annotations
+{
+    NSMutableSet *newAnnotations = [[NSMutableSet alloc]initWithArray:annotations];
+    NSSet *tempMapAnnotations = [map annotationsInMapRect:map.visibleMapRect];
+    NSMutableSet *mapAnnotations = [tempMapAnnotations mutableCopy];
+    
+    for(Job *an in tempMapAnnotations){
+        if([an isKindOfClass:[MKUserLocation class]] ||
+           [an isKindOfClass:[FavouriteAnnotation class]] || an.isDraggable)
+            [mapAnnotations removeObject:an];
+    }
+
+    for(Job *an in annotationsBuffer){
+        
+        if(MKMapRectContainsPoint([map visibleMapRect], MKMapPointForCoordinate(an.coordinate)))
+            [newAnnotations addObject:an];
+    }
+    
+    NSMutableArray *totalAnnotations = [[[mapAnnotations setByAddingObjectsFromSet:newAnnotations] allObjects] mutableCopy];
+        
+    
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"date"
+                                                  ascending:NO selector:@selector(compare:)] autorelease];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    [totalAnnotations sortUsingDescriptors:sortDescriptors];  
+
+    int n = 100;
+    int i=0;
+    
+    for (i=0 ;i<MIN(n,totalAnnotations.count);i++){
+        
+        if([newAnnotations containsObject:[totalAnnotations objectAtIndex:i]]){
+            [map addAnnotation:[totalAnnotations objectAtIndex:i]];
+            NSLog(@"AGGIUNTO");
+        }
+    }
+    NSLog(@"### PRIMO FOR i = %d",i);
+    for(i=MIN(n,totalAnnotations.count); i<totalAnnotations.count;i++){
+        if([mapAnnotations containsObject:[totalAnnotations objectAtIndex:i]]){
+            [map removeAnnotation:[totalAnnotations objectAtIndex:i]];
+            NSLog(@"TOLTO");
+            [annotationsBuffer addObject:[totalAnnotations objectAtIndex:i]];
+        }
+    }
+    
+    NSLog(@"### SECONDO FOR i = %d",i);
+    
+    NSLog(@"ANNOTATIONS IN RECT: %d", [map annotationsInMapRect:[map visibleMapRect]].count);
+    
+    
+    [newAnnotations release];
+    [mapAnnotations release];
+    [totalAnnotations release];
+    
+    //per ios<4.2 fare filtraggio di mapAnnotations
+    
+    
+}
+
+#pragma mark - GeoDecodereDelegate
+
+-(void)didReceivedGeoDecoderData:(NSDictionary *)geoData
+{
+    NSArray *resultsArray = [geoData objectForKey:@"results"];
+    NSDictionary *result = [resultsArray objectAtIndex:0];
+    CLLocationDegrees latitudeNE = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"northeast"] objectForKey:@"lat"] doubleValue];
+    CLLocationDegrees longitudeNE = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"northeast"] objectForKey:@"lng"] doubleValue];
+    CLLocationDegrees latitudeSW = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"southwest"] objectForKey:@"lat"] doubleValue];
+    CLLocationDegrees longitudeSW = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"southwest"] objectForKey:@"lng"] doubleValue];
+
+    CLLocationCoordinate2D regionCenter;
+    MKCoordinateSpan regionSpan;
+    regionCenter.latitude = (latitudeNE+latitudeSW) / 2;
+    regionCenter.longitude = (longitudeNE+longitudeSW) / 2;
+    regionSpan.latitudeDelta = fabs(latitudeSW-latitudeNE);
+    regionSpan.longitudeDelta = fabs(longitudeNE-longitudeSW);
+    
+    oldRegion = MKCoordinateRegionMake(regionCenter, regionSpan);
+    [map setRegion:oldRegion animated:YES];
+}
 
 #pragma mark - DatabaseAccessDelegate
 
 -(void)didReceiveJobList:(NSArray *)jobList
 {
+    NSLog(@"JOB LIST COUNT = %d",jobList.count);
     if(jobList != nil){
-        [self checkAndAddAnnotation:jobList];
+        [self updateVisibleAnnotations:jobList];
     }
   //      [self checkAndAddAnnotation:jobList];
 }
@@ -552,6 +721,8 @@
     else{
         refreshBtn.enabled = NO;
     }
+    
+    //oldRegion = map.region;
 }
 
 - (void)viewDidLoad
@@ -559,9 +730,25 @@
     // Do any additional setup after loading the view from its nib.
     [super viewDidLoad];
     
-    /*inizializzazione pulsanti
-    */
     
+    /**/
+    annotationsBuffer = [[NSMutableArray alloc] init];
+    
+    /**/
+    if(![CLLocationManager locationServicesEnabled] || 
+       [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
+    {
+        GeoDecoder *geoDec = [[GeoDecoder alloc]init];
+        [geoDec setDelegate:self];
+        NSLocale *currentLocale = [NSLocale currentLocale];
+        NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+        countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
+        //NSLog(@"ULOCALE = %@",countryCode);
+        [geoDec searchCoordinatesForAddress:countryCode];
+    }
+    
+    /*inizializzazione pulsanti
+     */
     //aggiungo bottone Info alla navigation bar
     UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
 	[tempInfoButton addTarget:self action:@selector(configBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -578,7 +765,7 @@
      */
     lastSpan = map.region.span.latitudeDelta;  //ciao
     //lastSpan = 180/floor( 180/map.region.span.latitudeDelta);
-
+    
     
     /* Inizializzazione valori booleani della classe
      */
@@ -645,6 +832,7 @@
     [infoBarButtonItem release];
     [publishBtn release];
     [dbAccess release];
+    [annotationsBuffer release];
     [super dealloc];
 }
 

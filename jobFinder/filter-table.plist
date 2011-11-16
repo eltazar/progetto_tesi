@@ -43,22 +43,69 @@
             <dict><key>enum</key>
                 <string>3</string>
                 <key>label</key>
-                <string>A1</string>
+                <string>b1</string>
             </dict>
             <dict>
                 <key>enum</key>
                 <string>4</string>
                 <key>label</key>
-                <string>A2</string>
+                <string>b2</string>
             </dict>
             <dict>
                 <key>enum</key>
                 <string>5</string>
                 <key>label</key>
-                <string>A3</string>
+                <string>b3</string>
             </dict>
         </array>
     </dict>
+    <dict>
+        <key>C</key>
+        <array>
+            <dict>
+                <key>enum</key>
+                <string>6</string>
+                <key>label</key>
+                <string>c1</string>
+            </dict>
+            <dict>
+                <key>enum</key>
+                <string>7</string>
+                <key>label</key>
+                <string>c2</string>
+            </dict>
+            <dict>
+                <key>enum</key>
+                <string>8</string>
+                <key>label</key>
+                <string>c3</string>
+            </dict>
+        </array>
+    </dict>
+    
+    <dict>
+        <key>D</key>
+        <array>
+            <dict><key>enum</key>
+                <string>9</string>
+                <key>label</key>
+                <string>d1</string>
+            </dict>
+            <dict>
+                <key>enum</key>
+                <string>10</string>
+                <key>label</key>
+                <string>d2</string>
+            </dict>
+            <dict>
+                <key>enum</key>
+                <string>11</string>
+                <key>label</key>
+                <string>d3</string>
+            </dict>
+        </array>
+    </dict>
+
 
 </array>
 </plist>

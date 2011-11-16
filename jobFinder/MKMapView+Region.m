@@ -38,4 +38,36 @@
     return mapRect;
 }
 
+-(int)currentZoomLevel
+{
+    return round(floor(log2(self.visibleMapRect.size.width / 664.000)));  
+}
+
+-(MKMapPoint)centerPointForMapRect:(MKMapRect)mapRect
+{
+    MKMapPoint center;
+    center.x =  mapRect.origin.x + (mapRect.size. width / 2);
+    center.y = mapRect.origin.y + (mapRect.size.height / 2);
+    
+    return center;
+}
+
+-(MKMapSize)mapRectSizeForZoom:(float)zoom
+{
+    
+    MKMapSize size;
+    size.width = 664 * pow(2, zoom);
+    size.height = 844 * pow(2,zoom);
+    
+    return size;    
+}
+
+-(MKMapPoint)rectOriginForCenter:(MKMapPoint)center andSize:(MKMapSize)size
+{
+    MKMapPoint origin;
+    origin.x = center.x - (size.width /2);
+    origin.y = center.y - (size.height /2);
+    return origin;  
+}
+
 @end

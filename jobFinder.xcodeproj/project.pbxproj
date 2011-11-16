@@ -12,6 +12,7 @@
 		AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC154CD3143A315600AE5FAD /* RootJobViewController.xib */; };
 		AC154CD7143A33B300AE5FAD /* EditJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD6143A33B300AE5FAD /* EditJobViewController.m */; };
 		AC154CDA143A343600AE5FAD /* InfoJobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC154CD9143A343600AE5FAD /* InfoJobViewController.m */; };
+		AC15A4B61469EA8000583795 /* favorites.png in Resources */ = {isa = PBXBuildFile; fileRef = AC15A4B51469EA8000583795 /* favorites.png */; };
 		AC22FFE81457602100DEECB7 /* star_button.png in Resources */ = {isa = PBXBuildFile; fileRef = AC22FFE71457602100DEECB7 /* star_button.png */; };
 		AC22FFED145763BC00DEECB7 /* myPosition.png in Resources */ = {isa = PBXBuildFile; fileRef = AC22FFEC145763BC00DEECB7 /* myPosition.png */; };
 		AC442BD01462ACC60083F9B6 /* greenButton.png in Resources */ = {isa = PBXBuildFile; fileRef = AC442BCF1462ACC60083F9B6 /* greenButton.png */; };
@@ -60,6 +61,9 @@
 		ACB869401459C68F0055ED47 /* myPosition@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB8693F1459C68F0055ED47 /* myPosition@2x.png */; };
 		ACB869471459CCBD0055ED47 /* mail.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB869451459CCBC0055ED47 /* mail.png */; };
 		ACB869481459CCBD0055ED47 /* mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACB869461459CCBD0055ED47 /* mail@2x.png */; };
+		ACBAF55014696963006A2A6D /* MKMapView+Region.m in Sources */ = {isa = PBXBuildFile; fileRef = ACBAF54F14696963006A2A6D /* MKMapView+Region.m */; };
+		ACBAF56314698F8E006A2A6D /* call.png in Resources */ = {isa = PBXBuildFile; fileRef = ACBAF56214698F8E006A2A6D /* call.png */; };
+		ACBAF56514698F94006A2A6D /* call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACBAF56414698F94006A2A6D /* call@2x.png */; };
 		ACC54A80145DFF0F002F41D3 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */; };
 		ACC54A81145DFF0F002F41D3 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */; };
 		ACC54DBC1456E73300A51364 /* DatabaseAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54DBB1456E73300A51364 /* DatabaseAccess.m */; };
@@ -104,6 +108,7 @@
 		AC154CD6143A33B300AE5FAD /* EditJobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditJobViewController.m; sourceTree = "<group>"; };
 		AC154CD8143A343600AE5FAD /* InfoJobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoJobViewController.h; sourceTree = "<group>"; };
 		AC154CD9143A343600AE5FAD /* InfoJobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoJobViewController.m; sourceTree = "<group>"; };
+		AC15A4B51469EA8000583795 /* favorites.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = favorites.png; path = icons/favorites.png; sourceTree = SOURCE_ROOT; };
 		AC22FFE71457602100DEECB7 /* star_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star_button.png; path = icons/star_button.png; sourceTree = SOURCE_ROOT; };
 		AC22FFEC145763BC00DEECB7 /* myPosition.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = myPosition.png; path = icons/myPosition.png; sourceTree = SOURCE_ROOT; };
 		AC442BCF1462ACC60083F9B6 /* greenButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = greenButton.png; path = icons/greenButton.png; sourceTree = SOURCE_ROOT; };
@@ -173,6 +178,10 @@
 		ACB8693F1459C68F0055ED47 /* myPosition@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myPosition@2x.png"; path = "icons/myPosition@2x.png"; sourceTree = SOURCE_ROOT; };
 		ACB869451459CCBC0055ED47 /* mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mail.png; path = icons/mail.png; sourceTree = SOURCE_ROOT; };
 		ACB869461459CCBD0055ED47 /* mail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mail@2x.png"; path = "icons/mail@2x.png"; sourceTree = SOURCE_ROOT; };
+		ACBAF54E14696963006A2A6D /* MKMapView+Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+Region.h"; sourceTree = "<group>"; };
+		ACBAF54F14696963006A2A6D /* MKMapView+Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+Region.m"; sourceTree = "<group>"; };
+		ACBAF56214698F8E006A2A6D /* call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = call.png; path = icons/call.png; sourceTree = SOURCE_ROOT; };
+		ACBAF56414698F94006A2A6D /* call@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "call@2x.png"; path = "icons/call@2x.png"; sourceTree = SOURCE_ROOT; };
 		ACC54A7D145DFF0F002F41D3 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
 		ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 		ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
@@ -320,6 +329,8 @@
 				AC4A04A31422369200FE96F7 /* MainWindow.xib */,
 				AC4A04C7142239E300FE96F7 /* MapViewController.h */,
 				AC4A04C8142239E300FE96F7 /* MapViewController.m */,
+				ACBAF54E14696963006A2A6D /* MKMapView+Region.h */,
+				ACBAF54F14696963006A2A6D /* MKMapView+Region.m */,
 				AC4A04C9142239E300FE96F7 /* MapViewController.xib */,
 				ACC54A7D145DFF0F002F41D3 /* FilterViewController.h */,
 				ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */,
@@ -455,6 +466,9 @@
 		ACD58178145862DB00CCB281 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AC15A4B51469EA8000583795 /* favorites.png */,
+				ACBAF56414698F94006A2A6D /* call@2x.png */,
+				ACBAF56214698F8E006A2A6D /* call.png */,
 				AC442BD21462AE5B0083F9B6 /* redButton.png */,
 				AC442BCF1462ACC60083F9B6 /* greenButton.png */,
 				ACB869451459CCBC0055ED47 /* mail.png */,
@@ -571,6 +585,9 @@
 				AC442BD01462ACC60083F9B6 /* greenButton.png in Resources */,
 				AC442BD31462AE5B0083F9B6 /* redButton.png in Resources */,
 				AC840BAA1463F25F00070F1D /* sector-table.plist in Resources */,
+				ACBAF56314698F8E006A2A6D /* call.png in Resources */,
+				ACBAF56514698F94006A2A6D /* call@2x.png in Resources */,
+				AC15A4B61469EA8000583795 /* favorites.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +655,7 @@
 				ACC54DBC1456E73300A51364 /* DatabaseAccess.m in Sources */,
 				ACC54A80145DFF0F002F41D3 /* FilterViewController.m in Sources */,
 				AC9FB388145EEAC4006227B6 /* SubSectorTableViewController.m in Sources */,
+				ACBAF55014696963006A2A6D /* MKMapView+Region.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

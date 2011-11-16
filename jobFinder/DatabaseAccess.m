@@ -1,4 +1,4 @@
-//
+ //
 //  DatabaseAccess.m
 //  jobFinder
 //
@@ -34,7 +34,8 @@ NSString* key(NSURLConnection* con)
 
 -(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSInteger)field
 {
-    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/read2.php"];
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read2.php"];
+    
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
     
@@ -73,7 +74,7 @@ NSString* key(NSURLConnection* con)
 
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field
 {
-    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/read.php"];
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read.php"];
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
     
@@ -111,7 +112,7 @@ NSString* key(NSURLConnection* con)
 
 -(void)jobWriteRequest:(Job *)job
 { 
-    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/write.php"];    
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/write.php"];    
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
@@ -167,7 +168,7 @@ NSString* key(NSURLConnection* con)
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     //sto log crea memory leak
-    //NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
+    NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
     NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
 
     [receivedData appendData:data];

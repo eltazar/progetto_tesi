@@ -8,7 +8,7 @@
 
 #import "jobFinderAppDelegate.h"
 #import "Reachability.h"
-#import "CoreLocation/CLLocationManager.h"
+#import "CoreLocation/CoreLocation.h"
 
 void myExceptionHandler (NSException *ex)
 {
@@ -23,29 +23,37 @@ void myExceptionHandler (NSException *ex)
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+{    
     //NSSetUncaughtExceptionHandler (&myExceptionHandler);
+    
     self.window.rootViewController = self.navController;
     
     // Override point for customization after application launch.
     [self.window makeKeyAndVisible];
-
+    
+    
     //per controllare quando cambia stato connessione
 //    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
     
-    /*controlla se i servizi di localizzazione sono attivati.
-     *da sistemare perchè voglio controllare se è attivo il gps in genereale
-     *e poi controllare se l'autorizzazione specifica a jobFinder è attiva per usare il gps
-     *inoltre: metterlo in BecomeActive? così lo fa ogni volta che l'app va in foreground?
-     *così lo fa solo quando viene caricata in memoria la prima volta.
-     */
-    if(![CLLocationManager locationServicesEnabled] || 
-       [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Annulla" otherButtonTitles: @"Riprova",nil];
+    //controlla se i servizi di localizzazione sono attivati.
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+    
+    if([CLLocationManager locationServicesEnabled]){
+        
+        if ([CLLocationManager respondsToSelector:@selector(authorizationStatus)]){
+            if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
+                NSLog(@"PRIMO");
+                [alert show];
+            }
+        }
+    }  
+    else{
+        NSLog(@"SECONDO");
         [alert show];
-        [alert release];
     }
+        
+    [alert release];
+    
     
     //controlla presenza rete al primo avvio dell'app
     internetReach = [[Reachability reachabilityForInternetConnection] retain];

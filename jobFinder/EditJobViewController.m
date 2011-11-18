@@ -44,9 +44,6 @@
 }
 
 
-//ATTENZIONE: faccio il release del job nel metodo dealloc, ma non sono sicuro se è giusto e cosa accade una volta che tale job lo passo ad altre view. viene copiato? retain + 1?
-
-
 #pragma mark - TableViewDelegate
 
 //azioni per le celle selezionate
@@ -96,6 +93,7 @@
 
 #pragma mark - SectorTableDelegate
 
+//prende i dati dalla tabella settori ed aggiorna la cella con il nuovo dato
 -(void) receiveSectorFromTable:(NSString*) jobSector
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -110,13 +108,14 @@
         placeholder = @"Scegli...";
     } 
     
+    //aggiorno il model della tabella
     [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:placeholder forKey:@"placeholder"];
     [self.tableView reloadRowsAtIndexPaths: [[[NSArray alloc] initWithObjects:indexPath,nil] autorelease] withRowAnimation:UITableViewRowAnimationNone];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
+//riempe le celle in base ai dati del job creato
 -(void)fillCell: (UITableViewCell *)cell rowDesc:(NSDictionary *)rowDesc
 {
     NSString *datakey= [rowDesc objectForKey:@"DataKey"];
@@ -140,6 +139,7 @@
 
 #pragma mark - View lifecycle
 
+//questa view può esser ruotata
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     //return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -154,6 +154,8 @@
 //     job = [[Job alloc]initWithCoordinate:CLLocationCoordinate2DMake(0,0)];
      //NSLog(@"job in EDTI_VIEW: %p",job);
      
+     
+     //creo il model della tabella
      NSMutableArray *secA = [[NSMutableArray alloc] init];
      NSMutableArray *secB = [[NSMutableArray alloc] init];
      NSMutableArray *secC = [[NSMutableArray alloc] init];
@@ -208,7 +210,7 @@
                           nil] autorelease] atIndex: 2];
      
      
-     // non li rilascio perchè usano initWithObject, quindi è rimandato a super
+     //il release è lasciato alla classe madre
      sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
      sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti", nil];   
      

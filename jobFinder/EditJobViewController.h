@@ -9,6 +9,9 @@
 #import "RootJobViewController.h"
 #import "SectorTableViewController.h"
 
+/* Rappresenta la tabella da mostrare in fase di creazione di un job
+ */
+
 @interface EditJobViewController : RootJobViewController <UITextFieldDelegate, UITextViewDelegate, SectorTableDelegate>{
 
     NSArray *fields;

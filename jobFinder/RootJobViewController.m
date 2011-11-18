@@ -159,9 +159,9 @@
 
 - (void)dealloc
 {
-    [super dealloc];
     [sectionDescripition release];
     [sectionData release];
+    [super dealloc];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -11,10 +11,11 @@
 @interface MKMapView (MKMapView_Region)
 
 
-- (MKMapRect)mapRectForCoordinateRegion:(MKCoordinateRegion)coordinateRegion;
++(MKMapRect)mapRectForCoordinateRegion:(MKCoordinateRegion)coordinateRegion;
 -(int)currentZoomLevel; 
--(MKMapPoint)centerPointForMapRect:(MKMapRect)mapRect;
--(MKMapSize)mapRectSizeForZoom:(float)zoom;
--(MKMapPoint)rectOriginForCenter:(MKMapPoint)center andSize:(MKMapSize)size;
--(NSInteger)binarySearch:(NSArray*)array integer:(NSInteger) x;
++(MKMapPoint)centerPointForMapRect:(MKMapRect)mapRect;
++(MKMapSize)mapRectSizeForZoom:(float)zoom;
++(MKMapPoint)rectOriginForCenter:(MKMapPoint)center andSize:(MKMapSize)size;
+-(NSMutableArray*) jobAnnotations;
+-(NSMutableArray*) orderedMutableAnnotations;
 @end

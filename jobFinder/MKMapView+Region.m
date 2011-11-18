@@ -14,7 +14,7 @@
 
 
 //crea un rect data una region
-- (MKMapRect)mapRectForCoordinateRegion:(MKCoordinateRegion)coordinateRegion
++ (MKMapRect)mapRectForCoordinateRegion:(MKCoordinateRegion)coordinateRegion
 {
     CLLocationCoordinate2D topLeftCoordinate = 
     CLLocationCoordinate2DMake(coordinateRegion.center.latitude 
@@ -47,7 +47,7 @@
 }
 
 //calcola il centro di un rect
--(MKMapPoint)centerPointForMapRect:(MKMapRect)mapRect
++(MKMapPoint)centerPointForMapRect:(MKMapRect)mapRect
 {
     MKMapPoint center;
     center.x =  mapRect.origin.x + (mapRect.size. width / 2);
@@ -57,7 +57,7 @@
 }
 
 //calcola il size di un rect in base al livello di zoom
--(MKMapSize)mapRectSizeForZoom:(float)zoom
++(MKMapSize)mapRectSizeForZoom:(float)zoom
 {
     
     MKMapSize size;
@@ -68,7 +68,7 @@
 }
 
 //ritorna il punto di origin per un rect dato il centro e il size del rect
--(MKMapPoint)rectOriginForCenter:(MKMapPoint)center andSize:(MKMapSize)size
++(MKMapPoint)rectOriginForCenter:(MKMapPoint)center andSize:(MKMapSize)size
 {
     MKMapPoint origin;
     origin.x = center.x - (size.width /2);
@@ -76,43 +76,27 @@
     return origin;  
 }
 
-//effettua la ricerca binaria su un array di un dato un idDb di un'annotation
--(NSInteger)binarySearch:(NSArray*)array integer:(NSInteger) x
-{   
-    //    NSLog(@"RICERCA BINARIA; ARRAY COUNT = %d",array.count);
-    //NSLog(@"X = %d",x);
-    NSInteger p;
-    NSInteger u;
-    NSInteger m;
-    p = 0;
-    u = [array count] - 1;
-    //    NSLog(@"U = %d",u);
-    while(p <= u) {
-        m = (p+u)/2;
-        //NSLog(@"M = %d",m);
-        if(!([((Job*)[array objectAtIndex:m]) isKindOfClass:[MKUserLocation class]] ||
-             [((Job*)[array objectAtIndex:m]) isKindOfClass:[FavouriteAnnotation class]])){
-            
-            //NSLog(@"M.IDDB = %d",((Job*)[array objectAtIndex:m]).idDb);
-            
-            if(((Job*)[array objectAtIndex:m]).idDb == x){ 
-                //NSLog(@"TROVATO");
-                return m; // valore x trovato alla posizione m
-            }
-            else if(((Job*)[array objectAtIndex:m]).idDb > x)
-                p = m+1;
-            else{
-                u = m-1;
-            }
-            
-            //NSLog(@"P = %d ##### U = %d",p,u);
-            
-        }
+-(NSMutableArray*) jobAnnotations {
+    //NSMutableArray *jAnnotations = [[[NSMutableArray alloc] initWithArray:[self annotations]]autorelease];
+    NSMutableArray *jAnnotations = [[[self annotations] mutableCopy]autorelease];
+    for(Job *an in [self annotations]){
+        if(![an isKindOfClass:[Job class]] || an.isDraggable)
+            [jAnnotations removeObject:an];
     }
-    
-    //NSLog(@"NON TROVATO");
-    return -1;
+    return jAnnotations;
 }
 
+-(NSMutableArray*) orderedMutableAnnotations {
+    
+    NSMutableArray *omAnnotations = [self jobAnnotations];
+    
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"idDb"
+                                                  ascending:NO] autorelease];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    [omAnnotations sortUsingDescriptors:sortDescriptors]; 
+    
+    return omAnnotations;
+}
 
 @end

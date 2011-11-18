@@ -83,9 +83,6 @@
 
 #pragma mark - View lifecycle
 
-
--(void) bla{}
-
 - (void)viewDidLoad
 {   
     [super viewDidLoad];
@@ -169,13 +166,6 @@
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
-//implementazione protocollo UITableViewDataSource
-
-
-
-
-
 
 
 @end

@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Job.h"
 
+/*Classe madre per le tabelle di creazione e visualizzazione di un job
+ */
+
 @interface RootJobViewController : UITableViewController <UITableViewDataSource/*,UITextFieldDelegate*/>{
     @protected
     NSArray *sectionDescripition;

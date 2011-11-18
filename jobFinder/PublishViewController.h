@@ -14,7 +14,7 @@
 @protocol PublishViewControllerDelegate;
 
 /* si occupa di presentare la tabella per l'inserimento dei dati di un lavoro
- * e di ritornare un job alla vista che l'ha chiamata.
+ * e di ritornare un job alla vista che l'ha chiamata grazie al protocollo dichiarato.
  */
 
 
@@ -24,7 +24,7 @@
     //la tabella per la raccolta dati dell'utente
     RootJobViewController *tableView;
     Job *newJob;
-    //coordinate dell'utente
+    //coordinate del newJob da inserire nel db
     CLLocationCoordinate2D jobCoordinate;
     
     @private

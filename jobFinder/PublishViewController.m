@@ -41,7 +41,7 @@
     newJob.date = [NSDate date];
     NSLog(@"NSDATE IS : %@",newJob.date);
        
-    //controllo la validità dei campi inseriti
+    //se i campi inseriti sono formalmente validi controllo connessione per invio
     if([self validate:newJob]){    
         //controllo stato connessione
         Reachability *internetReach = [[Reachability reachabilityForInternetConnection] retain];
@@ -63,13 +63,13 @@
 
 -(IBAction)cancelBtnPressed:(id)sender{
     
-    //dico al delegato che è stato spinto annulla
+    //informa il delegato che è stato spinto annulla
     [self.pwDelegate didCancelNewJob:self];
 }
 
 -(void)activeInsertBtn:(id)sender
 {
-    //abilita il tasto inserisci se è stato scelto il settore
+    //abilita il tasto "inserisci" se è stato scelto il settore
     tableView.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
@@ -84,7 +84,7 @@
     rtn = [job isValid];
     
     if (!rtn){
-        NSString *message = [NSString stringWithFormat:@"%@ formalmente \n non valido",[job invalidReason]];
+        NSString *message = [NSString stringWithFormat:@"%@ formalmente \n non valida",[job invalidReason]];
         [alert setMessage:NSLocalizedString(message, @"")];
         [alert show];		
     }

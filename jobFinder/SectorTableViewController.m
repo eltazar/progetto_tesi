@@ -127,6 +127,7 @@
 
 -(void) dealloc
 {
+    [structureFromPlist release];
     [tableStructure release];
     [sections release];
     [super dealloc];

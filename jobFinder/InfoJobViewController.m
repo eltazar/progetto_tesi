@@ -47,9 +47,7 @@
     return cell;
 }    
 
-/*forse questo è il modo più semplice/efficiente per riempire ogni riga della tabella job.
- * la classe incapsulando un job ha tutti i dati per completare la tabella
- */
+//riempe le celle con i relativi dati, semplifica anche il riuso di una cella
 -(void) fillCell:(UITableViewCell*)cell InRow:(int)row inSection:(int)section
 {
     //PASSARE UN JOB!!!!
@@ -111,9 +109,10 @@
         switch (row) {
             case 0:
                 NSLog(@"riga 0 sezione 2");
+                //fa partire una chiamata
                 UIDevice *device = [UIDevice currentDevice];    
                 if ([[device model] isEqualToString:@"iPhone"]){
-                
+                    
                     if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
                         NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
@@ -121,8 +120,8 @@
                 }
                 else{
                     UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Attenzione" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        [Notpermitted show];
-                        [Notpermitted release];
+                    [Notpermitted show];
+                    [Notpermitted release];
                 }
                 break;
                 
@@ -185,6 +184,8 @@
 }
 
 #pragma mark - GeodecoderDelegate
+
+//date le coordinate del job cerca il relativo indirizzo e lo mostra nella tabella
 -(void)didReceivedGeoDecoderData:(NSDictionary *)geoData
 {
     NSString *address;
@@ -242,7 +243,7 @@
     [super viewDidLoad];
     [self setTitle:@"Lavoro"]; 
     
-    //inizializzo tabella
+    //creo il model della tabella
     NSMutableArray *secA = [[NSMutableArray alloc] init];
     NSMutableArray *secB = [[NSMutableArray alloc] init];
     NSMutableArray *secC = [[NSMutableArray alloc] init];
@@ -311,7 +312,7 @@
     
     
 #warning REVERSE GECODING SPOSTARE??
-    /* Quando viene caricata la view controllo se il job scaricato dal server ha il campo address a nil o @"". Se si fa partire il reverse geocoding, altrimenti vuol dire che il job era già stato caricato in precedenza ed era già stato fatto il geocoding. In questo 
+    /* Quando viene caricata la view controllo se il job scaricato dal server ha il campo address a nil o @"". Se si fa partire il reverse geocoding, altrimenti vuol dire che il job era già stato visualizzato in precedenza ed era già stato fatto il geocoding. In questo 
         modo il reverse gecoding è fatto una volta sola, appena scaricato un job dal server.
      */
     if(job.address == nil || [job.address isEqualToString:@""] || [job.address isEqualToString:@"Non disponibile"]){

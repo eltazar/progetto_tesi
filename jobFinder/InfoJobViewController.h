@@ -12,6 +12,9 @@
 #import <MessageUI/MessageUI.h>
 #import "GeoDecoder.h"
 
+/* Rappresenta la tabella dei dati da mostrare quando viene selezionato un job sulla mappa
+ */
+
 @interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate, GeoDecoderDelegate>
 { 
 }

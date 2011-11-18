@@ -60,6 +60,7 @@
         SectorTableViewController *sectorTable = [[SectorTableViewController alloc] initWithPlist:@"sector-table"];
         sectorTable.secDelegate = self;
         [self.navigationController pushViewController:sectorTable animated:YES];
+        [sectorTable release];
     }
 }
 

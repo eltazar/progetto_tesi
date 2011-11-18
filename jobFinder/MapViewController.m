@@ -1,4 +1,3 @@
-
 //
 //  MapViewController.m
 //  jobFinder
@@ -28,17 +27,20 @@
 /*Dichiaro property e metodi privati per il MapViewController
  */
 @interface MapViewController()
+@property(nonatomic,retain) NSTimer *timer;
+@property(nonatomic, retain)NSMutableArray *receivedAnnotations;
 @property(nonatomic, assign) int oldZoom;
 @property(nonatomic,retain) NSMutableArray *zoomBuffer;
 @property(nonatomic,retain) NSMutableArray *annotationsBuffer;
 -(void)filterOverThreshold:(NSArray *)newAnnotations;
 -(void)filterUnderThreshold:(NSArray*)newAnnotations;
 -(void)removeDuplicateAnnotations:(NSMutableArray*)newAnnotations;
+-(void)startFiltering;
 @end
 //end
 
 @implementation MapViewController 
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, annotationsBuffer, zoomBuffer,oldZoom;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -78,7 +80,7 @@
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
-        
+    
     //mi permette di zoomare sulla posizione dell'utente se gps attivo
     for (MKAnnotationView *annotationView in views) {
         //NSLog(@"annotation view %p",annotationView);
@@ -117,7 +119,7 @@
         //NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;
     }
-
+    
     //se invece la annotation riguarda un lavoro creo e ritorno la annotationView dedicata
     MKPinAnnotationView* pinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"pin" ];
     
@@ -125,17 +127,17 @@
     if(pinView == nil){     
         
         pinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pin"]autorelease]; //aggiunto autorelease il 3 novembre
-//        NSLog(@"PIN VIEW ALLOCATO: %p",pinView);
+        //        NSLog(@"PIN VIEW ALLOCATO: %p",pinView);
         //setto colore, disclosure button ed animazione     
         pinView.canShowCallout = YES;
         pinView.animatesDrop = YES;
-
+        
     }
     else{ 
-//        NSLog(@"PIN VIEW RICICLATO %p  !!!!",pinView);
+        //        NSLog(@"PIN VIEW RICICLATO %p  !!!!",pinView);
         pinView.annotation = annotation;
     }
-
+    
     //setto la proprietà draggable
     if(((Job*)annotation).isDraggable){
         
@@ -150,15 +152,18 @@
         [pinView setDraggable:NO];
         pinView.pinColor = MKPinAnnotationColorGreen; 
     }
-
+    
     return pinView;
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
-{    
+{   
+    
+    [timer invalidate];
+    
     //se c'è un pin draggabile sulla mappa non faccio letture dal db, risparmio un po di query
     if(!isDragPinOnMap){
-    
+        
         static int count = 0;        
         
         if(count == 0)
@@ -178,18 +183,18 @@
             newExtendedRect.size.width *= 2;
             newExtendedRect.size.height *= 2;
             MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
-           
+            
             //perchè php1 è richiamato anche quando x = x ?????
             
             //controllo se sto facendo zoom out
-//            NSLog(@"NEW RECT width = %lf, OLD RECT width = %lf, current zoom = %d",newRect.size.width,oldRect.size.width, [map currentZoomLevel]);
-//            NSLog(@"FABS |new width - old width| = %f",fabs((newRect.size.width - oldRect.size.width)));
+            //            NSLog(@"NEW RECT width = %lf, OLD RECT width = %lf, current zoom = %d",newRect.size.width,oldRect.size.width, [map currentZoomLevel]);
+            //            NSLog(@"FABS |new width - old width| = %f",fabs((newRect.size.width - oldRect.size.width)));
             
-//            if(fabs((newRect.size.width - oldRect.size.width)) < EPS){
-//                NSLog(@ "****************");
-//        
-//            }
-//            else NSLog(@" BHOOOOOOOOO");
+            //            if(fabs((newRect.size.width - oldRect.size.width)) < EPS){
+            //                NSLog(@ "****************");
+            //        
+            //            }
+            //            else NSLog(@" BHOOOOOOOOO");
             
             //if(newRect.size.width >= oldRect.size.width && [map currentZoomLevel] >= ZOOM_THRESHOLD){
             if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
@@ -201,7 +206,7 @@
                 NSLog(@"PHP 1");
                 [dbAccess jobReadRequest:regionQuery field: -1];
             }
-
+            
             if([map currentZoomLevel] < ZOOM_THRESHOLD)
                 self.oldZoom = ZOOM_THRESHOLD-1;
         }
@@ -210,51 +215,51 @@
         oldRegion = mapView.region;
     }    
     NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
-//    NSLog(@"REGION ANNOTATIONS ZOOM = %d", [[mapView annotations] count]);
+    //    NSLog(@"REGION ANNOTATIONS ZOOM = %d", [[mapView annotations] count]);
     
-//    NSLog(@"NUOVA REGION: region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
-//    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
-//    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
-//
-//    NSLog(@"RECT: w = %f, h = %f",[mapView visibleMapRect].size.width,mapView.visibleMapRect.size.height );
-//    
-        
+    //    NSLog(@"NUOVA REGION: region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
+    //    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
+    //    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
+    //
+    //    NSLog(@"RECT: w = %f, h = %f",[mapView visibleMapRect].size.width,mapView.visibleMapRect.size.height );
+    //    
+    
     //NSLog(@"visible rect: w = %f, h = %f",mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height);
     
     /*10-11 novembre*/
     
-//    if(count == 0){
-//        count++;
-//    }
-//    else if(count == 1){
-//        
-//        [dbAccess jobReadRequest:mapView.region field: -1];
-//        oldRegion = mapView.region; 
-//        count ++;
-//    }
-//    else if(count == 2){
-//        [dbAccess jobReadRequestOldRegion:oldRegion newRegion:mapView.region field:-1]; 
-//        MKMapRect oldRect = [map mapRectForCoordinateRegion:oldRegion];
-//        MKMapRect newRect = [map mapRectForCoordinateRegion:map.region];
-//        if(MKMapRectIsNull( MKMapRectIntersection(oldRect,newRect) ))
-//            NSLog(@"NO INTERSEZIONE");
-//        else NSLog(@"INTERSEZIONE");        
-//        oldRegion = mapView.region; 
-//    }
-
+    //    if(count == 0){
+    //        count++;
+    //    }
+    //    else if(count == 1){
+    //        
+    //        [dbAccess jobReadRequest:mapView.region field: -1];
+    //        oldRegion = mapView.region; 
+    //        count ++;
+    //    }
+    //    else if(count == 2){
+    //        [dbAccess jobReadRequestOldRegion:oldRegion newRegion:mapView.region field:-1]; 
+    //        MKMapRect oldRect = [map mapRectForCoordinateRegion:oldRegion];
+    //        MKMapRect newRect = [map mapRectForCoordinateRegion:map.region];
+    //        if(MKMapRectIsNull( MKMapRectIntersection(oldRect,newRect) ))
+    //            NSLog(@"NO INTERSEZIONE");
+    //        else NSLog(@"INTERSEZIONE");        
+    //        oldRegion = mapView.region; 
+    //    }
+    
     
     
     //[dbAccess jobReadRequest:mapView.region field: -1];
-
+    
     /*PROVA 14 novembre: questo pezzo di codice è da inserire altrove. non ho bisogno di delegati, singleton ecc per il passaggio dei dati dal filtro al mapviecontroller. basta recuperare dallo user defaults i dati salvati dal filtro.
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSArray *fields = [prefs objectForKey:@"selectedCells"];
-    
-    if(fields != nil)
-        for(NSObject *field in fields)
-            NSLog(@"field: %@",field);
+     
+     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+     
+     NSArray *fields = [prefs objectForKey:@"selectedCells"];
+     
+     if(fields != nil)
+     for(NSObject *field in fields)
+     NSLog(@"field: %@",field);
      */
 }
 
@@ -272,7 +277,7 @@
 -(void)filterUnderThreshold:(NSMutableArray*)newAnnotations
 {
     NSMutableArray *mapAnn = [map orderedMutableAnnotations];
-       
+    
     /* annotationsBuffer contiene tutte le annotations aggiunte superato il livello 10 quando faccio zoom in. Così superato tale livello in zoom out potrò rimuoverle in blocco.
      */
     
@@ -286,11 +291,11 @@
     [self removeDuplicateAnnotations:newAnnotationNotInMap];
     [map addAnnotations:newAnnotationNotInMap];
     [annotationsBuffer addObjectsFromArray:newAnnotationNotInMap];
-   
+    
     NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations update add: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
     
     /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate. Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle 
-        aggiunte dall'altra funzione di filtro
+     aggiunte dall'altra funzione di filtro
      */
     
     //[Job orderJobsByID:newAnnotations];
@@ -302,7 +307,7 @@
         }        
     }
     NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations update remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
-
+    
     [newAnnotationNotInMap release];
     //[mapAnn release];
 }
@@ -314,7 +319,7 @@
     NSLog(@"\n§§§§§§§§§§§§§§\n§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d\n§§§§§§§§§§§§§",newAnnotations.count, [map annotations].count);
     NSMutableArray * mapAnnotations = [map orderedMutableAnnotations];
     
-
+    
     //NSLog(@"MAP ANNOTATIONS POST DELETING: %d",mapAnnotations.count);
     
     //ordino mapAnnotations per id
@@ -359,7 +364,7 @@
     NSMutableArray *jobToShow=[[NSMutableArray alloc] initWithCapacity:0];
     
     int cont=0;
-   
+    
     //se sto facendo zoom out e il current zoom è >= 10
     if([map currentZoomLevel] > self.oldZoom){
         
@@ -369,10 +374,10 @@
                 [map removeAnnotations:annotationsBuffer];
                 [annotationsBuffer removeAllObjects];
             }
-//            //riaggiungo i pin in base al livello di zoom 
-//            for(int i=[map currentZoomLevel]; i<= ZOOM_MAX; i++){
-//                [map addAnnotations:[ zoomBuffer objectAtIndex:(i-ZOOM_THRESHOLD)]];
-//            }
+            //            //riaggiungo i pin in base al livello di zoom 
+            //            for(int i=[map currentZoomLevel]; i<= ZOOM_MAX; i++){
+            //                [map addAnnotations:[ zoomBuffer objectAtIndex:(i-ZOOM_THRESHOLD)]];
+            //            }
         }         
         
         for(int i=MAX(ZOOM_THRESHOLD,self.oldZoom); i < [map currentZoomLevel]; i++){
@@ -386,9 +391,9 @@
     //if([map currentZoomLevel] <= self.oldZoom){
     [self removeDuplicateAnnotations:newAnnotations];
     mutableNewAnnotations = [newAnnotations mutableCopy];
-
-    for(int j=ZOOM_MAX; j>= [map currentZoomLevel];j--){
     
+    for(int j=ZOOM_MAX; j>= [map currentZoomLevel];j--){
+        
         rect.size = [MKMapView mapRectSizeForZoom:j];
         rect.origin = [MKMapView rectOriginForCenter:center andSize:rect.size];
         region = MKCoordinateRegionForMapRect(rect);
@@ -441,7 +446,7 @@
     //}
     
     NSLog(@"\n############# \n@MAP ANNS = %d\n############", [[map annotations] count]);
-
+    
     self.oldZoom = [map currentZoomLevel];
     
     //NSLog(@"PIN SULLA CAZZO DI MAPPA : %d", [[map annotations]count]);
@@ -463,7 +468,7 @@
     CLLocationDegrees longitudeNE = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"northeast"] objectForKey:@"lng"] doubleValue];
     CLLocationDegrees latitudeSW = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"southwest"] objectForKey:@"lat"] doubleValue];
     CLLocationDegrees longitudeSW = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"southwest"] objectForKey:@"lng"] doubleValue];
-
+    
     CLLocationCoordinate2D regionCenter;
     MKCoordinateSpan regionSpan;
     regionCenter.latitude = (latitudeNE+latitudeSW) / 2;
@@ -481,20 +486,22 @@
 -(void)didReceiveJobList:(NSArray *)jobList
 {
     NSLog(@"JOB LIST COUNT = %d",jobList.count);
-      
-    NSMutableArray *newAnnotations;
     
-    if(jobList != nil){
-        newAnnotations = [jobList mutableCopy];
-        
-        
-        if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
-            [self filterOverThreshold:newAnnotations];
-        }
-        else [self filterUnderThreshold:newAnnotations];
+    if(jobList != nil)
+        [receivedAnnotations addObjectsFromArray:jobList];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];
+}
+
+-(void)startFiltering
+{
+    if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
+        [self filterOverThreshold:receivedAnnotations];
     }
+    else [self filterUnderThreshold:receivedAnnotations];
     
-    [newAnnotations release]; 
+    [receivedAnnotations removeAllObjects];
+    timer = nil;
 }
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
@@ -507,7 +514,7 @@
 //mostra la action sheet con la scelta del tipo di segnalazione
 -(IBAction)publishBtnClicked:(id)sender 
 {    
-
+    
     CLLocationCoordinate2D coordinate;
     
     if(map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE){
@@ -526,10 +533,10 @@
     jobToPublish = [[Job alloc] initWithCoordinate:coordinate];
     
     //NSLog(@"JOBTOPUBLISH = %p",jobToPublish);
-
-
-    if(jobToPublish != nil){
     
+    
+    if(jobToPublish != nil){
+        
         //così il pin sarà draggabile
         jobToPublish.isDraggable = YES;
         //aggiungo annotazione alla mappa
@@ -541,8 +548,8 @@
         MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
         MKCoordinateRegion region = MKCoordinateRegionMake(coordinate,span);
         [map setRegion:region animated:YES];
-    
-            
+        
+        
         /*se è stato inserito un pin draggabile disattivo il tasto segnala ed attio quello per il salvataggio del job nella posizione scelta
          */
         if(isDragPinOnMap){
@@ -559,7 +566,7 @@
                          }
          ];
     }
-
+    
 }
 
 //carica la view per la creazione di un job
@@ -607,14 +614,14 @@
 
 -(IBAction)bookmarkBtnClicked:(id)sender
 {
-
-//    NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
+    
+    //    NSLog(@"BOOKMARKBTN: favourite coord lat : %f",favouriteCoord.latitude);
     if(favouriteAnnotation != nil &&
        favouriteAnnotation.coordinate.latitude != 0 &&
        favouriteAnnotation.coordinate.longitude != 0){
-            MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
-            MKCoordinateRegion region = MKCoordinateRegionMake(favouriteAnnotation.coordinate, span);
-            [map setRegion:region animated:YES];
+        MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
+        MKCoordinateRegion region = MKCoordinateRegionMake(favouriteAnnotation.coordinate, span);
+        [map setRegion:region animated:YES];
     }
 }
 
@@ -628,17 +635,17 @@
     alternativeToolbar.frame = alternativeToolBarFrame;
     [UIView commitAnimations]; 
     
-
+    
     //rimuovo il pin draggabile dalla mappa
     if(jobToPublish != nil && jobToPublish.isDraggable == YES)
         [map removeAnnotation:jobToPublish];
     
     //segnalo che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO;
-        
+    
     //riabilito il pulsante segnala
     publishBtn.enabled = YES;
-       
+    
     //rilascio jobToPublish istanziato quando si è cliccato su "segnala"
     [jobToPublish release];
     jobToPublish = nil;
@@ -660,7 +667,7 @@
  */
 -(void)didInsertNewJob:(Job *)newJob
 {    
-   //segnala che non ci sono pin draggabili sulla mappa
+    //segnala che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO; 
     //disabilita pulsante per salvare la posizione del job
     saveJobInPositionBtn.enabled = NO;
@@ -685,12 +692,12 @@
     alternativeToolBarFrame.origin.y = map.frame.size.height;
     alternativeToolbar.frame = alternativeToolBarFrame;
     [UIView commitAnimations];
-
+    
     //riattivo pulsante segnalazione
     publishBtn.enabled = YES;
-
+    
     [self dismissPublishView];  
-
+    
 }
 
 //rimuove il pin rosso dalla mappa se si è scelto di annullare la creazione
@@ -699,7 +706,7 @@
     //se l'operazione di inserimento è annullata il pin draggabile sarà eliminato dalla mappa e rilasciato
     
     [self backBtnClicked:self];
-
+    
     [self dismissPublishView];
 }
 
@@ -759,7 +766,7 @@
     zoomBuffer = [[NSMutableArray alloc] initWithCapacity:9];
     for(int i=0;i<9;i++)
         [zoomBuffer insertObject:[[[NSMutableArray alloc]init]autorelease] atIndex:i];    
- 
+    receivedAnnotations = [[NSMutableArray alloc]init];
     /* se gps è disattivato interroga servizio per reperire il paese in base al currentLocale dell'utente
      */
     if(![CLLocationManager locationServicesEnabled] || 
@@ -774,7 +781,7 @@
         //NSLog(@"ULOCALE = %@",countryCode);
         [geoDec searchCoordinatesForAddress:countryCode];
         [geoDec release];
-
+        
     }
     
     /*inizializzazione pulsanti
@@ -810,8 +817,8 @@
         CLLocationCoordinate2D favouriteCoord = CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue]);
         //creo ed aggiungo l'annotatione alla mappa
         favouriteAnnotation = [[[FavouriteAnnotation alloc] initWithCoordinate:favouriteCoord] autorelease];
-//        if([prefs objectForKey:@"address"] != nil)
-//            favouriteAnnotation.address = [prefs objectForKey:@"address"];
+        //        if([prefs objectForKey:@"address"] != nil)
+        //            favouriteAnnotation.address = [prefs objectForKey:@"address"];
         [map addAnnotation:favouriteAnnotation];   
         
     } 
@@ -827,14 +834,14 @@
     backBtn.layer.borderWidth = 1;
     backBtn.layer.borderColor = [UIColor grayColor].CGColor;
     backBtn.clipsToBounds = YES;
-        
+    
     /* inizializzazione classi necessarie al view controller
      */
     //alloco l'istanza per accesso al db
     dbAccess = [[DatabaseAccess alloc] init];
     [dbAccess setDelegate:self];
     
-
+    
 }
 
 -(double)fRand
@@ -865,6 +872,7 @@
     [dbAccess release];
     [annotationsBuffer release];
     [zoomBuffer release];
+    [receivedAnnotations release];
     [super dealloc];
 }
 

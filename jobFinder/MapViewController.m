@@ -159,7 +159,7 @@
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {   
     
-    [timer invalidate];
+    //[timer invalidate];
     
     //se c'è un pin draggabile sulla mappa non faccio letture dal db, risparmio un po di query
     if(!isDragPinOnMap){
@@ -287,15 +287,16 @@
             [(NSMutableArray*)array removeAllObjects];
     }
     
+    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under pre add: %d \n newAnnotations = %d \n @@@@@@@@@@@@@", [[map annotations]count], [newAnnotations count]);
+    
     NSMutableArray *newAnnotationNotInMap = [newAnnotations mutableCopy];
     [self removeDuplicateAnnotations:newAnnotationNotInMap];
     [map addAnnotations:newAnnotationNotInMap];
     [annotationsBuffer addObjectsFromArray:newAnnotationNotInMap];
     
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations update add: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
+    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post add: %d \n newAnnNotInMap = %d\n @@@@@@@@@@@@@", [[map annotations]count],newAnnotationNotInMap.count);
     
-    /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate. Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle 
-     aggiunte dall'altra funzione di filtro
+    /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate). Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle aggiunte dall'altra funzione di filtro
      */
     
     //[Job orderJobsByID:newAnnotations];
@@ -306,7 +307,7 @@
             [annotationsBuffer removeObject:an];
         }        
     }
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations update remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
+    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
     
     [newAnnotationNotInMap release];
     //[mapAnn release];
@@ -350,7 +351,7 @@
  */
 -(void)filterOverThreshold:(NSMutableArray *)newAnnotations{
     
-    NSLog(@"\n############# \n@PLACES TO FILTER COUNT = %d\n############", [newAnnotations count]);
+    //NSLog(@"\n############# \n@PLACES TO FILTER COUNT = %d\n############", [newAnnotations count]);
     
     NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc]init];
     float latDelta;
@@ -382,7 +383,7 @@
         
         for(int i=MAX(ZOOM_THRESHOLD,self.oldZoom); i < [map currentZoomLevel]; i++){
             [map removeAnnotations: [zoomBuffer objectAtIndex:(i - ZOOM_THRESHOLD)]];
-            NSLog(@"\n*********REMOVE********\n*\n zoomBuffer[%d] = %d \n******************* \n * map annotations: %d",i - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:i - ZOOM_THRESHOLD] count],[[map annotations]count]);
+            //NSLog(@"\n*********REMOVE********\n*\n zoomBuffer[%d] = %d \n******************* \n * map annotations: %d",i - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:i - ZOOM_THRESHOLD] count],[[map annotations]count]);
             [[zoomBuffer objectAtIndex:(i - ZOOM_THRESHOLD)] removeAllObjects];
         }
     }
@@ -434,7 +435,7 @@
                 [map addAnnotation:checkingAnnotation];
                 [[zoomBuffer objectAtIndex:(j - ZOOM_THRESHOLD)] addObject:checkingAnnotation];
                 [indexes addIndex:i];
-                NSLog(@"\n*********ADD********\n*\n zoomBuffer[%d] = %d \n*******************\n * map annotations: %d",j - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:j - ZOOM_THRESHOLD] count], [[map annotations]count]);
+                //NSLog(@"\n*********ADD********\n*\n zoomBuffer[%d] = %d \n*******************\n * map annotations: %d",j - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:j - ZOOM_THRESHOLD] count], [[map annotations]count]);
             }
             
         }
@@ -445,7 +446,7 @@
     }
     //}
     
-    NSLog(@"\n############# \n@MAP ANNS = %d\n############", [[map annotations] count]);
+    //NSLog(@"\n############# \n@MAP ANNS = %d\n############", [[map annotations] count]);
     
     self.oldZoom = [map currentZoomLevel];
     
@@ -486,21 +487,36 @@
 -(void)didReceiveJobList:(NSArray *)jobList
 {
     NSLog(@"JOB LIST COUNT = %d",jobList.count);
+
+    [Job mergeArray:receivedAnnotations withArray:jobList];
     
-    if(jobList != nil)
-        [receivedAnnotations addObjectsFromArray:jobList];
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];
+    NSLog(@"RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
+    
+//    for(Job *j in receivedAnnotations)
+//        NSLog(@"JOB ID = %d",j.idDb);
+    
+    
+    //richiamare mergesort ogni volta che arriva una nuova joblist
+    //no doppioni, e receivedAnnotations ordinato
+    //if(jobList != nil)
+    //    [receivedAnnotations addObjectsFromArray:jobList];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];
 }
 
 -(void)startFiltering
 {
-    if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
-        [self filterOverThreshold:receivedAnnotations];
-    }
-    else [self filterUnderThreshold:receivedAnnotations];
+    NSLog(@"--------------------------------------> ENTRATO");
+    //NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
+    
+        if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
+            [self filterOverThreshold:receivedAnnotations];
+        }
+        else [self filterUnderThreshold:receivedAnnotations];
     
     [receivedAnnotations removeAllObjects];
+
     timer = nil;
 }
 

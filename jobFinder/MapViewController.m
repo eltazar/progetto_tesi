@@ -695,7 +695,8 @@
     //rimuovo il pin rosso e metto quello verde (drag-noDrag)
     if(jobToPublish != nil){
         [map removeAnnotation:jobToPublish];
-        [map addAnnotation:jobToPublish];
+        //[map addAnnotation:jobToPublish];
+        [dbAccess jobReadRequest:map.region field:-1];
     }
     
     //fa sparire con uno slide la alternativeToolbar

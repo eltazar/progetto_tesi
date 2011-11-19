@@ -65,6 +65,7 @@
 
 -(void) dealloc
 {
+    [textField release], textField = nil;
     [super dealloc];
 }
 

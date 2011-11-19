@@ -158,9 +158,6 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {   
-    
-    //[timer invalidate];
-    
     //se c'è un pin draggabile sulla mappa non faccio letture dal db, risparmio un po di query
     if(!isDragPinOnMap){
         
@@ -508,16 +505,16 @@
 -(void)startFiltering
 {
     NSLog(@"--------------------------------------> ENTRATO");
-    //NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
-    
+    NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
+ 
+    if([receivedAnnotations count] != 0){
         if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
             [self filterOverThreshold:receivedAnnotations];
         }
         else [self filterUnderThreshold:receivedAnnotations];
     
     [receivedAnnotations removeAllObjects];
-
-    timer = nil;
+    }    
 }
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData

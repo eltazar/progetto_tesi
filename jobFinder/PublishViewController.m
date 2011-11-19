@@ -98,7 +98,7 @@
 {
     [super viewWillAppear:animated];
     //passo il newJob alla tabella per esser riempito
-    ((EditJobViewController *) tableView).job = self.newJob;
+    ((EditJobViewController *) tableView).job = newJob;
     //NSLog(@"WILL: NEW JOB PUNTA A: %p", newJob);
 }
 

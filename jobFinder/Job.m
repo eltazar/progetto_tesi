@@ -117,8 +117,11 @@
     /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
     //NSLog(@"NEW PHONE = %@",newPhone);
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
-        [newPhone release];
-        newPhone = nil;
+//        [newPhone release];
+//        newPhone = nil;
+        [phone release];
+        phone = @"";
+        return;
     }
    
     [newPhone retain];
@@ -138,23 +141,24 @@
     if([newDescription isKindOfClass:[NSNull class]] || [newDescription isEqualToString:@""]){ //aggiunto 7 novembre xchè app crash
 //        [newDescription release];
 //        newDescription = nil;
-        
+        [description release];
+        //description = nil;
         description = @"";
         return;
     }
     
-    [newDescription retain];
-    [description release];
-    description = newDescription;
+   [newDescription retain];
+   [description release];
+   description = newDescription;
 }
 
 -(void) setUrlWithString:(NSString *) newUrlString
 {
     if(newUrlString == nil || [newUrlString isKindOfClass:[NSNull class]] || [newUrlString isEqualToString:@""]){
         
-           isURLvalid = YES;
-           self.url = [NSURL URLWithString:@""];
-           return;
+       isURLvalid = YES;
+       self.url = [NSURL URLWithString:@""];
+       return;
     }    
     
     NSURL *tmpURL;

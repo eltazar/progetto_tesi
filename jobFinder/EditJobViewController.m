@@ -249,6 +249,8 @@
 
 -(void) dealloc
 {
+    [job release]; //aggiunti 19 novembre
+    job = nil; 
     [super dealloc];
 
 //    NSLog(@"dea job = %p, count = %d",job, job.retainCount);

@@ -156,8 +156,6 @@
 
 - (void)dealloc
 {
-    [job release]; //aggiunti 19 novembre
-    job = nil; 
     [sectionDescripition release];
     [sectionData release];
     [super dealloc];

@@ -104,11 +104,12 @@
     else isEmailValid = [emailTest evaluateWithObject:newEmail];
   
     
-    if(isEmailValid){
+//    if(isEmailValid){
         [newEmail retain];
         [email release];
         email = newEmail;
-    }
+//    }
+//    else NSLog(@"EMAIL NO VALIDA");
 }
 
 -(void)setPhone:(NSString *)newPhone
@@ -174,6 +175,7 @@
     if(isURLvalid){
         self.url = tmpURL;
     }
+    else self.url = [NSURL URLWithString:@""];
     
     [tmpURL release];
 

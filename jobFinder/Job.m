@@ -255,6 +255,111 @@
     }
 }
 
+//effettua la ricerca binaria su un array di un dato un idDb di un'annotation
++(NSInteger)jobBinarySearch:(NSArray*)array withID:(NSInteger) x
+{   
+    //    NSLog(@"RICERCA BINARIA; ARRAY COUNT = %d",array.count);
+    //NSLog(@"X = %d",x);
+    NSInteger p;
+    NSInteger u;
+    NSInteger m;
+    p = 0;
+    u = [array count] - 1;
+    //    NSLog(@"U = %d",u);
+    NSObject *element = nil;
+    
+    while(p <= u) {
+        m = (p+u)/2;
+        element = [array objectAtIndex:m];
+        //NSLog(@"M = %d",m);
+        
+        //NSLog(@"M.IDDB = %d",((Job*)[array objectAtIndex:m]).idDb);
+        
+        if(((Job*)element).idDb == x){ 
+            //NSLog(@"TROVATO");
+            return m; // valore x trovato alla posizione m
+        }
+        else if(((Job*)element).idDb > x)
+            p = m+1;
+        else{
+            u = m-1;
+        }
+        
+        //NSLog(@"P = %d ##### U = %d",p,u);
+        
+        
+    }
+    
+    //NSLog(@"NON TROVATO");
+    return -1;
+}
+
++(void)orderJobsByID:(NSMutableArray*)jobs
+{
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"idDb"
+                                                  ascending:NO] autorelease];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    [jobs sortUsingDescriptors:sortDescriptors]; 
+}
+
++(void)mergeArray:(NSMutableArray*)totalArray withArray:(NSArray*)jobs
+{
+    
+//    if(totalArray.count == 0){
+//        [totalArray addObjectsFromArray: jobs];
+//        return;
+//    }
+        
+    
+    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithCapacity:([totalArray count]+[jobs count])];
+    
+    int i = 0;
+    
+    int a = 0;
+    int b = [totalArray count];
+    int c = 0;
+    int d = [jobs count];
+    
+    while(a<b && c<d){
+        
+        if(((Job*)[totalArray objectAtIndex:a]).idDb >= ((Job*)[jobs objectAtIndex:c]).idDb){
+            if((i-1 < 0) || ((Job*)[totalArray objectAtIndex:a]).idDb != ((Job*)[tempArray objectAtIndex:i-1]).idDb){
+                [tempArray insertObject:[totalArray objectAtIndex:a] atIndex:i];
+                ++i;
+            }
+            ++a;
+        }
+        else{
+            if((i-1 < 0) || ((Job*)[jobs objectAtIndex:c]).idDb != ((Job*)[tempArray objectAtIndex:i-1]).idDb){
+                [tempArray insertObject:[jobs objectAtIndex:c] atIndex:i];
+                ++i;
+            }
+            ++c;
+        }
+    }
+    
+    if(a < b) {
+        for (int p = a; p < b; p++) {
+            [tempArray insertObject: [totalArray objectAtIndex:p] atIndex:i];
+            i++;
+        }
+    } else {
+        for (int p = c; p < d; p++) {
+            [tempArray insertObject: [jobs objectAtIndex:p] atIndex:i];
+            i++;
+        }
+    }
+    
+    
+//    for(Job *j in tempArray)
+//        NSLog(@"JOB ID = %d",j.idDb);
+    
+    [totalArray removeAllObjects];
+    [totalArray addObjectsFromArray:tempArray];    
+    [tempArray release];
+}
+
 
 -(void)dealloc{
     [subtitle release];

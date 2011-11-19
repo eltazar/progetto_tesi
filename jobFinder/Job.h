@@ -53,5 +53,8 @@
 -(NSString*) invalidReason;
 -(NSString*)urlAsString;
 -(NSString*)stringFromDate;
++(NSInteger)jobBinarySearch:(NSArray*)array withID:(NSInteger) x;
++(void)orderJobsByID:(NSMutableArray*)jobs;
++(void)mergeArray:(NSArray*)totalArray withArray:(NSArray*)jobs;
 
 @end

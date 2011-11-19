@@ -57,7 +57,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-        [textView resignFirstResponder];
+    [textView resignFirstResponder];
 
     [super touchesBegan:touches withEvent:event];
 }
@@ -91,8 +91,8 @@
 }
 
 -(void) dealloc{
-    [super dealloc];
     [textView release];
+    [super dealloc];
 }
 
 @end

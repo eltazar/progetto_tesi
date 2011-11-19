@@ -44,6 +44,7 @@
     MKCoordinateRegion oldRegion;
         
 }
+@property(nonatomic, retain)Job *jobToPublish;
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
 @property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;

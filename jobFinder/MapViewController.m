@@ -40,7 +40,10 @@
 //end
 
 @implementation MapViewController 
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer;
+//ivar pubbliche
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
+//ivar private
+@synthesize annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -543,7 +546,7 @@
     }
     
     //alloco il job da pubblicare
-    jobToPublish = [[Job alloc] initWithCoordinate:coordinate];
+    self.jobToPublish = [[[Job alloc] initWithCoordinate:coordinate] autorelease];
     
     //NSLog(@"JOBTOPUBLISH = %p",jobToPublish);
     
@@ -658,10 +661,7 @@
     
     //riabilito il pulsante segnala
     publishBtn.enabled = YES;
-    
-    //rilascio jobToPublish istanziato quando si è cliccato su "segnala"
-    [jobToPublish release];
-    jobToPublish = nil;
+
 }
 
 -(IBAction)filterBtnClicked:(id)sender
@@ -698,6 +698,13 @@
         //[map addAnnotation:jobToPublish];
         [dbAccess jobReadRequest:map.region field:-1];
     }
+    
+    
+    //rilascio new job dopo inserimento nel db
+//    NSLog(@"DID INSERT JOB RETAIN PRE = %d",[jobToPublish retainCount]);
+//    [jobToPublish release];
+//    NSLog(@"DID INSERT JOB RETAIN POST = %d",[jobToPublish retainCount]);
+//    //jobToPublish = nil;
     
     //fa sparire con uno slide la alternativeToolbar
     CGRect alternativeToolBarFrame = alternativeToolbar.frame;
@@ -876,6 +883,7 @@
 
 - (void)dealloc
 {
+    [jobToPublish release], jobToPublish = nil;
     [filterButton release];
     [favouriteAnnotation release];
     [map release];

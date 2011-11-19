@@ -24,7 +24,7 @@
     
     if(self)
     {
-        self.newJob = nil;
+        //self.newJob = nil; //commentato 19 novembre
     }
     
     return self;
@@ -148,6 +148,7 @@
 
 - (void) dealloc
 {
+    [newJob release], newJob = nil;
     [tableView release];
     [super dealloc];
 }

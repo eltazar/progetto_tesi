@@ -20,7 +20,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.job = nil;
+        //self.job = nil; //commentato 19 novembre
     }
     return self;
 }
@@ -156,6 +156,8 @@
 
 - (void)dealloc
 {
+    [job release]; //aggiunti 19 novembre
+    job = nil; 
     [sectionDescripition release];
     [sectionData release];
     [super dealloc];

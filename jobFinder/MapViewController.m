@@ -15,7 +15,6 @@
 #import "MKMapView+Region.h"
 #import "GeoDecoder.h"
 
-#define THRESHOLD 0.01
 #define DEFAULT_COORDINATE -180
 #define iphoneScaleFactorLatitude   16.0    
 #define iphoneScaleFactorLongitude  20.0
@@ -23,6 +22,7 @@
 #define ZOOM_MAX 18
 #define EPS 0.00001
 
+#pragma mark - Metodi e ivar private
 
 /*Dichiaro property e metodi privati per il MapViewController
  */
@@ -38,6 +38,8 @@
 -(void)startFiltering;
 @end
 //end
+
+#pragma mark - Start Implementation
 
 @implementation MapViewController 
 //ivar pubbliche
@@ -713,8 +715,14 @@
         refreshBtn.enabled = NO;
     }
     
-    //oldRegion = map.region;
+    //setto il colore del tasto di filtro per segnalare se l'utente ha il filtro su on od off
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if([[prefs objectForKey:@"switchStatus"] isEqualToString:@"ON"])
+        [filterButton setStyle:UIBarButtonItemStyleDone];
+    else [filterButton setStyle:UIBarButtonItemStylePlain];
     
+    //oldRegion = map.region;
+
 }
 
 - (void)viewDidLoad

@@ -202,6 +202,12 @@
     [prefs setBool:aSwitch.on forKey:@"switch"];
     [prefs removeObjectForKey:@"selectedCells"];
     [prefs setObject:selectedCells forKey:@"selectedCells"];
+    
+    //salvo informazioni sullo stato del filtro, se attivato o no
+    [prefs removeObjectForKey:@"switchStatus"];
+    if(aSwitch.on)
+        [prefs setObject:@"ON" forKey:@"switchStatus"];
+    else [prefs setObject:@"OFF" forKey:@"switchStatus"];
     [prefs synchronize];
 }
 

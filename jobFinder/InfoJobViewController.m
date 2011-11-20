@@ -44,6 +44,11 @@
         ((TextAreaCell *)cell).textView.editable = NO;
     }
     
+    if([cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    
     return cell;
 }    
 
@@ -96,6 +101,8 @@
 
 }
 
+#pragma mark - TableViewDelegate
+
 //azioni per le celle selezionate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -108,20 +115,22 @@
     if(section == 2){
         switch (row) {
             case 0:
-                NSLog(@"riga 0 sezione 2");
-                //fa partire una chiamata
-                UIDevice *device = [UIDevice currentDevice];    
-                if ([[device model] isEqualToString:@"iPhone"]){
-                    
-                    if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
-                        NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                    NSLog(@"riga 0 sezione 2");
+                    //fa partire una chiamata
+                    UIDevice *device = [UIDevice currentDevice];    
+                    if ([[device model] isEqualToString:@"iPhone"]){
+                        
+                        if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                            NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
+                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+                        }
                     }
-                }
-                else{
-                    UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Attenzione" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [Notpermitted show];
-                    [Notpermitted release];
+                    else{
+                        UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Attenzione" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [Notpermitted show];
+                        [Notpermitted release];
+                    }
                 }
                 break;
                 

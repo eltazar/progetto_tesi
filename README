@@ -11,6 +11,10 @@ TODO LIST:
 - verificare supporto iOS 5 (classe NSUrlConnection, ecc…)
 - verificare supporto metodi tra tutte le versioni di iOS 4.x (CLLLocationManager, UITableView, ecc…)
 - gestire alcuni controller per i memory warning
+
+
+FATTO - 19 NOVEMBRE
 - finire di testare l'app per prevenire qualsiasi memory leak (soprattutto quando avviene la connessione al db o si crea un job da scrivere sul db)
 - finire di testare l'app per verificare la massima quantità di memoria allocata
 - finire di verificare i risultati dell'analyzer statico
+--> RIMANGONO SOLO FALSE POSITIVE ORA

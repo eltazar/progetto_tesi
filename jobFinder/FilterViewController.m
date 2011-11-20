@@ -89,6 +89,26 @@
     return sections.count;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    //TODO: SISTEMARE
+    
+    switch (section) {
+        case 0:
+            if(aSwitch.on)
+                return @"Disattiva il filtro per mostrare tutti i lavori appartenenti a qualsiasi settore";
+            else return @"Attiva il filtro per mostrare solo i lavori appartenenti ai settori che ti interessano";
+            break;
+        case 1:
+            return nil;
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -139,10 +159,12 @@
 
         //setto la lunghezza massima del range in base lunghezza effettiva array sections
         range.length = sections.count - 1;
-        
+  
         [self.tableView beginUpdates];
+        
         [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationBottom];
-        [self.tableView endUpdates];        
+        [self.tableView endUpdates];  
+        [self.tableView reloadData];
     }
     else{
         range.length = sections.count - 1;
@@ -156,10 +178,11 @@
         
         //rimuovo tutti i checkmarks dalle celle quando faccio switch off
         [selectedCells removeAllObjects];
-        
+    
         [self.tableView beginUpdates];
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:range] withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView endUpdates]; 
+        [self.tableView reloadData];
     }
 }
 
@@ -194,7 +217,7 @@
     //recupero array
     self.structureFromPlist = [NSArray arrayWithContentsOfFile:plisStructure];
     
-    //chiamato al PRIMO avvio dell'app quando si spinge il tasto "filtro"
+    //chiamato al PRIMO avvio dell'app quando si fa tap sul tasto "filtro"
     if([prefs objectForKey:@"tableStructure"] == nil){
         
         //NSLog(@"prefs = nil");
@@ -212,13 +235,13 @@
         /*chimato ogni volta che esiste salvata in memoria una struttura della tabella lasciata ad un passaggio precedente da questa vista*/
         //NSLog(@"prefs != nil");
         self.tableStructure = [[[prefs objectForKey:@"tableStructure"] mutableCopy] autorelease];
-        NSLog(@"%@",tableStructure);
+//        NSLog(@"%@",tableStructure);
         self.sections = [[[prefs objectForKey:@"sections"] mutableCopy] autorelease];
         aSwitch.on = [prefs boolForKey:@"switch"];
         
         self.selectedCells = [[[prefs objectForKey:@"selectedCells"]mutableCopy]autorelease];
     }
-    
+
     self.title = @"Imposta filtro";//[[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
 }
 

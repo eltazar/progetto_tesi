@@ -26,21 +26,16 @@
     UIBarButtonItem *filterButton;
     UIBarButtonItem *bookmarkButtonItem;
     Job *jobToPublish;
-    Job *jobDiprova;
     UIView *alternativeToolbar;
     UIButton *saveJobInPositionBtn;
     UIButton *backBtn;
     
-    CLLocationDegrees lastSpan;
-    NSMutableArray *arrayJOBtemp; 
     FavouriteAnnotation *favouriteAnnotation;
         
     BOOL isDragPinOnMap;
 
     DatabaseAccess *dbAccess;
-    
-    CLLocationDegrees zoomLevel;
-    
+      
     MKCoordinateRegion oldRegion;
         
 }

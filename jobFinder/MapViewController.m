@@ -159,9 +159,17 @@
     return pinView;
 }
 
+//per gestire il tap sul disclosure
+- (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+    InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
+    [self.navigationController pushViewController:infoJobView animated: YES];
+    [infoJobView release];
+}
+
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {   
-    //se c'è un pin draggabile sulla mappa non faccio letture dal db, risparmio un po di query
+    //se c'è un pin draggabile sulla mappa non faccio fare letture dal db, risparmio un po di query
     if(!isDragPinOnMap){
         
         static int count = 0;        
@@ -173,6 +181,7 @@
             ++count;
         }
         else if(count == 2){
+            //calcolo i rect delle regioni
             MKMapRect oldRect = [MKMapView mapRectForCoordinateRegion:oldRegion];
             MKMapRect newRect = [MKMapView mapRectForCoordinateRegion:map.region];
             MKMapRect newExtendedRect = [MKMapView mapRectForCoordinateRegion:map.region];  
@@ -184,19 +193,6 @@
             newExtendedRect.size.height *= 2;
             MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
             
-            //perchè php1 è richiamato anche quando x = x ?????
-            
-            //controllo se sto facendo zoom out
-            //            NSLog(@"NEW RECT width = %lf, OLD RECT width = %lf, current zoom = %d",newRect.size.width,oldRect.size.width, [map currentZoomLevel]);
-            //            NSLog(@"FABS |new width - old width| = %f",fabs((newRect.size.width - oldRect.size.width)));
-            
-            //            if(fabs((newRect.size.width - oldRect.size.width)) < EPS){
-            //                NSLog(@ "****************");
-            //        
-            //            }
-            //            else NSLog(@" BHOOOOOOOOO");
-            
-            //if(newRect.size.width >= oldRect.size.width && [map currentZoomLevel] >= ZOOM_THRESHOLD){
             if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
                 
                 NSLog(@"PHP 2");
@@ -214,104 +210,12 @@
         //aggiorno oldRegion con la region attuale
         oldRegion = mapView.region;
     }    
-    NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
-    //    NSLog(@"REGION ANNOTATIONS ZOOM = %d", [[mapView annotations] count]);
-    
-    //    NSLog(@"NUOVA REGION: region.center.latitude %f \n region.center.longitude %f", mapView.region.center.latitude, mapView.region.center.longitude);
-    //    NSLog    (@"span region latitude: %f ", map.region.span.latitudeDelta);
-    //    NSLog    (@"span region longitude: %f ", map.region.span.longitudeDelta);
-    //
-    //    NSLog(@"RECT: w = %f, h = %f",[mapView visibleMapRect].size.width,mapView.visibleMapRect.size.height );
-    //    
-    
-    //NSLog(@"visible rect: w = %f, h = %f",mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height);
-    
-    /*10-11 novembre*/
-    
-    //    if(count == 0){
-    //        count++;
-    //    }
-    //    else if(count == 1){
-    //        
-    //        [dbAccess jobReadRequest:mapView.region field: -1];
-    //        oldRegion = mapView.region; 
-    //        count ++;
-    //    }
-    //    else if(count == 2){
-    //        [dbAccess jobReadRequestOldRegion:oldRegion newRegion:mapView.region field:-1]; 
-    //        MKMapRect oldRect = [map mapRectForCoordinateRegion:oldRegion];
-    //        MKMapRect newRect = [map mapRectForCoordinateRegion:map.region];
-    //        if(MKMapRectIsNull( MKMapRectIntersection(oldRect,newRect) ))
-    //            NSLog(@"NO INTERSEZIONE");
-    //        else NSLog(@"INTERSEZIONE");        
-    //        oldRegion = mapView.region; 
-    //    }
-    
-    
-    
-    //[dbAccess jobReadRequest:mapView.region field: -1];
-    
-    /*PROVA 14 novembre: questo pezzo di codice è da inserire altrove. non ho bisogno di delegati, singleton ecc per il passaggio dei dati dal filtro al mapviecontroller. basta recuperare dallo user defaults i dati salvati dal filtro.
-     
-     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-     
-     NSArray *fields = [prefs objectForKey:@"selectedCells"];
-     
-     if(fields != nil)
-     for(NSObject *field in fields)
-     NSLog(@"field: %@",field);
-     */
+   // NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
+
 }
 
-//per gestire il tap sul disclosure
-- (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
-{
-    InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
-    [self.navigationController pushViewController:infoJobView animated: YES];
-    [infoJobView release];
-}
 
 #pragma mark - Metodi per filtraggio e fitting delle Annotations
-
-//calcola quali, tra le annotazioni arrivate dal server, sono quelle da aggiungere alla mappa
--(void)filterUnderThreshold:(NSMutableArray*)newAnnotations
-{
-    NSMutableArray *mapAnn = [map orderedMutableAnnotations];
-    
-    /* annotationsBuffer contiene tutte le annotations aggiunte superato il livello 10 quando faccio zoom in. Così superato tale livello in zoom out potrò rimuoverle in blocco.
-     */
-    
-    //pulisco lo zoomBuffer se lo zoom scende sotto threshold
-    if(self.oldZoom >= ZOOM_THRESHOLD){
-        for(NSObject *array in zoomBuffer)
-            [(NSMutableArray*)array removeAllObjects];
-    }
-    
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under pre add: %d \n newAnnotations = %d \n @@@@@@@@@@@@@", [[map annotations]count], [newAnnotations count]);
-    
-    NSMutableArray *newAnnotationNotInMap = [newAnnotations mutableCopy];
-    [self removeDuplicateAnnotations:newAnnotationNotInMap];
-    [map addAnnotations:newAnnotationNotInMap];
-    [annotationsBuffer addObjectsFromArray:newAnnotationNotInMap];
-    
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post add: %d \n newAnnNotInMap = %d\n @@@@@@@@@@@@@", [[map annotations]count],newAnnotationNotInMap.count);
-    
-    /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate). Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle aggiunte dall'altra funzione di filtro
-     */
-    
-    //[Job orderJobsByID:newAnnotations];
-    
-    for(Job* an in mapAnn){
-        if([Job jobBinarySearch:newAnnotations withID:((Job*)an).idDb] == -1){
-            [map removeAnnotation:an];
-            [annotationsBuffer removeObject:an];
-        }        
-    }
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
-    
-    [newAnnotationNotInMap release];
-    //[mapAnn release];
-}
 
 /*rimuove da newAnnotations le annotazioni già presenti sulla mappa
  */
@@ -347,7 +251,51 @@
     [indexes release];
 }
 
-/* effettua il fitting delle annotations in base al livello di zoom. PlacesToFilter rappresenta la lista di tutte le corrette annotations da inserire nella mappa
+
+//calcola quali, tra le annotazioni arrivate dal server, sono quelle da aggiungere alla mappa
+-(void)filterUnderThreshold:(NSMutableArray*)newAnnotations
+{
+    //le annotazioni della mappa ordinate
+    NSMutableArray *mapAnn = [map orderedMutableAnnotations];
+    
+    /* annotationsBuffer contiene tutte le annotations aggiunte superato il livello 10 quando faccio zoom in. Così superato tale livello in zoom out potrò rimuoverle in blocco.
+     */
+    
+    //pulisco lo zoomBuffer se lo zoom scende sotto threshold
+    if(self.oldZoom >= ZOOM_THRESHOLD){
+        for(NSObject *array in zoomBuffer)
+            [(NSMutableArray*)array removeAllObjects];
+    }
+    
+    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under pre add: %d \n newAnnotations = %d \n @@@@@@@@@@@@@", [[map annotations]count], [newAnnotations count]);
+    
+    //rimuovo duplicati che sono tra newAnnotations e mapAnn
+    NSMutableArray *newAnnotationNotInMap = [newAnnotations mutableCopy];
+    [self removeDuplicateAnnotations:newAnnotationNotInMap];
+    [map addAnnotations:newAnnotationNotInMap];
+    [annotationsBuffer addObjectsFromArray:newAnnotationNotInMap];
+    
+    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post add: %d \n newAnnNotInMap = %d\n @@@@@@@@@@@@@", [[map annotations]count],newAnnotationNotInMap.count);
+    
+    /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate). Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle aggiunte dall'altra funzione di filtro
+     */
+    
+    //[Job orderJobsByID:newAnnotations];
+    
+    for(Job* an in mapAnn){
+        if([Job jobBinarySearch:newAnnotations withID:((Job*)an).idDb] == -1){
+            [map removeAnnotation:an];
+            [annotationsBuffer removeObject:an];
+        }        
+    }
+    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
+    
+    [newAnnotationNotInMap release];
+    //[mapAnn release];
+}
+
+
+/* effettua il fitting delle annotations in base al livello di zoom e a dei fattori di scala
  */
 -(void)filterOverThreshold:(NSMutableArray *)newAnnotations{
     
@@ -366,21 +314,22 @@
     
     int cont=0;
     
+    //############# ZOOM OUT ################
+    
+    
     //se sto facendo zoom out e il current zoom è >= 10
     if([map currentZoomLevel] > self.oldZoom){
         
+        
+        //controlla se si è superato il threshold ed elimina tutti i pin inseriti quando si stava sotto il livello threshold
         if(self.oldZoom < ZOOM_THRESHOLD){
             if(annotationsBuffer != nil){
-                //rimuovo i pin inseriti dopo il superamento del zoom threshold
                 [map removeAnnotations:annotationsBuffer];
                 [annotationsBuffer removeAllObjects];
             }
-            //            //riaggiungo i pin in base al livello di zoom 
-            //            for(int i=[map currentZoomLevel]; i<= ZOOM_MAX; i++){
-            //                [map addAnnotations:[ zoomBuffer objectAtIndex:(i-ZOOM_THRESHOLD)]];
-            //            }
         }         
         
+        //rimuovo per ogni livello di zoom tra 10 e 18 tutti i pin inseriti precendentemente
         for(int i=MAX(ZOOM_THRESHOLD,self.oldZoom); i < [map currentZoomLevel]; i++){
             [map removeAnnotations: [zoomBuffer objectAtIndex:(i - ZOOM_THRESHOLD)]];
             //NSLog(@"\n*********REMOVE********\n*\n zoomBuffer[%d] = %d \n******************* \n * map annotations: %d",i - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:i - ZOOM_THRESHOLD] count],[[map annotations]count]);
@@ -388,11 +337,15 @@
         }
     }
     
+    //############# ZOOM IN ################
+    
     //se sto facendo zoom in e il current zoom è >= 10
-    //if([map currentZoomLevel] <= self.oldZoom){
+    //calcola quali sono tra le newAnnotations quelle che sono effettivamente da mostrare
     [self removeDuplicateAnnotations:newAnnotations];
     mutableNewAnnotations = [newAnnotations mutableCopy];
     
+    
+    //calcola per ogni livello di zoom ed in base al fattore di scala quante annotazioni vanno inserite sulla mappa (fitting)
     for(int j=ZOOM_MAX; j>= [map currentZoomLevel];j--){
         
         rect.size = [MKMapView mapRectSizeForZoom:j];
@@ -449,9 +402,7 @@
     //NSLog(@"\n############# \n@MAP ANNS = %d\n############", [[map annotations] count]);
     
     self.oldZoom = [map currentZoomLevel];
-    
-    //NSLog(@"PIN SULLA CAZZO DI MAPPA : %d", [[map annotations]count]);
-    
+        
     [indexes release];
     [mutableNewAnnotations release];
     [jobToShow release];
@@ -488,20 +439,13 @@
 {
     NSLog(@"JOB LIST COUNT = %d",jobList.count);
 
+    //fonde in maniera ordinata le jobList provenienti dal server e le salva in receivedAnnotations
     [Job mergeArray:receivedAnnotations withArray:jobList];
     
     
     NSLog(@"RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
-    
-//    for(Job *j in receivedAnnotations)
-//        NSLog(@"JOB ID = %d",j.idDb);
-    
-    
-    //richiamare mergesort ogni volta che arriva una nuova joblist
-    //no doppioni, e receivedAnnotations ordinato
-    //if(jobList != nil)
-    //    [receivedAnnotations addObjectsFromArray:jobList];
-    
+
+    //fa partire un filtro ogni tot secondi
     timer = [NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];
 }
 
@@ -510,6 +454,8 @@
     NSLog(@"--------------------------------------> ENTRATO");
     NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
  
+    //decide quale filtro utilizzare in base al livello di zoom
+    
     if([receivedAnnotations count] != 0){
         if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
             [self filterOverThreshold:receivedAnnotations];
@@ -533,6 +479,7 @@
     
     CLLocationCoordinate2D coordinate;
     
+    //controllo se gps spento
     if(map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE){
         
         //mostra avviso che gps spento 
@@ -566,14 +513,14 @@
         [map setRegion:region animated:YES];
         
         
-        /*se è stato inserito un pin draggabile disattivo il tasto segnala ed attio quello per il salvataggio del job nella posizione scelta
+        /*se è stato inserito un pin draggabile disattivo il tasto segnala ed attivo quello per il salvataggio del job nella posizione scelta
          */
         if(isDragPinOnMap){
             publishBtn.enabled = NO;
             saveJobInPositionBtn.enabled = YES;
         }
         
-        //carica l'alternativeToolbar con uno slide
+        //carica l'alternativeToolbar con uno slide effect
         [self.map addSubview:alternativeToolbar];
         alternativeToolbar.frame = CGRectMake(0, self.view.frame.size.height, self.map.frame.size.width,alternativeToolbar.frame.size.height);
         [UIView animateWithDuration:.85 
@@ -582,7 +529,6 @@
                          }
          ];
     }
-    
 }
 
 //carica la view per la creazione di un job
@@ -590,7 +536,7 @@
 {
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;
-    //prima di fare l'istruzione a riga 339 controllare che jobTopublish != nil ???
+    //passo in avanti il puntatore a jobToPublish
     publishViewCtrl.newJob = jobToPublish;
     [self presentModalViewController:publishViewCtrl animated:YES];
     [publishViewCtrl release];
@@ -696,6 +642,7 @@
     if(jobToPublish != nil){
         [map removeAnnotation:jobToPublish];
         //[map addAnnotation:jobToPublish];
+        //faccio partire una query per far caricare il nuovo job sulla mappa
         [dbAccess jobReadRequest:map.region field:-1];
     }
     
@@ -775,19 +722,22 @@
     // Do any additional setup after loading the view from its nib.
     [super viewDidLoad];
     
-    /*setto le proprietà necessarie alla mapView 
+    /*Inizializzazione proprietà mapView
      */
     self.oldZoom = 18; //max zoom
-    //oldRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(1,2),MKCoordinateSpanMake(0.0000000000001,0.000000000001));
+    
     
     /*inizializzo i buffer per lo zoom e per le annotazioni
      */
+    //buffer di annotazioni aggiunte sotto la soglia di zoom 10
     annotationsBuffer = [[NSMutableArray alloc] init];
-    //buffer composto- da nove sotto array che contengone le annotazioni aggiunte ad ogni livello di zoom
+    //buffer composto da nove sotto array che contengono le annotazioni aggiunte ad ogni livello di zoom sopra la soglia 10
     zoomBuffer = [[NSMutableArray alloc] initWithCapacity:9];
     for(int i=0;i<9;i++)
         [zoomBuffer insertObject:[[[NSMutableArray alloc]init]autorelease] atIndex:i];    
+    //raccolta di annotazioni aggiunte ad ogni query
     receivedAnnotations = [[NSMutableArray alloc]init];
+   
     /* se gps è disattivato interroga servizio per reperire il paese in base al currentLocale dell'utente
      */
     if(![CLLocationManager locationServicesEnabled] || 
@@ -805,7 +755,7 @@
         
     }
     
-    /*inizializzazione pulsanti
+    /*inizializzazione pulsanti view
      */
     //aggiungo bottone Info alla navigation bar
     UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -818,14 +768,20 @@
     //tasto publishAlternativeBtn è disabilitato di default
     saveJobInPositionBtn.enabled = NO;
     
-    
-    /*Inizializzazione proprietà mapView
+    /* configurazione pulsanti della view
      */
-    //lastSpan = map.region.span.latitudeDelta;  //ciao
-    //lastSpan = 180/floor( 180/map.region.span.latitudeDelta);
+    saveJobInPositionBtn.layer.cornerRadius = 8;
+    saveJobInPositionBtn.layer.borderWidth = 1;
+    saveJobInPositionBtn.layer.borderColor = [UIColor grayColor].CGColor;
+    saveJobInPositionBtn.clipsToBounds = YES;
     
+    backBtn.layer.cornerRadius = 8;
+    backBtn.layer.borderWidth = 1;
+    backBtn.layer.borderColor = [UIColor grayColor].CGColor;
+    backBtn.clipsToBounds = YES;
     
-    /* Inizializzazione valori booleani della classe
+
+    /* Inizializzazione valori booleani per la classe
      */
     //di default i pin non possono esser "draggabili"
     isDragPinOnMap = NO;
@@ -843,19 +799,7 @@
         [map addAnnotation:favouriteAnnotation];   
         
     } 
-    
-    /* configurazione pulsanti della view
-     */
-    saveJobInPositionBtn.layer.cornerRadius = 8;
-    saveJobInPositionBtn.layer.borderWidth = 1;
-    saveJobInPositionBtn.layer.borderColor = [UIColor grayColor].CGColor;
-    saveJobInPositionBtn.clipsToBounds = YES;
-    
-    backBtn.layer.cornerRadius = 8;
-    backBtn.layer.borderWidth = 1;
-    backBtn.layer.borderColor = [UIColor grayColor].CGColor;
-    backBtn.clipsToBounds = YES;
-    
+
     /* inizializzazione classi necessarie al view controller
      */
     //alloco l'istanza per accesso al db

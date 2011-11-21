@@ -28,8 +28,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-//    NSLog(@"sections in sec = %d",sections.count);
     return sections.count > 0 ? sections.count : 0;
 }
 
@@ -60,10 +58,11 @@
         cell = [[[NSClassFromString(kind) alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier withDictionary:rowDesc] autorelease];
     }
     else{
-        NSLog(@"CELLA RICICLATA");
+        //NSLog(@"CELLA RICICLATA");
         cell.textLabel.text = [rowDesc objectForKey:@"label"];
     }    
     
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
         
@@ -82,17 +81,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-    //recupero i settori che cominciano con una data lettera (es: tutti i settori con la A)
-    NSArray *sectorWithLetter = [tableStructure objectForKey:[sections objectAtIndex:indexPath.section] ];
-    //NSLog(@"JOB SECTOR %@",sector);
-    //ricavo un preciso settore e costruisco il nome del relativo file plist
-    NSDictionary *sector = [sectorWithLetter objectAtIndex:indexPath.row];
-    NSString *plistString = [NSString stringWithFormat:@"%@sectors-table", [sector objectForKey:@"code"]];
-    NSLog(@"PATH PLIST %@",plistString);
-    SubSectorTableViewController *subSector = [[SubSectorTableViewController alloc] initWithPlist:plistString];
-    subSector.secDelegate = self.secDelegate;
-    [self.navigationController pushViewController:subSector animated:YES];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
+    //NSLog(@"Selezionata riga %d sezione %d",indexPath.row, indexPath.section);
+    
+    NSArray *array = [tableStructure objectForKey:[sections objectAtIndex:indexPath.section]];
+    NSDictionary *choiceDic = [array objectAtIndex:indexPath.row];
+    NSString *choice = [choiceDic objectForKey:@"label"];
+    //NSLog(@"PROVA LABEL: %@", choice);
+    [secDelegate didReceiveSectorFromTable:choice];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"employeeDidSet" object:self userInfo:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

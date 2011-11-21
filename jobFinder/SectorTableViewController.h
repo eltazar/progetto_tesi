@@ -31,5 +31,5 @@
 
 @protocol SectorTableDelegate <NSObject>
 
--(void)receiveSectorFromTable:(NSString*)jobSector;
+-(void)didReceiveSectorFromTable:(NSString*)jobSector;
 @end

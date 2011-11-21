@@ -21,6 +21,7 @@
         self.textView.dataDetectorTypes = UIDataDetectorTypeNone;
         self.textView.text = [dictionary objectForKey:@"placeholder"];
         self.textView.keyboardType = [[dictionary objectForKey:@"keyboardType"] integerValue];
+        self.textView.tag = 1111;
         //self.textView.delegate = self;
         CGRect frame = self.frame;
         frame.size.height *=2;

@@ -140,6 +140,16 @@
          ((TextFieldCell *)cell).textField.text = [job.url absoluteString]; 
 }
 
+- (void)hideKeyboard 
+{
+//    TextAreaCell *cell = 
+
+    //NSLog(@"SUBVIEW = %@", [self.view viewWithTag:1111] );
+    
+    if([self.tableView viewWithTag:1111] != nil)
+        [[self.tableView viewWithTag:1111] resignFirstResponder];
+}
+    
 
 #pragma mark - View lifecycle
 
@@ -221,6 +231,11 @@
      [secA autorelease]; //autorelease??
      [secB autorelease];
      [secC autorelease];
+     
+     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
+     [self.tableView addGestureRecognizer:gestureRecognizer];
+     gestureRecognizer.cancelsTouchesInView = NO;  // this prevents the gesture recognizers to 'block' touches
+     [gestureRecognizer release];
 
  }
 

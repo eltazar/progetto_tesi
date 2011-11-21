@@ -258,15 +258,18 @@
     sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"About Us",nil];
     
     [secA autorelease];
-    [secB autorelease];    
+    [secB autorelease];
+    
 }
 
 
 - (void)viewDidUnload
 {
+    [sectionData release];
+    sectionData = nil;
+    [sectionDescripition release];
+    sectionDescripition = nil;
     [super viewDidUnload];
-//    sectionDescripition = nil;
-//    sectionData = nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

@@ -253,6 +253,10 @@
 
 - (void)viewDidUnload
 {
+    self.selectedCells = nil;
+    self.sections = nil;
+    self.structureFromPlist = nil;
+    self.tableStructure = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

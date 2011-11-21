@@ -59,6 +59,10 @@
         [self.navigationController pushViewController:sectorTable animated:YES];
         [sectorTable release];
     }
+    else if(section == 2){
+        TextFieldCell *cell = (TextFieldCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+        [cell.textField becomeFirstResponder];
+    }
 }
 
 
@@ -94,7 +98,7 @@
 #pragma mark - SectorTableDelegate
 
 //prende i dati dalla tabella settori ed aggiorna la cella con il nuovo dato
--(void) receiveSectorFromTable:(NSString*) jobSector
+-(void) didReceiveSectorFromTable:(NSString*) jobSector
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     NSString *placeholder;
@@ -163,7 +167,7 @@
      [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                           @"employee",         @"DataKey",
                           @"ActionCell",       @"kind", 
-                          @"Impiego",          @"label",
+                          @"Settore",          @"label",
                           @"Scegli...",        @"placeholder",
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",

@@ -119,7 +119,7 @@
         MKPinAnnotationView *favouritePinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
         favouritePinView.tag = 122;
         favouritePinView.canShowCallout = YES;
-        favouritePinView.image=[UIImage imageNamed:@"favorites.png"];
+        favouritePinView.image=[UIImage imageNamed:@"favPin.png"];
         //favouritePinView.pinColor = MKPinAnnotationColorPurple;
         //NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;

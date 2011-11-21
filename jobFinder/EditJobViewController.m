@@ -247,6 +247,10 @@
 
 - (void)viewDidUnload
 {
+    [sectionDescripition release];
+    sectionDescripition = nil;
+    [sectionData release];
+    sectionData = nil;
     //NSLog(@"ECCOLO");
     [super viewDidUnload];
     

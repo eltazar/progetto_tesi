@@ -159,31 +159,44 @@
        isURLvalid = YES;
        self.url = [NSURL URLWithString:@""];
        return;
+    }        
+    
+    NSURL *tmpURL = [NSURL URLWithString:newUrlString];
+    NSURL *urlFromString;
+    
+    //NSLog(@"SCHEME = %@, TMPURL = %@, HOST = %@",tmpURL.scheme,tmpURL,tmpURL.host);
+    
+    if (tmpURL && tmpURL.scheme){
+        
+        isURLvalid = YES;
+        self.url = tmpURL;
+        return;        
     }    
     
-    NSURL *tmpURL;
-
-    if ([newUrlString rangeOfString:@"http://"].location == NSNotFound) {
-                    
+    if(tmpURL && tmpURL.scheme == nil){
+            
         NSString *stringModified = [NSString stringWithFormat:@"http://%@",newUrlString];
-        tmpURL = [[NSURL alloc]initWithString:stringModified];
-    }
-    else {
-        tmpURL = [[NSURL alloc] initWithString:newUrlString];
+        urlFromString = [[NSURL alloc]initWithString:stringModified];
+        isURLvalid = YES;
+        self.url = urlFromString;
+        [urlFromString release];
+        return;
     }
     
-    if(tmpURL == nil)
-        isURLvalid = NO;
-    else isURLvalid = YES;
+    isURLvalid = NO;
+    //se la stringa non è valida e si scrolla la tabella la cella viene cancellata :S
+    self.url = tmpURL;
     
-    if(isURLvalid){
-        self.url = tmpURL;
-    }
-    else self.url = [NSURL URLWithString:@""];
-    
-    [tmpURL release];
-
 }
+
+/*
+ - (BOOL) validateUrl: (NSString *) url {
+ NSString *theURL =
+ @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+ NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", theURL]; 
+ return [urlTest evaluateWithObject:url];
+ }
+ */
 
 -(BOOL) isValid
 {

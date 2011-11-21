@@ -43,13 +43,13 @@ void myExceptionHandler (NSException *ex)
         if ([CLLocationManager respondsToSelector:@selector(authorizationStatus)]){
             if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
                 NSLog(@"PRIMO");
-                [alert show];
+                //[alert show];
             }
         }
     }  
     else{
         NSLog(@"SECONDO");
-        [alert show];
+        //[alert show];
     }
         
     [alert release];
@@ -81,9 +81,40 @@ void myExceptionHandler (NSException *ex)
         }
             
     }
+    
+    //notifiche push
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
 
     
     return YES;
+}
+
+/*metodi per gestire le push notification*/
+
+- (void)postUpdateRequest
+{
+//	NSURL* url = [NSURL URLWithString:ServerApiURL];
+//	ASIFormDataRequest* request = [ASIFormDataRequest requestWithURL:url];
+//	[request setPostValue:@"update" forKey:@"cmd"];
+//	[request setPostValue:[dataModel udid] forKey:@"udid"];
+//	[request setPostValue:[dataModel deviceToken] forKey:@"token"];
+//	[request setDelegate:self];
+//	[request startAsynchronous];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken{
+    
+    // Qui registrate e/o inviate il token
+    NSString* newToken = [devToken description];
+	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+	newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)err{
+    
+    // Qui intercettate eventuali errori avvenuti se la registrazione fallisce
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

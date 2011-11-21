@@ -11,7 +11,7 @@
 #import "SubSectorTableViewController.h"
 
 @implementation SectorTableViewController
-@synthesize secDelegate, tableStructure, sections,structureFromPlist;
+@synthesize secDelegate, tableStructure, sections,structureFromPlist, indeces;
 
 -(id) initWithPlist:(NSString *)plist
 {
@@ -76,7 +76,15 @@
     return [sections objectAtIndex:section];
 }
 
-#warning pulire if-if
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    return  indeces;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    
+    return [sections indexOfObject:title];
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -112,6 +120,9 @@
     
     self.tableStructure = [structureFromPlist objectAtIndex:1];
     self.sections = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
+        
+    self.indeces = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
+                    @"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
 }
 - (void)viewDidUnload
 {
@@ -124,6 +135,7 @@
 
 -(void) dealloc
 {
+    [indeces release];
     [structureFromPlist release];
     [tableStructure release];
     [sections release];

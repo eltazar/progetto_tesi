@@ -17,9 +17,10 @@
     NSDictionary *tableStructure;
     NSArray *sections;
     NSString *plistName;
+    NSArray *indices;
 
 }
-
+@property(nonatomic, retain) NSArray *indeces;
 @property(nonatomic, retain) NSArray *structureFromPlist;
 @property(nonatomic, retain) NSDictionary *tableStructure;
 @property(nonatomic, retain) NSArray *sections;

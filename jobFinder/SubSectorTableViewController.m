@@ -39,7 +39,7 @@
     NSDictionary *choiceDic = [array objectAtIndex:indexPath.row];
     NSString *choice = [choiceDic objectForKey:@"label"];
     //NSLog(@"PROVA LABEL: %@", choice);
-    [super.secDelegate receiveSectorFromTable:choice];
+    [super.secDelegate didReceiveSectorFromTable:choice];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"employeeDidSet" object:self userInfo:nil];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

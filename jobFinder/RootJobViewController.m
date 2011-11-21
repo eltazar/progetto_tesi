@@ -124,6 +124,10 @@
 
 - (void)viewDidUnload
 {   
+    [sectionDescripition release];
+    sectionDescripition = nil;
+    [sectionData release];
+    sectionData = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

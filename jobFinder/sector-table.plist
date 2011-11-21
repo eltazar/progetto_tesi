@@ -11,64 +11,154 @@
 		<array>
 			<dict>
 				<key>label</key>
-				<string>A1</string>
+				<string>Altro</string>
 				<key>code</key>
-				<string>A1</string>
+				<string>a1</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>A2</string>
+				<string>Abbigliamento</string>
 				<key>code</key>
 				<string>a2</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>A3</string>
+				<string>Acquisti</string>
 				<key>code</key>
 				<string>a3</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
+            <dict>
+				<key>label</key>
+				<string>Affari legali</string>
+				<key>code</key>
+				<string>a4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Agricoltura</string>
+				<key>code</key>
+				<string>a5</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+                <key>label</key>
+                <string>Alberghi</string>
+                <key>code</key>
+                <string>a6</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>
+            <dict>
+                <key>label</key>
+                <string>Alimentazione</string>
+                <key>code</key>
+                <string>a7</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>
+            <dict>
+                <key>label</key>
+                <string>Amministrazione</string>
+                <key>code</key>
+                <string>a8</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>	
+            <dict>
+                <key>label</key>
+                <string>Architettura - design</string>
+                <key>code</key>
+                <string>a9</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>	
+            <dict>
+                <key>label</key>
+                <string>Arte - cultura</string>
+                <key>code</key>
+                <string>a10</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>
+            <dict>
+                <key>label</key>
+                <string>Artigianato</string>
+                <key>code</key>
+                <string>a11</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>
+            <dict>
+                <key>label</key>
+                <string>Assicurazioni</string>
+                <key>code</key>
+                <string>a12</string>
+                <key>kind</key>
+                <string>InfoCell</string>
+                <key>style</key>
+                <string>UITableViewCellStyleDefault</string>
+            </dict>
 		</array>
 		<key>B</key>
 		<array>
 			<dict>
 				<key>label</key>
-				<string>b1</string>
+				<string>Banche</string>
 				<key>code</key>
 				<string>b1</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>b2</string>
+				<string>Biologia</string>
 				<key>code</key>
 				<string>b2</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>b3</string>
+				<string>Biotecnologia</string>
 				<key>code</key>
 				<string>b3</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
@@ -77,31 +167,514 @@
 		<array>
 			<dict>
 				<key>label</key>
-				<string>c1</string>
+				<string>Call center</string>
 				<key>code</key>
 				<string>c1</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>c2</string>
+				<string>Chimica</string>
 				<key>code</key>
 				<string>c2</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
 			<dict>
 				<key>label</key>
+				<string>Cinema - spettacolo</string>
+				<key>code</key>
 				<string>c3</string>
-				<key>code</key>
-				<string>a1</string>
 				<key>kind</key>
-				<string>ActionCell</string>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Commercio</string>
+				<key>code</key>
+				<string>c4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Consulenza</string>
+				<key>code</key>
+				<string>c5</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Contabilità</string>
+				<key>code</key>
+				<string>c6</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Cura della persona - estetica</string>
+				<key>code</key>
+				<string>c7</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>D</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Distribuzione</string>
+				<key>code</key>
+				<string>d1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>E</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Edilizia</string>
+				<key>code</key>
+				<string>e1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Editoria - stampa</string>
+				<key>code</key>
+				<string>e2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Elettronica</string>
+				<key>code</key>
+				<string>e3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Energia - ecologia</string>
+				<key>code</key>
+				<string>e4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>F</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Farmaceutica</string>
+				<key>code</key>
+				<string>f1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Formazione - istruzione</string>
+				<key>code</key>
+				<string>f2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+        </array>
+        <key>I</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Immobiliare</string>
+				<key>code</key>
+				<string>i1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Import - export</string>
+				<key>code</key>
+				<string>i2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Industria</string>
+				<key>code</key>
+				<string>i3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Informatica - IT</string>
+				<key>code</key>
+				<string>i4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Ingegneria</string>
+				<key>code</key>
+				<string>i5</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Internet</string>
+				<key>code</key>
+				<string>i6</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>L</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Lavori pubblici</string>
+				<key>code</key>
+				<string>l1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Legge e finanza</string>
+				<key>code</key>
+				<string>l2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Libera professione</string>
+				<key>code</key>
+				<string>l3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Locali pubblici</string>
+				<key>code</key>
+				<string>l4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Logistica e trasporti</string>
+				<key>code</key>
+				<string>l5</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>	
+		</array>
+        <key>M</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Management</string>
+				<key>code</key>
+				<string>m1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Manovalanza</string>
+				<key>code</key>
+				<string>m2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Marketing - pubblicità</string>
+				<key>code</key>
+				<string>m3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Meccanica</string>
+				<key>code</key>
+				<string>m4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Medicina</string>
+				<key>code</key>
+				<string>m5</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Moda</string>
+				<key>code</key>
+				<string>m6</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Musica</string>
+				<key>code</key>
+				<string>m7</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>P</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Pesca - itticoltura</string>
+				<key>code</key>
+				<string>p1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Produzione</string>
+				<key>code</key>
+				<string>p2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Pubblica amministrazione</string>
+				<key>code</key>
+				<string>p3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>R</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Ricerca - sviluppo</string>
+				<key>code</key>
+				<string>r1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Riparazione - manutenzione</string>
+				<key>code</key>
+				<string>r2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Risorse umane</string>
+				<key>code</key>
+				<string>r3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Ristorazione</string>
+				<key>code</key>
+				<string>r4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>S</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Segreteria - direzione</string>
+				<key>code</key>
+				<string>s1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Servizi generali</string>
+				<key>code</key>
+				<string>s2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Servizi pubblici</string>
+				<key>code</key>
+				<string>s3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Sicurezza - vigilanza</string>
+				<key>code</key>
+				<string>s4</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Sport - tempo libero</string>
+				<key>code</key>
+				<string>s5</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Supporto clientela</string>
+				<key>code</key>
+				<string>s6</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>T</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Telecomunicazioni - ITC</string>
+				<key>code</key>
+				<string>t1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Turismo</string>
+				<key>code</key>
+				<string>t2</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+        </array>
+        <key>V</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Vendite</string>
+				<key>code</key>
+				<string>v1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
 				<key>style</key>
 				<string>UITableViewCellStyleDefault</string>
 			</dict>

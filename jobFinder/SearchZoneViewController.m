@@ -217,6 +217,11 @@
 
 #pragma mark - View lifecycle
 
+- (void)viewDidAppear:(BOOL)animated {
+    [self.theSearchBar becomeFirstResponder];
+    [super viewDidAppear:animated];
+}
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -233,23 +238,19 @@
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
     label.lineBreakMode = UILineBreakModeWordWrap;
-    label.text = @"Inserisci un indirizzo, una zona, un codice postale o una città.";
+    label.text = @"Puoi inserire un indirizzo, una zona, un codice postale o una città.";
     [self.disableViewOverlay addSubview:label];
     [label release];
 }
 
 - (void)viewDidUnload
 {
+    self.tableData = nil;
+    self.disableViewOverlay = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
-- (void)viewDidAppear:(BOOL)animated {
-    [self.theSearchBar becomeFirstResponder];
-    [super viewDidAppear:animated];
-}
-
 
 
 #pragma mark - Memory management

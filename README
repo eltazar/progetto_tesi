@@ -7,10 +7,13 @@ JobFinder:
 TODO LIST:
 
 - finire di scrivere la lista dei settori di lavoro e inserirla nel progetto
+- scrivere una regex per il campo phone di job
 - implementare notifiche push
 - verificare supporto iOS 5 (classe NSUrlConnection, ecc…)
 - verificare supporto metodi tra tutte le versioni di iOS 4.x (CLLLocationManager, UITableView, ecc…)
-- gestire alcuni controller per i memory warning
+
+FATTO 21 novembre
+- gestire viewController per i memory warning (systemati i metodi viewDidUnload)
 
 
 FATTO - 19 NOVEMBRE

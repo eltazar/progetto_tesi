@@ -9,7 +9,7 @@
 #import "PublishViewController.h"
 #import "EditJobViewController.h"
 #import "MapKit/MKAnnotation.h"
-#import "Reachability.h"
+#import "Utilities.h"
 
 @implementation PublishViewController
 @synthesize pwDelegate, jobCoordinate, addressGeocoding, newJob;
@@ -44,18 +44,14 @@
     //se i campi inseriti sono formalmente validi controllo connessione per invio
     if([self validate:newJob]){    
         //controllo stato connessione
-        Reachability *internetReach = [[Reachability reachabilityForInternetConnection] retain];
-        [internetReach startNotifier];
-        NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-        
-        if(netStatus == 0){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
-                [alert release];
+        if(![Utilities networkReachable]){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            [alert release];
         }
-        else    [pwDelegate didInsertNewJob:newJob]; //passo al delegato il nuovo job;
+            
+        else [pwDelegate didInsertNewJob:newJob]; //passo al delegato il nuovo job;
         
-        [internetReach release]; //aggiunto autorelease il 3 novembre
     }
     
     //[newJob release];

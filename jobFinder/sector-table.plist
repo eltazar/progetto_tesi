@@ -11,16 +11,6 @@
 		<array>
 			<dict>
 				<key>label</key>
-				<string>Altro</string>
-				<key>code</key>
-				<string>a1</string>
-				<key>kind</key>
-				<string>InfoCell</string>
-				<key>style</key>
-				<string>UITableViewCellStyleDefault</string>
-			</dict>
-			<dict>
-				<key>label</key>
 				<string>Abbigliamento</string>
 				<key>code</key>
 				<string>a2</string>
@@ -380,6 +370,16 @@
 		</array>
         <key>L</key>
 		<array>
+            <dict>
+				<key>label</key>
+				<string>Lavori domestici</string>
+				<key>code</key>
+				<string>l1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
 			<dict>
 				<key>label</key>
 				<string>Lavori pubblici</string>
@@ -582,9 +582,9 @@
 		</array>
         <key>S</key>
 		<array>
-			<dict>
+            <dict>
 				<key>label</key>
-				<string>Segreteria - direzione</string>
+				<string>Scienze</string>
 				<key>code</key>
 				<string>s1</string>
 				<key>kind</key>
@@ -594,7 +594,7 @@
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>Servizi generali</string>
+				<string>Segreteria - direzione</string>
 				<key>code</key>
 				<string>s2</string>
 				<key>kind</key>
@@ -604,9 +604,19 @@
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>Servizi pubblici</string>
+				<string>Servizi generali</string>
 				<key>code</key>
 				<string>s3</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Servizi pubblici</string>
+				<key>code</key>
+				<string>s4</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -616,7 +626,7 @@
 				<key>label</key>
 				<string>Sicurezza - vigilanza</string>
 				<key>code</key>
-				<string>s4</string>
+				<string>s5</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -626,7 +636,7 @@
 				<key>label</key>
 				<string>Sport - tempo libero</string>
 				<key>code</key>
-				<string>s5</string>
+				<string>s6</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -636,7 +646,7 @@
 				<key>label</key>
 				<string>Supporto clientela</string>
 				<key>code</key>
-				<string>s6</string>
+				<string>s7</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -647,7 +657,7 @@
 		<array>
 			<dict>
 				<key>label</key>
-				<string>Telecomunicazioni - ITC</string>
+				<string>Telecomunicazioni - ICT</string>
 				<key>code</key>
 				<string>t1</string>
 				<key>kind</key>
@@ -673,6 +683,19 @@
 				<string>Vendite</string>
 				<key>code</key>
 				<string>v1</string>
+				<key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
+			</dict>
+		</array>
+        <key>Altro</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Altro</string>
+				<key>code</key>
+				<string>a1</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>

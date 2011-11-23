@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/* Mostra tabella contenenti i settori di lavoro
+ */
+
 @protocol SectorTableDelegate;
 
 @interface SectorTableViewController : UITableViewController{
@@ -15,7 +18,7 @@
     id<SectorTableDelegate> secDelegate;
     NSArray *structureFromPlist;
     NSDictionary *tableStructure;
-    NSArray *sections;
+    NSMutableArray *sections;
     NSString *plistName;
     NSArray *indices;
 
@@ -23,7 +26,7 @@
 @property(nonatomic, retain) NSArray *indeces;
 @property(nonatomic, retain) NSArray *structureFromPlist;
 @property(nonatomic, retain) NSDictionary *tableStructure;
-@property(nonatomic, retain) NSArray *sections;
+@property(nonatomic, retain) NSMutableArray *sections;
 @property(nonatomic,assign) id<SectorTableDelegate> secDelegate;
 
 -(id) initWithPlist:(NSString *)plist;

@@ -76,6 +76,7 @@
     return [sections objectAtIndex:section];
 }
 
+// metodi per gestire la barra degli indici nella view
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     return  indeces;
 }
@@ -119,10 +120,16 @@
     self.title = [[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
     
     self.tableStructure = [structureFromPlist objectAtIndex:1];
-    self.sections = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
-        
+    
+    NSArray *sectionsTemp = [[NSArray alloc] initWithArray:[[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)]];
+    
+    self.sections = [NSMutableArray arrayWithArray:sectionsTemp];
+    [self.sections removeObject:@"Altro"];
+    [self.sections addObject:@"Altro"];
+    
     self.indeces = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
                     @"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
+    [sectionsTemp release];
 }
 - (void)viewDidUnload
 {

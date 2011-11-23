@@ -7,8 +7,8 @@
 //
 
 #import "jobFinderAppDelegate.h"
-#import "Reachability.h"
 #import "CoreLocation/CoreLocation.h"
+#import "Utilities.h"
 
 void myExceptionHandler (NSException *ex)
 {
@@ -55,31 +55,12 @@ void myExceptionHandler (NSException *ex)
     [alert release];
     
     
-    //controlla presenza rete al primo avvio dell'app
-    internetReach = [[Reachability reachabilityForInternetConnection] retain];
-    [internetReach startNotifier];
-    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    //################ controlla presenza rete al primo avvio dell'app ###################
     
-    switch (netStatus)
-    {
-        case ReachableViaWWAN:
-        {
-            //NSLog(@"3g");
-            break;
-        }
-        case ReachableViaWiFi:
-        {
-            //NSLog(@"Wifi");
-            break;
-        }
-        case NotReachable:
-        {
+    if(![Utilities networkReachable]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
-            [alert release];
-            break;
-        }
-            
+        [alert show];
+        [alert release];
     }
     
     //notifiche push
@@ -159,35 +140,6 @@ void myExceptionHandler (NSException *ex)
      */
 }
 
-/*chiamato ogni volta che lo stato della connettività cambia. Da sistemare perchè
- *quando cade la connessione l'alert è mostrato più volte.
- */
-////Called by Reachability whenever status changes.
-//- (void) reachabilityChanged: (NSNotification* )note
-//{
-//    Reachability* curReach = [note object];
-//    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
-//    
-//    NetworkStatus netStatus = [curReach currentReachabilityStatus];
-//    switch (netStatus)
-//    {
-//        case ReachableViaWWAN:
-//        {
-//            break;
-//        }
-//        case ReachableViaWiFi:
-//        {
-//            break;
-//        }
-//        case NotReachable:
-//        {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"CHANGED: NO CONNECTION" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//            [alert show];
-//            [alert release];
-//            break;
-//        }
-//    }
-//}
 
 - (void)dealloc
 {

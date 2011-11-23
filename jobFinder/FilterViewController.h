@@ -16,8 +16,12 @@
     NSString *plistName;
     UISwitch *aSwitch;
     
+    NSArray *indices;
+
+    
     
 }
+@property(nonatomic, retain) NSArray *indeces;
 @property(nonatomic,retain) NSMutableArray *selectedCells;
 @property(nonatomic,retain) NSString *plistName;
 @property(nonatomic, retain) NSArray *structureFromPlist;

@@ -2,7 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-
     <dict>
         <key> </key>
         <array>
@@ -16,96 +15,470 @@
     <dict>
         <key>A</key>
         <array>
+			<dict>
+				<key>label</key>
+				<string>Abbigliamento</string>
+				<key>enum</key>
+				<string>a2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Acquisti</string>
+				<key>enum</key>
+				<string>a3</string>
+			</dict>
             <dict>
-                <key>enum</key>
-                <string>0</string>
+				<key>label</key>
+				<string>Affari legali</string>
+				<key>enum</key>
+				<string>a4</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Agricoltura</string>
+				<key>enum</key>
+				<string>a5</string>
+			</dict>
+            <dict>
                 <key>label</key>
-                <string>A1</string>
+                <string>Alberghi</string>
+                <key>enum</key>
+                <string>a6</string>
             </dict>
             <dict>
-                <key>enum</key>
-                <string>1</string>
                 <key>label</key>
-                <string>A2</string>
+                <string>Alimentazione</string>
+                <key>enum</key>
+                <string>a7</string>
             </dict>
             <dict>
-                <key>enum</key>
-                <string>2</string>
                 <key>label</key>
-                <string>A3</string>
+                <string>Amministrazione</string>
+                <key>enum</key>
+                <string>a8</string>
+            </dict>	
+            <dict>
+                <key>label</key>
+                <string>Architettura - design</string>
+                <key>enum</key>
+                <string>a9</string>
+            </dict>	
+            <dict>
+                <key>label</key>
+                <string>Arte - cultura</string>
+                <key>enum</key>
+                <string>a10</string>
             </dict>
-        </array>
+            <dict>
+                <key>label</key>
+                <string>Artigianato</string>
+                <key>enum</key>
+                <string>a11</string>
+            </dict>
+            <dict>
+                <key>label</key>
+                <string>Assicurazioni</string>
+                <key>enum</key>
+                <string>a12</string>
+            </dict>
+		</array>
     </dict>
     
     <dict>
         <key>B</key>
         <array>
-            <dict><key>enum</key>
-                <string>3</string>
-                <key>label</key>
-                <string>b1</string>
-            </dict>
-            <dict>
-                <key>enum</key>
-                <string>4</string>
-                <key>label</key>
-                <string>b2</string>
-            </dict>
-            <dict>
-                <key>enum</key>
-                <string>5</string>
-                <key>label</key>
-                <string>b3</string>
-            </dict>
-        </array>
+			<dict>
+				<key>label</key>
+				<string>Banche</string>
+				<key>enum</key>
+				<string>b1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Biologia</string>
+				<key>enum</key>
+				<string>b2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Biotecnologia</string>
+				<key>enum</key>
+				<string>b3</string>
+			</dict>
+		</array>
     </dict>
     <dict>
         <key>C</key>
         <array>
-            <dict>
-                <key>enum</key>
-                <string>6</string>
-                <key>label</key>
-                <string>c1</string>
+			<dict>
+				<key>label</key>
+				<string>Call center</string>
+				<key>enum</key>
+				<string>c1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Chimica</string>
+				<key>enum</key>
+				<string>c2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Cinema - spettacolo</string>
+				<key>enum</key>
+				<string>c3</string>
             </dict>
             <dict>
-                <key>enum</key>
-                <string>7</string>
-                <key>label</key>
-                <string>c2</string>
-            </dict>
+				<key>label</key>
+				<string>Commercio</string>
+				<key>enum</key>
+				<string>c4</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Consulenza</string>
+				<key>enum</key>
+				<string>c5</string>
+			</dict>	
             <dict>
-                <key>enum</key>
-                <string>8</string>
-                <key>label</key>
-                <string>c3</string>
-            </dict>
-        </array>
+				<key>label</key>
+				<string>Contabilità</string>
+				<key>enum</key>
+				<string>c6</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Cura della persona - estetica</string>
+				<key>enum</key>
+				<string>c7</string>
+			</dict>
+		</array>
     </dict>
     
     <dict>
         <key>D</key>
         <array>
-            <dict><key>enum</key>
-                <string>9</string>
-                <key>label</key>
-                <string>d1</string>
-            </dict>
+			<dict>
+				<key>label</key>
+				<string>Distribuzione</string>
+				<key>enum</key>
+				<string>d1</string>
+        </dict>
+		</array>
+    </dict>
+    <dict>
+        <key>E</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Edilizia</string>
+				<key>enum</key>
+				<string>e1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Editoria - stampa</string>
+				<key>enum</key>
+				<string>e2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Elettronica</string>
+				<key>enum</key>
+				<string>e3</string>
+			</dict>
             <dict>
-                <key>enum</key>
-                <string>10</string>
-                <key>label</key>
-                <string>d2</string>
-            </dict>
+				<key>label</key>
+				<string>Energia - ecologia</string>
+				<key>enum</key>
+				<string>e4</string>
+			</dict>
+		</array>
+    </dict>
+    <dict>
+        <key>F</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Farmaceutica</string>
+				<key>enum</key>
+				<string>f1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Formazione - istruzione</string>
+				<key>enum</key>
+				<string>f2</string>
+			</dict>
+        </array>
+    </dict>
+    <dict>
+        <key>G</key>
+        <array>
             <dict>
-                <key>enum</key>
-                <string>11</string>
-                <key>label</key>
-                <string>d3</string>
-            </dict>
+				<key>label</key>
+				<string>Giochi - intrattenimento</string>
+				<key>enum</key>
+				<string>g1</string>
+			</dict>
         </array>
     </dict>
 
-
+    <dict>
+        <key>I</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Immobiliare</string>
+				<key>enum</key>
+				<string>i1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Import - export</string>
+				<key>enum</key>
+				<string>i2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Industria</string>
+				<key>enum</key>
+				<string>i3</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Informatica - IT</string>
+				<key>enum</key>
+				<string>i4</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Ingegneria</string>
+				<key>enum</key>
+				<string>i5</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Internet</string>
+				<key>enum</key>
+				<string>i6</string>
+			</dict>
+		</array>
+    </dict>
+    <dict>
+        <key>L</key>
+        <array>
+            <dict>
+				<key>label</key>
+				<string>Lavori domestici</string>
+				<key>enum</key>
+				<string>l1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Lavori pubblici</string>
+				<key>enum</key>
+				<string>l1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Legge e finanza</string>
+				<key>enum</key>
+				<string>l2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Libera professione</string>
+				<key>enum</key>
+				<string>l3</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Locali pubblici</string>
+				<key>enum</key>
+				<string>l4</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Logistica e trasporti</string>
+				<key>enum</key>
+				<string>l5</string>
+			</dict>	
+		</array>
+    </dict>
+    <dict>
+        <key>M</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Management</string>
+				<key>enum</key>
+				<string>m1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Manovalanza</string>
+				<key>enum</key>
+				<string>m2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Marketing - pubblicità</string>
+				<key>enum</key>
+				<string>m3</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Meccanica</string>
+				<key>enum</key>
+				<string>m4</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Medicina</string>
+				<key>enum</key>
+				<string>m5</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Moda</string>
+				<key>enum</key>
+				<string>m6</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Musica</string>
+				<key>enum</key>
+				<string>m7</string>
+			</dict>
+		</array>
+    </dict>
+    <dict>
+        <key>P</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Pesca - itticoltura</string>
+				<key>enum</key>
+				<string>p1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Produzione</string>
+				<key>enum</key>
+				<string>p2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Pubblica amministrazione</string>
+				<key>enum</key>
+				<string>p3</string>
+			</dict>
+		</array>
+    </dict>
+    <dict>
+        <key>R</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Ricerca - sviluppo</string>
+				<key>enum</key>
+				<string>r1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Riparazione - manutenzione</string>
+				<key>enum</key>
+				<string>r2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Risorse umane</string>
+				<key>enum</key>
+				<string>r3</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Ristorazione</string>
+				<key>enum</key>
+				<string>r4</string>
+			</dict>
+		</array>
+    </dict>
+    <dict>
+        <key>S</key>
+        <array>
+            <dict>
+				<key>label</key>
+				<string>Scienze</string>
+				<key>enum</key>
+				<string>s1</string>
+            </dict>
+			<dict>
+				<key>label</key>
+				<string>Segreteria - direzione</string>
+				<key>enum</key>
+				<string>s2</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Servizi generali</string>
+				<key>enum</key>
+				<string>s3</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Servizi pubblici</string>
+				<key>enum</key>
+				<string>s4</string>
+			</dict>
+            <dict>
+				<key>label</key>
+				<string>Sicurezza - vigilanza</string>
+				<key>enum</key>
+				<string>s5</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Sport - tempo libero</string>
+				<key>enum</key>
+				<string>s6</string>
+			</dict>	
+            <dict>
+				<key>label</key>
+				<string>Supporto clientela</string>
+				<key>enum</key>
+				<string>s7</string>
+			</dict>
+		</array>
+    </dict>
+    <dict>
+        <key>T</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Telecomunicazioni - ICT</string>
+				<key>enum</key>
+				<string>t1</string>
+			</dict>
+			<dict>
+				<key>label</key>
+				<string>Turismo</string>
+				<key>enum</key>
+				<string>t2</string>
+			</dict>
+        </array>
+    </dict>
+    <dict>
+        <key>V</key>
+        <array>
+			<dict>
+				<key>label</key>
+				<string>Vendite</string>
+				<key>enum</key>
+				<string>v1</string>
+			</dict>
+		</array>
+    </dict>   
 </array>
 </plist>

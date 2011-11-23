@@ -9,7 +9,7 @@
 #import "FilterViewController.h"
 
 @implementation FilterViewController
-@synthesize tableStructure, sections, structureFromPlist, plistName, selectedCells;
+@synthesize tableStructure, sections, structureFromPlist, plistName, selectedCells, indeces;
 
 -(id) initWithPlist:(NSString *)plist
 {
@@ -96,8 +96,8 @@
     switch (section) {
         case 0:
             if(aSwitch.on)
-                return @"Disattiva il filtro per mostrare tutti i lavori appartenenti a qualsiasi settore";
-            else return @"Attiva il filtro per mostrare solo i lavori appartenenti ai settori che ti interessano";
+                return @"Disattivando il filtro ti verranno mostrati i lavori appartenenti a qualsiasi settore";
+            else return @"Attivando il filtro ti verranno mostrati solo i lavori appartenenti ai settori da te scelti";
             break;
         case 1:
             return nil;
@@ -132,6 +132,19 @@
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
+}
+
+// metodi per gestire la barra degli indici nella view
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    if(aSwitch.on)
+        return  indeces;
+    else return nil;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    if(aSwitch.on)
+        return [sections indexOfObject:title];
+    return 0;
 }
 
 -(void)switchChanged
@@ -247,6 +260,9 @@
         
         self.selectedCells = [[[prefs objectForKey:@"selectedCells"]mutableCopy]autorelease];
     }
+    
+    self.indeces = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
+                    @"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
 
     self.title = @"Imposta filtro";//[[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
 }

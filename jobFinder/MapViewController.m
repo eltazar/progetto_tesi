@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MKMapView+Region.h"
 #import "GeoDecoder.h"
+#import "Utilities.h"
 
 #define DEFAULT_COORDINATE -180
 #define iphoneScaleFactorLatitude   16.0    
@@ -172,8 +173,9 @@
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {   
     //se c'è un pin draggabile sulla mappa non faccio fare letture dal db, risparmio un po di query
+    //se c'è internet
     if(!isDragPinOnMap){
-        
+            
         static int count = 0;        
         
         if(count == 0)
@@ -183,26 +185,38 @@
             ++count;
         }
         else if(count == 2){
-            //calcolo i rect delle regioni
-            MKMapRect oldRect = [MKMapView mapRectForCoordinateRegion:oldRegion];
-            MKMapRect newRect = [MKMapView mapRectForCoordinateRegion:map.region];
-            MKMapRect newExtendedRect = [MKMapView mapRectForCoordinateRegion:map.region];  
             
-            //ricalcolo il rect dell'attuale region per aumentarne le dimensioni e fare la query
-            newExtendedRect.origin.x -= newExtendedRect.size.width / 2;
-            newExtendedRect.origin.y -= newExtendedRect.size.height / 2;
-            newExtendedRect.size.width *= 2;
-            newExtendedRect.size.height *= 2;
-            MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
-            
-            if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
+            //se c'è internet posso fare le query
+            if([Utilities networkReachable]){
                 
-                NSLog(@"PHP 2");
-                [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:-1];
+                //calcolo i rect delle regioni
+                MKMapRect oldRect = [MKMapView mapRectForCoordinateRegion:oldRegion];
+                MKMapRect newRect = [MKMapView mapRectForCoordinateRegion:map.region];
+                MKMapRect newExtendedRect = [MKMapView mapRectForCoordinateRegion:map.region];  
+                
+                //ricalcolo il rect dell'attuale region per aumentarne le dimensioni e fare la query
+                newExtendedRect.origin.x -= newExtendedRect.size.width / 2;
+                newExtendedRect.origin.y -= newExtendedRect.size.height / 2;
+                newExtendedRect.size.width *= 2;
+                newExtendedRect.size.height *= 2;
+                MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
+                
+                //in base a come effettuo lo zoom cambia il tipo di query
+                if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
+                    
+                    //NSLog(@"PHP 2");
+                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:-1];
+                }
+                else{
+                    //NSLog(@"PHP 1");
+                    [dbAccess jobReadRequest:regionQuery field: -1];
+                }
             }
             else{
-                NSLog(@"PHP 1");
-                [dbAccess jobReadRequest:regionQuery field: -1];
+                //se non c'è internet mostro alert
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+                [alert release];
             }
             
             if([map currentZoomLevel] < ZOOM_THRESHOLD)
@@ -478,58 +492,65 @@
 //mostra la action sheet con la scelta del tipo di segnalazione
 -(IBAction)publishBtnClicked:(id)sender 
 {    
-    
-    CLLocationCoordinate2D coordinate;
-    
-    //controllo se gps spento
-    if(map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE){
+    if([Utilities networkReachable]){
+        CLLocationCoordinate2D coordinate;
         
-        //mostra avviso che gps spento 
-        
-        //setta le coordinate del punto draggabile come quelle del centro della region
-        coordinate = CLLocationCoordinate2DMake(map.region.center.latitude,map.region.center.longitude);
-    }
-    else{
-        //setta coordinate del punto draggabile come quelle della user location
-        coordinate = CLLocationCoordinate2DMake(map.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude);
-    }
-    
-    //alloco il job da pubblicare
-    self.jobToPublish = [[[Job alloc] initWithCoordinate:coordinate] autorelease];
-    
-    //NSLog(@"JOBTOPUBLISH = %p",jobToPublish);
-    
-    
-    if(jobToPublish != nil){
-        
-        //così il pin sarà draggabile
-        jobToPublish.isDraggable = YES;
-        //aggiungo annotazione alla mappa
-        [map addAnnotation:jobToPublish];
-        //segnalo che c'è un pin draggabile sulla mappa
-        isDragPinOnMap = YES;
-        
-        //sposta la vista nella region in cui è stato inserito il pin
-        MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
-        MKCoordinateRegion region = MKCoordinateRegionMake(coordinate,span);
-        [map setRegion:region animated:YES];
-        
-        
-        /*se è stato inserito un pin draggabile disattivo il tasto segnala ed attivo quello per il salvataggio del job nella posizione scelta
-         */
-        if(isDragPinOnMap){
-            publishBtn.enabled = NO;
-            saveJobInPositionBtn.enabled = YES;
+        //controllo se gps spento
+        if(map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE){
+            
+            //mostra avviso che gps spento 
+            
+            //setta le coordinate del punto draggabile come quelle del centro della region attuale
+            coordinate = CLLocationCoordinate2DMake(map.region.center.latitude,map.region.center.longitude);
+        }
+        else{
+            //setta coordinate del punto draggabile come quelle della user location
+            coordinate = CLLocationCoordinate2DMake(map.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude);
         }
         
-        //carica l'alternativeToolbar con uno slide effect
-        [self.map addSubview:alternativeToolbar];
-        alternativeToolbar.frame = CGRectMake(0, self.view.frame.size.height, self.map.frame.size.width,alternativeToolbar.frame.size.height);
-        [UIView animateWithDuration:.85 
-                         animations:^{
-                             alternativeToolbar.frame = CGRectMake(0,map.frame.size.height - alternativeToolbar.frame.size.height , self.map.frame.size.width, alternativeToolbar.frame.size.height);
-                         }
-         ];
+        //alloco il job da pubblicare
+        self.jobToPublish = [[[Job alloc] initWithCoordinate:coordinate] autorelease];
+        
+        //NSLog(@"JOBTOPUBLISH = %p",jobToPublish);
+        
+        
+        if(jobToPublish != nil){
+            
+            //così il pin sarà draggabile
+            jobToPublish.isDraggable = YES;
+            //aggiungo annotazione alla mappa
+            [map addAnnotation:jobToPublish];
+            //segnalo che c'è un pin draggabile sulla mappa
+            isDragPinOnMap = YES;
+            
+            //sposta la vista nella region in cui è stato inserito il pin
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.017731, 0.01820);
+            MKCoordinateRegion region = MKCoordinateRegionMake(coordinate,span);
+            [map setRegion:region animated:YES];
+            
+            
+            /*se è stato inserito un pin draggabile disattivo il tasto segnala ed attivo quello per il salvataggio del job nella posizione scelta
+             */
+            if(isDragPinOnMap){
+                publishBtn.enabled = NO;
+                saveJobInPositionBtn.enabled = YES;
+            }
+            
+            //carica l'alternativeToolbar con uno slide effect
+            [self.map addSubview:alternativeToolbar];
+            alternativeToolbar.frame = CGRectMake(0, self.view.frame.size.height, self.map.frame.size.width,alternativeToolbar.frame.size.height);
+            [UIView animateWithDuration:.85 
+                             animations:^{
+                                 alternativeToolbar.frame = CGRectMake(0,map.frame.size.height - alternativeToolbar.frame.size.height , self.map.frame.size.width, alternativeToolbar.frame.size.height);
+                             }
+             ];
+        }
+    }
+    else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        [alert release];
+        
     }
 }
 

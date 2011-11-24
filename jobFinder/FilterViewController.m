@@ -169,6 +169,9 @@
 
         //rimuovo ultimo elemento che è la ripetizione del nome della prima sezione
         [self.sections removeObjectAtIndex: 0];
+        //per posizionare sezione "altro" alla fine della lista
+        [self.sections removeObject:@"Altro"];
+        [self.sections addObject:@"Altro"];
 
         //setto la lunghezza massima del range in base lunghezza effettiva array sections
         range.length = sections.count - 1;
@@ -186,6 +189,10 @@
         
         [self.tableStructure removeObjectsForKeys:[sections objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]]];
         
+        
+        //per posizionare sezione "altro" alla fine della lista
+        [self.sections removeObject:@"Altro"];
+        [self.sections addObject:@"Altro"];
         //rimuovo tutte le sezioni tranne la prima
         [self.sections removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
         
@@ -246,8 +253,7 @@
         
         //creao array di settori indicizzati e in ordine alfabetico (0=A,1=B,...)
         NSArray *tempArray = [[tableStructure allKeys] sortedArrayUsingSelector:@selector(compare:)];
-        self.sections  = [[[NSMutableArray alloc] initWithArray:tempArray] autorelease];
-                
+        self.sections  = [[[NSMutableArray alloc] initWithArray:tempArray] autorelease];        
         self.selectedCells = [[[NSMutableArray alloc]init] autorelease];       
     }
     else{

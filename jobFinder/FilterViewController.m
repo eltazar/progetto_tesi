@@ -275,6 +275,7 @@
 
 - (void)viewDidUnload
 {
+    self.indeces = nil;
     self.selectedCells = nil;
     self.sections = nil;
     self.structureFromPlist = nil;
@@ -297,6 +298,7 @@
 
 -(void) dealloc
 {
+    [indices release];
     [selectedCells release];
     [structureFromPlist release];
     [aSwitch release];

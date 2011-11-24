@@ -479,6 +479,17 @@
 				<string>v1</string>
 			</dict>
 		</array>
-    </dict>   
+    </dict>
+    <dict>
+        <key>Altro</key>
+		<array>
+			<dict>
+				<key>label</key>
+				<string>Altro</string>
+				<key>enum</key>
+				<string>a1</string>
+            </dict>
+        </array>
+    </dict>
 </array>
 </plist>

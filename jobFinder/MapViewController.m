@@ -738,10 +738,12 @@
     
     //setto il colore del tasto di filtro per segnalare se l'utente ha il filtro su on od off
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if([[prefs objectForKey:@"switchStatus"] isEqualToString:@"ON"])
-        [filterButton setStyle:UIBarButtonItemStyleDone];
-    else [filterButton setStyle:UIBarButtonItemStylePlain];
-    
+    if([prefs boolForKey:@"switch"]){
+        [filterButton setImage:[UIImage imageNamed:@"filterYellow.png"]];
+    }
+    else{
+        [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
+    }
     //oldRegion = map.region;
 
 }
@@ -809,6 +811,7 @@
     backBtn.layer.borderColor = [UIColor grayColor].CGColor;
     backBtn.clipsToBounds = YES;
     
+    [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
 
     /* Inizializzazione valori booleani per la classe
      */

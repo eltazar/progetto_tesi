@@ -9,28 +9,38 @@
 #import <UIKit/UIKit.h>
 //@protocol FilterDelegate;
 
-@interface FilterViewController : UITableViewController{
-    NSArray *structureFromPlist;
-    NSMutableDictionary *tableStructure;
-    NSMutableArray *sections;
-    NSString *plistName;
+@interface FilterViewController : UIViewController <UITableViewDataSource,UITextFieldDelegate>{
+    NSArray *structureForSwitchTable;
+    NSMutableDictionary *tableStructureForSwitchTable;
+    NSMutableArray *sectionsForSwitchTable;
     UISwitch *aSwitch;
     
     NSArray *indices;
 
-    
+    UIView *mainView;
+    UITableView *switchTable;
+    UITableView *contentTable;
     
 }
+
+@property(nonatomic, retain) IBOutlet UITableView *switchTable;
+@property(nonatomic ,retain) IBOutlet UITableView *contentTable;
+@property(nonatomic, retain) IBOutlet UIView *mainView;
+
 @property(nonatomic, retain) NSArray *indeces;
 @property(nonatomic,retain) NSMutableArray *selectedCells;
-@property(nonatomic,retain) NSString *plistName;
-@property(nonatomic, retain) NSArray *structureFromPlist;
-@property(nonatomic, retain) NSMutableDictionary *tableStructure;
-@property(nonatomic, retain) NSMutableArray *sections;
+
+@property(nonatomic, retain) NSArray *structureForContentTable;
+@property(nonatomic, retain) NSMutableDictionary *tableStructureForContentTable;
+@property(nonatomic, retain) NSMutableArray *sectionsForContentTable;
+
+
+@property(nonatomic, retain) NSArray *structureForSwitchTable;
+@property(nonatomic, retain) NSMutableDictionary *tableStructureForSwitchTable;
+@property(nonatomic, retain) NSMutableArray *sectionsForSwitchTable;
 //@property(nonatomic,assign) id<FilterDelegate> filtDelegate;
 
--(id) initWithPlist:(NSString *)plist;
--(void)switchChanged;
+
 @end
 
 

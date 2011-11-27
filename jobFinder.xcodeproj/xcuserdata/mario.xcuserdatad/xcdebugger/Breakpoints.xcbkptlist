@@ -9,40 +9,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/Job.m"
-         timestampString = "343564424.370902"
+         timestampString = "343696979.943298"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "337"
-         endingLineNumber = "337"
+         startingLineNumber = "318"
+         endingLineNumber = "318"
          landmarkName = "+mergeArray:withArray:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "jobFinder/FilterViewController.m"
-         timestampString = "343580124.497888"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "150"
-         endingLineNumber = "150"
-         landmarkName = "-switchChanged"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "jobFinder/MapViewController.m"
-         timestampString = "343477618.52196"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "488"
-         endingLineNumber = "488"
-         landmarkName = "-publishBtnClicked:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -58,6 +30,20 @@
          endingLineNumber = "13"
          landmarkName = "@implementation SectorTableViewController"
          landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "jobFinder/ConfigViewController.m"
+         timestampString = "343922286.269635"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "210"
+         endingLineNumber = "210"
+         landmarkName = "-didSelectedPreferredAddress:withLatitude:andLongitude:"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

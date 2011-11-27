@@ -10,12 +10,9 @@
 #import "CoreLocation/CoreLocation.h"
 #import "DatabaseAccess.h"
 #import "Utilities.h"
+#import "Reachability.h"
+#import "MapViewController.h"
 
-void myExceptionHandler (NSException *ex)
-{
-    NSLog(@"Eccezione");
-    NSLog(@"*** %@ \n*** %@ \n*** %@", ex.name, ex.reason, ex.userInfo);
-}
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
@@ -24,14 +21,13 @@ void myExceptionHandler (NSException *ex)
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{    
-    //NSSetUncaughtExceptionHandler (&myExceptionHandler);
-    
+{        
     self.window.rootViewController = self.navController;
     
     // Override point for customization after application launch.
     [self.window makeKeyAndVisible];
-
+    
+    tokenSended = NO;
     
     //############# controlla se i servizi di localizzazione sono attivi #################
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
@@ -61,12 +57,19 @@ void myExceptionHandler (NSException *ex)
         [alert release];
     }
     
+    //per controllare quando cambia stato connessione
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
+    reachability = [[Reachability reachabilityForInternetConnection] retain];         
+    [reachability startNotifier];       
+    
+    
+    
     //###############   registrazione device a notifiche push #######################
     #if !TARGET_IPHONE_SIMULATOR
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
     #endif
     
-//    // Clear application badge when app launches
+    // Clear application badge when app launches
     application.applicationIconBadgeNumber = 0;
     
     
@@ -99,6 +102,8 @@ void myExceptionHandler (NSException *ex)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    NSLog(@"DID BECOME ACTIVE");
+   
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
@@ -125,45 +130,116 @@ void myExceptionHandler (NSException *ex)
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken{
     
-    
     //TODO: prima di inviare i dati sul server controllare la presenza della zona preferita
     
     NSString* newToken = [devToken description];
 	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
+    //salvo token attuale
     self.tokenDevice= newToken;
+   
     
-    NSLog(@"Il token è %@, ed è lungo %d", tokenDevice, [tokenDevice length]);
+    NSLog(@"################");
+    NSLog(@"DID REGISTER: \nIl token è %@, ed è lungo %d", tokenDevice, [tokenDevice length]);
 
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];    
-    NSLog(@"pefs lat = %f, long = %f", [[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]);
-    if([pref objectForKey: @"lat"] != nil && [pref objectForKey: @"long"] != nil){
-        NSLog(@" APP DELEGATE : preferito settato");
-        dbAccess = [[DatabaseAccess alloc] init];
-        [dbAccess setDelegate:self];
-        [dbAccess registerDevice:newToken];
+    //se c'è connessione internet
+    if([Utilities networkReachable]){
+            
+        NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];    
+        NSLog(@"pefs lat = %f, long = %f", [[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]);
+        
+        //se coordinate sono settate e token è valido
+        if([pref objectForKey: @"lat"] != nil &&
+           [pref objectForKey: @"long"] != nil &&
+           ![tokenDevice isEqualToString:@""]){
+            
+            NSLog(@" APP DELEGATE : preferito settato");
+            dbAccess = [[DatabaseAccess alloc] init];
+            [dbAccess setDelegate:self];
+            [dbAccess registerDevice:newToken];
+        }
+        else{
+            
+            NSLog(@" APP DELEGATE : nessun preferito");
+            tokenSended = NO;
+        }
     }
-    else NSLog(@" APP DELEGATE : nessun preferito");
-    
+    else{
+        NSLog(@"INTERNET NN DISPONIBILE : TOKEN NN INVIATO");
+        tokenSended = NO;
+    }
+        
+    NSLog(@"################");
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)err{
     
     NSLog(@"%@, %@, %@", [err localizedDescription], [err localizedFailureReason], [err localizedRecoverySuggestion]);
-    
+    self.tokenDevice = @"";
 }
+
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@" DID RECEIVE");
+}
+
+
+//si accorge se cambia stato connessione, e se il token non è stato ancora inviato lo invia sul db
+- (void) reachabilityChanged:(NSNotification *)notice
+{  
+    NSLog(@"################");
+    NSLog(@"HANDLE NETWORK CHANGE");
+    
+    NetworkStatus remoteHostStatus = [reachability currentReachabilityStatus];  
+    
+    //se internet è raggiungibile e il token non è stato ancora inviato
+    if(remoteHostStatus != NotReachable && !tokenSended){
+        NSLog(@"DENTRO IF");
+        NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+       
+        if([pref objectForKey: @"lat"] != nil &&
+           [pref objectForKey: @"long"] != nil){
+            
+            NSLog(@" APP DELEGATE : preferito settato");
+            dbAccess = [[DatabaseAccess alloc] init];
+            [dbAccess setDelegate:self];
+            [dbAccess registerDevice:tokenDevice];
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
+        }
+        else{
+            NSLog(@" APP DELEGATE : nessun preferito");        
+            tokenSended = NO;
+        }
+        
+    }
+
+    NSLog(@"################");
+} 
 
 #pragma mark - DatabaseAccessDelegate
 
 - (void) didReceiveResponsFromServer:(NSString *)receivedData {
     NSLog(@"%s", [receivedData UTF8String]);
+    
+    //se scrittura su db è andata a buon fine
+    if([receivedData isEqualToString:@"OK"]){
+        tokenSended = YES;
+        NSLog(@"token inviato");
+    }
+    else{
+        tokenSended = NO;
+        NSLog(@"TOKEN NN INVIATO");
+    }
 }
 
 #pragma mark - memory management
 
 - (void)dealloc
-{   [dbAccess release];
+{   
+    [reachability release];
+    [dbAccess release];
     [navController release];
     [_window release];
     [super dealloc];

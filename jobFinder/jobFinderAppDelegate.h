@@ -8,12 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "DatabaseAccess.h"
+@class Reachability;
 
 @interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate>{
     UINavigationController *navController; 
     DatabaseAccess *dbAccess;
     NSString *tokenDevice;
+    BOOL tokenSended;
+    Reachability *reachability;
+
 }
+
 
 @property(nonatomic, retain)NSString *tokenDevice;
 @property (nonatomic, retain) IBOutlet UIWindow *window;

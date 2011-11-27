@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DatabaseAccess.h"
 
-@interface jobFinderAppDelegate : NSObject <UIApplicationDelegate>{
+@interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate>{
     UINavigationController *navController; 
+    DatabaseAccess *dbAccess;
+    NSString *tokenDevice;
 }
 
+@property(nonatomic, retain)NSString *tokenDevice;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navController;
 

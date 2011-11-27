@@ -8,6 +8,7 @@
 
 #import "jobFinderAppDelegate.h"
 #import "CoreLocation/CoreLocation.h"
+#import "DatabaseAccess.h"
 #import "Utilities.h"
 
 void myExceptionHandler (NSException *ex)
@@ -18,7 +19,7 @@ void myExceptionHandler (NSException *ex)
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
-@synthesize navController;
+@synthesize navController, tokenDevice;
 
 
 
@@ -30,12 +31,9 @@ void myExceptionHandler (NSException *ex)
     
     // Override point for customization after application launch.
     [self.window makeKeyAndVisible];
+
     
-    
-    //per controllare quando cambia stato connessione
-//    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
-    
-    //controlla se i servizi di localizzazione sono attivati.
+    //############# controlla se i servizi di localizzazione sono attivi #################
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
     
     if([CLLocationManager locationServicesEnabled]){
@@ -63,39 +61,16 @@ void myExceptionHandler (NSException *ex)
         [alert release];
     }
     
-    //notifiche push
+    //###############   registrazione device a notifiche push #######################
+    #if !TARGET_IPHONE_SIMULATOR
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
-
+    #endif
+    
+//    // Clear application badge when app launches
+    application.applicationIconBadgeNumber = 0;
+    
     
     return YES;
-}
-
-/*metodi per gestire le push notification*/
-
-- (void)postUpdateRequest
-{
-//	NSURL* url = [NSURL URLWithString:ServerApiURL];
-//	ASIFormDataRequest* request = [ASIFormDataRequest requestWithURL:url];
-//	[request setPostValue:@"update" forKey:@"cmd"];
-//	[request setPostValue:[dataModel udid] forKey:@"udid"];
-//	[request setPostValue:[dataModel deviceToken] forKey:@"token"];
-//	[request setDelegate:self];
-//	[request startAsynchronous];
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken{
-    
-    // Qui registrate e/o inviate il token
-    NSString* newToken = [devToken description];
-	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-	newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-}
-
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)err{
-    
-    // Qui intercettate eventuali errori avvenuti se la registrazione fallisce
-    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -119,6 +94,7 @@ void myExceptionHandler (NSException *ex)
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -128,6 +104,11 @@ void myExceptionHandler (NSException *ex)
      */
     
     //We are unable to make a internet connection at this time. Some functionality will be limited until a connection is made.
+    
+    //controlla tra le impostazioni dell'iphone se l'app ha le notifiche attive
+    UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+    if (types == UIRemoteNotificationTypeNone) 
+        NSLog(@"push disabilitate");
     
 }
 
@@ -140,9 +121,49 @@ void myExceptionHandler (NSException *ex)
      */
 }
 
+#pragma mark - Metodi per gestire le push notification
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken{
+    
+    
+    //TODO: prima di inviare i dati sul server controllare la presenza della zona preferita
+    
+    NSString* newToken = [devToken description];
+	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+	newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    self.tokenDevice= newToken;
+    
+    NSLog(@"Il token è %@, ed è lungo %d", tokenDevice, [tokenDevice length]);
+
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];    
+    NSLog(@"pefs lat = %f, long = %f", [[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]);
+    if([pref objectForKey: @"lat"] != nil && [pref objectForKey: @"long"] != nil){
+        NSLog(@" APP DELEGATE : preferito settato");
+        dbAccess = [[DatabaseAccess alloc] init];
+        [dbAccess setDelegate:self];
+        [dbAccess registerDevice:newToken];
+    }
+    else NSLog(@" APP DELEGATE : nessun preferito");
+    
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)err{
+    
+    NSLog(@"%@, %@, %@", [err localizedDescription], [err localizedFailureReason], [err localizedRecoverySuggestion]);
+    
+}
+
+#pragma mark - DatabaseAccessDelegate
+
+- (void) didReceiveResponsFromServer:(NSString *)receivedData {
+    NSLog(@"%s", [receivedData UTF8String]);
+}
+
+#pragma mark - memory management
 
 - (void)dealloc
-{
+{   [dbAccess release];
     [navController release];
     [_window release];
     [super dealloc];

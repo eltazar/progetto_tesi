@@ -59,5 +59,6 @@
 -(IBAction)backBtnClicked:(id)sender;
 -(double) fRand;
 -(IBAction)filterBtnClicked:(id)sender;
+-(void) refreshViewMap;
 @end
 

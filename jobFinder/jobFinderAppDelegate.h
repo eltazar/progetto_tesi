@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DatabaseAccess.h"
 @class Reachability;
-
+@class MapViewController;
 @interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate>{
     UINavigationController *navController; 
     DatabaseAccess *dbAccess;
@@ -19,7 +19,7 @@
 
 }
 
-
+@property(nonatomic, retain) IBOutlet MapViewController *mapController;
 @property(nonatomic, retain)NSString *tokenDevice;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navController;

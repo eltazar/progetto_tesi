@@ -726,6 +726,13 @@
 
 #pragma  mark - View lyfe cicle
 
+-(void) refreshViewMap
+{
+    NSLog(@"ENTRATO IN REFRESH");
+    [self bookmarkBtnClicked:self];
+}
+
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

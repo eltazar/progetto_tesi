@@ -16,12 +16,12 @@
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
-@synthesize navController, tokenDevice;
+@synthesize navController, mapController, tokenDevice;
 
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{        
+{            
     self.window.rootViewController = self.navController;
     
     // Override point for customization after application launch.
@@ -183,6 +183,9 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     NSLog(@" DID RECEIVE");
+    //apre la mappa nella posizione preferita
+    [self.mapController refreshViewMap];
+    //mostrare alert quando l'applicazione è in foreground
 }
 
 

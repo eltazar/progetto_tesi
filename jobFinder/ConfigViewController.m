@@ -9,10 +9,12 @@
 #import "ConfigViewController.h"
 #import "BaseCell.h"
 #import "SearchZoneViewController.h"
+#import "DatabaseAccess.h"
+#import "jobFinderAppDelegate.h"
+#import "Utilities.h"
 
-
-#define EMAIL_CONTACT @"el-tazar@hotmail.it"
-#define URL_INFO @"http://www.google.it"
+#define EMAIL_CONTACT @"el-tazar@hotmail.it" //per prova
+#define URL_INFO @"http://www.google.it" //per prova
 
 @implementation ConfigViewController
 @synthesize delegate;
@@ -65,7 +67,9 @@
 //        cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
 //    }
     cell.textLabel.numberOfLines = 2;
-    cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;    return cell;
+    cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+    
+    return cell;
 }
 
 //setta gli header delle sezioni
@@ -80,7 +84,7 @@
 {
     switch (section) {
         case 0:
-            return @"Cerca e seleziona un indirizzo preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
+            return @"Scegli un indirizzo preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
             break;
         case 1:
             return nil;
@@ -178,7 +182,7 @@
 #pragma mark - SearchZoneDelegate
 
 -(void) didSelectedPreferredAddress:(NSString *)address withLatitude:(CLLocationDegrees)latitude andLongitude:(CLLocationDegrees) longitude
-{
+{    
     //una volta selezionata la zona preferita viene salvata nelle impostazioni personali dell'utente
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
    [prefs setObject:address forKey:@"address"];
@@ -194,6 +198,32 @@
     //avviso il delegato cnhe ho scelto la zona preferita e gli passo le coordinate
     [delegate didSelectedFavouriteZone:CLLocationCoordinate2DMake(latitude,longitude)]; 
     [self.navigationController popViewControllerAnimated:YES];
+    
+    //TODO: chiamare metodo che fa query di aggiornamento token-nuovaPosizione
+    
+    if([Utilities networkReachable]){
+        NSLog(@"CONFIG VIEW: sto cambiando preferito");
+        dbAccess = [[DatabaseAccess alloc] init];
+        [dbAccess setDelegate:self];
+        jobFinderAppDelegate *appDelegate = (jobFinderAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSLog(@"token in configView = %@",[appDelegate tokenDevice]);
+        [dbAccess registerDevice:appDelegate.tokenDevice];
+    }
+    else{
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        [alert release];
+        
+    }
+
+    
+}
+
+#pragma mark - DatabaseAccessDelegate
+
+- (void) didReceiveResponsFromServer:(NSString *)receivedData {
+    NSLog(@"%s", [receivedData UTF8String]);
 }
 
 #pragma mark - View life cycle
@@ -260,6 +290,7 @@
     [secA autorelease];
     [secB autorelease];
     
+    //[self.tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background.png"]] autorelease] ];
 }
 
 
@@ -292,6 +323,7 @@
 
 - (void)dealloc 
 {
+    [dbAccess release];
     [sectionDescripition release];
     [sectionData release];  
 //    [searchZone release];

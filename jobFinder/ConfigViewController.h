@@ -9,15 +9,20 @@
 #import "TextFieldCell.h"
 #import <MessageUI/MessageUI.h>
 #import "SearchZoneViewController.h"
+#import "DatabaseAccess.h"
+
+/* Mostra la view relativa alle configurazioni utente
+ */
 
 @protocol ConfigViewControllerDelegate;
 
-@interface ConfigViewController : UITableViewController <UITableViewDataSource,MFMailComposeViewControllerDelegate, SearchZoneDelegate >{
+@interface ConfigViewController : UITableViewController <UITableViewDataSource,MFMailComposeViewControllerDelegate, SearchZoneDelegate, DatabaseAccessDelegate >{
     
     NSArray *sectionDescripition;
     NSArray *sectionData;
     SearchZoneViewController *searchZone;
     id<ConfigViewControllerDelegate> delegate;
+    DatabaseAccess *dbAccess;
 }
 @property(nonatomic,assign) id<ConfigViewControllerDelegate> delegate;
 @end

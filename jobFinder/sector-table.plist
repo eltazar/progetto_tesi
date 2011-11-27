@@ -305,6 +305,15 @@
 				<string>UITableViewCellStyleDefault</string>
 			</dict>
         </array>
+        <key>G</key>
+        <array>
+            <dict>
+				<key>label</key>
+				<string>Giochi - intrattenimento</string>
+				<key>enum</key>
+				<string>g1</string>
+			</dict>
+        </array>
         <key>I</key>
 		<array>
 			<dict>

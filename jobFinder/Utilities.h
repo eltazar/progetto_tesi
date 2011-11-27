@@ -10,4 +10,6 @@
 
 @interface Utilities : NSObject
 
++(BOOL)networkReachable;
++(NSUserDefaults*)userDefaults;
 @end

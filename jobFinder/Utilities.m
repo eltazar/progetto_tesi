@@ -7,17 +7,41 @@
 //
 
 #import "Utilities.h"
+#import "Reachability.h"
 
 @implementation Utilities
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
++(BOOL)networkReachable {
+    Reachability *r = [[Reachability reachabilityForInternetConnection] retain];
+    NetworkStatus internetStatus = [r currentReachabilityStatus];
+    BOOL result = NO;
     
-    return self;
+    if(internetStatus == ReachableViaWWAN){
+            //NSLog(@"3g");
+            result =  YES;
+
+    }
+    else if(internetStatus == ReachableViaWiFi){
+            //NSLog(@"Wifi");
+            result = YES;
+
+   }
+   else if(internetStatus == NotReachable){
+            result = NO;        
+   }
+    
+    [r release];
+    
+    return  result;
 }
+
++(NSUserDefaults*)userDefaults{
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    return pref;
+}
+
+
 
 @end

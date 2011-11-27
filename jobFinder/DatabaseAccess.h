@@ -28,13 +28,14 @@ NSString* key(NSURLConnection* con);
 -(void)jobWriteRequest:(Job*)job;
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field;
 -(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)oldRegion field:(NSInteger)field;
-
+-(void)registerDevice:(NSString*)token;
 
 @end
 
 
 @protocol DatabaseAccessDelegate <NSObject>
-
+@optional
 -(void)didReceiveResponsFromServer:(NSString*) receivedData;
+@optional
 -(void)didReceiveJobList:(NSArray*)jobList;
 @end

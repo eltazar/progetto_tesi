@@ -32,6 +32,52 @@ NSString* key(NSURLConnection* con)
     return self;
 }
 
+//invia richiesta registrazione token device sul db
+-(void)registerDevice:(NSString*)token
+{
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/registerDevice.php"];
+    
+    [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
+    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
+    
+    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *postFormatString = @"token=%@&latitude=%f&longitude=%f";
+    NSString *postString = [NSString stringWithFormat:postFormatString,
+                            token,[[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]];
+
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    [request setHTTPBody:postData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+        [writeConnections addObject:connection];
+        
+        NSMutableData *receivedData = [[NSMutableData data] retain];
+        //[connectionDictionary setObject:connection forKey:key(connection)];
+        [dataDictionary setObject:receivedData forKey:key(connection)];
+        //NSLog(@"RECEIVED DATA FROM DICTIONARY : %p",[dataDictionary objectForKey:connection]);
+    }
+    else{
+        NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita??
+    }
+
+    
+    
+}
+
+//invia richiesta lettura da db
 -(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSInteger)field
 {
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read2.php"];
@@ -68,7 +114,7 @@ NSString* key(NSURLConnection* con)
     }
     else{
         NSLog(@"theConnection is NULL");
-        //mostrare alert all'utente che la connessione è fallita
+        //mostrare alert all'utente che la connessione è fallita??
     }
 }   
 
@@ -110,6 +156,8 @@ NSString* key(NSURLConnection* con)
     }
 }   
 
+
+//invia richiesta scrittura su db
 -(void)jobWriteRequest:(Job *)job
 { 
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/write.php"];    
@@ -168,7 +216,7 @@ NSString* key(NSURLConnection* con)
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     //sto log crea memory leak
-    NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
+    //NSLog(@"XXXX %@",[[NSString alloc] initWithBytes: [data bytes] length:[data length] encoding:NSASCIIStringEncoding]);
     NSMutableData *receivedData = [dataDictionary objectForKey:key(connection)];
 
     [receivedData appendData:data];
@@ -185,6 +233,7 @@ NSString* key(NSURLConnection* con)
     [readConnections removeObject:connection];
     [writeConnections removeObject:connection];
     
+    //esempio se richiedo connessione quando rete non disponibile, mostrare allert view?
     NSLog(@"ERROR with theConenction");
     [connection release];
     [receivedData release];
@@ -230,7 +279,9 @@ NSString* key(NSURLConnection* con)
             [jobsArray addObject:job];
         }
         
-        [delegate didReceiveJobList:jobsArray];
+        if(delegate != nil &&[delegate respondsToSelector:@selector(didReceiveJobList:)])
+            [delegate didReceiveJobList:jobsArray];
+        
         [readConnections removeObject:connection];
         [jobsArray release]; //aggiunto 7 novembre
         [formatter release];
@@ -256,6 +307,8 @@ NSString* key(NSURLConnection* con)
 
 -(void)dealloc
 {
+    [readConnections release];
+    [writeConnections release];
     [dataDictionary release];
     [super dealloc];
 }

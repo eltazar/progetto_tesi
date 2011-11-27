@@ -5,14 +5,23 @@ JobFinder:
 
 #############
 TODO LIST:
+notifhce push:
+-registrazione token ad avvio app se internet off
 
-- finire di scrivere la lista dei settori di lavoro e inserirla nel progetto
+filtro:
+-fare json o stringa a1,b1,….  da mandare in post
+
 - scrivere una regex per il campo phone di job
-- implementare notifiche push
 - verificare supporto iOS 5 (classe NSUrlConnection, ecc…)
 - verificare supporto metodi tra tutte le versioni di iOS 4.x (CLLLocationManager, UITableView, ecc…)
 
+------------------------
+
+INIZIATO 24 nov
+- implementare notifiche push
+
 FATTO 21 novembre
+- finire di scrivere la lista dei settori di lavoro e inserirla nel progetto
 - gestire viewController per i memory warning (systemati i metodi viewDidUnload)
 
 

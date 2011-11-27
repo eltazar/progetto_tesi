@@ -20,8 +20,8 @@
     
     MKMapView *map;
     UIToolbar *toolBar;  
-    UIBarButtonItem *publishBtn; // bottone "segnala"
-    UIBarButtonItem *refreshBtn; //bottone "refresh"
+    UIBarButtonItem *publishBtn; 
+    UIBarButtonItem *refreshBtn; 
     UIBarButtonItem *infoBarButtonItem;
     UIBarButtonItem *filterButton;
     UIBarButtonItem *bookmarkButtonItem;

@@ -12,13 +12,15 @@
 #import "DatabaseAccess.h"
 #import "FilterViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "MKMapView+Region.h"
+#import "MKMapView+Utils.h"
 #import "GeoDecoder.h"
 #import "Utilities.h"
+#import "NSDictionary_JSONExtensions.h"
+
 
 #define DEFAULT_COORDINATE -180
-#define iphoneScaleFactorLatitude   16.0    
-#define iphoneScaleFactorLongitude  20.0
+#define iphoneScaleFactorLatitude   17.0    
+#define iphoneScaleFactorLongitude  21.0
 #define ZOOM_THRESHOLD 10 //760567.187974
 #define ZOOM_MAX 18
 #define EPS 0.00001
@@ -37,6 +39,7 @@
 -(void)filterUnderThreshold:(NSArray*)newAnnotations;
 -(void)removeDuplicateAnnotations:(NSMutableArray*)newAnnotations;
 -(void)startFiltering;
+-(void) dismissPublishView;
 @end
 //end
 
@@ -65,8 +68,7 @@
     //NSLog(@"DRAG STATE %d",annotationView.dragState);
     
 	if (oldState == MKAnnotationViewDragStateDragging) {
-        //NSLog(@"CAMBIO DI STATO: lat = %f , long = %f",annotationView.annotation.coordinate.latitude, annotationView.annotation.coordinate.longitude);
-        //NSLog(@"JOBTOPUBLISH CAMBIO STATO: lat = %f, long = %f",jobToPublish.coordinate.latitude,jobToPublish.coordinate.longitude);
+
 	}
 }
 
@@ -121,8 +123,6 @@
         favouritePinView.tag = 122;
         favouritePinView.canShowCallout = YES;
         favouritePinView.image=[UIImage imageNamed:@"favPin.png"];
-        //favouritePinView.pinColor = MKPinAnnotationColorPurple;
-        //NSLog(@"FAVOURITE ANN: %p", favouriteAnnView);
         return favouritePinView;
     }
     
@@ -165,11 +165,13 @@
 //per gestire il tap sul disclosure
 - (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
+    //carico la vista relativa al job
     InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
     [self.navigationController pushViewController:infoJobView animated: YES];
     [infoJobView release];
 }
 
+//gestisce le chiamate al db in base al cambio di region
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {   
     //se c'è un pin draggabile sulla mappa non faccio fare letture dal db, risparmio un po di query
@@ -225,9 +227,9 @@
         
         //aggiorno oldRegion con la region attuale
         oldRegion = mapView.region;
-    }    
-   // NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
-
+       
+       // NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
+    }
 }
 
 
@@ -237,15 +239,12 @@
  */
 -(void)removeDuplicateAnnotations:(NSMutableArray*)newAnnotations
 {
-    NSLog(@"\n§§§§§§§§§§§§§§\n§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d\n§§§§§§§§§§§§§",newAnnotations.count, [map annotations].count);
+    //NSLog(@"\n§§§§§§§§§§§§§§\n§ ANNOTATIONS FROM QUARY = %d, mapANNOTATIONS = %d\n§§§§§§§§§§§§§",newAnnotations.count, [map annotations].count);
+    
     NSMutableArray * mapAnnotations = [map orderedMutableAnnotations];
     
     
     //NSLog(@"MAP ANNOTATIONS POST DELETING: %d",mapAnnotations.count);
-    
-    //ordino mapAnnotations per id
-    //[Job orderJobsByID:newAnnotations];    
-    //NSLog(@"ANNOTATIONS: %@",annotationsToAdd);
     
     //elenco indici da eliminare da array
     NSInteger indexToDelete;
@@ -253,7 +252,7 @@
     
     //NSLog(@"ANNOTATIONS TO ADD PRE CHECK: %d",annotationsToAdd.count);
     
-    //cerca tra le annotazioni della mappa quali annotationi di annotatotionsToAdd sono già presenti
+    //cerca tra le annotazioni della mappa quali annotationi di newAnnotations sono già presenti
     for(int i=0; i<newAnnotations.count;i++){
         //   NSLog(@"AN é TIPO: %@",[an class]);
         indexToDelete = [Job jobBinarySearch:mapAnnotations withID: ((Job*)[newAnnotations objectAtIndex:i]).idDb];
@@ -263,18 +262,18 @@
     }
     
     [newAnnotations removeObjectsAtIndexes:indexes];
-    NSLog(@"\n -----> ANNOTATIONS TO ADD POST CHECK: %d",newAnnotations.count);
+   // NSLog(@"\n -----> ANNOTATIONS TO ADD POST CHECK: %d",newAnnotations.count);
     [indexes release];
 }
 
 
-//calcola quali, tra le annotazioni arrivate dal server, sono quelle da aggiungere alla mappa
+//filtro attivato se sto sotto il threshold
 -(void)filterUnderThreshold:(NSMutableArray*)newAnnotations
 {
     //le annotazioni della mappa ordinate
     NSMutableArray *mapAnn = [map orderedMutableAnnotations];
     
-    /* annotationsBuffer contiene tutte le annotations aggiunte superato il livello 10 quando faccio zoom in. Così superato tale livello in zoom out potrò rimuoverle in blocco.
+    /* annotationsBuffer contiene le annotazioni calcolate quando si va sotto lo zoom threshold.
      */
     
     //pulisco lo zoomBuffer se lo zoom scende sotto threshold
@@ -283,35 +282,35 @@
             [(NSMutableArray*)array removeAllObjects];
     }
     
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under pre add: %d \n newAnnotations = %d \n @@@@@@@@@@@@@", [[map annotations]count], [newAnnotations count]);
+    //NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under pre add: %d \n newAnnotations = %d \n @@@@@@@@@@@@@", [[map annotations]count], [newAnnotations count]);
     
     //rimuovo duplicati che sono tra newAnnotations e mapAnn
     NSMutableArray *newAnnotationNotInMap = [newAnnotations mutableCopy];
     [self removeDuplicateAnnotations:newAnnotationNotInMap];
     [map addAnnotations:newAnnotationNotInMap];
+    // e li aggiungo al buffer
     [annotationsBuffer addObjectsFromArray:newAnnotationNotInMap];
     
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post add: %d \n newAnnNotInMap = %d\n @@@@@@@@@@@@@", [[map annotations]count],newAnnotationNotInMap.count);
+    //NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post add: %d \n newAnnNotInMap = %d\n @@@@@@@@@@@@@", [[map annotations]count],newAnnotationNotInMap.count);
     
     /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate). Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle aggiunte dall'altra funzione di filtro
      */
-    
-    //[Job orderJobsByID:newAnnotations];
-    
+        
     for(Job* an in mapAnn){
         if([Job jobBinarySearch:newAnnotations withID:((Job*)an).idDb] == -1){
             [map removeAnnotation:an];
             [annotationsBuffer removeObject:an];
         }        
     }
-    NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
+    
+    //NSLog(@"\n@@@@@@@@@@@@@@ \n map annotations under post remv: %d \n @@@@@@@@@@@@@", [[map annotations]count]);
     
     [newAnnotationNotInMap release];
-    //[mapAnn release];
 }
 
 
-/* effettua il fitting delle annotations in base al livello di zoom e a dei fattori di scala
+/* filtro attivato se sto sopra il livello di threshold.
+ * effettua il fitting delle annotations in base al livello di zoom e a dei fattori di scala
  */
 -(void)filterOverThreshold:(NSMutableArray *)newAnnotations{
     
@@ -333,11 +332,11 @@
     //############# ZOOM OUT ################
     
     
-    //se sto facendo zoom out e il current zoom è >= 10
+    //se sto facendo zoom out
     if([map currentZoomLevel] > self.oldZoom){
         
         
-        //controlla se si è superato il threshold ed elimina tutti i pin inseriti quando si stava sotto il livello threshold
+        //controlla se si è superato il threshold ed elimina tutti i pin inseriti quando si stava sotto il livello threshold dalla mappa e dal buffer
         if(self.oldZoom < ZOOM_THRESHOLD){
             if(annotationsBuffer != nil){
                 [map removeAnnotations:annotationsBuffer];
@@ -345,7 +344,7 @@
             }
         }         
         
-        //rimuovo per ogni livello di zoom tra 10 e 18 tutti i pin inseriti precendentemente
+        //rimuovo per ogni livello di zoom tra 10 e 18 tutti i pin inseriti quando feci zoom in
         for(int i=MAX(ZOOM_THRESHOLD,self.oldZoom); i < [map currentZoomLevel]; i++){
             [map removeAnnotations: [zoomBuffer objectAtIndex:(i - ZOOM_THRESHOLD)]];
             //NSLog(@"\n*********REMOVE********\n*\n zoomBuffer[%d] = %d \n******************* \n * map annotations: %d",i - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:i - ZOOM_THRESHOLD] count],[[map annotations]count]);
@@ -355,8 +354,8 @@
     
     //############# ZOOM IN ################
     
-    //se sto facendo zoom in e il current zoom è >= 10
-    //calcola quali sono tra le newAnnotations quelle che sono effettivamente da mostrare
+    //se sto facendo zoom in.
+    //calcola quali sono tra le newAnnotations quelle che non sono già sulla mappa
     [self removeDuplicateAnnotations:newAnnotations];
     mutableNewAnnotations = [newAnnotations mutableCopy];
     
@@ -397,7 +396,7 @@
                     }
                 }
             }
-            //solo se non trovo un pin vicino lo aggiungo
+            //solo se non trovo un pin troppo vicino ad un altro lo aggiungo
             if (!found) {
                 cont++;
                 [jobToShow addObject:checkingAnnotation];
@@ -450,25 +449,27 @@
 
 #pragma mark - DatabaseAccessDelegate
 
-/*riceve una lista di annotazioni e decide quale tipo di filtraggio effettuare in base allo zoom corrente*/
+/*riceve una lista dinuove annotazioni dal server
+ */
 -(void)didReceiveJobList:(NSArray *)jobList
 {
-    NSLog(@"JOB LIST COUNT = %d",jobList.count);
+    //NSLog(@"JOB LIST COUNT = %d",jobList.count);
 
     //fonde in maniera ordinata le jobList provenienti dal server e le salva in receivedAnnotations
     [Job mergeArray:receivedAnnotations withArray:jobList];
     
     
-    NSLog(@"RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
+    //NSLog(@"RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
 
     //fa partire un filtro ogni tot secondi
     timer = [NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];
 }
 
+//decide in base al livello di zoom quale filtro far partire
 -(void)startFiltering
 {
-    NSLog(@"--------------------------------------> ENTRATO");
-    NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
+//    NSLog(@"--------------------------------------> ENTRATO");
+//    NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
  
     //decide quale filtro utilizzare in base al livello di zoom
     
@@ -478,13 +479,12 @@
         }
         else [self filterUnderThreshold:receivedAnnotations];
     
-    [receivedAnnotations removeAllObjects];
+        [receivedAnnotations removeAllObjects];
     }    
 }
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
 {
-    
     if(![receivedData isEqualToString:@"\"OK\""]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
         [alert show];
@@ -492,9 +492,12 @@
     }
 }
 
+
+
+
 #pragma mark - gestione click bottoni della view
 
-//mostra la action sheet con la scelta del tipo di segnalazione
+//mostra la barra con i pulsanti per inserimento di un nuovo job
 -(IBAction)publishBtnClicked:(id)sender 
 {    
     if([Utilities networkReachable]){
@@ -559,7 +562,7 @@
     }
 }
 
-//carica la view per la creazione di un job
+//carica la view per inserimento dati del job in maniera modale
 -(IBAction)saveNewJobInPositionBtnClicked:(id)sender
 {
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
@@ -570,7 +573,7 @@
     [publishViewCtrl release];
 }
 
-//carica view info nella gerarchia
+//carica la view per la configurazione dell'app
 -(IBAction)configBtnClicked:(id)sender
 {
     
@@ -591,6 +594,7 @@
     [configView release];
 }
 
+//mostra la posizione attuale dell'utente
 -(IBAction) showUserLocationButtonClicked:(id)sender
 { 
     if(refreshBtn.enabled){
@@ -602,6 +606,7 @@
     }
 }
 
+//mostra la regione in cui si trova la zona preferita scelta dall'utente
 -(IBAction)bookmarkBtnClicked:(id)sender
 {
     
@@ -609,11 +614,13 @@
     if(favouriteAnnotation != nil &&
        favouriteAnnotation.coordinate.latitude != 0 &&
        favouriteAnnotation.coordinate.longitude != 0){
+        
         MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
         MKCoordinateRegion region = MKCoordinateRegionMake(favouriteAnnotation.coordinate, span);
         [map setRegion:region animated:YES];
     }
 }
+
 
 -(IBAction)backBtnClicked:(id)sender
 {
@@ -638,17 +645,16 @@
 
 }
 
+//mostra la vista per filtrare i settori di lavoro
 -(IBAction)filterBtnClicked:(id)sender
 {
-    FilterViewController *filterTable = [[FilterViewController alloc] initWithPlist:@"filter-table"];    //sectorTable.secDelegate = self;
+    FilterViewController *filterTable = [[FilterViewController alloc] initWithNibName:nil bundle:nil];    //sectorTable.secDelegate = self;
     [self.navigationController pushViewController:filterTable animated:YES];
     [filterTable release];
 }
 
 
 #pragma mark - PublishViewControllerDelegate
-
-#warning creare array di jobToPublish per non fare leak quando si alloca un nuovo jobToPublish ?????
 
 /*richiamato dalla view modale dopo il click su inserisci. spedisce i dati sul db
  */
@@ -662,24 +668,16 @@
     jobToPublish.isDraggable = NO;
     
     
-    //INSERIRE CONTROLLO SE INSERIMENTO SU DB è ANDATO A BUON FINE PRIMA DI INSERIRE IL PIN VERDE SULLA MAPPA????
     //richiedo scrittura su db dei dati
     [dbAccess jobWriteRequest:jobToPublish];
     
-    //rimuovo il pin rosso e metto quello verde (drag-noDrag)
+    //rimuovo il pin rosso e metto quello verde (da drag a noDrag)
     if(jobToPublish != nil){
         [map removeAnnotation:jobToPublish];
         //[map addAnnotation:jobToPublish];
         //faccio partire una query per far caricare il nuovo job sulla mappa
         [dbAccess jobReadRequest:map.region field:-1];
     }
-    
-    
-    //rilascio new job dopo inserimento nel db
-//    NSLog(@"DID INSERT JOB RETAIN PRE = %d",[jobToPublish retainCount]);
-//    [jobToPublish release];
-//    NSLog(@"DID INSERT JOB RETAIN POST = %d",[jobToPublish retainCount]);
-//    //jobToPublish = nil;
     
     //fa sparire con uno slide la alternativeToolbar
     CGRect alternativeToolBarFrame = alternativeToolbar.frame;
@@ -699,8 +697,7 @@
 //rimuove il pin rosso dalla mappa se si è scelto di annullare la creazione
 -(void) didCancelNewJob:(PublishViewController *)viewController
 {
-    //se l'operazione di inserimento è annullata il pin draggabile sarà eliminato dalla mappa e rilasciato
-    
+    //se l'operazione di inserimento è annullata il pin draggabile sarà eliminato dalla mappa
     [self backBtnClicked:self];
     
     [self dismissPublishView];
@@ -718,7 +715,7 @@
 //gestisce il pin relativo all'annotation favourite
 -(void)didSelectedFavouriteZone:(CLLocationCoordinate2D)coordinate
 {
-    //rimuovo la vecchia
+    //rimuovo la vecchia annotation preferita
     if(favouriteAnnotation != nil){
         [map removeAnnotation:favouriteAnnotation];
     }
@@ -774,12 +771,12 @@
     //raccolta di annotazioni aggiunte ad ogni query
     receivedAnnotations = [[NSMutableArray alloc]init];
    
-    /* se gps è disattivato interroga servizio per reperire il paese in base al currentLocale dell'utente
+    /* se gps è disattivato interroga google per reperire il paese in base al currentLocale dell'utente
      */
     if(![CLLocationManager locationServicesEnabled] || 
        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
     {
-        NSLog(@"CERCO REGIONE");
+        //NSLog(@"CERCO REGIONE");
         GeoDecoder *geoDec = [[GeoDecoder alloc]init];
         [geoDec setDelegate:self];
         NSLocale *currentLocale = [NSLocale currentLocale];
@@ -798,7 +795,7 @@
 	[tempInfoButton addTarget:self action:@selector(configBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tempInfoButton];
 	self.navigationItem.leftBarButtonItem = infoBarButtonItem;
-    
+      
     //tasto refresh è disabilitato di default
     refreshBtn.enabled = NO;
     //tasto publishAlternativeBtn è disabilitato di default
@@ -825,7 +822,7 @@
     
     /* Gestione delle configurazioni preferite dell'utente
      */
-    //recupero e setto le coordinate preferite all'avvio dell'app
+    //recupero le coordinate preferite all'avvio dell'app ed aggiungo la relativa annotation
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if([prefs objectForKey: @"lat"] != nil && [prefs objectForKey: @"long"] != nil){
         CLLocationCoordinate2D favouriteCoord = CLLocationCoordinate2DMake([[prefs objectForKey:@"lat"] doubleValue], [[prefs objectForKey:@"long"] doubleValue]);
@@ -837,7 +834,7 @@
         
     } 
 
-    /* inizializzazione classi necessarie al view controller
+    /* inizializzazione classi ausiliarie necessarie al map view controller
      */
     //alloco l'istanza per accesso al db
     dbAccess = [[DatabaseAccess alloc] init];
@@ -846,14 +843,11 @@
     
 }
 
--(double)fRand
-{
-    double f = ((double)rand()) / RAND_MAX;
-    return  f * 2.6e6;
-}
-
 - (void)viewDidUnload
 {
+    //TODO: DA INSERIRE LE VARIE VARIABILI
+    
+    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

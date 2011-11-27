@@ -8,7 +8,8 @@
 
 #import <MapKit/MapKit.h>
 
-@interface MKMapView (MKMapView_Region)
+//category con metodi utili alla mappa
+@interface MKMapView (MKMapView_Utils)
 
 
 +(MKMapRect)mapRectForCoordinateRegion:(MKCoordinateRegion)coordinateRegion;

@@ -6,11 +6,11 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MKMapView+Region.h"
+#import "MKMapView+Utils.h"
 #import "Job.h"
 #import "FavouriteAnnotation.h"
 
-@implementation MKMapView (MKMapView_Region)
+@implementation MKMapView (MKMapView_Utils)
 
 
 //crea un rect data una region

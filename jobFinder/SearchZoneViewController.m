@@ -10,8 +10,7 @@
 #import "GeoDecoder.h"
 #import <objc/runtime.h>
 #import "CoreLocation/CLLocation.h"
-#import "Reachability.h"
-
+#import "Utilities.h"
 @implementation SearchZoneViewController
 @synthesize tableData, theSearchBar, theTableView, disableViewOverlay, delegate;
 
@@ -65,28 +64,22 @@
     // SomeService is just a dummy class representing some 
     // api that you are using to do the search
     
-    //controllo presenza connessione ad internet
-    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] retain];
-    [internetReach startNotifier];
-    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-     [internetReach release];
-    
-    if (netStatus == 0){
-            
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Connessione non disponibile. Controllare le impostazioni del proprio device." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    //controllo presenza connessione ad internet    
+    if ([Utilities networkReachable]){
+          
+        //se presente, avvio il geocoding
+        GeoDecoder *geoDec = [[GeoDecoder alloc] init];
+        [geoDec setDelegate:self]; 
+        //passo indirizzo per calcolare coordinate
+        [geoDec searchCoordinatesForAddress:searchBar.text];
+        [self searchBar:searchBar activate:NO];
+        [geoDec release];
+    }
+    else{    
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
         [alert release];
-        return;
     }
-    
-    //se presente, avvio il geocoding
-    GeoDecoder *geoDec = [[GeoDecoder alloc] init];
-    [geoDec setDelegate:self]; 
-    //passo indirizzo per calcolare coordinate
-    [geoDec searchCoordinatesForAddress:searchBar.text];
-    [self searchBar:searchBar activate:NO];
-    [geoDec release];
-    
 }
 
 // We call this when we want to activate/deactivate the UISearchBar

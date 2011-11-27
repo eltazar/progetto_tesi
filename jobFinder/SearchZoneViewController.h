@@ -13,7 +13,8 @@
 
 @protocol SearchZoneDelegate;
 
-
+/*Mostra la view per la ricerca di un indirizzo preferito
+ */
 @interface SearchZoneViewController : UIViewController<UISearchBarDelegate, UITableViewDataSource, GeoDecoderDelegate>{
     
     NSMutableArray *tableData;
@@ -22,9 +23,7 @@
     UISearchBar *theSearchBar;
     
     UIView *disableViewOverlay;
-    
-   // NSDictionary *
-    
+        
     id<SearchZoneDelegate> delegate;
 
     

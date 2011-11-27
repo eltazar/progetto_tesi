@@ -485,6 +485,11 @@
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
 {
     
+    if(![receivedData isEqualToString:@"\"OK\""]){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+        [alert show];
+        [alert release];
+    }
 }
 
 #pragma mark - gestione click bottoni della view

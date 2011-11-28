@@ -13,7 +13,6 @@
 #import "TextAreaCell.h"
 
 @implementation EditJobViewController
-@synthesize fields;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -98,7 +97,7 @@
 #pragma mark - SectorTableDelegate
 
 //prende i dati dalla tabella settori ed aggiorna la cella con il nuovo dato
--(void) didReceiveSectorFromTable:(NSString*) jobSector
+-(void) didReceiveSectorFromTable:(NSString*) jobSector andCode:(NSString*)code
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     NSString *placeholder;
@@ -106,10 +105,12 @@
     if(jobSector != nil){
         job.employee = jobSector;
         placeholder = jobSector;
+        job.code = code;
     }    
     else{
         job.employee = @"";
         placeholder = @"Scegli...";
+        job.code = @"";
     } 
     
     //aggiorno il model della tabella
@@ -141,11 +142,8 @@
 }
 
 - (void)hideKeyboard 
-{
-//    TextAreaCell *cell = 
-
-    //NSLog(@"SUBVIEW = %@", [self.view viewWithTag:1111] );
-    
+{ 
+    //nasconde tastiera se ho selezionato la cella contentente la textView
     if([self.tableView viewWithTag:1111] != nil)
         [[self.tableView viewWithTag:1111] resignFirstResponder];
 }
@@ -228,7 +226,7 @@
      sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
      sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti", nil];   
      
-     [secA autorelease]; //autorelease??
+     [secA autorelease]; 
      [secB autorelease];
      [secC autorelease];
      
@@ -247,11 +245,6 @@
 
 - (void)viewDidUnload
 {
-    [sectionDescripition release];
-    sectionDescripition = nil;
-    [sectionData release];
-    sectionData = nil;
-    //NSLog(@"ECCOLO");
     [super viewDidUnload];
     
     //    NSLog(@"UIPIKER UNLOAD count = %d", pickerView.view.retainCount);

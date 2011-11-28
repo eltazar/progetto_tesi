@@ -13,11 +13,8 @@
  */
 
 @interface EditJobViewController : RootJobViewController <UITextFieldDelegate, UITextViewDelegate, SectorTableDelegate>{
-
-    NSArray *fields;
     
 }
-@property(nonatomic,retain,readonly) NSArray *fields;
 
 -(void)fillCell: (UITableViewCell *)cell rowDesc:(NSDictionary *)rowDesc;
 

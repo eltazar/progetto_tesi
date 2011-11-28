@@ -42,6 +42,45 @@
     return pref;
 }
 
++(NSString*)sectorFromCode:(NSString*)code
+{
+    NSString *plisStructure = [[NSBundle mainBundle] pathForResource:@"sectors" ofType:@"plist"];
+    //array di dizionari
 
+    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:plisStructure];
+    
+    NSString *sector = [NSString stringWithFormat:@"%@",[dict objectForKey:code]];
+    
+    [dict release];
+    
+    if(sector != nil)
+        return sector;
+    else return @"job no code";
+}
+
++(NSString*) createStringFields
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString *stringFields = @"";
+    
+    if([prefs boolForKey:@"switch"]){
+         NSArray *arrayFields = [[NSArray alloc] initWithArray:[prefs objectForKey:@"selectedCells"]];
+        if(arrayFields.count != 0){
+            for(int i=0; i < arrayFields.count-1; i++){
+                NSLog(@"FIELD = %@",[arrayFields objectAtIndex:i]);
+               stringFields = [stringFields stringByAppendingFormat:@"%@ ", [arrayFields objectAtIndex:i]];
+            }    
+            stringFields = [stringFields stringByAppendingFormat:@"%@", [arrayFields objectAtIndex:(arrayFields.count-1)]];
+        }
+        [arrayFields release];
+    }
+    else{ 
+        stringFields = [stringFields stringByAppendingFormat:@"%@", @"ALL"];
+    }
+
+    NSLog(@"STRING FIELD = %@", stringFields);
+    
+    return stringFields;
+}
 
 @end

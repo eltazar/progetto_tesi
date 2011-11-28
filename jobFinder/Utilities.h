@@ -12,4 +12,6 @@
 
 +(BOOL)networkReachable;
 +(NSUserDefaults*)userDefaults;
++(NSString*)sectorFromCode:(NSString*)code;
++(NSString*) createStringFields;
 @end

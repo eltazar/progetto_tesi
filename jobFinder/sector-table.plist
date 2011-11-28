@@ -13,7 +13,7 @@
 				<key>label</key>
 				<string>Abbigliamento</string>
 				<key>code</key>
-				<string>a2</string>
+				<string>a1</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -23,7 +23,7 @@
 				<key>label</key>
 				<string>Acquisti</string>
 				<key>code</key>
-				<string>a3</string>
+				<string>a2</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -33,7 +33,7 @@
 				<key>label</key>
 				<string>Affari legali</string>
 				<key>code</key>
-				<string>a4</string>
+				<string>a3</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -43,7 +43,7 @@
 				<key>label</key>
 				<string>Agricoltura</string>
 				<key>code</key>
-				<string>a5</string>
+				<string>a4</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -53,7 +53,7 @@
                 <key>label</key>
                 <string>Alberghi</string>
                 <key>code</key>
-                <string>a6</string>
+                <string>a5</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -63,7 +63,7 @@
                 <key>label</key>
                 <string>Alimentazione</string>
                 <key>code</key>
-                <string>a7</string>
+                <string>a6</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -73,7 +73,7 @@
                 <key>label</key>
                 <string>Amministrazione</string>
                 <key>code</key>
-                <string>a8</string>
+                <string>a7</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -83,7 +83,7 @@
                 <key>label</key>
                 <string>Architettura - design</string>
                 <key>code</key>
-                <string>a9</string>
+                <string>a8</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -93,7 +93,7 @@
                 <key>label</key>
                 <string>Arte - cultura</string>
                 <key>code</key>
-                <string>a10</string>
+                <string>a9</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -103,7 +103,7 @@
                 <key>label</key>
                 <string>Artigianato</string>
                 <key>code</key>
-                <string>a11</string>
+                <string>a10</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -113,7 +113,7 @@
                 <key>label</key>
                 <string>Assicurazioni</string>
                 <key>code</key>
-                <string>a12</string>
+                <string>a11</string>
                 <key>kind</key>
                 <string>InfoCell</string>
                 <key>style</key>
@@ -393,7 +393,7 @@
 				<key>label</key>
 				<string>Lavori pubblici</string>
 				<key>code</key>
-				<string>l1</string>
+				<string>l2</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -403,7 +403,7 @@
 				<key>label</key>
 				<string>Legge e finanza</string>
 				<key>code</key>
-				<string>l2</string>
+				<string>l3</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -413,7 +413,7 @@
 				<key>label</key>
 				<string>Libera professione</string>
 				<key>code</key>
-				<string>l3</string>
+				<string>l4</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -423,7 +423,7 @@
 				<key>label</key>
 				<string>Locali pubblici</string>
 				<key>code</key>
-				<string>l4</string>
+				<string>l5</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -433,7 +433,7 @@
 				<key>label</key>
 				<string>Logistica e trasporti</string>
 				<key>code</key>
-				<string>l5</string>
+				<string>l6</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>
@@ -704,7 +704,7 @@
 				<key>label</key>
 				<string>Altro</string>
 				<key>code</key>
-				<string>a1</string>
+				<string>spec1</string>
 				<key>kind</key>
 				<string>InfoCell</string>
 				<key>style</key>

@@ -751,9 +751,12 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if([prefs boolForKey:@"switch"]){
         [filterButton setImage:[UIImage imageNamed:@"filterYellow.png"]];
+        [map removeAnnotations:[map annotations]];
+        [dbAccess jobReadRequest:map.region field:[Utilities createStringFields]];
     }
     else{
         [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
+        [dbAccess jobReadRequest:map.region field:[Utilities createStringFields]];
     }
     //oldRegion = map.region;
     NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);

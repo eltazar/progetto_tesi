@@ -95,8 +95,7 @@
     NSArray *array = [tableStructure objectForKey:[sections objectAtIndex:indexPath.section]];
     NSDictionary *choiceDic = [array objectAtIndex:indexPath.row];
     NSString *choice = [choiceDic objectForKey:@"label"];
-    //NSLog(@"PROVA LABEL: %@", choice);
-    [secDelegate didReceiveSectorFromTable:choice];
+    [secDelegate didReceiveSectorFromTable:choice  andCode: [choiceDic objectForKey:@"code"]];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"employeeDidSet" object:self userInfo:nil];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

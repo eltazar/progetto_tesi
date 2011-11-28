@@ -68,6 +68,7 @@
 		ACBAF55014696963006A2A6D /* MKMapView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ACBAF54F14696963006A2A6D /* MKMapView+Utils.m */; };
 		ACBAF56314698F8E006A2A6D /* call.png in Resources */ = {isa = PBXBuildFile; fileRef = ACBAF56214698F8E006A2A6D /* call.png */; };
 		ACBAF56514698F94006A2A6D /* call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACBAF56414698F94006A2A6D /* call@2x.png */; };
+		ACC0F8961482F39000A4164B /* sectors.plist in Resources */ = {isa = PBXBuildFile; fileRef = ACC0F8951482F39000A4164B /* sectors.plist */; };
 		ACC54A80145DFF0F002F41D3 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */; };
 		ACC54A81145DFF0F002F41D3 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */; };
 		ACC54DBC1456E73300A51364 /* DatabaseAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54DBB1456E73300A51364 /* DatabaseAccess.m */; };
@@ -192,6 +193,7 @@
 		ACBAF54F14696963006A2A6D /* MKMapView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+Utils.m"; sourceTree = "<group>"; };
 		ACBAF56214698F8E006A2A6D /* call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = call.png; path = icons/call.png; sourceTree = SOURCE_ROOT; };
 		ACBAF56414698F94006A2A6D /* call@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "call@2x.png"; path = "icons/call@2x.png"; sourceTree = SOURCE_ROOT; };
+		ACC0F8951482F39000A4164B /* sectors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = sectors.plist; sourceTree = "<group>"; };
 		ACC54A7D145DFF0F002F41D3 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
 		ACC54A7E145DFF0F002F41D3 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 		ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterViewController.xib; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 			isa = PBXGroup;
 			children = (
 				ACA915E1145EA10500806FD3 /* filter-table.plist */,
+				ACC0F8951482F39000A4164B /* sectors.plist */,
 				AC0B0404147EB74000788ADC /* filter-tableSingleSection.plist */,
 				AC9FB383145EE736006227B6 /* A1sectors-table.plist */,
 				AC840BA91463F25F00070F1D /* sector-table.plist */,
@@ -611,6 +614,7 @@
 				ACC8D9571480FEC000307E7E /* filterWhite.png in Resources */,
 				ACC8D95A1480FEE900307E7E /* filterWhite@2x.png in Resources */,
 				ACC8D95B1480FEE900307E7E /* filterYellow@2x.png in Resources */,
+				ACC0F8961482F39000A4164B /* sectors.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

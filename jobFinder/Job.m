@@ -45,13 +45,6 @@
     return self;
 }
 
-//-(void)addObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void *)context
-//{
-//    
-//    [super addObserver:observer forKeyPath:keyPath options:options context:context];
-//    
-//    
-//}
 
 - (NSString *)title {
     if(employee != nil)
@@ -114,33 +107,28 @@
 
 -(void)setPhone:(NSString *)newPhone
 {
-    /*SE NEWPHONE è NIL VIENE AUTOMATICAMENTE SALVATO A NIL*/
-    //NSLog(@"NEW PHONE = %@",newPhone);
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
-//        [newPhone release];
-//        newPhone = nil;
+
         [phone release];
         phone = @"";
         return;
     }
    
-    [newPhone retain];
-    [phone release];
-    phone = newPhone;
+    //TODO: CREARE REGEX PER CONTROLLO DATI INSERITI
     
-//    NSLog(@"PHONE = %p, %@",phone,phone);
+    NSString *_newPhone = [[newPhone stringByReplacingOccurrencesOfString:@" " withString:@""] retain];
+    [phone release];
+    phone = _newPhone;
     
 }
 
 
-//problemi con questo metodo, vedere commit 7 novembre
+//problemi con questo metodo, vedere commit 7 novembre --> risolti
 -(void)setDescription:(NSString *)newDescription
 {
     //NSLog(@"NEW DESCR: %@",newDescription);
         
-    if([newDescription isKindOfClass:[NSNull class]] || [newDescription isEqualToString:@""]){ //aggiunto 7 novembre xchè app crash
-//        [newDescription release];
-//        newDescription = nil;
+    if([newDescription isKindOfClass:[NSNull class]] || [newDescription isEqualToString:@""]){ //
         [description release];
         //description = nil;
         description = @"";
@@ -213,9 +201,6 @@
 }
 
 
-#warning fare i getter in modo tale che se la stringhe puntano a nil ritorna stringa @""
-
-
 - (NSString *)description
 {
     NSString *tmpDescription;
@@ -225,7 +210,7 @@
     else{
         tmpDescription = description;
     }
-#warning come cazzo funzionano i getter con le properTy???
+
     return [[tmpDescription  retain] autorelease];
 }
 
@@ -265,7 +250,7 @@
 
 -(NSString*)urlAsString
 {
-    NSLog(@"URL = %@", [url absoluteString]);
+    //NSLog(@"URL = %@", [url absoluteString]);
     
     if(url == nil)
         return @"";
@@ -313,6 +298,7 @@
     return -1;
 }
 
+//ordina array di job in base ad idDb
 +(void)orderJobsByID:(NSMutableArray*)jobs
 {
     NSSortDescriptor *sortDescriptor;
@@ -322,14 +308,9 @@
     [jobs sortUsingDescriptors:sortDescriptors]; 
 }
 
+//fonde due array ordinati di job
 +(void)mergeArray:(NSMutableArray*)totalArray withArray:(NSArray*)jobs
 {
-    
-//    if(totalArray.count == 0){
-//        [totalArray addObjectsFromArray: jobs];
-//        return;
-//    }
-        
     
     NSMutableArray *tempArray = [[NSMutableArray alloc]initWithCapacity:([totalArray count]+[jobs count])];
     

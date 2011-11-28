@@ -57,6 +57,7 @@
         [alert release];
     }
     
+    
     //per controllare quando cambia stato connessione
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
     reachability = [[Reachability reachabilityForInternetConnection] retain];         
@@ -210,6 +211,7 @@
             [dbAccess setDelegate:self];
             [dbAccess registerDevice:tokenDevice];
             [[NSNotificationCenter defaultCenter] removeObserver:self];
+            [reachability stopNotifier];
         }
         else{
             NSLog(@" APP DELEGATE : nessun preferito");        

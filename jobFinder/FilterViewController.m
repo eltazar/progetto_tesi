@@ -205,21 +205,20 @@
     else return nil;
 }
 
-//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-//    
-//    if(tableView == contentTable)
-//        if(aSwitch.on)
-//            return [sections indexOfObject:title];
-//        return 0;
-//    
-//    return 0;
-//    
-//}
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    
+    if(tableView == contentTable)
+        if(aSwitch.on)
+            return [sectionsForContentTable indexOfObject:title];
+        return 0;
+    
+    return 0;
+    
+}
 
 -(void)switchChanged
 {   
-    
-    
+
     if(aSwitch.on){
         [self changeFrameTables];
         [self fadeIn : contentTable withDuration: 0.55 andWait : 0.2 ];

@@ -247,13 +247,10 @@
     [prefs setObject:selectedCells forKey:@"selectedCells"];
     
     [prefs removeObjectForKey:@"switch"];
-    [prefs setBool:aSwitch.on forKey:@"switch"];
-    
-    //salvo informazioni sullo stato del filtro, se attivato o no
-    [prefs removeObjectForKey:@"switchStatus"];
-    if(aSwitch.on)
-        [prefs setObject:@"ON" forKey:@"switchStatus"];
-    else [prefs setObject:@"OFF" forKey:@"switchStatus"];
+    if(selectedCells.count == 0)
+        [prefs setBool:NO forKey:@"switch"];
+    else [prefs setBool:aSwitch.on forKey:@"switch"];
+
     [prefs synchronize];
 }
 

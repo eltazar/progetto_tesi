@@ -26,8 +26,8 @@ NSString* key(NSURLConnection* con);
 @property(nonatomic,assign) id<DatabaseAccessDelegate> delegate;
 
 -(void)jobWriteRequest:(Job*)job;
--(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field;
--(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)oldRegion field:(NSInteger)field;
+-(void)jobReadRequest:(MKCoordinateRegion)region field:(NSString*)field;
+-(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)oldRegion field:(NSString*)field;
 -(void)registerDevice:(NSString*)token;
 
 @end

@@ -9,7 +9,7 @@
 #import "DatabaseAccess.h"
 #import "NSDictionary_JSONExtensions.h"
 #import "Job.h"
-
+#import "Utilities.h"
 NSString* key(NSURLConnection* con)
 {
     return [NSString stringWithFormat:@"%p",con];
@@ -78,15 +78,17 @@ NSString* key(NSURLConnection* con)
 }
 
 //invia richiesta lettura da db
--(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSInteger)field
+-(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSString*)field
 {
+    NSLog(@"DATABASE ACCESS FIELD 1 = %@",field);
+    
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read2.php"];
     
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *postFormatString = @"oldLatitude=%f&oldLongitude=%f&oldLatSpan=%f&oldLongSpan=%f&newLatitude=%f&newLongitude=%f&newLatSpan=%f&newLongSpan=%f&field=%d";
+    NSString *postFormatString = @"oldLatitude=%f&oldLongitude=%f&oldLatSpan=%f&oldLongSpan=%f&newLatitude=%f&newLongitude=%f&newLatSpan=%f&newLongSpan=%f&field=%@";
     NSString *postString = [NSString stringWithFormat:postFormatString,
                             oldRegion.center.latitude,oldRegion.center.longitude,oldRegion.span.latitudeDelta,oldRegion.span.longitudeDelta,
                                 newRegion.center.latitude,newRegion.center.longitude,newRegion.span.latitudeDelta,newRegion.span.longitudeDelta,field];
@@ -118,14 +120,16 @@ NSString* key(NSURLConnection* con)
     }
 }   
 
--(void)jobReadRequest:(MKCoordinateRegion)region field:(NSInteger)field
+-(void)jobReadRequest:(MKCoordinateRegion)region field:(NSString*)field
 {
+     NSLog(@"DATABASE ACCESS FIELD 2 = %@",field);
+    
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read.php"];
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *postFormatString = @"latitude=%f&longitude=%f&latSpan=%f&longSpan=%f&field=%d";
+    NSString *postFormatString = @"latitude=%f&longitude=%f&latSpan=%f&longSpan=%f&field=%@";
     NSString *postString = [NSString stringWithFormat:postFormatString,
                             region.center.latitude,region.center.longitude,region.span.latitudeDelta,region.span.longitudeDelta,field];
     
@@ -160,13 +164,15 @@ NSString* key(NSURLConnection* con)
 //invia richiesta scrittura su db
 -(void)jobWriteRequest:(Job *)job
 { 
+    
+    NSLog(@"JOB CODE: %@", job.code);
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/write.php"];    
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *postFormatString = @"description=%@&phone=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=0";
+    NSString *postFormatString = @"description=%@&phone=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=%@";
     NSString *postString = [NSString stringWithFormat:postFormatString,
         job.description,
         job.phone,
@@ -174,7 +180,8 @@ NSString* key(NSURLConnection* con)
         job.urlAsString,
         job.date,
         job.coordinate.latitude,
-        job.coordinate.longitude
+        job.coordinate.longitude,
+        job.code
     ];
     
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -247,14 +254,14 @@ NSString* key(NSURLConnection* con)
 
     //NSLog(@"DONE. Received Bytes: %d", [receivedData length]);
     NSString *json = [[NSString alloc] initWithBytes: [receivedData mutableBytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
-    //NSLog(@"JSON %p %@",json, json);
+    //NSLog(@"JSON  %@", json);
     
     if([readConnections containsObject:connection]){
         //creo array di job
         NSError *theError = NULL;
         NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
        // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
-        //NSLog(@"%@",dictionary);
+       // NSLog(@"%@",dictionary);
         NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
     
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -265,10 +272,11 @@ NSString* key(NSURLConnection* con)
            NSDictionary *tempDict = [dictionary objectAtIndex:i];
            CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
            Job *job = [[[Job alloc] initWithCoordinate:coordinate] autorelease]; //aggiunto 7 nov
-            
+                       
             //sistemare il tipo ritornato da field e da date
+           job.employee = [Utilities sectorFromCode:[tempDict objectForKey:@"field"]];
            job.idDb = [[tempDict objectForKey:@"id"] integerValue];
-           job.employee = [tempDict objectForKey:@"field"];
+           job.code = [tempDict objectForKey:@"field"];
            job.date = [formatter dateFromString: [tempDict objectForKey:@"date"]];
            job.description = [tempDict objectForKey:@"description"];
            job.phone = [tempDict objectForKey:@"phone"];

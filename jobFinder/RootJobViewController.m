@@ -86,38 +86,7 @@
 - (void)viewDidLoad
 {   
     [super viewDidLoad];
-    
-    
-    //    UIBarButtonItem* btnSubmitSignup = [[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"Join",@"") style:UIBarButtonItemStylePlain target:self action:@selector(bla:)];
-    //	[[self navigationItem] setRightBarButtonItem:btnSubmitSignup];
-    
-    //    tableView = [[EditableJobViewController alloc] init]; 
-    
-    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    
-    //    [self.centralView addSubview:tableView.view];    
-    
-    
-    
-    //    UITableViewController *prova = [[UITableViewController alloc] init ];
-    //    //tableController = [[UITableViewController alloc] init];
-    //    [self.view addSubview:prova.tableView];
-    
-    
-    
-    
-    
-    // Do any additional setup after loading the view from its nib.
-    /*self.title = @"Dettagli";
-     self.insertButton =[[UIBarButtonItem alloc]
-     initWithTitle:@"Inserisci" style:(UIBarButtonSystemItemAdd) target:(self) action:@selector(bla)];
-     self.navigationItem.rightBarButtonItem = insertButton ; // not it..
-     //[self.navigationController presentModalViewController:self animated:YES];
-     
-     [insertButton release] ;*/
-    
-    
+    //[self.tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background.png"]] autorelease] ];    
 }
 
 
@@ -134,18 +103,11 @@
     
 }
 
-
-#pragma mark Texfield Delegate
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField
-//{ 
-//	[textField resignFirstResponder];
-//	return YES;
-//}
-
-//- (void)textFieldDidBeginEditing:(UITextField *)textField
-//{
-//}
-
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
 
 #pragma mark - Memory management
 
@@ -164,12 +126,5 @@
     [sectionData release];
     [super dealloc];
 }
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 
 @end

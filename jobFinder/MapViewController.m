@@ -15,7 +15,6 @@
 #import "MKMapView+Utils.h"
 #import "GeoDecoder.h"
 #import "Utilities.h"
-#import "NSDictionary_JSONExtensions.h"
 
 
 #define DEFAULT_COORDINATE -180
@@ -183,7 +182,7 @@
         if(count == 0)
             ++count;
         else if(count == 1){
-            [dbAccess jobReadRequest:mapView.region field: -1];
+            [dbAccess jobReadRequest:mapView.region field:[Utilities createStringFields]];
             ++count;
         }
         else if(count == 2){
@@ -204,14 +203,15 @@
                 MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
                 
                 //in base a come effettuo lo zoom cambia il tipo di query
+                //NSLog(@"FABS %f",fabs(newRect.size.width - oldRect.size.width));
                 if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
                     
-                    //NSLog(@"PHP 2");
-                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:-1];
+                    NSLog(@"PHP 2");
+                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:[Utilities createStringFields]];
                 }
                 else{
-                    //NSLog(@"PHP 1");
-                    [dbAccess jobReadRequest:regionQuery field: -1];
+                    NSLog(@"PHP 1");
+                    [dbAccess jobReadRequest:regionQuery field: [Utilities createStringFields]];
                 }
             }
             else{
@@ -485,7 +485,9 @@
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
 {
-    if(![receivedData isEqualToString:@"\"OK\""]){
+    NSLog(@"RECEIVED DATA: %@",receivedData);
+    
+    if(![receivedData isEqualToString:@"OK"]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
         [alert show];
         [alert release];
@@ -676,7 +678,7 @@
         [map removeAnnotation:jobToPublish];
         //[map addAnnotation:jobToPublish];
         //faccio partire una query per far caricare il nuovo job sulla mappa
-        [dbAccess jobReadRequest:map.region field:-1];
+        [dbAccess jobReadRequest:map.region field:[Utilities createStringFields]];
     }
     
     //fa sparire con uno slide la alternativeToolbar
@@ -754,7 +756,7 @@
         [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
     }
     //oldRegion = map.region;
-
+    NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);
 }
 
 - (void)viewDidLoad
@@ -822,11 +824,7 @@
     
     [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
 
-    /* Inizializzazione valori booleani per la classe
-     */
-    //di default i pin non possono esser "draggabili"
-    isDragPinOnMap = NO;
-    
+
     /* Gestione delle configurazioni preferite dell'utente
      */
     //recupero le coordinate preferite all'avvio dell'app ed aggiungo la relativa annotation
@@ -840,6 +838,11 @@
         [map addAnnotation:favouriteAnnotation];   
         
     } 
+    
+    /* Inizializzazione valori booleani per la classe
+     */
+    //di default i pin non possono esser "draggabili"
+    isDragPinOnMap = NO;
 
     /* inizializzazione classi ausiliarie necessarie al map view controller
      */

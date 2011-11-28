@@ -362,6 +362,7 @@
 
 
 -(void)dealloc{
+    [code release];
     [subtitle release];
     [employee release];
     [date release];

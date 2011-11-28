@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<array>
-    <dict>
-        <key> </key>
-        <array>
-            <dict>
-                <key>label</key>
-                <string>Filtro</string>
-            </dict>
-        </array>
-    </dict>
-    
+<array>    
     <dict>
         <key>A</key>
         <array>
@@ -19,67 +9,67 @@
 				<key>label</key>
 				<string>Abbigliamento</string>
 				<key>enum</key>
-				<string>a2</string>
+				<string>a1</string>
 			</dict>
 			<dict>
 				<key>label</key>
 				<string>Acquisti</string>
 				<key>enum</key>
-				<string>a3</string>
+				<string>a2</string>
 			</dict>
             <dict>
 				<key>label</key>
 				<string>Affari legali</string>
 				<key>enum</key>
-				<string>a4</string>
+				<string>a3</string>
 			</dict>
             <dict>
 				<key>label</key>
 				<string>Agricoltura</string>
 				<key>enum</key>
-				<string>a5</string>
+				<string>a4</string>
 			</dict>
             <dict>
                 <key>label</key>
                 <string>Alberghi</string>
                 <key>enum</key>
-                <string>a6</string>
+                <string>a5</string>
             </dict>
             <dict>
                 <key>label</key>
                 <string>Alimentazione</string>
                 <key>enum</key>
-                <string>a7</string>
+                <string>a6</string>
             </dict>
             <dict>
                 <key>label</key>
                 <string>Amministrazione</string>
                 <key>enum</key>
-                <string>a8</string>
+                <string>a7</string>
             </dict>	
             <dict>
                 <key>label</key>
                 <string>Architettura - design</string>
                 <key>enum</key>
-                <string>a9</string>
+                <string>a8</string>
             </dict>	
             <dict>
                 <key>label</key>
                 <string>Arte - cultura</string>
                 <key>enum</key>
-                <string>a10</string>
+                <string>a9</string>
             </dict>
             <dict>
                 <key>label</key>
                 <string>Artigianato</string>
                 <key>enum</key>
-                <string>a11</string>
+                <string>a10</string>
             </dict>
             <dict>
                 <key>label</key>
                 <string>Assicurazioni</string>
                 <key>enum</key>
-                <string>a12</string>
+                <string>a11</string>
             </dict>
 		</array>
     </dict>
@@ -278,31 +268,31 @@
 				<key>label</key>
 				<string>Lavori pubblici</string>
 				<key>enum</key>
-				<string>l1</string>
+				<string>l2</string>
 			</dict>
 			<dict>
 				<key>label</key>
 				<string>Legge e finanza</string>
 				<key>enum</key>
-				<string>l2</string>
+				<string>l3</string>
 			</dict>
 			<dict>
 				<key>label</key>
 				<string>Libera professione</string>
 				<key>enum</key>
-				<string>l3</string>
+				<string>l4</string>
 			</dict>
             <dict>
 				<key>label</key>
 				<string>Locali pubblici</string>
 				<key>enum</key>
-				<string>l4</string>
+				<string>l5</string>
 			</dict>
 			<dict>
 				<key>label</key>
 				<string>Logistica e trasporti</string>
 				<key>enum</key>
-				<string>l5</string>
+				<string>l6</string>
 			</dict>	
 		</array>
     </dict>
@@ -487,7 +477,7 @@
 				<key>label</key>
 				<string>Altro</string>
 				<key>enum</key>
-				<string>a1</string>
+				<string>spec1</string>
             </dict>
         </array>
     </dict>

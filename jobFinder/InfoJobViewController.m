@@ -20,8 +20,7 @@
     self = [super initWithNibName:@"RootJobViewController" bundle:nil];
     if (self) {
         // Custom initialization
-#warning giusto fare così???
-        job = [aJob retain]; //??? GIUSTO????
+        job = [aJob retain];
     }
     return self;
     
@@ -259,7 +258,7 @@
     
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
-                         @"Impiego",          @"label",
+                         @"Settore",          @"label",
                          @"",                 @"detailLabel",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],

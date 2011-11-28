@@ -18,7 +18,7 @@
 
 - (id) initWithStandardRootViewController
 {    
-    tableView = [[EditJobViewController alloc] initWithNibName:@"RootJobViewController" bundle:nil]; //autorelease?
+    tableView = [[EditJobViewController alloc] initWithNibName:@"RootJobViewController" bundle:nil];
     
     self = [super initWithRootViewController:tableView];
     
@@ -39,7 +39,7 @@
 
     //setto data creazione annuncio, il formato è tale per esser compatibile con mysql
     newJob.date = [NSDate date];
-    NSLog(@"NSDATE IS : %@",newJob.date);
+    //NSLog(@"NSDATE IS : %@",newJob.date);
        
     //se i campi inseriti sono formalmente validi controllo connessione per invio
     if([self validate:newJob]){    
@@ -69,8 +69,6 @@
     tableView.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
-
-#warning spostare nella logica??
 -(BOOL)validate:(Job*) job
 {
     BOOL rtn = YES; 

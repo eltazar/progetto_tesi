@@ -11,6 +11,9 @@
 
 @protocol GeoDecoderDelegate;
 
+
+/* Wrapper su api di google per geocoding e reverseGeocoding
+ */
 @interface GeoDecoder : NSObject{
     
     NSMutableData *receivedGeoData;

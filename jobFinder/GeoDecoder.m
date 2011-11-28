@@ -57,8 +57,6 @@
 
 -(void)searchAddressForCoordinate:(CLLocationCoordinate2D)coordinate
 {
-   // http://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=true_or_false
-
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&sensor=true",coordinate.latitude,coordinate.longitude];    
     
     //Replace Spaces with a '+' character.
@@ -106,7 +104,7 @@
     NSError *theError = NULL;
     dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
     
-    //NSLog(@"%@",dictionary);
+   // NSLog(@"%@",dictionary);
 //    NSLog(@"JSON is: %@",jsonResult);
     
     [delegate didReceivedGeoDecoderData:dictionary];

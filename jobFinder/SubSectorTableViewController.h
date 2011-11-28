@@ -8,6 +8,8 @@
 
 #import "SectorTableViewController.h"
 
+//tabelle per sottocategorie - non usate
+
 @interface SubSectorTableViewController : SectorTableViewController
 
 @end

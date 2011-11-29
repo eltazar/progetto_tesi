@@ -24,7 +24,6 @@
 		AC4A049C1422369200FE96F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AC4A049A1422369200FE96F7 /* InfoPlist.strings */; };
 		AC4A049E1422369200FE96F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A049D1422369200FE96F7 /* main.m */; };
 		AC4A04A21422369200FE96F7 /* jobFinderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04A11422369200FE96F7 /* jobFinderAppDelegate.m */; };
-		AC4A04A51422369200FE96F7 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04A31422369200FE96F7 /* MainWindow.xib */; };
 		AC4A04AD1422369200FE96F7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04AC1422369200FE96F7 /* SenTestingKit.framework */; };
 		AC4A04AE1422369200FE96F7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04911422369200FE96F7 /* UIKit.framework */; };
 		AC4A04AF1422369200FE96F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04931422369200FE96F7 /* Foundation.framework */; };
@@ -35,6 +34,7 @@
 		AC4A04C6142236CA00FE96F7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4A04C5142236CA00FE96F7 /* MapKit.framework */; };
 		AC4A04CA142239E300FE96F7 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04C8142239E300FE96F7 /* MapViewController.m */; };
 		AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04C9142239E300FE96F7 /* MapViewController.xib */; };
+		AC59F49714853E8300B00D41 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC59F49814853E8300B00D41 /* MainWindow.xib */; };
 		AC65376614797ACC0099D60D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = AC65376514797ACC0099D60D /* background.png */; };
 		AC7135DD144F45CD0022A47C /* SearchZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */; };
 		AC7135DE144F45CD0022A47C /* SearchZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC7135DC144F45CD0022A47C /* SearchZoneViewController.xib */; };
@@ -131,7 +131,6 @@
 		AC4A049F1422369200FE96F7 /* jobFinder-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "jobFinder-Prefix.pch"; sourceTree = "<group>"; };
 		AC4A04A01422369200FE96F7 /* jobFinderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jobFinderAppDelegate.h; sourceTree = "<group>"; };
 		AC4A04A11422369200FE96F7 /* jobFinderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jobFinderAppDelegate.m; sourceTree = "<group>"; };
-		AC4A04A41422369200FE96F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		AC4A04AB1422369200FE96F7 /* jobFinderTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = jobFinderTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC4A04AC1422369200FE96F7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		AC4A04B51422369200FE96F7 /* jobFinderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jobFinderTests-Info.plist"; sourceTree = "<group>"; };
@@ -142,6 +141,7 @@
 		AC4A04C7142239E300FE96F7 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		AC4A04C8142239E300FE96F7 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		AC4A04C9142239E300FE96F7 /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
+		AC59F49814853E8300B00D41 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		AC65376514797ACC0099D60D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = SOURCE_ROOT; };
 		AC7135DA144F45CC0022A47C /* SearchZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchZoneViewController.h; sourceTree = "<group>"; };
 		AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchZoneViewController.m; sourceTree = "<group>"; };
@@ -340,7 +340,7 @@
 				AC4A04A11422369200FE96F7 /* jobFinderAppDelegate.m */,
 				AC3CD532147D5F9300F80C76 /* Utilities.h */,
 				AC3CD533147D5F9300F80C76 /* Utilities.m */,
-				AC4A04A31422369200FE96F7 /* MainWindow.xib */,
+				AC59F49814853E8300B00D41 /* MainWindow.xib */,
 				AC4A04C7142239E300FE96F7 /* MapViewController.h */,
 				AC4A04C8142239E300FE96F7 /* MapViewController.m */,
 				ACBAF54E14696963006A2A6D /* MKMapView+Utils.h */,
@@ -580,7 +580,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC4A049C1422369200FE96F7 /* InfoPlist.strings in Resources */,
-				AC4A04A51422369200FE96F7 /* MainWindow.xib in Resources */,
+				AC59F49714853E8300B00D41 /* MainWindow.xib in Resources */,
 				AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */,
 				ACCAB8051435A115008DA6B8 /* ConfigViewController.xib in Resources */,
 				AC154CD4143A315600AE5FAD /* RootJobViewController.xib in Resources */,
@@ -712,14 +712,6 @@
 				AC4A049B1422369200FE96F7 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		AC4A04A31422369200FE96F7 /* MainWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AC4A04A41422369200FE96F7 /* en */,
-			);
-			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
 		AC4A04B61422369200FE96F7 /* InfoPlist.strings */ = {

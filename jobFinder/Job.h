@@ -19,6 +19,7 @@
     NSString *email;
     NSURL *url;
     NSString *code;   
+    NSString *time;
     
     NSString *address;
     NSString *city;
@@ -30,7 +31,7 @@
 }
 
 #warning controllare bene attributi di queste property
-
+@property(nonatomic,retain) NSString *time;
 @property(nonatomic, retain) NSString *code;
 @property(nonatomic, assign) NSInteger idDb;
 @property(nonatomic, assign) BOOL isDraggable;

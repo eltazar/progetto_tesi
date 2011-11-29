@@ -10,7 +10,7 @@
 
 @implementation Job
 
-@synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle, idDb, code;
+@synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle, idDb, code, time;
 @synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init
@@ -80,6 +80,18 @@
         return [NSString stringWithFormat:@"%@", [formatter stringFromDate:date]];
     }
     else return @"Non disponibile";
+}
+
+-(void) setTime:(NSString *)newTime
+{
+    if([newTime isKindOfClass:[NSNull class]] || [newTime isEqualToString:@""]){
+        [time release];
+        time = @"";
+        return;
+    }
+    [newTime retain];
+    [time release];
+    time = newTime;
 }
 
 -(void) setEmail:(NSString*)newEmail
@@ -362,6 +374,7 @@
 
 
 -(void)dealloc{
+    [time release];
     [code release];
     [subtitle release];
     [employee release];

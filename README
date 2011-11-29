@@ -5,20 +5,29 @@ JobFinder:
 
 #############
 TODO LIST:
-notifhce push:
--registrazione token ad avvio app se internet off
 
-filtro:
--fare json o stringa a1,b1,….  da mandare in post
+- db: quando si cambia preferito
+ -> togliere da job_for_user record che nn sono nella zona preferita
+ -> scandire la tabella job per trovare job nn più vecchi di 1 giorno e controllare quali sono nella nuova zona pref.
 
-- scrivere una regex per il campo phone di job
 - verificare supporto iOS 5 (classe NSUrlConnection, ecc…)
 - verificare supporto metodi tra tutte le versioni di iOS 4.x (CLLLocationManager, UITableView, ecc…)
+- memory warning
+- scrivere una regex per il campo phone di job
+
 
 ------------------------
 
 INIZIATO 24 nov
 - implementare notifiche push
+
+FATTO 28 nov:
+filtro:
+-fare json o stringa a1,b1,….  da mandare in post
+
+FATTO 27 nov:
+notifhce push:
+-registrazione token ad avvio app se internet off
 
 FATTO 21 novembre
 - finire di scrivere la lista dei settori di lavoro e inserirla nel progetto

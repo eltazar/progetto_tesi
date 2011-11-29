@@ -262,40 +262,44 @@ NSString* key(NSURLConnection* con)
         NSArray *dictionary = [NSMutableDictionary dictionaryWithJSONString:json error:&theError];
        // NSLog(@"TIPO DEL DIZIONARIO %@",[dictionary class]);
        // NSLog(@"%@",dictionary);
-        NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
-    
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
-        //    return [f dateFromString:dateString];
-        //NSLog(@"FORMATTER = %p",formatter);
-       for(int i=0; i < dictionary.count-1; i++){
-           NSDictionary *tempDict = [dictionary objectAtIndex:i];
-           CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
-           Job *job = [[[Job alloc] initWithCoordinate:coordinate] autorelease]; //aggiunto 7 nov
-                       
-            //sistemare il tipo ritornato da field e da date
-           job.employee = [Utilities sectorFromCode:[tempDict objectForKey:@"field"]];
-           job.idDb = [[tempDict objectForKey:@"id"] integerValue];
-           job.code = [tempDict objectForKey:@"field"];
-           job.date = [formatter dateFromString: [tempDict objectForKey:@"date"]];
-           job.description = [tempDict objectForKey:@"description"];
-           job.phone = [tempDict objectForKey:@"phone"];
-           //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
-           job.email = [tempDict objectForKey:@"email"];
-           [job setUrlWithString:[tempDict objectForKey:@"url"]];
+        
+        if(dictionary != nil){
+            NSMutableArray *jobsArray = [[NSMutableArray alloc]initWithCapacity:dictionary.count];
+        
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
+            //    return [f dateFromString:dateString];
+            //NSLog(@"FORMATTER = %p",formatter);
+           for(int i=0; i < dictionary.count-1; i++){
+               NSDictionary *tempDict = [dictionary objectAtIndex:i];
+               CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
+               Job *job = [[[Job alloc] initWithCoordinate:coordinate] autorelease]; //aggiunto 7 nov
+                           
+                //sistemare il tipo ritornato da field e da date
+               job.employee = [Utilities sectorFromCode:[tempDict objectForKey:@"field"]];
+               job.time = [tempDict objectForKey:@"time"];
+               job.idDb = [[tempDict objectForKey:@"id"] integerValue];
+               job.code = [tempDict objectForKey:@"field"];
+               job.date = [formatter dateFromString: [tempDict objectForKey:@"date"]];
+               job.description = [tempDict objectForKey:@"description"];
+               job.phone = [tempDict objectForKey:@"phone"];
+               //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
+               job.email = [tempDict objectForKey:@"email"];
+               [job setUrlWithString:[tempDict objectForKey:@"url"]];
+                
+                [jobsArray addObject:job];
+            }
             
-            [jobsArray addObject:job];
+            if(delegate != nil &&[delegate respondsToSelector:@selector(didReceiveJobList:)])
+                [delegate didReceiveJobList:jobsArray];
+            
+            [jobsArray release];
+            [formatter release];
+            formatter = nil;
         }
         
-        if(delegate != nil &&[delegate respondsToSelector:@selector(didReceiveJobList:)])
-            [delegate didReceiveJobList:jobsArray];
-        
         [readConnections removeObject:connection];
-        [jobsArray release]; //aggiunto 7 novembre
-        [formatter release];
-        formatter = nil;
-    
-        
+       
     }else{        
         [delegate didReceiveResponsFromServer:json];
         [writeConnections removeObject:connection];

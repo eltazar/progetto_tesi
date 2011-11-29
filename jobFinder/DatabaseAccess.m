@@ -10,10 +10,7 @@
 #import "NSDictionary_JSONExtensions.h"
 #import "Job.h"
 #import "Utilities.h"
-NSString* key(NSURLConnection* con)
-{
-    return [NSString stringWithFormat:@"%p",con];
-}
+
 
 @implementation DatabaseAccess
 @synthesize delegate;
@@ -30,6 +27,11 @@ NSString* key(NSURLConnection* con)
     }
     
     return self;
+}
+
+NSString* key(NSURLConnection* con)
+{
+    return [NSString stringWithFormat:@"%p",con];
 }
 
 //invia richiesta registrazione token device sul db
@@ -56,7 +58,7 @@ NSString* key(NSURLConnection* con)
     [request setHTTPBody:postData];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
+
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -101,8 +103,13 @@ NSString* key(NSURLConnection* con)
     
     [request setHTTPBody:postData];
     
+    NSLog(@"DB ACCESS RETAIN COUNT PRIMA = %d", [self retainCount]);
+
+    
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
+    NSLog(@"DB ACCESS RETAIN COUNT dopo = %d", [self retainCount]);
+
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -172,8 +179,9 @@ NSString* key(NSURLConnection* con)
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *postFormatString = @"description=%@&phone=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=%@";
+    NSString *postFormatString = @"time=%@&description=%@&phone=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=%@";
     NSString *postString = [NSString stringWithFormat:postFormatString,
+        job.time,
         job.description,
         job.phone,
         job.email,

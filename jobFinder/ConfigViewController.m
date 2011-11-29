@@ -199,15 +199,17 @@
     [delegate didSelectedFavouriteZone:CLLocationCoordinate2DMake(latitude,longitude)]; 
     [self.navigationController popViewControllerAnimated:YES];
     
-    //TODO: chiamare metodo che fa query di aggiornamento token-nuovaPosizione
+    //scrivo sul db il cambiamento della zona preferita per il relativo token
     
-    if([Utilities networkReachable]){
+    jobFinderAppDelegate *appDelegate = (jobFinderAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if([Utilities networkReachable] && appDelegate.tokenDevice != nil){
         NSLog(@"CONFIG VIEW: sto cambiando preferito");
-        dbAccess = [[DatabaseAccess alloc] init];
+        DatabaseAccess *dbAccess = [[DatabaseAccess alloc] init];
         [dbAccess setDelegate:self];
-        jobFinderAppDelegate *appDelegate = (jobFinderAppDelegate *)[[UIApplication sharedApplication] delegate];
         NSLog(@"token in configView = %@",[appDelegate tokenDevice]);
         [dbAccess registerDevice:appDelegate.tokenDevice];
+        [dbAccess release];
     }
     else{
         
@@ -322,9 +324,7 @@
 }
 
 - (void)dealloc 
-{
-    [dbAccess release];
-    [sectionDescripition release];
+{    [sectionDescripition release];
     [sectionData release];  
 //    [searchZone release];
     [super dealloc];

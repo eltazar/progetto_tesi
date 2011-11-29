@@ -22,7 +22,6 @@
     NSArray *sectionData;
     SearchZoneViewController *searchZone;
     id<ConfigViewControllerDelegate> delegate;
-    DatabaseAccess *dbAccess;
 }
 @property(nonatomic,assign) id<ConfigViewControllerDelegate> delegate;
 @end

@@ -19,8 +19,12 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        
-        
+        segmentedCtrl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Part-time",@"Full-time", nil]];       
+        segmentedCtrl.frame = CGRectMake(27, 7, 180, 30);
+        [segmentedCtrl addTarget:self
+                             action:@selector(selectedTime:)
+                   forControlEvents:UIControlEventValueChanged];
+        segmentedCtrl.segmentedControlStyle = UISegmentedControlStyleBar;
     }
     return self;
 }
@@ -34,6 +38,13 @@
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     
     BaseCell *cell = (BaseCell*)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+    if(indexPath.section == 0 && indexPath.row == 1){
+        
+        cell.accessoryView = segmentedCtrl;
+        //[cell.contentView addSubview:segmentedCtrl]; 
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;        
+    }
     
     [self fillCell:cell rowDesc:rowDesc];
     
@@ -147,6 +158,20 @@
     if([self.tableView viewWithTag:1111] != nil)
         [[self.tableView viewWithTag:1111] resignFirstResponder];
 }
+
+- (void) selectedTime:(id)sender{
+    switch(segmentedCtrl.selectedSegmentIndex)
+    {
+        case 0:
+            job.time = @"Part-time";
+            break;
+        case 1:
+            job.time = @"Full-time";
+            break;
+    }
+    
+    NSLog(@"JOB TIME = %@",job.time);
+}
     
 
 #pragma mark - View lifecycle
@@ -180,6 +205,15 @@
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           nil] autorelease] atIndex: 0];
+     
+     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                          @"time",             @"DataKey",
+                          @"BaseCell",         @"kind", 
+                          @"Contratto",                 @"label",
+                          @"",                 @"placeholder",
+                          @"",                 @"img",
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
+                          nil] autorelease] atIndex: 1];
      
      [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                           @"description",      @"DataKey",
@@ -264,7 +298,7 @@
 }
 
 -(void) dealloc
-{
+{   [segmentedCtrl release];
     [job release]; //aggiunti 19 novembre
     job = nil; 
     [super dealloc];

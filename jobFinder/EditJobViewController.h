@@ -13,6 +13,7 @@
  */
 
 @interface EditJobViewController : RootJobViewController <UITextFieldDelegate, UITextViewDelegate, SectorTableDelegate>{
+    UISegmentedControl *segmentedCtrl;
     
 }
 

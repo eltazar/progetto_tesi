@@ -63,10 +63,14 @@
             if(row == 0)
                 cell.detailTextLabel.text = job.employee;
             else if(row == 1)
-                cell.detailTextLabel.text = [job stringFromDate];
+                if(![job.time isEqualToString:@""])
+                    cell.detailTextLabel.text = job.time;
+                else cell.detailTextLabel.text = @"Non disponibile";
             else if(row == 2)
-                cell.detailTextLabel.text = job.address;
+                cell.detailTextLabel.text = [job stringFromDate];
             else if(row == 3)
+                cell.detailTextLabel.text = job.address;
+            else if(row == 4)
                 cell.detailTextLabel.text = job.city;
             
             break;
@@ -229,7 +233,7 @@
     }
     job.address = address;
     //aggiorno il model usando la stringa address e ricarico i dati della tabella 
-    [[[sectionData objectAtIndex:0] objectAtIndex:2] setObject:address forKey:@"detailLabel"];
+    [[[sectionData objectAtIndex:0] objectAtIndex:3] setObject:address forKey:@"detailLabel"];
     [self.tableView reloadData];        
 }
 
@@ -266,12 +270,21 @@
                          nil] autorelease] atIndex: 0];
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
+                         @"Contratto",        @"label",
+                         @"",                 @"detailLabel",
+                         @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
+                         @"style",
+                         nil] autorelease] atIndex: 1];
+
+    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"InfoCell",         @"kind", 
                          @"Inserito il",      @"label",
                          @"",                 @"detailLabel",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
                             @"style",
-                         nil] autorelease] atIndex: 1];
+                         nil] autorelease] atIndex: 2];
     
     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
@@ -280,7 +293,7 @@
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
                          @"style",
-                         nil] autorelease] atIndex: 2];
+                         nil] autorelease] atIndex: 3];
     
 //    [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
 //                         @"InfoCell",         @"kind", 

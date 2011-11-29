@@ -20,15 +20,16 @@
 #define DEFAULT_COORDINATE -180
 #define iphoneScaleFactorLatitude   17.0    
 #define iphoneScaleFactorLongitude  21.0
-#define ZOOM_THRESHOLD 10 //760567.187974
+#define ZOOM_THRESHOLD 10 //=760567.187974
 #define ZOOM_MAX 18
-#define EPS 0.00001
+#define EPS 0.0000001
 
 #pragma mark - Metodi e ivar private
 
 /*Dichiaro property e metodi privati per il MapViewController
  */
 @interface MapViewController()
+@property(nonatomic, assign) BOOL oldSwitch;
 @property(nonatomic,retain) NSTimer *timer;
 @property(nonatomic, retain)NSMutableArray *receivedAnnotations;
 @property(nonatomic, assign) int oldZoom;
@@ -48,7 +49,7 @@
 //ivar pubbliche
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
 //ivar private
-@synthesize annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer;
+@synthesize annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer, oldSwitch;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -174,7 +175,6 @@
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {   
     //se c'è un pin draggabile sulla mappa non faccio fare letture dal db, risparmio un po di query
-    //se c'è internet
     if(!isDragPinOnMap){
             
         static int count = 0;        
@@ -182,7 +182,7 @@
         if(count == 0)
             ++count;
         else if(count == 1){
-            [dbAccess jobReadRequest:mapView.region field:[Utilities createStringFields]];
+            [dbAccess jobReadRequest:mapView.region field:[Utilities createFieldsString]];
             ++count;
         }
         else if(count == 2){
@@ -203,15 +203,15 @@
                 MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
                 
                 //in base a come effettuo lo zoom cambia il tipo di query
-                //NSLog(@"FABS %f",fabs(newRect.size.width - oldRect.size.width));
+                NSLog(@"FABS %ef",fabs(newRect.size.width - oldRect.size.width));
                 if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
                     
                     NSLog(@"PHP 2");
-                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:[Utilities createStringFields]];
+                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:[Utilities createFieldsString]];
                 }
                 else{
                     NSLog(@"PHP 1");
-                    [dbAccess jobReadRequest:regionQuery field: [Utilities createStringFields]];
+                    [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
                 }
             }
             else{
@@ -678,7 +678,7 @@
         [map removeAnnotation:jobToPublish];
         //[map addAnnotation:jobToPublish];
         //faccio partire una query per far caricare il nuovo job sulla mappa
-        [dbAccess jobReadRequest:map.region field:[Utilities createStringFields]];
+        [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
     }
     
     //fa sparire con uno slide la alternativeToolbar
@@ -746,18 +746,26 @@
     else{
         refreshBtn.enabled = NO;
     }
-    
+
+     
     //setto il colore del tasto di filtro per segnalare se l'utente ha il filtro su on od off
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if([prefs boolForKey:@"switch"]){
+    
+        
+    if(  [prefs boolForKey:@"switch"]){
         [filterButton setImage:[UIImage imageNamed:@"filterYellow.png"]];
-        [map removeAnnotations:[map annotations]];
-        [dbAccess jobReadRequest:map.region field:[Utilities createStringFields]];
+        if(oldSwitch == FALSE){
+            NSLog(@"OLD SWITCH");
+            [map removeAnnotations:[map jobAnnotations]];
+            [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+        }
     }
     else{
         [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
-        [dbAccess jobReadRequest:map.region field:[Utilities createStringFields]];
+        [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
     }
+    oldSwitch = [prefs boolForKey:@"switch"];
+    
     //oldRegion = map.region;
     NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);
 }
@@ -846,6 +854,7 @@
      */
     //di default i pin non possono esser "draggabili"
     isDragPinOnMap = NO;
+    oldSwitch = [prefs boolForKey:@"switch"];
 
     /* inizializzazione classi ausiliarie necessarie al map view controller
      */

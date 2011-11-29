@@ -156,9 +156,10 @@
            ![tokenDevice isEqualToString:@""]){
             
             NSLog(@" APP DELEGATE : preferito settato");
-            dbAccess = [[DatabaseAccess alloc] init];
+            DatabaseAccess *dbAccess = [[DatabaseAccess alloc] init];
             [dbAccess setDelegate:self];
             [dbAccess registerDevice:newToken];
+            [dbAccess release];
         }
         else{
             
@@ -196,10 +197,10 @@
     NSLog(@"################");
     NSLog(@"HANDLE NETWORK CHANGE");
     
-    NetworkStatus remoteHostStatus = [reachability currentReachabilityStatus];  
+    NetworkStatus remoteStatus = [reachability currentReachabilityStatus];  
     
     //se internet è raggiungibile e il token non è stato ancora inviato
-    if(remoteHostStatus != NotReachable && !tokenSended){
+    if(remoteStatus != NotReachable && !tokenSended){
         NSLog(@"DENTRO IF");
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
        
@@ -207,11 +208,12 @@
            [pref objectForKey: @"long"] != nil){
             
             NSLog(@" APP DELEGATE : preferito settato");
-            dbAccess = [[DatabaseAccess alloc] init];
+            DatabaseAccess  *dbAccess = [[DatabaseAccess alloc] init];
             [dbAccess setDelegate:self];
             [dbAccess registerDevice:tokenDevice];
             [[NSNotificationCenter defaultCenter] removeObserver:self];
             [reachability stopNotifier];
+            [dbAccess release];
         }
         else{
             NSLog(@" APP DELEGATE : nessun preferito");        
@@ -244,7 +246,6 @@
 - (void)dealloc
 {   
     [reachability release];
-    [dbAccess release];
     [navController release];
     [_window release];
     [super dealloc];

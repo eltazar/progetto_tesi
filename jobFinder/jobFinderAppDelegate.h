@@ -12,7 +12,6 @@
 @class MapViewController;
 @interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate>{
     UINavigationController *navController; 
-    DatabaseAccess *dbAccess;
     NSString *tokenDevice;
     BOOL tokenSended;
     Reachability *reachability;

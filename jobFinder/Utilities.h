@@ -12,7 +12,7 @@
 
 +(BOOL)networkReachable;
 +(NSUserDefaults*)userDefaults;
-+(NSString*)sectorFromCode:(NSString*)code;
-+(NSString*) createStringFields;
++(NSString*)sectorFromCode:(NSString*)code; 
++(NSString*) createFieldsString;
 +(NSString *) createLocalizedStringDate:(NSDate*)date;
 @end

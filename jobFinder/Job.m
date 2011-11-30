@@ -8,6 +8,7 @@
 
 #import "Job.h"
 
+#import "Utilities.h"
 @implementation Job
 
 @synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle, idDb, code, time;
@@ -47,8 +48,10 @@
 
 
 - (NSString *)title {
-    if(employee != nil)
-        return employee;
+//    if(employee != nil)
+//        return employee;
+    if(employee == nil)
+        return [Utilities sectorFromCode:code];
     return @"Sposta il pin se vuoi";
 }
 

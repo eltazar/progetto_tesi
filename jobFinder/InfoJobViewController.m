@@ -11,6 +11,7 @@
 #import "BaseCell.h"
 #import "GeoDecoder.h"
 #import <objc/runtime.h>
+#import "Utilities.h"
 
 
 @implementation InfoJobViewController
@@ -61,7 +62,7 @@
     switch (section) {
         case 0:
             if(row == 0)
-                cell.detailTextLabel.text = job.employee;
+                cell.detailTextLabel.text = [Utilities sectorFromCode:job.code];
             else if(row == 1)
                 if(![job.time isEqualToString:@""])
                     cell.detailTextLabel.text = job.time;

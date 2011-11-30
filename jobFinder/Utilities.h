@@ -14,4 +14,5 @@
 +(NSUserDefaults*)userDefaults;
 +(NSString*)sectorFromCode:(NSString*)code;
 +(NSString*) createStringFields;
++(NSString *) createLocalizedStringDate:(NSDate*)date;
 @end

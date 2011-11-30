@@ -83,4 +83,19 @@
     return stringFields;
 }
 
++(NSString *) createLocalizedStringDate:(NSDate*)date
+{
+    NSLocale *locale = [NSLocale currentLocale];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init]; 
+    NSString *dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyyMMMd" options:0 locale:locale];
+    [formatter setDateFormat:dateFormat];
+    [formatter setLocale:locale];
+    
+    NSString *stringDate = [NSString stringWithFormat:@"%@", [formatter stringFromDate:date]];
+    
+    [formatter release];
+    
+    return  stringDate;
+}
+
 @end

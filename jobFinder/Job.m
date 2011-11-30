@@ -58,14 +58,8 @@
 - (NSString *)subtitle {
     
     if(date != nil){
-        //setto data creazione annuncio
-        NSLocale *locale = [NSLocale currentLocale];
-        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease]; 
-        NSString *dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyyMMMd" options:0 locale:locale];
-        [formatter setDateFormat:dateFormat];
-        [formatter setLocale:locale];
-        
-        return [NSString stringWithFormat:@"Inserito: %@", [formatter stringFromDate:date]];
+        //ritorna data formattata secondo la localizzazione dell'utente
+       return [Utilities createLocalizedStringDate:date];
     }
     else return @"";
 }
@@ -73,14 +67,8 @@
 -(NSString*)stringFromDate
 {
     if(date != nil){
-        //setto data creazione annuncio
-        NSLocale *locale = [NSLocale currentLocale];
-        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease]; 
-        NSString *dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyyMMMd" options:0 locale:locale];
-        [formatter setDateFormat:dateFormat];
-        [formatter setLocale:locale];
-        
-        return [NSString stringWithFormat:@"%@", [formatter stringFromDate:date]];
+        //ritorna data formattata secondo la localizzazione dell'utente
+        return [Utilities createLocalizedStringDate:date];
     }
     else return @"Non disponibile";
 }

@@ -322,7 +322,7 @@
     MKMapPoint center = [MKMapView centerPointForMapRect: [map visibleMapRect]];
     MKCoordinateRegion region;
     MKMapRect rect;
-    NSMutableArray *mutableNewAnnotations;
+    //NSMutableArray *mutableNewAnnotations;
     
     
     NSMutableArray *jobToShow=[[NSMutableArray alloc] initWithCapacity:0];
@@ -357,7 +357,7 @@
     //se sto facendo zoom in.
     //calcola quali sono tra le newAnnotations quelle che non sono già sulla mappa
     [self removeDuplicateAnnotations:newAnnotations];
-    mutableNewAnnotations = [newAnnotations mutableCopy];
+    //mutableNewAnnotations = [newAnnotations mutableCopy];
     
     
     //calcola per ogni livello di zoom ed in base al fattore di scala quante annotazioni vanno inserite sulla mappa (fitting)
@@ -370,8 +370,8 @@
         latDelta = region.span.latitudeDelta / iphoneScaleFactorLatitude;
         longDelta = region.span.longitudeDelta / iphoneScaleFactorLongitude;
         
-        for (int i=0; i<[mutableNewAnnotations count]; i++) {
-            Job *checkingAnnotation=[mutableNewAnnotations objectAtIndex:i];
+        for (int i=0; i<[newAnnotations count]; i++) {
+            Job *checkingAnnotation=[newAnnotations objectAtIndex:i];
             CLLocationDegrees latitude = [checkingAnnotation coordinate].latitude;
             CLLocationDegrees longitude = [checkingAnnotation coordinate].longitude;
             
@@ -409,7 +409,7 @@
         }
         //NSLog(@" COUNT = %d", cont);
         
-        [mutableNewAnnotations removeObjectsAtIndexes:indexes];
+        [newAnnotations removeObjectsAtIndexes:indexes];
         [indexes removeAllIndexes];
     }
     //}
@@ -419,7 +419,7 @@
     self.oldZoom = [map currentZoomLevel];
         
     [indexes release];
-    [mutableNewAnnotations release];
+    //[mutableNewAnnotations release];
     [jobToShow release];
 }
 

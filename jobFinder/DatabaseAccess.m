@@ -284,7 +284,7 @@ NSString* key(NSURLConnection* con)
                Job *job = [[[Job alloc] initWithCoordinate:coordinate] autorelease]; //aggiunto 7 nov
                            
                 //sistemare il tipo ritornato da field e da date
-               job.employee = [Utilities sectorFromCode:[tempDict objectForKey:@"field"]];
+               //job.employee = [Utilities sectorFromCode:[tempDict objectForKey:@"field"]];
                job.time = [tempDict objectForKey:@"time"];
                job.idDb = [[tempDict objectForKey:@"id"] integerValue];
                job.code = [tempDict objectForKey:@"field"];

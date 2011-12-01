@@ -29,6 +29,7 @@
 /*Dichiaro property e metodi privati per il MapViewController
  */
 @interface MapViewController()
+@property(nonatomic,retain) NSString *oldFieldsString;
 @property(nonatomic, assign) BOOL oldSwitch;
 @property(nonatomic,retain) NSTimer *timer;
 @property(nonatomic, retain)NSMutableArray *receivedAnnotations;
@@ -49,7 +50,7 @@
 //ivar pubbliche
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
 //ivar private
-@synthesize annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer, oldSwitch;
+@synthesize annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer, oldSwitch, oldFieldsString;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -771,12 +772,18 @@
             [map removeAnnotations:[map jobAnnotations]];
             [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
         }
+        else if(![oldFieldsString isEqualToString:[Utilities createFieldsString]]){
+            [map removeAnnotations:[map jobAnnotations]];
+            [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+        }
     }
     else{
         [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
         [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
     }
+    
     oldSwitch = [prefs boolForKey:@"switch"];
+    self.oldFieldsString = [Utilities createFieldsString];
     
     //oldRegion = map.region;
     NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);
@@ -866,8 +873,13 @@
      */
     //di default i pin non possono esser "draggabili"
     isDragPinOnMap = NO;
-    oldSwitch = [prefs boolForKey:@"switch"];
 
+    /*Inizializzazione proprietà filtro settori
+     */
+    oldSwitch = [prefs boolForKey:@"switch"];
+    self.oldFieldsString = @"";
+    
+    
     /* inizializzazione classi ausiliarie necessarie al map view controller
      */
     //alloco l'istanza per accesso al db

@@ -349,13 +349,17 @@
     
     if(a < b) {
         for (int p = a; p < b; p++) {
-            [tempArray insertObject: [totalArray objectAtIndex:p] atIndex:i];
-            i++;
+            if((i-1 <0) || ((Job*)[totalArray objectAtIndex:p]).idDb != ((Job*)[tempArray objectAtIndex:i-1]).idDb){
+                [tempArray insertObject: [totalArray objectAtIndex:p] atIndex:i];
+                i++;
+            }
         }
     } else {
         for (int p = c; p < d; p++) {
-            [tempArray insertObject: [jobs objectAtIndex:p] atIndex:i];
-            i++;
+            if((i-1 <0) || ((Job*)[jobs objectAtIndex:p]).idDb != ((Job*)[tempArray objectAtIndex:i-1]).idDb){
+                [tempArray insertObject: [jobs objectAtIndex:p] atIndex:i];
+                i++;
+            }
         }
     }
     

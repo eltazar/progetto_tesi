@@ -120,10 +120,17 @@
     
     //se la annotatione è di tipo FavouriteAnnotation la creo e salvo 
     if([annotation isKindOfClass:[FavouriteAnnotation class]]){
-        MKPinAnnotationView *favouritePinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
+                
+        MKAnnotationView *favouritePinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"favouritePin" ];
+        if(favouritePinView == nil){
+            favouritePinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"favouritePin"] autorelease];
+        }
+        
+        favouritePinView.annotation = annotation;
         favouritePinView.tag = 122;
         favouritePinView.canShowCallout = YES;
         favouritePinView.image=[UIImage imageNamed:@"favPin.png"];
+
         return favouritePinView;
     }
     

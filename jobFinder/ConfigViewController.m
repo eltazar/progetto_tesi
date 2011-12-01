@@ -201,24 +201,9 @@
     
     //scrivo sul db il cambiamento della zona preferita per il relativo token
     
-    jobFinderAppDelegate *appDelegate = (jobFinderAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    if([Utilities networkReachable] && appDelegate.tokenDevice != nil){
-        NSLog(@"CONFIG VIEW: sto cambiando preferito");
-        DatabaseAccess *dbAccess = [[DatabaseAccess alloc] init];
-        [dbAccess setDelegate:self];
-        NSLog(@"token in configView = %@",[appDelegate tokenDevice]);
-        [dbAccess registerDevice:appDelegate.tokenDevice];
-        [dbAccess release];
-    }
-    else{
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-        [alert release];
-        
-    }
-
+#if !TARGET_IPHONE_SIMULATOR
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+#endif
     
 }
 

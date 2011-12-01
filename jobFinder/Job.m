@@ -80,7 +80,7 @@
 
 -(void) setTime:(NSString *)newTime
 {
-    if([newTime isKindOfClass:[NSNull class]] || [newTime isEqualToString:@""]){
+    if([newTime isKindOfClass:[NSNull class]] || [newTime isEqualToString:@""] || newTime == nil){
         [time release];
         time = @"";
         return;

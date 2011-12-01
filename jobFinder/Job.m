@@ -50,9 +50,14 @@
 - (NSString *)title {
 //    if(employee != nil)
 //        return employee;
-    if(employee == nil)
+    
+    if(isDraggable)
+        return @"Sposta il pin se vuoi";
+    if([Utilities sectorFromCode:code] != nil)
         return [Utilities sectorFromCode:code];
-    return @"Sposta il pin se vuoi";
+    
+    return @"";
+
 }
 
 - (NSString *)subtitle {

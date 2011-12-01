@@ -19,8 +19,8 @@
 
 #define DEFAULT_COORDINATE -180
 #define iphoneScaleFactorLatitude   17.0    
-#define iphoneScaleFactorLongitude  21.0
-#define ZOOM_THRESHOLD 10 //=760567.187974
+#define iphoneScaleFactorLongitude  20.0
+#define ZOOM_THRESHOLD 8 //=760567.187974
 #define ZOOM_MAX 18
 #define EPS 0.0000001
 
@@ -207,11 +207,18 @@
                 if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
                     
                     NSLog(@"PHP 2");
-                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:regionQuery field:[Utilities createFieldsString]];
+                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:map.region field:[Utilities createFieldsString]];
                 }
                 else{
-                    NSLog(@"PHP 1");
-                    [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
+                    if([map currentZoomLevel] >= ZOOM_THRESHOLD){
+                        NSLog(@"PHP 1A");
+                        [dbAccess jobReadRequest:map.region field: [Utilities createFieldsString]];
+                    }
+                    else{
+                        NSLog(@"PHP 1B");
+                        [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
+                    }
+                        
                 }
             }
             else{
@@ -400,7 +407,7 @@
             if (!found) {
                 cont++;
                 [jobToShow addObject:checkingAnnotation];
-                [map addAnnotation:checkingAnnotation];
+                //[map addAnnotation:checkingAnnotation];
                 [[zoomBuffer objectAtIndex:(j - ZOOM_THRESHOLD)] addObject:checkingAnnotation];
                 [indexes addIndex:i];
                 //NSLog(@"\n*********ADD********\n*\n zoomBuffer[%d] = %d \n*******************\n * map annotations: %d",j - ZOOM_THRESHOLD,[[zoomBuffer objectAtIndex:j - ZOOM_THRESHOLD] count], [[map annotations]count]);
@@ -415,6 +422,8 @@
     //}
     
     //NSLog(@"\n############# \n@MAP ANNS = %d\n############", [[map annotations] count]);
+    
+    [map addAnnotations:jobToShow];
     
     self.oldZoom = [map currentZoomLevel];
         
@@ -462,7 +471,7 @@
     //NSLog(@"RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
 
     //fa partire un filtro ogni tot secondi
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];    
 }
 
 //decide in base al livello di zoom quale filtro far partire
@@ -785,8 +794,8 @@
     //buffer di annotazioni aggiunte sotto la soglia di zoom 10
     annotationsBuffer = [[NSMutableArray alloc] init];
     //buffer composto da nove sotto array che contengono le annotazioni aggiunte ad ogni livello di zoom sopra la soglia 10
-    zoomBuffer = [[NSMutableArray alloc] initWithCapacity:9];
-    for(int i=0;i<9;i++)
+    zoomBuffer = [[NSMutableArray alloc] initWithCapacity:11];
+    for(int i=0;i<11;i++)
         [zoomBuffer insertObject:[[[NSMutableArray alloc]init]autorelease] atIndex:i];    
     //raccolta di annotazioni aggiunte ad ogni query
     receivedAnnotations = [[NSMutableArray alloc]init];

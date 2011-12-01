@@ -785,8 +785,10 @@
         }
     }
     else{
-        [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
-        [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+        if(oldSwitch == TRUE){
+            [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
+            [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+        }
     }
     
     oldSwitch = [prefs boolForKey:@"switch"];

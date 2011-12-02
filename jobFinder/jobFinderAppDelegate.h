@@ -12,14 +12,12 @@
 @class MapViewController;
 @interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate>{
     UINavigationController *navController; 
-    NSString *tokenDevice;
     BOOL tokenSended;
     Reachability *reachability;
 
 }
 
 @property(nonatomic, retain) IBOutlet MapViewController *mapController;
-@property(nonatomic, retain)NSString *tokenDevice;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navController;
 

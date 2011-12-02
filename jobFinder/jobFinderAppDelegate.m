@@ -16,7 +16,7 @@
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
-@synthesize navController, mapController, tokenDevice;
+@synthesize navController, mapController;
 
 
 
@@ -102,9 +102,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    NSLog(@"DID BECOME ACTIVE");
-   
+{   
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
@@ -137,12 +135,8 @@
 	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    //salvo token attuale
-    self.tokenDevice= newToken;
-   
-    
     NSLog(@"################");
-    NSLog(@"DID REGISTER: \nIl token è %@, ed è lungo %d", tokenDevice, [tokenDevice length]);
+    NSLog(@"DID REGISTER: \nIl token è %@, ed è lungo %d", newToken, [newToken length]);
 
     //se c'è connessione internet
     if([Utilities networkReachable]){
@@ -153,7 +147,7 @@
         //se coordinate sono settate e token è valido
         if([pref objectForKey: @"lat"] != nil &&
            [pref objectForKey: @"long"] != nil &&
-           ![tokenDevice isEqualToString:@""]){
+           ![newToken isEqualToString:@""]){
             
             NSLog(@" APP DELEGATE : preferito settato");
             DatabaseAccess *dbAccess = [[DatabaseAccess alloc] init];
@@ -178,7 +172,6 @@
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)err{
     
     NSLog(@"%@, %@, %@", [err localizedDescription], [err localizedFailureReason], [err localizedRecoverySuggestion]);
-    self.tokenDevice = @"";
 }
 
 
@@ -208,12 +201,11 @@
            [pref objectForKey: @"long"] != nil){
             
             NSLog(@" APP DELEGATE : preferito settato");
-            DatabaseAccess  *dbAccess = [[DatabaseAccess alloc] init];
-            [dbAccess setDelegate:self];
-            [dbAccess registerDevice:tokenDevice];
+        #if !TARGET_IPHONE_SIMULATOR
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+        #endif
             [[NSNotificationCenter defaultCenter] removeObserver:self];
             [reachability stopNotifier];
-            [dbAccess release];
         }
         else{
             NSLog(@" APP DELEGATE : nessun preferito");        

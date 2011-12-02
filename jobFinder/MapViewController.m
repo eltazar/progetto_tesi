@@ -16,11 +16,10 @@
 #import "GeoDecoder.h"
 #import "Utilities.h"
 
-
 #define DEFAULT_COORDINATE -180
-#define iphoneScaleFactorLatitude   17.0    
-#define iphoneScaleFactorLongitude  20.0
-#define ZOOM_THRESHOLD 8 //=760567.187974
+#define iphoneScaleFactorLatitude   19.0    
+#define iphoneScaleFactorLongitude  22.0
+#define ZOOM_THRESHOLD 10 //=760567.187974
 #define ZOOM_MAX 18
 #define EPS 0.0000001
 
@@ -179,72 +178,83 @@
     [infoJobView release];
 }
 
-//gestisce le chiamate al db in base al cambio di region
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
-{   
+{
     //se c'è un pin draggabile sulla mappa non faccio fare letture dal db, risparmio un po di query
     if(!isDragPinOnMap){
-            
+        
         static int count = 0;        
         
         if(count == 0)
             ++count;
         else if(count == 1){
-            [dbAccess jobReadRequest:mapView.region field:[Utilities createFieldsString]];
+            [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
             ++count;
         }
         else if(count == 2){
-            
-            //se c'è internet posso fare le query
-            if([Utilities networkReachable]){
-                
-                //calcolo i rect delle regioni
-                MKMapRect oldRect = [MKMapView mapRectForCoordinateRegion:oldRegion];
-                MKMapRect newRect = [MKMapView mapRectForCoordinateRegion:map.region];
-                MKMapRect newExtendedRect = [MKMapView mapRectForCoordinateRegion:map.region];  
-                
-                //ricalcolo il rect dell'attuale region per aumentarne le dimensioni e fare la query
-                newExtendedRect.origin.x -= newExtendedRect.size.width / 2;
-                newExtendedRect.origin.y -= newExtendedRect.size.height / 2;
-                newExtendedRect.size.width *= 2;
-                newExtendedRect.size.height *= 2;
-                MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
-                
-                //in base a come effettuo lo zoom cambia il tipo di query
-                NSLog(@"FABS %ef",fabs(newRect.size.width - oldRect.size.width));
-                if(fabs((newRect.size.width - oldRect.size.width)) < EPS && [map currentZoomLevel] >= ZOOM_THRESHOLD){
-                    
-                    NSLog(@"PHP 2");
-                    [dbAccess jobReadRequestOldRegion:oldRegion newRegion:map.region field:[Utilities createFieldsString]];
-                }
-                else{
-                    if([map currentZoomLevel] >= ZOOM_THRESHOLD){
-                        NSLog(@"PHP 1A");
-                        [dbAccess jobReadRequest:map.region field: [Utilities createFieldsString]];
-                    }
-                    else{
-                        NSLog(@"PHP 1B");
-                        [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
-                    }
-                        
-                }
-            }
-            else{
-                //se non c'è internet mostro alert
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
-                [alert release];
-            }
-            
-            if([map currentZoomLevel] < ZOOM_THRESHOLD)
-                self.oldZoom = ZOOM_THRESHOLD-1;
+            [timer invalidate];
+            timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(regionDidChange) userInfo:nil repeats:NO];
         }
-        
-        //aggiorno oldRegion con la region attuale
-        oldRegion = mapView.region;
-       
-       // NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
     }
+}
+
+//gestisce le chiamate al db in base al cambio di region
+- (void)regionDidChange
+{   
+    timer = nil;
+                
+    //se c'è internet posso fare le query
+    //if([Utilities networkReachable]){
+        
+        //calcolo i rect delle regioni
+        MKMapRect oldRect = [MKMapView mapRectForCoordinateRegion:oldRegion];
+        MKMapRect newRect = [MKMapView mapRectForCoordinateRegion:map.region];
+        MKMapRect newExtendedRect = [MKMapView mapRectForCoordinateRegion:map.region];  
+        
+        //ricalcolo il rect dell'attuale region per aumentarne le dimensioni e fare la query
+        newExtendedRect.origin.x -= newExtendedRect.size.width / 2;
+        newExtendedRect.origin.y -= newExtendedRect.size.height / 2;
+        newExtendedRect.size.width *= 2;
+        newExtendedRect.size.height *= 2;
+        MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
+        
+        //in base a come effettuo lo zoom cambia il tipo di query
+        NSLog(@"CURRENT ZOOM LIVEL: %d", [map currentZoomLevel]);
+        NSLog(@"FABS %ef",fabs(newRect.size.width - oldRect.size.width));
+        
+    
+    if([map currentZoomLevel] < ZOOM_THRESHOLD){
+        NSLog(@"PHP 1B");
+        [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
+    }
+    else
+    {
+        if(fabs((newRect.size.width - oldRect.size.width)) > EPS){
+            NSLog(@"PHP 1A");
+            [dbAccess jobReadRequest:map.region field: [Utilities createFieldsString]];
+        }
+        else{
+            NSLog(@"PHP 2");
+            [dbAccess jobReadRequestOldRegion:oldRegion newRegion:map.region field:[Utilities createFieldsString]];
+        }
+    }
+    
+   // }
+//            else{
+//                //se non c'è internet mostro alert
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//                [alert show];
+//                [alert release];
+//            }
+    
+        if([map currentZoomLevel] < ZOOM_THRESHOLD)
+            self.oldZoom = ZOOM_THRESHOLD-1;
+
+
+        //aggiorno oldRegion con la region attuale
+        oldRegion = map.region;
+
+        // NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
 }
 
 
@@ -302,6 +312,7 @@
     //rimuovo duplicati che sono tra newAnnotations e mapAnn
     NSMutableArray *newAnnotationNotInMap = [newAnnotations mutableCopy];
     [self removeDuplicateAnnotations:newAnnotationNotInMap];
+    //aggiungo alla mappa 
     [map addAnnotations:newAnnotationNotInMap];
     // e li aggiungo al buffer
     [annotationsBuffer addObjectsFromArray:newAnnotationNotInMap];
@@ -310,8 +321,10 @@
     
     /*fa si che sulla mappa rimangano tutte e sole le annotazioni ritornate dal db (che sono più aggiornate). Di conseguenza se viene superata la soglia di zoom vengono tolte tutte quelle aggiunte dall'altra funzione di filtro
      */
-        
+            
+    //fa si che sulla mappa siano presenti sempre le annotazioni nuove appena scaricate
     for(Job* an in mapAnn){
+        //se an non trovato tra le nuove annotazioni lo rimuovo dalla mappa
         if([Job jobBinarySearch:newAnnotations withID:((Job*)an).idDb] == -1){
             [map removeAnnotation:an];
             [annotationsBuffer removeObject:an];
@@ -369,9 +382,10 @@
     
     //############# ZOOM IN ################
     
-    //se sto facendo zoom in.
+    //se sto facendo zoom in o nn cambio livello di zoom.
     //calcola quali sono tra le newAnnotations quelle che non sono già sulla mappa
     [self removeDuplicateAnnotations:newAnnotations];
+    
     //mutableNewAnnotations = [newAnnotations mutableCopy];
     
     
@@ -390,6 +404,8 @@
             CLLocationDegrees latitude = [checkingAnnotation coordinate].latitude;
             CLLocationDegrees longitude = [checkingAnnotation coordinate].longitude;
             
+            
+            //se una nuova annotazione è troppo vicina a quelle da mostrare o a quelle presenti già sulla mappa la scarto
             bool found=FALSE;
             for (Job *tempPlacemark in jobToShow) {
                 if(fabs([tempPlacemark coordinate].latitude-latitude) < latDelta &&
@@ -411,7 +427,8 @@
                     }
                 }
             }
-            //solo se non trovo un pin troppo vicino ad un altro lo aggiungo
+            
+            //solo se non trovo un'annotazione troppo vicina ad un altra la aggiungo alla mappa e al buffer
             if (!found) {
                 cont++;
                 [jobToShow addObject:checkingAnnotation];
@@ -424,6 +441,7 @@
         }
         //NSLog(@" COUNT = %d", cont);
         
+        //rimuovo annotazioni già processate
         [newAnnotations removeObjectsAtIndexes:indexes];
         [indexes removeAllIndexes];
     }
@@ -470,39 +488,17 @@
  */
 -(void)didReceiveJobList:(NSArray *)jobList
 {
-    //NSLog(@"JOB LIST COUNT = %d",jobList.count);
-
-    //fonde in maniera ordinata le jobList provenienti dal server e le salva in receivedAnnotations
-    [Job mergeArray:receivedAnnotations withArray:jobList];
-    
-    
-    //NSLog(@"RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
-
-    //fa partire un filtro ogni tot secondi
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(startFiltering) userInfo:nil repeats:NO];    
-}
-
-//decide in base al livello di zoom quale filtro far partire
--(void)startFiltering
-{
-//    NSLog(@"--------------------------------------> ENTRATO");
-//    NSLog(@"---------------------------------------> RECEIVED ANNOTATIONS = %d",[receivedAnnotations count]);
- 
-    //decide quale filtro utilizzare in base al livello di zoom
-    
-    if([receivedAnnotations count] != 0){
+    if([jobList count] != 0){
         if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
-            [self filterOverThreshold:receivedAnnotations];
+            [self filterOverThreshold:jobList];
         }
-        else [self filterUnderThreshold:receivedAnnotations];
-    
-        [receivedAnnotations removeAllObjects];
+        else [self filterUnderThreshold:jobList];
     }    
 }
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
 {
-    NSLog(@"RECEIVED DATA: %@",receivedData);
+    //NSLog(@"RECEIVED DATA: %@",receivedData);
     
     if(![receivedData isEqualToString:@"OK"]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
@@ -510,9 +506,6 @@
         [alert release];
     }
 }
-
-
-
 
 #pragma mark - gestione click bottoni della view
 
@@ -690,6 +683,7 @@
     jobToPublish.isDraggable = NO;
     
     
+
     //richiedo scrittura su db dei dati
     [dbAccess jobWriteRequest:jobToPublish];
     
@@ -712,8 +706,8 @@
     //riattivo pulsante segnalazione
     publishBtn.enabled = YES;
     
-    [self dismissPublishView];  
-    
+    [self dismissPublishView]; 
+     
 }
 
 //rimuove il pin rosso dalla mappa se si è scelto di annullare la creazione
@@ -795,7 +789,7 @@
     self.oldFieldsString = [Utilities createFieldsString];
     
     //oldRegion = map.region;
-    NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);
+    //NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);
 }
 
 - (void)viewDidLoad
@@ -891,10 +885,10 @@
     
     /* inizializzazione classi ausiliarie necessarie al map view controller
      */
-    //alloco l'istanza per accesso al db
+    //alloco l'istanza per accesso al database
     dbAccess = [[DatabaseAccess alloc] init];
     [dbAccess setDelegate:self];
-    
+
     
 }
 

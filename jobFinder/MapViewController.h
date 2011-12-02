@@ -37,7 +37,7 @@
     DatabaseAccess *dbAccess;
       
     MKCoordinateRegion oldRegion;
-        
+    
 }
 @property(nonatomic, retain)Job *jobToPublish;
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;

@@ -57,7 +57,6 @@
 -(IBAction)configBtnClicked:(id)sender;
 -(IBAction)showUserLocationButtonClicked:(id)sender;
 -(IBAction)backBtnClicked:(id)sender;
--(double) fRand;
 -(IBAction)filterBtnClicked:(id)sender;
 -(void) refreshViewMap;
 @end

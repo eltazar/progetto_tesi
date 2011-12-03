@@ -38,7 +38,6 @@
 -(void)filterOverThreshold:(NSArray *)newAnnotations;
 -(void)filterUnderThreshold:(NSArray*)newAnnotations;
 -(void)removeDuplicateAnnotations:(NSMutableArray*)newAnnotations;
--(void)startFiltering;
 -(void) dismissPublishView;
 @end
 //end
@@ -580,7 +579,7 @@
     PublishViewController *publishViewCtrl = [[PublishViewController alloc]initWithStandardRootViewController];
     publishViewCtrl.pwDelegate = self;
     //passo in avanti il puntatore a jobToPublish
-    publishViewCtrl.newJob = jobToPublish;
+    publishViewCtrl.theNewJob = jobToPublish;
     [self presentModalViewController:publishViewCtrl animated:YES];
     [publishViewCtrl release];
 }
@@ -673,7 +672,7 @@
 
 /*richiamato dalla view modale dopo il click su inserisci. spedisce i dati sul db
  */
--(void)didInsertNewJob:(Job *)newJob
+-(void)didInsertNewJob:(Job *)theNewJob
 {    
     //segnala che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO; 

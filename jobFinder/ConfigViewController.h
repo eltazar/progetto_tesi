@@ -22,7 +22,9 @@
     NSArray *sectionData;
     SearchZoneViewController *searchZone;
     id<ConfigViewControllerDelegate> delegate;
+    
 }
+@property(nonatomic,retain) IBOutlet UIView *sapienzaImage;
 @property(nonatomic,assign) id<ConfigViewControllerDelegate> delegate;
 @end
 

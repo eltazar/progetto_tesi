@@ -17,7 +17,7 @@
 #define URL_INFO @"http://www.google.it" //per prova
 
 @implementation ConfigViewController
-@synthesize delegate;
+@synthesize delegate, sapienzaImage;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -236,7 +236,8 @@
     //creo le sezioni
     NSMutableArray *secA = [[NSMutableArray alloc] init];
     NSMutableArray *secB = [[NSMutableArray alloc] init];
-    
+    NSMutableArray *secC = [[NSMutableArray alloc] init];
+    NSMutableArray *secD = [[NSMutableArray alloc] init];
     
     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                          @"bookmarks",              @"DataKey",
@@ -256,28 +257,45 @@
                          nil] autorelease] atIndex: 1];
     
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"site",              @"DataKey",
+                         @"InfoCell",          @"kind",
+                         @"Emanuele Panizzi",  @"label",
+                         @"",                  @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
+                         nil]autorelease] atIndex: 0];
+    
+    [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"site",             @"DataKey",
+                         @"InfoCell",         @"kind",
+                         @"Mario Greco",      @"label",
+                         @"",         @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
+                         nil]autorelease] atIndex: 0];
+    
+    [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"email",            @"DataKey",
                          @"ActionCell",       @"kind",
-                         @"Contattaci",       @"label",
+                         @"Scrivici",       @"label",
                          @"mail.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil] autorelease] atIndex: 0];
     
-    [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+    [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"site",             @"DataKey",
                          @"ActionCell",       @"kind",
-                         @"Visita il sito",   @"label",
+                         @"Visitaci",   @"label",
                          @"home.png",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil]autorelease] atIndex: 1];
     
-    sectionData = [[NSArray alloc] initWithObjects: secA, secB, nil];
-    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"About Us",nil];
+    
+    
+    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC,secD, nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"Supervisor",@"Developer",@"Contatti",nil];
     
     [secA autorelease];
     [secB autorelease];
-    
-    //[self.tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background.png"]] autorelease] ];
+
 }
 
 

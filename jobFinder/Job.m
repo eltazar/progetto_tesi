@@ -11,7 +11,7 @@
 #import "Utilities.h"
 @implementation Job
 
-@synthesize employee, date, address, city, description, phone, url, email, coordinate, subtitle, idDb, code, time;
+@synthesize employee, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time;
 @synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init

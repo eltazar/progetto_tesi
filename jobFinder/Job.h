@@ -35,7 +35,8 @@
 @property(nonatomic, retain) NSString *code;
 @property(nonatomic, assign) NSInteger idDb;
 @property(nonatomic, assign) BOOL isDraggable;
-@property(nonatomic, retain) NSString *subtitle;
+@property (nonatomic, readonly, copy) NSString *title;
+@property (nonatomic, readonly, copy) NSString *subtitle;
 @property(nonatomic, retain) NSString *employee;
 @property(nonatomic, retain) NSDate *date;
 @property(nonatomic, retain) NSString *address;

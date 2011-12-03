@@ -297,7 +297,7 @@
         // Check if the facebook session is valid.
         // If it’s not valid clear any authorization and mark the status as not connected.
         if (![facebook isSessionValid]) {
-            [facebook authorize:nil];
+            //[facebook authorize:nil];
             isConnected = NO;
         }
         else {

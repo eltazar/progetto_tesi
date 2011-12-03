@@ -12,7 +12,7 @@
 #import "Utilities.h"
 
 @implementation PublishViewController
-@synthesize pwDelegate, jobCoordinate, addressGeocoding, newJob;
+@synthesize pwDelegate, jobCoordinate, addressGeocoding, theNewJob;
 
 
 
@@ -38,11 +38,11 @@
     [self.view endEditing:TRUE];
 
     //setto data creazione annuncio, il formato è tale per esser compatibile con mysql
-    newJob.date = [NSDate date];
+    theNewJob.date = [NSDate date];
     //NSLog(@"NSDATE IS : %@",newJob.date);
        
     //se i campi inseriti sono formalmente validi controllo connessione per invio
-    if([self validate:newJob]){    
+    if([self validate:theNewJob]){    
         //controllo stato connessione
         if(![Utilities networkReachable]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -50,7 +50,7 @@
             [alert release];
         }
             
-        else [pwDelegate didInsertNewJob:newJob]; //passo al delegato il nuovo job;
+        else [pwDelegate didInsertNewJob:theNewJob]; //passo al delegato il nuovo job;
         
     }
     
@@ -92,7 +92,7 @@
 {
     [super viewWillAppear:animated];
     //passo il newJob alla tabella per esser riempito
-    ((EditJobViewController *) tableView).job = newJob;
+    ((EditJobViewController *) tableView).job = theNewJob;
     //NSLog(@"WILL: NEW JOB PUNTA A: %p", newJob);
 }
 
@@ -142,7 +142,7 @@
 
 - (void) dealloc
 {
-    [newJob release], newJob = nil;
+    [theNewJob release], theNewJob = nil;
     [tableView release];
     [super dealloc];
 }

@@ -23,7 +23,7 @@
     id<PublishViewControllerDelegate> pwDelegate;
     //la tabella per la raccolta dati dell'utente
     RootJobViewController *tableView;
-    Job *newJob;
+    Job *theNewJob;
     //coordinate del newJob da inserire nel db
     CLLocationCoordinate2D jobCoordinate;
     
@@ -31,7 +31,7 @@
     NSString *addressGeocoding;
 }
 
-@property(nonatomic, retain) Job *newJob;
+@property(nonatomic, retain) Job *theNewJob;
 @property(nonatomic, assign) id<PublishViewControllerDelegate> pwDelegate;
 @property(nonatomic, assign) CLLocationCoordinate2D jobCoordinate;
 @property(nonatomic, retain) NSString *addressGeocoding;
@@ -46,6 +46,6 @@
 ////metodi protocollo
 @protocol PublishViewControllerDelegate <NSObject>
 //-(void)publishViewControllerDidInsert:(PublishViewController *)viewController aJob:(Job *)job;
--(void)didInsertNewJob:(Job *) newJob;
+-(void)didInsertNewJob:(Job *) theNewJob;
 -(void)didCancelNewJob:(PublishViewController *)viewController;
 @end

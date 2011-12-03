@@ -9,7 +9,7 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/Job.m"
-         timestampString = "344439427.941373"
+         timestampString = "344450761.710586"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "313"
@@ -36,13 +36,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "jobFinder/ConfigViewController.m"
-         timestampString = "344281726.734439"
+         filePath = "jobFinder/MapViewController.m"
+         timestampString = "344632717.517065"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "212"
-         endingLineNumber = "212"
-         landmarkName = "-didSelectedPreferredAddress:withLatitude:andLongitude:"
+         startingLineNumber = "204"
+         endingLineNumber = "204"
+         landmarkName = "-regionDidChange"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -50,13 +50,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "jobFinder/MapViewController.m"
-         timestampString = "344438652.777773"
+         filePath = "jobFinder/Job.m"
+         timestampString = "344448889.591113"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "188"
-         endingLineNumber = "188"
-         landmarkName = "-mapView:regionDidChangeAnimated:"
+         startingLineNumber = "82"
+         endingLineNumber = "82"
+         landmarkName = "-setTime:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -64,13 +64,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "jobFinder/MapViewController.m"
-         timestampString = "344438672.857425"
+         filePath = "jobFinder/Job.m"
+         timestampString = "344448891.315801"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "182"
-         endingLineNumber = "182"
-         landmarkName = "-mapView:regionDidChangeAnimated:"
+         startingLineNumber = "81"
+         endingLineNumber = "81"
+         landmarkName = "-setTime:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -78,13 +78,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "jobFinder/MapViewController.m"
-         timestampString = "344438680.209605"
+         filePath = "jobFinder/Job.m"
+         timestampString = "344472395.057095"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "181"
-         endingLineNumber = "181"
-         landmarkName = "-mapView:regionDidChangeAnimated:"
+         startingLineNumber = "322"
+         endingLineNumber = "322"
+         landmarkName = "+mergeArray:withArray:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -92,13 +92,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "jobFinder/MapViewController.m"
-         timestampString = "344438681.985223"
+         filePath = "jobFinder/Job.m"
+         timestampString = "344472714.737032"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "177"
-         endingLineNumber = "177"
-         landmarkName = "-mapView:regionDidChangeAnimated:"
+         startingLineNumber = "321"
+         endingLineNumber = "321"
+         landmarkName = "+mergeArray:withArray:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -106,13 +106,83 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "jobFinder/MapViewController.m"
-         timestampString = "344438757.135417"
+         filePath = "jobFinder/Job.h"
+         timestampString = "344543877.637812"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "176"
-         endingLineNumber = "176"
-         landmarkName = "-mapView:regionDidChangeAnimated:"
+         startingLineNumber = "37"
+         endingLineNumber = "37"
+         landmarkName = "title"
+         landmarkType = "19">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "jobFinder/InfoJobViewController.m"
+         timestampString = "344642771.592344"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "184"
+         endingLineNumber = "184"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "jobFinder/PostOnFacebook.h"
+         timestampString = "344602410.132391"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "31"
+         endingLineNumber = "31"
+         landmarkName = "actView"
+         landmarkType = "19">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "jobFinder/InfoJobViewController.m"
+         timestampString = "344642771.592344"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "325"
+         endingLineNumber = "325"
+         landmarkName = "-request:didLoad:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "jobFinder/InfoJobViewController.m"
+         timestampString = "344642771.592344"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "344"
+         endingLineNumber = "344"
+         landmarkName = "-request:didFailWithError:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "jobFinder/InfoJobViewController.m"
+         timestampString = "344642771.592344"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "343"
+         endingLineNumber = "343"
+         landmarkName = "-request:didFailWithError:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

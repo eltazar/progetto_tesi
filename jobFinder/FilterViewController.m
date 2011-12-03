@@ -221,11 +221,11 @@
 
     if(aSwitch.on){
         [self changeFrameTables];
-        [self fadeIn : contentTable withDuration: 0.55 andWait : 0.2 ];
+        [self fadeIn : contentTable withDuration: 0.3 andWait : 0.2 ];
     }
     else{
         [self changeFrameTables];
-        [self fadeOut :contentTable withDuration: 0.55 andWait : 0.2 ];
+        [self fadeOut :contentTable withDuration: 0.3 andWait : 0.2 ];
     }
     
     //ricarica il titolo della section

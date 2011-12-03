@@ -12,6 +12,9 @@
 #import "GeoDecoder.h"
 #import <objc/runtime.h>
 #import "Utilities.h"
+#import "FBConnect.h"
+#import "FBDialog.h"
+#import "Facebook.h"
 
 
 @implementation InfoJobViewController
@@ -71,8 +74,8 @@
                 cell.detailTextLabel.text = [job stringFromDate];
             else if(row == 3)
                 cell.detailTextLabel.text = job.address;
-            else if(row == 4)
-                cell.detailTextLabel.text = job.city;
+           // else if(row == 4)
+                //cell.detailTextLabel.text = job.city;
             
             break;
         case 1:
@@ -163,7 +166,35 @@
                 break; 
         }
     }
-    
+    else if(section == 3){
+#warning permettere solo 1 volta la condivisione di un job su fb?
+        if(row==0){
+            NSLog(@"selezionata riga di fb");
+            if (!isConnected) {
+                NSLog(@"non è connesso ---> lancio login");
+                [facebook authorize:permissions];
+//                [self postOnFacebookWall];
+            }
+            else{
+                NSLog(@"era gia connesso ---> invio post");
+                [self postOnFacebookWall];
+            }
+        }
+        else if(row == 1){
+            
+            MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+            mail.mailComposeDelegate = self;
+            
+            if([MFMailComposeViewController canSendMail]){
+                //[mail setToRecipients:[NSArray arrayWithObjects:cell.detailTextLabel.text, nil]];
+                [mail setSubject:@"Segnalazione offerta di lavoro da jobFinder"];
+                [mail setMessageBody:[self createJobString] isHTML:NO];
+                [self presentModalViewController:mail animated:YES];
+                [mail release];
+            }
+        }
+    }
+     
     //deseleziona cella
     [tableView deselectRowAtIndexPath:indexPath animated:YES];  
     
@@ -196,6 +227,154 @@
     }
 }
 
+
+#pragma mark - Metodi utili per facebook
+
+-(NSString*) createJobString
+{
+    NSMutableString *jobString = [NSMutableString stringWithFormat:@"%@",@"Ciao, vi segnalo questa opportunità di lavoro:\n\n"];
+    
+    [jobString appendString:[NSString stringWithFormat:@"Settore: %@ \n", [Utilities sectorFromCode:job.code]]];
+    [jobString appendString:[NSString stringWithFormat:@"Vicino a: %@ \n",[job address]]];
+    
+    if(![job.time isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"Contratto: %@ \n",job.time]];
+    
+    if(![job.description isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"Descrizione: %@ \n",job.description]];
+    if(![job.phone isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"Telefono: %@ \n",job.phone]];
+     
+    if(![job.email isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"E-mail: %@ \n",job.email]];
+    
+    if(![[job urlAsString] isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"Url: %@ \n",[job urlAsString]]];
+
+    return jobString;
+    
+}
+
+-(void)showActivityView{
+    // Show an alert with a message without the buttons.
+    [msgAlert show];
+    
+}
+
+
+-(void)stopShowingActivity{
+    [actView stopAnimating];
+    [msgAlert dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+-(void)postOnFacebookWall
+{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self showActivityView];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   @"175161829247160", @"app_id",
+                                   [NSString stringWithFormat:@"http://maps.google.it/maps?q=%f,%f",job.coordinate.latitude,job.coordinate.longitude], @"link",
+                                   @"", @"picture",
+                                   @"JobFinder", @"name",
+                                   @"Segnalazione di un lavoro da jobFinder", @"caption",
+                                   @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi.", @"description",
+                                   [self createJobString],@"message",
+                                   nil];                
+    [facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
+}
+
+-(void)checkForPreviouslySavedAccessTokenInfo{
+    // Initially set the isConnected value to NO.
+    isConnected = NO;
+    
+    // Check if there is a previous access token key in the user defaults file.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"] &&
+        [defaults objectForKey:@"FBExpirationDateKey"]) {
+        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+        NSLog(@"expirationDate = %@",facebook.expirationDate);       
+        // Check if the facebook session is valid.
+        // If it’s not valid clear any authorization and mark the status as not connected.
+        if (![facebook isSessionValid]) {
+            [facebook authorize:nil];
+            isConnected = NO;
+        }
+        else {
+            isConnected = YES;
+        }
+    }
+}
+
+-(void)saveAccessTokenKeyInfo{
+    // Save the access token key info into the user defaults.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[facebook accessToken] forKey:@"FBAccessTokenKey"];
+    [defaults setObject:[facebook expirationDate] forKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+}
+
+#pragma mark - Facebook's delegates
+
+-(void)request:(FBRequest *)request didReceiveResponse:(NSURLResponse *)response {
+    // Keep this just for testing purposes.
+    NSLog(@"received response");
+    
+}
+-(void)request:(FBRequest *)request didLoad:(id)result{
+    NSLog(@"facebook did load request: %@",result);
+    [self stopShowingActivity];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    if ([result isKindOfClass:[NSArray class]]) {
+        // The first object in the result is the data dictionary.
+        result = [result objectAtIndex:0];
+    }
+    if ([result objectForKey:@"first_name"]) {
+
+    }
+    else if ([result objectForKey:@"id"]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio inviato" message:@"Hai condiviso questa offerta di lavoro su facebook" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        [alert release];
+    }
+}
+
+-(void)request:(FBRequest *)request didFailWithError:(NSError *)error{
+    NSLog(@"%@", [error localizedDescription]);
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    if ([actView isAnimating]) {
+        [self stopShowingActivity];
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore" message:@"Non è stato possibile condividere questo contenuto su facebook, riprova" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [alert show];
+    [alert release];
+}
+
+-(void)fbDidLogin{
+    // Save the access token key info.
+    [self saveAccessTokenKeyInfo];
+    isConnected = YES;
+    // Get the user's info.
+    [facebook requestWithGraphPath:@"me" andDelegate:self];
+    [self postOnFacebookWall];
+    
+}
+
+-(void)fbDidNotLogin:(BOOL)cancelled{
+    
+    isConnected = NO;
+}
+
+-(void)fbDidLogout{
+    // Keep this for testing purposes.
+    NSLog(@"Logged out");
+}
+
+
+
+
 #pragma mark - GeodecoderDelegate
 
 //date le coordinate del job cerca il relativo indirizzo e lo mostra nella tabella
@@ -216,7 +395,6 @@
     //    NSLog(@"CLASSE: %s", class_getName([[dataArray objectAtIndex:0] class]));
         //NSLog(@"DATA ARRAY: %@", [[dataArray objectAtIndex:0] objectForKey:@"long_name"]);// 0 = dizionario street number
         
-    #warning fatto a mano ma deve farlo se c'è errore nel reverse gecoding, CORREGGERE!!!!
         address = @""; //dove mettere "non disponibile" ?
     #warning  CONTROLLARE dataArray quanti elementi ha l'array.
         NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
@@ -260,6 +438,7 @@
     NSMutableArray *secA = [[NSMutableArray alloc] init];
     NSMutableArray *secB = [[NSMutableArray alloc] init];
     NSMutableArray *secC = [[NSMutableArray alloc] init];
+    NSMutableArray *secD = [[NSMutableArray alloc] init];
     
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
@@ -329,8 +508,24 @@
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 2];
     
-    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
-    sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti", nil];  
+    [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"ActionCell",       @"kind", 
+                         @"Facebook",           @"label",
+                         @"",         @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
+                         nil]autorelease] atIndex: 0];
+    
+    [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"ActionCell",       @"kind", 
+                         @"E-mail",           @"label",
+                         @"",         @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
+                         nil]autorelease] atIndex: 1];
+
+
+    
+    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, secD,nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti",@"Condividi su", nil];  
     
     
 #warning REVERSE GECODING SPOSTARE??
@@ -348,11 +543,47 @@
     [secA autorelease];
     [secB autorelease];
     [secC autorelease];   
+    [secD autorelease];
+    
+    
+    //###### FACEBOOK ########
+    
+    msgAlert = [[UIAlertView alloc] initWithTitle:@"Invio..." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    actView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    actView.frame= CGRectMake(121,50, 37, 37);
+    //actView.center = CGPointMake(msgAlert.frame.size.width/2,msgAlert.frame.size.height/3);
+    [actView startAnimating];
+    [msgAlert addSubview:actView];
+    
+    // Set the permissions.
+    // Without specifying permissions the access to Facebook is imposibble.
+    permissions = [[NSArray arrayWithObjects:@"publish_stream", nil] retain];
+    
+    // Set the Facebook object we declared. We’ll use the declared object from the application
+    // delegate.
+    facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
+    
+    // Check if there is a stored access token.
+    [self checkForPreviouslySavedAccessTokenInfo];
+    NSLog(@"is connected = %d",isConnected);
+
+    // Specify the lblUser label's message depending on the isConnected value.
+    // If the access token not found and the user is not connected then prompt him/her to login.
+//    if (isConnected){
+//        // Get the user's name from the Facebook account. The message will be set later.
+//        [facebook requestWithGraphPath:@"me" andDelegate:self];
+//    }
 }
 
 
 - (void)viewDidUnload
 {
+    [facebook release];
+    facebook = nil;
+    [actView release];
+    actView = nil;
+    [msgAlert release];
+    msgAlert = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -377,6 +608,10 @@
 
 -(void) dealloc
 {   
+    NSLog(@"DALLOC");
+    [facebook release];
+    [msgAlert release];
+    [actView release];
     [job release];
     [super dealloc];
 }

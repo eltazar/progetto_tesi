@@ -11,12 +11,18 @@
 #import "ActionCell.h"
 #import <MessageUI/MessageUI.h>
 #import "GeoDecoder.h"
-
+#import "FBConnect.h"
+#import "Facebook.h"
 /* Rappresenta la tabella dei dati da mostrare quando viene selezionato un job sulla mappa
  */
 
-@interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate, GeoDecoderDelegate>
+@interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate, GeoDecoderDelegate, FBSessionDelegate, FBDialogDelegate, FBRequestDelegate>
 { 
+    NSArray *permissions;
+    Facebook *facebook;
+    BOOL isConnected;
+    UIActivityIndicatorView *actView;
+    UIAlertView *msgAlert;
 }
 
 -(id) initWithJob:(Job *)aJob;

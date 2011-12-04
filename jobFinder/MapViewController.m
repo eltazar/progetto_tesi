@@ -17,6 +17,7 @@
 #import "Utilities.h"
 
 #define DEFAULT_COORDINATE -180
+#define DEFAUlT_COORDINATE_0 0
 #define iphoneScaleFactorLatitude   19.0    
 #define iphoneScaleFactorLongitude  22.0
 #define ZOOM_THRESHOLD 10 //=760567.187974
@@ -31,7 +32,6 @@
 @property(nonatomic,retain) NSString *oldFieldsString;
 @property(nonatomic, assign) BOOL oldSwitch;
 @property(nonatomic,retain) NSTimer *timer;
-@property(nonatomic, retain)NSMutableArray *receivedAnnotations;
 @property(nonatomic, assign) int oldZoom;
 @property(nonatomic,retain) NSMutableArray *zoomBuffer;
 @property(nonatomic,retain) NSMutableArray *annotationsBuffer;
@@ -48,7 +48,7 @@
 //ivar pubbliche
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
 //ivar private
-@synthesize annotationsBuffer, zoomBuffer,oldZoom,receivedAnnotations, timer, oldSwitch, oldFieldsString;
+@synthesize annotationsBuffer, zoomBuffer,oldZoom, timer, oldSwitch, oldFieldsString;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -76,12 +76,15 @@
 {
     /*attivo il pulsante refresh in base alla user location. Se la localizzazione è disabilitata dopo un po la userLocation assume i valori di default, quindi disattivo il pulsante.
      */
-    if(userLocation.coordinate.latitude != DEFAULT_COORDINATE &&
-       userLocation.coordinate.longitude != DEFAULT_COORDINATE){
-        refreshBtn.enabled = YES;
+    if((userLocation.coordinate.latitude == DEFAULT_COORDINATE &&
+       userLocation.coordinate.longitude == DEFAULT_COORDINATE) || 
+        (userLocation.coordinate.latitude == DEFAUlT_COORDINATE_0 &&
+         userLocation.coordinate.longitude == DEFAUlT_COORDINATE_0))
+    {
+        refreshBtn.enabled = NO;
     }
     else{
-        refreshBtn.enabled = NO;
+        refreshBtn.enabled = YES;
     }
 }
 
@@ -462,7 +465,7 @@
 
 //all'avvio dell'app setta la region in base alla localizzazione del device utente, se il gps è spento
 -(void)didReceivedGeoDecoderData:(NSDictionary *)geoData
-{
+{    
     NSArray *resultsArray = [geoData objectForKey:@"results"];
     NSDictionary *result = [resultsArray objectAtIndex:0];
     CLLocationDegrees latitudeNE = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"northeast"] objectForKey:@"lat"] doubleValue];
@@ -514,11 +517,13 @@
     if([Utilities networkReachable]){
         CLLocationCoordinate2D coordinate;
         
+        NSLog(@"USER LOCATION, lat = %f, long = %f",map.userLocation.coordinate.latitude,map.userLocation.coordinate.longitude);
         //controllo se gps spento
-        if(map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE){
+        if((map.userLocation.coordinate.latitude == DEFAULT_COORDINATE && map.userLocation.coordinate.longitude == DEFAULT_COORDINATE) ||
+           (map.userLocation.coordinate.latitude == DEFAUlT_COORDINATE_0 && map.userLocation.coordinate.longitude == DEFAUlT_COORDINATE_0))
+        {
             
             //mostra avviso che gps spento 
-            
             //setta le coordinate del punto draggabile come quelle del centro della region attuale
             coordinate = CLLocationCoordinate2DMake(map.region.center.latitude,map.region.center.longitude);
         }
@@ -751,13 +756,16 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    //serve per riabilitare il tasto refreshBtn dopo un memory warnings
-    if(map.userLocation.coordinate.latitude != DEFAULT_COORDINATE &&
-       map.userLocation.coordinate.longitude != DEFAULT_COORDINATE){
-        refreshBtn.enabled = YES;
+    //serve per riabilitare il tasto refreshBtn dopo un memory warning
+    if((map.userLocation.coordinate.latitude == DEFAULT_COORDINATE &&
+        map.userLocation.coordinate.longitude == DEFAULT_COORDINATE) || 
+       (map.userLocation.coordinate.latitude == DEFAUlT_COORDINATE_0 &&
+        map.userLocation.coordinate.longitude == DEFAUlT_COORDINATE_0))
+    {
+        refreshBtn.enabled = NO;
     }
     else{
-        refreshBtn.enabled = NO;
+        refreshBtn.enabled = YES;
     }
 
      
@@ -805,19 +813,33 @@
      */
     //buffer di annotazioni aggiunte sotto la soglia di zoom 10
     annotationsBuffer = [[NSMutableArray alloc] init];
+    
     //buffer composto da nove sotto array che contengono le annotazioni aggiunte ad ogni livello di zoom sopra la soglia 10
     zoomBuffer = [[NSMutableArray alloc] initWithCapacity:11];
     for(int i=0;i<11;i++)
-        [zoomBuffer insertObject:[[[NSMutableArray alloc]init]autorelease] atIndex:i];    
-    //raccolta di annotazioni aggiunte ad ogni query
-    receivedAnnotations = [[NSMutableArray alloc]init];
+        [zoomBuffer insertObject:[[[NSMutableArray alloc]init]autorelease] atIndex:i];  
    
     /* se gps è disattivato interroga google per reperire il paese in base al currentLocale dell'utente
      */
-    if(![CLLocationManager locationServicesEnabled] || 
-       [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
-    {
-        //NSLog(@"CERCO REGIONE");
+    if([CLLocationManager locationServicesEnabled]) {
+        
+        if ([CLLocationManager respondsToSelector:@selector(authorizationStatus)]){
+            if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
+               // NSLog(@"GPS NON AUTORIZZATO PER L APP");
+                //NSLog(@"CERCO REGIONE");
+                GeoDecoder *geoDec = [[GeoDecoder alloc]init];
+                [geoDec setDelegate:self];
+                NSLocale *currentLocale = [NSLocale currentLocale];
+                NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+                countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
+                //NSLog(@"ULOCALE = %@",countryCode);
+                [geoDec searchCoordinatesForAddress:countryCode];
+                [geoDec release];
+            }
+        }
+    }
+    else {
+        //NSLog(@"GPS TOTALMENTE DISATTIVATO");
         GeoDecoder *geoDec = [[GeoDecoder alloc]init];
         [geoDec setDelegate:self];
         NSLocale *currentLocale = [NSLocale currentLocale];
@@ -826,7 +848,6 @@
         //NSLog(@"ULOCALE = %@",countryCode);
         [geoDec searchCoordinatesForAddress:countryCode];
         [geoDec release];
-        
     }
     
     /*inizializzazione pulsanti view
@@ -892,7 +913,6 @@
 }
 
 - (void)viewDidUnload
-{
 {    
     NSLog(@"MAPCONTROLLER DID UNLOAD");
     
@@ -935,7 +955,6 @@
     [dbAccess release];
     [annotationsBuffer release];
     [zoomBuffer release];
-    [receivedAnnotations release];
     [super dealloc];
 }
 

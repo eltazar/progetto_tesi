@@ -515,21 +515,21 @@
     [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind", 
                          @"Facebook",           @"label",
-                         @"",         @"img",
+                         @"facebook.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 0];
     
     [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"ActionCell",       @"kind", 
                          @"E-mail",           @"label",
-                         @"",         @"img",
+                         @"mail.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 1];
 
 
     
     sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, secD,nil];
-    sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti",@"Condividi su", nil];  
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti",@"Condividi con", nil];  
     
     
 #warning REVERSE GECODING SPOSTARE??

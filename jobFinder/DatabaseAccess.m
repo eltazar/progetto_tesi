@@ -58,7 +58,7 @@ NSString* key(NSURLConnection* con)
     [request setHTTPBody:postData];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-
+    
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -82,7 +82,7 @@ NSString* key(NSURLConnection* con)
 //invia richiesta lettura da db
 -(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSString*)field
 {
-    NSLog(@"DATABASE ACCESS FIELD 1 = %@",field);
+    //NSLog(@"DATABASE ACCESS FIELD 1 = %@",field);
     
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read2.php"];
     
@@ -103,13 +103,11 @@ NSString* key(NSURLConnection* con)
     
     [request setHTTPBody:postData];
     
-    NSLog(@"DB ACCESS RETAIN COUNT PRIMA = %d", [self retainCount]);
-
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+//    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//	[connection start];
     
-    NSLog(@"DB ACCESS RETAIN COUNT dopo = %d", [self retainCount]);
-
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -129,7 +127,7 @@ NSString* key(NSURLConnection* con)
 
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSString*)field
 {
-     NSLog(@"DATABASE ACCESS FIELD 2 = %@",field);
+     //NSLog(@"DATABASE ACCESS FIELD 2 = %@",field);
     
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read.php"];
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
@@ -148,7 +146,10 @@ NSString* key(NSURLConnection* con)
     
     [request setHTTPBody:postData];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+    
+//    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//	[connection start];
     
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
@@ -171,8 +172,6 @@ NSString* key(NSURLConnection* con)
 //invia richiesta scrittura su db
 -(void)jobWriteRequest:(Job *)job
 { 
-    
-    NSLog(@"JOB CODE: %@", job.code);
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/write.php"];    
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
@@ -308,8 +307,9 @@ NSString* key(NSURLConnection* con)
         
         [readConnections removeObject:connection];
        
-    }else{        
-        [delegate didReceiveResponsFromServer:json];
+    }else{ 
+         if(delegate && [delegate respondsToSelector:@selector(didReceiveResponsFromServer:)])
+             [delegate didReceiveResponsFromServer:json];
         [writeConnections removeObject:connection];
     }
         //rilascio risorse, come spiegato sula documentazione apple

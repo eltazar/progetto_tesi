@@ -50,8 +50,10 @@
             [alert release];
         }
             
-        else [pwDelegate didInsertNewJob:theNewJob]; //passo al delegato il nuovo job;
-        
+        else{
+             if(pwDelegate && [pwDelegate respondsToSelector:@selector(didInsertNewJob:)])
+                 [pwDelegate didInsertNewJob:theNewJob]; //passo al delegato il nuovo job;
+        }        
     }
     
     //[newJob release];
@@ -60,7 +62,8 @@
 -(IBAction)cancelBtnPressed:(id)sender{
     
     //informa il delegato che è stato spinto annulla
-    [self.pwDelegate didCancelNewJob:self];
+    if(pwDelegate && [pwDelegate respondsToSelector:@selector(didCancelNewJob:)])
+        [self.pwDelegate didCancelNewJob:self];    
 }
 
 -(void)activeInsertBtn:(id)sender

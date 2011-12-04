@@ -121,7 +121,8 @@
 {
     int row = indexPath.row;
     //informo ed invio al delegato l'indirizzo scelto
-    [delegate didSelectedPreferredAddress:[[tableData objectAtIndex:row] objectForKey:@"address"] withLatitude:[[[tableData objectAtIndex:row] objectForKey:@"lat"] doubleValue]  andLongitude:[[[tableData objectAtIndex:row] objectForKey:@"long"] doubleValue] ];
+    if(delegate && [delegate respondsToSelector:@selector(didSelectedPreferredAddress:withLatitude:andLongitude:)])
+        [delegate didSelectedPreferredAddress:[[tableData objectAtIndex:row] objectForKey:@"address"] withLatitude:[[[tableData objectAtIndex:row] objectForKey:@"lat"] doubleValue]  andLongitude:[[[tableData objectAtIndex:row] objectForKey:@"long"] doubleValue] ];
     
      [tableView deselectRowAtIndexPath:indexPath animated:YES];
     

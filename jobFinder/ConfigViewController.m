@@ -17,7 +17,7 @@
 #define URL_INFO @"http://www.google.it" //per prova
 
 @implementation ConfigViewController
-@synthesize delegate, sapienzaImage;
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -195,8 +195,10 @@
     //aggiorno il model per mostrare i cambiamenti fatti alla tabella
     [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:address forKey:@"label"];
     [self.tableView reloadData];    
-    //avviso il delegato cnhe ho scelto la zona preferita e gli passo le coordinate
-    [delegate didSelectedFavouriteZone:CLLocationCoordinate2DMake(latitude,longitude)]; 
+    //avviso il delegato che ho scelto la zona preferita e gli passo le coordinate
+    if(delegate && [delegate respondsToSelector:@selector(didSelectedFavouriteZone:)])
+        [delegate didSelectedFavouriteZone:CLLocationCoordinate2DMake(latitude,longitude)]; 
+    
     [self.navigationController popViewControllerAnimated:YES];
     
     //scrivo sul db il cambiamento della zona preferita per il relativo token

@@ -263,7 +263,7 @@
 
 
 -(void)stopShowingActivity{
-    [actView stopAnimating];
+    //[actView stopAnimating];
     [msgAlert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
@@ -298,9 +298,12 @@
         // If it’s not valid clear any authorization and mark the status as not connected.
         if (![facebook isSessionValid]) {
             //[facebook authorize:nil];
+            NSLog(@"SESSIONE NN VALIDA");
+            [facebook logout:self];
             isConnected = NO;
         }
         else {
+            NSLog(@"SESSIONE VALIDA");
             isConnected = YES;
         }
     }
@@ -353,6 +356,7 @@
 }
 
 -(void)fbDidLogin{
+    NSLog(@"DID LOGIN");
     // Save the access token key info.
     [self saveAccessTokenKeyInfo];
     isConnected = YES;
@@ -468,7 +472,7 @@
     
     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                          @"InfoCell",         @"kind", 
-                         @"Indirizzo",        @"label",
+                         @"Zona",        @"label",
                          @"",                 @"detailLabel",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
@@ -578,6 +582,8 @@
 
 - (void)viewDidUnload
 {
+    [permissions release];
+    permissions = nil;
     [facebook release];
     facebook = nil;
     [actView release];
@@ -609,6 +615,7 @@
 -(void) dealloc
 {   
     NSLog(@"DALLOC");
+    [permissions release];
     [facebook release];
     [msgAlert release];
     [actView release];

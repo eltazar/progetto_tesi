@@ -37,7 +37,7 @@
             </dict>
             <dict>
                 <key>label</key>
-                <string>Alimentazione</string>
+                <string>Alimentare</string>
                 <key>enum</key>
                 <string>a6</string>
             </dict>
@@ -79,7 +79,7 @@
         <array>
 			<dict>
 				<key>label</key>
-				<string>Banche</string>
+				<string>Bancario</string>
 				<key>enum</key>
 				<string>b1</string>
 			</dict>
@@ -161,7 +161,7 @@
         <array>
 			<dict>
 				<key>label</key>
-				<string>Edilizia</string>
+				<string>Edile</string>
 				<key>enum</key>
 				<string>e1</string>
 			</dict>
@@ -173,7 +173,7 @@
 			</dict>
 			<dict>
 				<key>label</key>
-				<string>Elettronica</string>
+				<string>Elettronica - automazione</string>
 				<key>enum</key>
 				<string>e3</string>
 			</dict>

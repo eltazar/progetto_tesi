@@ -893,7 +893,25 @@
 
 - (void)viewDidUnload
 {
-    //TODO: DA INSERIRE LE VARIE VARIABILI
+{    
+    NSLog(@"MAPCONTROLLER DID UNLOAD");
+    
+    backBtn = nil;
+    saveJobInPositionBtn = nil;
+    alternativeToolbar = nil;
+    map = nil;
+    toolBar = nil;
+    filterButton = nil;
+    publishBtn = nil;
+    refreshBtn = nil;
+    bookmarkButtonItem = nil;
+    
+    [zoomBuffer release];
+    zoomBuffer = nil;
+    [annotationsBuffer release];
+    annotationsBuffer = nil;
+    [dbAccess release];
+    dbAccess = nil;
     
     
     [super viewDidUnload];

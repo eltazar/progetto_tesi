@@ -232,24 +232,24 @@
 
 -(NSString*) createJobString
 {
-    NSMutableString *jobString = [NSMutableString stringWithFormat:@"%@",@"Ciao, vi segnalo questa opportunità di lavoro:\n\n"];
+    NSMutableString *jobString = [NSMutableString stringWithFormat:@"%@",@""];
     
-    [jobString appendString:[NSString stringWithFormat:@"Settore: %@ \n", [Utilities sectorFromCode:job.code]]];
-    [jobString appendString:[NSString stringWithFormat:@"Vicino a: %@ \n",[job address]]];
+    [jobString appendString:[NSString stringWithFormat:@"<b>Settore:</b> %@ ", [Utilities sectorFromCode:job.code]]];
+    [jobString appendString:[NSString stringWithFormat:@"<b>Vicino a:</b> %@ ",[job address]]];
     
     if(![job.time isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"Contratto: %@ \n",job.time]];
+        [jobString appendString:[NSString stringWithFormat:@"<b>Contratto:</b> %@ ",job.time]];
     
     if(![job.description isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"Descrizione: %@ \n",job.description]];
+        [jobString appendString:[NSString stringWithFormat:@"<b>Descrizione:</b> %@ ",job.description]];
     if(![job.phone isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"Telefono: %@ \n",job.phone]];
+        [jobString appendString:[NSString stringWithFormat:@"<b>Telefono:</b> %@ ",job.phone]];
      
     if(![job.email isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"E-mail: %@ \n",job.email]];
+        [jobString appendString:[NSString stringWithFormat:@"<b>E-mail:</b> %@ ",job.email]];
     
     if(![[job urlAsString] isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"Url: %@ \n",[job urlAsString]]];
+        [jobString appendString:[NSString stringWithFormat:@"<b>Url:</b> %@ ",[job urlAsString]]];
 
     return jobString;
     
@@ -269,18 +269,21 @@
 
 -(void)postOnFacebookWall
 {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [self showActivityView];
+//    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+//    [self showActivityView];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    @"175161829247160", @"app_id",
                                    [NSString stringWithFormat:@"http://maps.google.it/maps?q=%f,%f",job.coordinate.latitude,job.coordinate.longitude], @"link",
-                                   @"", @"picture",
-                                   @"JobFinder", @"name",
-                                   @"Segnalazione di un lavoro da jobFinder", @"caption",
-                                   @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi.", @"description",
-                                   [self createJobString],@"message",
+                                   @"http://jobfinder.altervista.org/Icon_2x.png", @"picture",
+                                   @"Segnalazione di un'offerta di lavoro attraverso JobFinder", @"name",
+                                   [self createJobString], @"caption"/*,
+                                   @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi.", @"description"*/,
+                                   @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi, di ricevere notifiche quando c'è un nuovo lavoro nella tua zona di interesse.",@"description",
                                    nil];                
-    [facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
+    //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
+    
+    [facebook dialog:@"feed" andParams:params andDelegate:self];
+
 }
 
 -(void)checkForPreviouslySavedAccessTokenInfo{
@@ -319,41 +322,36 @@
 
 #pragma mark - Facebook's delegates
 
--(void)request:(FBRequest *)request didReceiveResponse:(NSURLResponse *)response {
-    // Keep this just for testing purposes.
-    NSLog(@"received response");
-    
-}
--(void)request:(FBRequest *)request didLoad:(id)result{
-    NSLog(@"facebook did load request: %@",result);
-    [self stopShowingActivity];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    if ([result isKindOfClass:[NSArray class]]) {
-        // The first object in the result is the data dictionary.
-        result = [result objectAtIndex:0];
-    }
-    if ([result objectForKey:@"first_name"]) {
-
-    }
-    else if ([result objectForKey:@"id"]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio inviato" message:@"Hai condiviso questa offerta di lavoro su facebook" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-        [alert release];
-    }
+- (void) dialogDidNotComplete:(FBDialog *)dialog
+{
+    NSLog(@"DIALOG DID NOT COMPLETE");
 }
 
--(void)request:(FBRequest *)request didFailWithError:(NSError *)error{
-    NSLog(@"%@", [error localizedDescription]);
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    if ([actView isAnimating]) {
-        [self stopShowingActivity];
-    }
+- (void)dialogCompleteWithUrl:(NSURL *)url{
+    NSLog(@"DIALOG COMPLETE WITH URL : %@", [url absoluteString]);
+//    if([url absoluteString] 
+}
+
+- (void) dialogDidNotCompleteWithUrl:(NSURL *)url{
+    NSLog(@"DIALOG NOT COMPLETE WITH URL : %@", [url absoluteString]);
+}
+
+- (void)dialog:(FBDialog*)dialog didFailWithError:(NSError *)error{
+    NSLog(@"DIALOG FAIL WITH ERROR: %@", [error description]);
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore" message:@"Non è stato possibile condividere questo contenuto su facebook, riprova" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
     [alert show];
     [alert release];
 }
+
+- (void)dialogDidComplete:(FBDialog *)dialog{
+    
+    NSLog(@"DIALOG COMPLETE");
+//    
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio inviato" message:@"Hai condiviso questa offerta di lavoro su facebook" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//    [alert show];
+//    [alert release];
+}
+
 
 -(void)fbDidLogin{
     NSLog(@"DID LOGIN");

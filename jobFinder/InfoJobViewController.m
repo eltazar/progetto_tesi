@@ -255,22 +255,8 @@
     
 }
 
--(void)showActivityView{
-    // Show an alert with a message without the buttons.
-    [msgAlert show];
-    
-}
-
-
--(void)stopShowingActivity{
-    //[actView stopAnimating];
-    [msgAlert dismissWithClickedButtonIndex:0 animated:YES];
-}
-
 -(void)postOnFacebookWall
 {
-//    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-//    [self showActivityView];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    @"175161829247160", @"app_id",
                                    [NSString stringWithFormat:@"http://maps.google.it/maps?q=%f,%f",job.coordinate.latitude,job.coordinate.longitude], @"link",
@@ -320,6 +306,15 @@
     [defaults synchronize];
 }
 
+-(void)logoutFromFB{
+    //eseguo logout e rimuovo token
+    [facebook logout:self];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"FBAccessTokenKey"];
+    [defaults removeObjectForKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+}
+
 #pragma mark - Facebook's delegates
 
 - (void) dialogDidNotComplete:(FBDialog *)dialog
@@ -328,8 +323,19 @@
 }
 
 - (void)dialogCompleteWithUrl:(NSURL *)url{
+    
     NSLog(@"DIALOG COMPLETE WITH URL : %@", [url absoluteString]);
-//    if([url absoluteString] 
+    
+    if ([[url absoluteString] rangeOfString:@"?post_id="].location == NSNotFound )
+    {
+        NSLog(@"post non inserito");
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio postato sulla tua bacheca" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        [alert release];
+        
+    }
 }
 
 - (void) dialogDidNotCompleteWithUrl:(NSURL *)url{
@@ -337,7 +343,8 @@
 }
 
 - (void)dialog:(FBDialog*)dialog didFailWithError:(NSError *)error{
-    NSLog(@"DIALOG FAIL WITH ERROR: %@", [error description]);
+    
+    NSLog(@"DIALOG FAIL WITH ERROR: %@", error);
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore" message:@"Non è stato possibile condividere questo contenuto su facebook, riprova" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
     [alert show];
     [alert release];
@@ -346,10 +353,7 @@
 - (void)dialogDidComplete:(FBDialog *)dialog{
     
     NSLog(@"DIALOG COMPLETE");
-//    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio inviato" message:@"Hai condiviso questa offerta di lavoro su facebook" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-//    [alert show];
-//    [alert release];
+
 }
 
 
@@ -361,7 +365,8 @@
     // Get the user's info.
     [facebook requestWithGraphPath:@"me" andDelegate:self];
     [self postOnFacebookWall];
-    
+    //mostro tasto logout
+    [self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
 }
 
 -(void)fbDidNotLogin:(BOOL)cancelled{
@@ -372,6 +377,8 @@
 -(void)fbDidLogout{
     // Keep this for testing purposes.
     NSLog(@"Logged out");
+    //nascondo tasto logout
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
 
@@ -547,47 +554,47 @@
     [secC autorelease];   
     [secD autorelease];
     
+    //setto il pulsante per il logout
+    UIImage *buttonImage = [UIImage imageNamed:@"logout.png"];
+
+    UIButton *tmpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [tmpButton setImage:buttonImage forState:UIControlStateNormal];
+    tmpButton.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
+    [tmpButton addTarget:self action:@selector(logoutFromFB) forControlEvents:UIControlEventTouchUpInside];
+    
+    logoutBtn = [[UIBarButtonItem alloc] initWithCustomView:tmpButton];
     
     //###### FACEBOOK ########
     
-    msgAlert = [[UIAlertView alloc] initWithTitle:@"Invio..." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-    actView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    actView.frame= CGRectMake(121,50, 37, 37);
-    //actView.center = CGPointMake(msgAlert.frame.size.width/2,msgAlert.frame.size.height/3);
-    [actView startAnimating];
-    [msgAlert addSubview:actView];
-    
-    // Set the permissions.
-    // Without specifying permissions the access to Facebook is imposibble.
+    // Set i permessi di accesso
     permissions = [[NSArray arrayWithObjects:@"publish_stream", nil] retain];
     
     // Set the Facebook object we declared. We’ll use the declared object from the application
     // delegate.
     facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
     
-    // Check if there is a stored access token.
+    //controllo se ci sono token e sessione precedenti valide
     [self checkForPreviouslySavedAccessTokenInfo];
-    NSLog(@"is connected = %d",isConnected);
+       
+    //mostra il tasto per il logout se connesso
+    if(isConnected){
+        self.navigationItem.rightBarButtonItem = logoutBtn;
+    }
+    else{
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 
-    // Specify the lblUser label's message depending on the isConnected value.
-    // If the access token not found and the user is not connected then prompt him/her to login.
-//    if (isConnected){
-//        // Get the user's name from the Facebook account. The message will be set later.
-//        [facebook requestWithGraphPath:@"me" andDelegate:self];
-//    }
 }
 
 
 - (void)viewDidUnload
 {
+    [logoutBtn release];
+    logoutBtn = nil;
     [permissions release];
     permissions = nil;
     [facebook release];
     facebook = nil;
-    [actView release];
-    actView = nil;
-    [msgAlert release];
-    msgAlert = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -613,10 +620,9 @@
 -(void) dealloc
 {   
     NSLog(@"DALLOC");
+    [logoutBtn release];
     [permissions release];
     [facebook release];
-    [msgAlert release];
-    [actView release];
     [job release];
     [super dealloc];
 }

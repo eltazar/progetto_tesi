@@ -21,8 +21,7 @@
     NSArray *permissions;
     Facebook *facebook;
     BOOL isConnected;
-    UIActivityIndicatorView *actView;
-    UIAlertView *msgAlert;
+    UIBarButtonItem *logoutBtn;
 }
 
 -(id) initWithJob:(Job *)aJob;

@@ -113,6 +113,36 @@
 //    else NSLog(@"EMAIL NO VALIDA");
 }
 
+-(void)_setPhone:(NSString *)_phone
+{
+    if(_phone == nil || [_phone isEqualToString:@""]){
+        [self setPhone:@""];
+        return;
+    }
+    
+    NSLog(@"_PHONE = %@",_phone);
+    NSMutableString *strippedString = [NSMutableString 
+                                       stringWithCapacity:_phone.length];
+    
+    NSScanner *scanner = [NSScanner scannerWithString:_phone];
+    NSCharacterSet *numbers = [NSCharacterSet 
+                               characterSetWithCharactersInString:@"0123456789"];
+    
+    while ([scanner isAtEnd] == NO) {
+        NSString *buffer;
+        if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
+            [strippedString appendString:buffer];
+            
+        } else {
+            [scanner setScanLocation:([scanner scanLocation] + 1)];
+        }
+    }
+    
+    NSLog(@"STRIPPED STRING = %@",strippedString);
+    
+    [self setPhone:strippedString];
+}
+
 -(void)setPhone:(NSString *)newPhone
 {
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
@@ -124,9 +154,10 @@
    
     //TODO: CREARE REGEX PER CONTROLLO DATI INSERITI
     
-    NSString *_newPhone = [[newPhone stringByReplacingOccurrencesOfString:@" " withString:@""] retain];
+//    NSString *_newPhone = [[newPhone stringByReplacingOccurrencesOfString:@" " withString:@""] retain];
+    [newPhone retain];
     [phone release];
-    phone = _newPhone;
+    phone = newPhone;
     
 }
 

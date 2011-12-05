@@ -53,6 +53,7 @@
 -(id) initWithCoordinate:(CLLocationCoordinate2D)coord;
 -(void) setEmail:(NSString*)newEmail;
 -(void) setUrlWithString:(NSString *) urlString;
+-(void) _setPhone:(NSString*) _phone;
 -(BOOL) isValid;
 -(NSString*) invalidReason;
 -(NSString*)urlAsString;

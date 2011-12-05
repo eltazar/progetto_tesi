@@ -118,7 +118,8 @@
                 break;
         }
     }
-    else if(section == 1){
+    else if(section == 3
+            ){
         switch (row) {
             case 0:
                 NSLog(@"emaildidSelectRow");
@@ -231,7 +232,7 @@
     [self setTitle:@"Impostazioni"];
     self.navigationItem.hidesBackButton = TRUE;
     //aggiungo bottone "fatto" alla barra e setto azione
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Fatto" style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonClicked:)];          
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Fatto" style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonClicked:)];          
     self.navigationItem.rightBarButtonItem = anotherButton;
     [anotherButton release];
     

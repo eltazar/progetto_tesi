@@ -46,6 +46,8 @@
 		AC4A04CA142239E300FE96F7 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4A04C8142239E300FE96F7 /* MapViewController.m */; };
 		AC4A04CB142239E300FE96F7 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC4A04C9142239E300FE96F7 /* MapViewController.xib */; };
 		AC59F49714853E8300B00D41 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC59F49814853E8300B00D41 /* MainWindow.xib */; };
+		AC5D9039148C42EB009EE5E2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AC5D9038148C42EB009EE5E2 /* Icon.png */; };
+		AC5D903B148C42F2009EE5E2 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AC5D903A148C42F2009EE5E2 /* Icon@2x.png */; };
 		AC65376614797ACC0099D60D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = AC65376514797ACC0099D60D /* background.png */; };
 		AC7135DD144F45CD0022A47C /* SearchZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */; };
 		AC7135DE144F45CD0022A47C /* SearchZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC7135DC144F45CD0022A47C /* SearchZoneViewController.xib */; };
@@ -85,10 +87,6 @@
 		ACC54A81145DFF0F002F41D3 /* FilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACC54A7F145DFF0F002F41D3 /* FilterViewController.xib */; };
 		ACC54DBC1456E73300A51364 /* DatabaseAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC54DBB1456E73300A51364 /* DatabaseAccess.m */; };
 		ACC54E121456FB4600A51364 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC54E111456FB4600A51364 /* MobileCoreServices.framework */; };
-		ACC6609F148A35FF00E47305 /* LoginNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC6609B148A35FF00E47305 /* LoginNormal.png */; };
-		ACC660A0148A35FF00E47305 /* LoginPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC6609C148A35FF00E47305 /* LoginPressed.png */; };
-		ACC660A1148A35FF00E47305 /* LogoutNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC6609D148A35FF00E47305 /* LogoutNormal.png */; };
-		ACC660A2148A35FF00E47305 /* LogoutPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC6609E148A35FF00E47305 /* LogoutPressed.png */; };
 		ACC8D9551480FEB900307E7E /* filterYellow.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC8D9541480FEB900307E7E /* filterYellow.png */; };
 		ACC8D9571480FEC000307E7E /* filterWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC8D9561480FEC000307E7E /* filterWhite.png */; };
 		ACC8D95A1480FEE900307E7E /* filterWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC8D9581480FEE900307E7E /* filterWhite@2x.png */; };
@@ -100,6 +98,8 @@
 		ACCAC508145D80B3008B0B9F /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = ACCAC506145D80B3008B0B9F /* search.png */; };
 		ACCAC509145D80B3008B0B9F /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACCAC507145D80B3008B0B9F /* search@2x.png */; };
 		ACCBD837144D7FA500EEAC2A /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACCBD836144D7FA500EEAC2A /* BaseCell.m */; };
+		ACCC4E14148B7F4A00EEF4AE /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = ACCC4E12148B7F4900EEF4AE /* facebook.png */; };
+		ACCC4E15148B7F4A00EEF4AE /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACCC4E13148B7F4900EEF4AE /* facebook@2x.png */; };
 		ACD5818C145899B400CCB281 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = ACD5818B145899B300CCB281 /* back.png */; };
 		ACD73AB7143AF4810025DF6C /* ActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB0143AF4810025DF6C /* ActionCell.m */; };
 		ACD73AB8143AF4810025DF6C /* InfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACD73AB2143AF4810025DF6C /* InfoCell.m */; };
@@ -181,6 +181,8 @@
 		AC4A04C8142239E300FE96F7 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		AC4A04C9142239E300FE96F7 /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		AC59F49814853E8300B00D41 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		AC5D9038148C42EB009EE5E2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		AC5D903A148C42F2009EE5E2 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		AC65376514797ACC0099D60D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = SOURCE_ROOT; };
 		AC7135DA144F45CC0022A47C /* SearchZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchZoneViewController.h; sourceTree = "<group>"; };
 		AC7135DB144F45CC0022A47C /* SearchZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchZoneViewController.m; sourceTree = "<group>"; };
@@ -241,10 +243,6 @@
 		ACC54DBB1456E73300A51364 /* DatabaseAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseAccess.m; sourceTree = "<group>"; };
 		ACC54E0F1456FB3100A51364 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		ACC54E111456FB4600A51364 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		ACC6609B148A35FF00E47305 /* LoginNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoginNormal.png; sourceTree = "<group>"; };
-		ACC6609C148A35FF00E47305 /* LoginPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoginPressed.png; sourceTree = "<group>"; };
-		ACC6609D148A35FF00E47305 /* LogoutNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoutNormal.png; sourceTree = "<group>"; };
-		ACC6609E148A35FF00E47305 /* LogoutPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoutPressed.png; sourceTree = "<group>"; };
 		ACC8D9541480FEB900307E7E /* filterYellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = filterYellow.png; path = icons/filterYellow.png; sourceTree = SOURCE_ROOT; };
 		ACC8D9561480FEC000307E7E /* filterWhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = filterWhite.png; path = icons/filterWhite.png; sourceTree = SOURCE_ROOT; };
 		ACC8D9581480FEE900307E7E /* filterWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "filterWhite@2x.png"; path = "icons/filterWhite@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -257,6 +255,8 @@
 		ACCAC507145D80B3008B0B9F /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search@2x.png"; path = "icons/search@2x.png"; sourceTree = SOURCE_ROOT; };
 		ACCBD835144D7FA400EEAC2A /* BaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCell.h; sourceTree = "<group>"; };
 		ACCBD836144D7FA500EEAC2A /* BaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCell.m; sourceTree = "<group>"; };
+		ACCC4E12148B7F4900EEF4AE /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		ACCC4E13148B7F4900EEF4AE /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook@2x.png"; sourceTree = "<group>"; };
 		ACD5818914586AA700CCB281 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		ACD5818B145899B300CCB281 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = icons/back.png; sourceTree = SOURCE_ROOT; };
 		ACD73AAF143AF4810025DF6C /* ActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionCell.h; sourceTree = "<group>"; };
@@ -567,11 +567,11 @@
 		ACD58178145862DB00CCB281 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				ACC6609B148A35FF00E47305 /* LoginNormal.png */,
-				ACC6609C148A35FF00E47305 /* LoginPressed.png */,
-				ACC6609D148A35FF00E47305 /* LogoutNormal.png */,
-				ACC6609E148A35FF00E47305 /* LogoutPressed.png */,
+				AC5D903A148C42F2009EE5E2 /* Icon@2x.png */,
+				AC5D9038148C42EB009EE5E2 /* Icon.png */,
 				ACC2D74C1488D1970084174F /* sapienza.png */,
+				ACCC4E12148B7F4900EEF4AE /* facebook.png */,
+				ACCC4E13148B7F4900EEF4AE /* facebook@2x.png */,
 				ACC8D9581480FEE900307E7E /* filterWhite@2x.png */,
 				ACC8D9591480FEE900307E7E /* filterYellow@2x.png */,
 				ACC8D9561480FEC000307E7E /* filterWhite.png */,
@@ -705,10 +705,10 @@
 				ACC0F8961482F39000A4164B /* sectors.plist in Resources */,
 				ACC2D74D1488D1970084174F /* sapienza.png in Resources */,
 				AC2C73B914897C4500922345 /* FBDialog.bundle in Resources */,
-				ACC6609F148A35FF00E47305 /* LoginNormal.png in Resources */,
-				ACC660A0148A35FF00E47305 /* LoginPressed.png in Resources */,
-				ACC660A1148A35FF00E47305 /* LogoutNormal.png in Resources */,
-				ACC660A2148A35FF00E47305 /* LogoutPressed.png in Resources */,
+				ACCC4E14148B7F4A00EEF4AE /* facebook.png in Resources */,
+				ACCC4E15148B7F4A00EEF4AE /* facebook@2x.png in Resources */,
+				AC5D9039148C42EB009EE5E2 /* Icon.png in Resources */,
+				AC5D903B148C42F2009EE5E2 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

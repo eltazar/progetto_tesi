@@ -18,8 +18,8 @@
 
 #define DEFAULT_COORDINATE -180
 #define DEFAUlT_COORDINATE_0 0
-#define iphoneScaleFactorLatitude   19.0    
-#define iphoneScaleFactorLongitude  22.0
+#define scaleFactorLatitude   19.0    
+#define scaleFactorLongitude  22.0
 #define ZOOM_THRESHOLD 10 //=760567.187974
 #define ZOOM_MAX 18
 #define EPS 0.0000001
@@ -398,8 +398,8 @@
         rect.origin = [MKMapView rectOriginForCenter:center andSize:rect.size];
         region = MKCoordinateRegionForMapRect(rect);
         
-        latDelta = region.span.latitudeDelta / iphoneScaleFactorLatitude;
-        longDelta = region.span.longitudeDelta / iphoneScaleFactorLongitude;
+        latDelta = region.span.latitudeDelta / scaleFactorLatitude;
+        longDelta = region.span.longitudeDelta / scaleFactorLongitude;
         
         for (int i=0; i<[newAnnotations count]; i++) {
             Job *checkingAnnotation=[newAnnotations objectAtIndex:i];

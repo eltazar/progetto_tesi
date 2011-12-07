@@ -188,7 +188,7 @@
             if([MFMailComposeViewController canSendMail]){
                 //[mail setToRecipients:[NSArray arrayWithObjects:cell.detailTextLabel.text, nil]];
                 [mail setSubject:@"Segnalazione offerta di lavoro da jobFinder"];
-                [mail setMessageBody:[self createJobString] isHTML:NO];
+                [mail setMessageBody:[self createJobString:@"mail"] isHTML:YES];
                 [self presentModalViewController:mail animated:YES];
                 [mail release];
             }
@@ -230,9 +230,13 @@
 
 #pragma mark - Metodi utili per facebook
 
--(NSString*) createJobString
+-(NSString*) createJobString:(NSString*)sender
 {
-    NSMutableString *jobString = [NSMutableString stringWithFormat:@"%@",@""];
+    NSMutableString *jobString;
+    
+    if([sender isEqualToString:@"mail"])
+        jobString = [NSMutableString stringWithFormat:@"%@",@"<html><body>"];
+    else jobString = [NSMutableString stringWithFormat:@"%@",@""];
     
     [jobString appendString:[NSString stringWithFormat:@"<b>Settore:</b> %@ ", [Utilities sectorFromCode:job.code]]];
     [jobString appendString:[NSString stringWithFormat:@"<b>Vicino a:</b> %@ ",[job address]]];
@@ -250,6 +254,9 @@
     
     if(![[job urlAsString] isEqualToString:@""])
         [jobString appendString:[NSString stringWithFormat:@"<b>Url:</b> %@ ",[job urlAsString]]];
+    
+    if([sender isEqualToString:@"mail"])
+        [jobString appendFormat:@"</body></html>",nil];
 
     return jobString;
     
@@ -262,7 +269,7 @@
                                    [NSString stringWithFormat:@"http://maps.google.it/maps?q=%f,%f",job.coordinate.latitude,job.coordinate.longitude], @"link",
                                    @"http://jobfinder.altervista.org/Icon_2x.png", @"picture",
                                    @"Segnalazione di un'offerta di lavoro attraverso JobFinder", @"name",
-                                   [self createJobString], @"caption"/*,
+                                   [self createJobString:@"fb"], @"caption"/*,
                                    @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi.", @"description"*/,
                                    @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi, di ricevere notifiche quando c'è un nuovo lavoro nella tua zona di interesse.",@"description",
                                    nil];                

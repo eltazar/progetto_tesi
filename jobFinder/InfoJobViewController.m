@@ -15,9 +15,10 @@
 #import "FBConnect.h"
 #import "FBDialog.h"
 #import "Facebook.h"
-
+#import "jobFinderAppDelegate.h"
 
 @implementation InfoJobViewController
+@synthesize facebook;
 
 -(id) initWithJob:(Job *)aJob
 {
@@ -293,9 +294,9 @@
         // Check if the facebook session is valid.
         // If it’s not valid clear any authorization and mark the status as not connected.
         if (![facebook isSessionValid]) {
-            //[facebook authorize:nil];
+            [facebook authorize:nil];
             NSLog(@"SESSIONE NN VALIDA");
-            [facebook logout:self];
+            //[facebook logout:self];
             isConnected = NO;
         }
         else {
@@ -316,10 +317,11 @@
 -(void)logoutFromFB{
     //eseguo logout e rimuovo token
     [facebook logout:self];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObjectForKey:@"FBAccessTokenKey"];
-    [defaults removeObjectForKey:@"FBExpirationDateKey"];
-    [defaults synchronize];
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults removeObjectForKey:@"FBAccessTokenKey"];
+//    [defaults removeObjectForKey:@"FBExpirationDateKey"];
+//    [defaults synchronize];
+    isConnected = NO;
 }
 
 #pragma mark - Facebook's delegates
@@ -368,9 +370,8 @@
     NSLog(@"DID LOGIN");
     // Save the access token key info.
     [self saveAccessTokenKeyInfo];
-    isConnected = YES;
     // Get the user's info.
-    [facebook requestWithGraphPath:@"me" andDelegate:self];
+    //[facebook requestWithGraphPath:@"me" andDelegate:self];
     [self postOnFacebookWall];
     //mostro tasto logout
     [self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
@@ -385,6 +386,14 @@
     // Keep this for testing purposes.
     NSLog(@"Logged out");
     //nascondo tasto logout
+    // Remove saved authorization information if it exists
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"]) {
+        [defaults removeObjectForKey:@"FBAccessTokenKey"];
+        [defaults removeObjectForKey:@"FBExpirationDateKey"];
+        [defaults synchronize];
+    }
+
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
@@ -573,21 +582,30 @@
     
     //###### FACEBOOK ########
     
+    jobFinderAppDelegate *appDelegate = (jobFinderAppDelegate*) [[UIApplication sharedApplication] delegate];
+
+    
     // Set i permessi di accesso
     permissions = [[NSArray arrayWithObjects:@"publish_stream", nil] retain];
     
     // Set the Facebook object we declared. We’ll use the declared object from the application
     // delegate.
     facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
+    appDelegate.fb = facebook;
+    
+    
+    NSLog(@"DID LOAD FACEBOOK DELEGATE : %p, FACEBOOK: %p",facebook.sessionDelegate, facebook);
     
     //controllo se ci sono token e sessione precedenti valide
     [self checkForPreviouslySavedAccessTokenInfo];
        
     //mostra il tasto per il logout se connesso
     if(isConnected){
+        NSLog(@"DID LOAD CONNECTED");
         self.navigationItem.rightBarButtonItem = logoutBtn;
     }
     else{
+        NSLog(@"DID LOAD NOT CONNECTED");
         self.navigationItem.rightBarButtonItem = nil;
     }
 

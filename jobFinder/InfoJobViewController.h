@@ -19,14 +19,16 @@
 @interface InfoJobViewController : RootJobViewController <MFMailComposeViewControllerDelegate, GeoDecoderDelegate, FBSessionDelegate, FBDialogDelegate, FBRequestDelegate>
 { 
     NSArray *permissions;
-    Facebook *facebook;
+    //Facebook *facebook;
     BOOL isConnected;
     UIBarButtonItem *logoutBtn;
+    Facebook *facebook;
 }
 
 -(id) initWithJob:(Job *)aJob;
 -(void) fillCell:(UITableViewCell*)cell InRow:(int)row inSection:(int)section;
 
+@property(nonatomic, retain)Facebook *facebook;
 //@property(nonatomic,retain) Job *job;
 -(void) setJob:(Job*) newJob;
 @end

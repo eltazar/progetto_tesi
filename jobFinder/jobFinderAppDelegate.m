@@ -12,11 +12,13 @@
 #import "Utilities.h"
 #import "Reachability.h"
 #import "MapViewController.h"
+#import "InfoJobViewController.h"
+#import "FBConnect.h"
 
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
-@synthesize navController, mapController;
+@synthesize navController, mapController, fb;
 
 
 
@@ -211,7 +213,6 @@
             NSLog(@" APP DELEGATE : nessun preferito");        
             tokenSended = NO;
         }
-        
     }
 
     NSLog(@"################");
@@ -232,6 +233,26 @@
         NSLog(@"TOKEN NN INVIATO");
     }
 }
+
+#pragma mark - FacebookDelegate
+
+// Pre 4.2 support
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    NSLog(@"DENTRO APP DELEGATE2");
+
+    return [fb handleOpenURL:url]; 
+}
+
+// For 4.2+ support
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    NSLog(@"DENTRO APP DELEGATE, facebook = %p",fb);
+    return [fb handleOpenURL:url]; 
+}
+
+
+
 
 #pragma mark - memory management
 

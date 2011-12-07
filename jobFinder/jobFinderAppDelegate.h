@@ -8,15 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "DatabaseAccess.h"
+#import "FBConnect.h"
+
 @class Reachability;
 @class MapViewController;
-@interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate>{
+@interface jobFinderAppDelegate : NSObject <UIApplicationDelegate, DatabaseAccessDelegate, FBSessionDelegate>{
     UINavigationController *navController; 
     BOOL tokenSended;
     Reachability *reachability;
-
+    Facebook *fb;
 }
-
+@property(nonatomic, retain) Facebook *fb;
 @property(nonatomic, retain) IBOutlet MapViewController *mapController;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navController;

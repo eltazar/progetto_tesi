@@ -37,7 +37,8 @@
 {   
     if(sectionData){
         //         NSLog(@"[AbstractJobViewController numOfRows]: %d", cellDescription.count);
-        return [[sectionData objectAtIndex: section] count];    } 
+        return [[sectionData objectAtIndex: section] count];
+    } 
     //    NSLog(@"[AbstractJobViewController numOfRows]: %d", 0);
     return 0;
 }
@@ -56,12 +57,6 @@
     if (cell == nil) {       
         cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
-    
-    
-    //di default imposto la cella come non selezionabile (non diventa blu)
-    //cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    //imposto la label della cella
-    //TODO: aggiungere immagine alla cella
     
     return cell;
 }

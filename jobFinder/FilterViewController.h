@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-//@protocol FilterDelegate;
 
 @interface FilterViewController : UIViewController <UITableViewDataSource,UITextFieldDelegate>{
     NSArray *structureForSwitchTable;
@@ -38,13 +37,6 @@
 @property(nonatomic, retain) NSArray *structureForSwitchTable;
 @property(nonatomic, retain) NSMutableDictionary *tableStructureForSwitchTable;
 @property(nonatomic, retain) NSMutableArray *sectionsForSwitchTable;
-//@property(nonatomic,assign) id<FilterDelegate> filtDelegate;
 
 
 @end
-
-
-//@protocol FilterDelegate <NSObject>
-
-//-(void)didSelectedFilterFromTable:(NSString*)filter;
-//@end

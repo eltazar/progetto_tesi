@@ -153,7 +153,7 @@
             case 0:
                 if(aSwitch.on)
                     return @"Disattivando il filtro ti verranno mostrati i lavori appartenenti a qualsiasi settore";
-                else return @"Attivando il filtro ti verranno mostrati solo i lavori appartenenti ai settori da te scelti";
+                else return @"Attivando il filtro potrai scegliere i tuoi settori di interesse e visualizzare solo i lavori appartenenti a essi";
                 break;
             default:
                 return nil;

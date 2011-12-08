@@ -168,7 +168,6 @@
         }
     }
     else if(section == 3){
-#warning permettere solo 1 volta la condivisione di un job su fb?
         if(row==0){
             NSLog(@"selezionata riga di fb");
             if (!isConnected) {
@@ -421,9 +420,12 @@
         //NSLog(@"DATA ARRAY: %@", [[dataArray objectAtIndex:0] objectForKey:@"long_name"]);// 0 = dizionario street number
         
         address = @""; //dove mettere "non disponibile" ?
-    #warning  CONTROLLARE dataArray quanti elementi ha l'array.
-        NSString *street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
-        NSString *number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"];    
+        NSString *street;
+        NSString *number;
+        if(dataArray != nil && dataArray.count != 0){
+            street = [[dataArray objectAtIndex:1] objectForKey:@"long_name"];
+            number = [[dataArray objectAtIndex:0] objectForKey:@"long_name"]; 
+        }
         //formatto la stringa address 
         if(street != nil && !([street isEqualToString:@""])){
             address = [NSString stringWithFormat:@"%@", street];
@@ -553,7 +555,7 @@
     sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti",@"Condividi con", nil];  
     
     
-#warning REVERSE GECODING SPOSTARE??
+    //#warning REVERSE GECODING SPOSTARE??
     /* Quando viene caricata la view controllo se il job scaricato dal server ha il campo address a nil o @"". Se si fa partire il reverse geocoding, altrimenti vuol dire che il job era già stato visualizzato in precedenza ed era già stato fatto il geocoding. In questo 
         modo il reverse gecoding è fatto una volta sola, appena scaricato un job dal server.
      */
@@ -644,7 +646,7 @@
 
 -(void) dealloc
 {   
-    NSLog(@"DALLOC");
+    NSLog(@"DEALLOC");
     [logoutBtn release];
     [permissions release];
     [facebook release];

@@ -84,7 +84,7 @@
     TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
 
     if([cell.dataKey isEqualToString:@"phone"])
-        job.phone = txtField.text;
+        [job _setPhone:txtField.text];
     else if([cell.dataKey isEqualToString:@"email"])
         job.email = txtField.text;    
     else if([cell.dataKey isEqualToString:@"url"])
@@ -168,9 +168,9 @@
         case 1:
             job.time = @"Full-time";
             break;
+        default: job.time = @"";
+            break;
     }
-    
-    NSLog(@"JOB TIME = %@",job.time);
 }
     
 

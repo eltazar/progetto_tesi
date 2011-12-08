@@ -22,7 +22,7 @@
     NSString *time;
     
     NSString *address;
-    NSString *city;
+//    NSString *city;
     
     BOOL isEmailValid;
     BOOL isURLvalid;
@@ -30,7 +30,6 @@
     CLLocationCoordinate2D coordinate;
 }
 
-#warning controllare bene attributi di queste property
 @property(nonatomic,retain) NSString *time;
 @property(nonatomic, retain) NSString *code;
 @property(nonatomic, assign) NSInteger idDb;
@@ -40,7 +39,7 @@
 @property(nonatomic, retain) NSString *employee;
 @property(nonatomic, retain) NSDate *date;
 @property(nonatomic, retain) NSString *address;
-@property(nonatomic, retain) NSString *city;
+//@property(nonatomic, retain) NSString *city;
 @property(nonatomic, retain) NSString *phone;
 @property(nonatomic, retain) NSString *email;
 @property(nonatomic, retain) NSString *description;

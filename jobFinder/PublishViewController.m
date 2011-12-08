@@ -31,6 +31,22 @@
 }
 
 #pragma mark - metodi bottoni della view
+-(BOOL)validate:(Job*) job
+{
+    BOOL rtn = YES; 
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    
+    rtn = [job isValid];
+    
+    if (!rtn){
+        NSString *message = [NSString stringWithFormat:@"%@ formalmente \n non valida",[job invalidReason]];
+        [alert setMessage:NSLocalizedString(message, @"")];
+        [alert show];		
+    }
+    [alert release];
+    return rtn;
+}
 
 -(IBAction)insertBtnPressed:(id)sender
 {   
@@ -72,22 +88,7 @@
     tableView.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
--(BOOL)validate:(Job*) job
-{
-    BOOL rtn = YES; 
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    
-    rtn = [job isValid];
-    
-    if (!rtn){
-        NSString *message = [NSString stringWithFormat:@"%@ formalmente \n non valida",[job invalidReason]];
-        [alert setMessage:NSLocalizedString(message, @"")];
-        [alert show];		
-    }
-    [alert release];
-    return rtn;
-}
+
 
 #pragma mark - View lifecycle
 
@@ -109,7 +110,7 @@
     //setto la navigationBar
     self.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationBar.translucent = YES;
-    tableView.navigationItem.title = @"Inserisci";
+    tableView.navigationItem.title = @"Nuovo lavoro";
     
     //aggiungo bottone "inserisci" ed "annulla" alla barra
     UIBarButtonItem *insertButton = [[UIBarButtonItem alloc] initWithTitle:@"Invia" style:UIBarButtonItemStyleDone target:self action:@selector(insertBtnPressed:)];          

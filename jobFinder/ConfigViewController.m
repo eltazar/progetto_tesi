@@ -58,14 +58,7 @@
 	if (cell == nil) {
         cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
-    
-//    if(indexPath.section == 0 && indexPath.row == 0){
-//        //per gestire linee di testo multiple nella cella
-//        cell.textLabel.text = @"";
-//        cell.detailTextLabel.text = [[[sectionData objectAtIndex:0] objectAtIndex:0] objectForKey:@"label"];
-//        cell.detailTextLabel.numberOfLines = 2;
-//        cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-//    }
+
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
     
@@ -84,7 +77,7 @@
 {
     switch (section) {
         case 0:
-            return @"Scegli un indirizzo preferito; JobFinder ti invierà delle notifiche se è stato aggiunto un nuovo lavoro nella tua zona.";
+            return @"Scegliendo una zona preferita e attivando le notifiche push sarai avvisato se è stato aggiunto un nuovo lavoro nella tua zona";
             break;
         case 1:
             return nil;
@@ -191,7 +184,7 @@
    [prefs setObject: [NSNumber numberWithDouble:longitude] forKey: @"long"];
     
     //    NSLog(@"dato nel prefs: %@",[prefs objectForKey:cell.dataKey]);
-    //    [prefs synchronize];
+    [prefs synchronize];
     
     //aggiorno il model per mostrare i cambiamenti fatti alla tabella
     [[[sectionData objectAtIndex:0] objectAtIndex:0] setObject:address forKey:@"label"];
@@ -313,11 +306,6 @@
     // e.g. self.myOutlet = nil;
 }
 
-//Implement loadView to create a view hierarchy programmatically, without using a nib.
-//- (void)loadView
-//{
-//    
-//}
 
 #pragma mark - memory management
 

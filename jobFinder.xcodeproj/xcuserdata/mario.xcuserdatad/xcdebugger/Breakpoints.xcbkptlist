@@ -9,11 +9,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/Job.m"
-         timestampString = "344450761.710586"
+         timestampString = "344813612.605744"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "313"
-         endingLineNumber = "313"
+         startingLineNumber = "344"
+         endingLineNumber = "344"
          landmarkName = "+orderJobsByID:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -23,11 +23,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/SectorTableViewController.m"
-         timestampString = "343477618.52196"
+         timestampString = "344957706.99035"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "13"
-         endingLineNumber = "13"
+         startingLineNumber = "12"
+         endingLineNumber = "12"
          landmarkName = "@implementation SectorTableViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -37,7 +37,7 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/MapViewController.m"
-         timestampString = "344684721.120107"
+         timestampString = "344818912.956099"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "207"
@@ -79,11 +79,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/Job.m"
-         timestampString = "344472395.057095"
+         timestampString = "344813612.605744"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "322"
-         endingLineNumber = "322"
+         startingLineNumber = "353"
+         endingLineNumber = "353"
          landmarkName = "+mergeArray:withArray:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -93,11 +93,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/Job.m"
-         timestampString = "344472714.737032"
+         timestampString = "344813612.605744"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "321"
-         endingLineNumber = "321"
+         startingLineNumber = "352"
+         endingLineNumber = "352"
          landmarkName = "+mergeArray:withArray:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -121,7 +121,7 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "jobFinder/InfoJobViewController.m"
-         timestampString = "344642771.592344"
+         timestampString = "344996514.253734"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "184"
@@ -142,48 +142,6 @@
          endingLineNumber = "31"
          landmarkName = "actView"
          landmarkType = "19">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "jobFinder/InfoJobViewController.m"
-         timestampString = "344679377.208246"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "328"
-         endingLineNumber = "328"
-         landmarkName = "-request:didLoad:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "jobFinder/InfoJobViewController.m"
-         timestampString = "344679377.208246"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "347"
-         endingLineNumber = "347"
-         landmarkName = "-request:didFailWithError:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "jobFinder/InfoJobViewController.m"
-         timestampString = "344679377.208246"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "346"
-         endingLineNumber = "346"
-         landmarkName = "-request:didFailWithError:"
-         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

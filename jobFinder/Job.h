@@ -12,7 +12,7 @@
 
 @interface Job : NSObject <MKAnnotation>{
     NSInteger idDb;
-    NSString *employee; //cambiare nome in field
+    NSString *field; //cambiare nome in field
     NSDate *date;
     NSString *description;
     NSString *phone;
@@ -36,7 +36,7 @@
 @property(nonatomic, assign) BOOL isDraggable;
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *subtitle;
-@property(nonatomic, retain) NSString *employee;
+@property(nonatomic, retain) NSString *field;
 @property(nonatomic, retain) NSDate *date;
 @property(nonatomic, retain) NSString *address;
 //@property(nonatomic, retain) NSString *city;

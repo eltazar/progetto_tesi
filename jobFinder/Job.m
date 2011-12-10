@@ -10,7 +10,7 @@
 #import "Utilities.h"
 @implementation Job
 
-@synthesize employee, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time;
+@synthesize field, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time;
 @synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init
@@ -448,7 +448,7 @@
     [time release];
     [code release];
     [subtitle release];
-    [employee release];
+    [field release];
     [date release];
     [address release];
     //[city release];

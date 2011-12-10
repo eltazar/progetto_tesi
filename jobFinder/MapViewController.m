@@ -672,6 +672,9 @@
     [filterTable release];
 }
 
+-(void)onConnectionRestored{
+    [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+}
 
 #pragma mark - PublishViewControllerDelegate
 

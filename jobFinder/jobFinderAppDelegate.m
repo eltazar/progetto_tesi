@@ -105,6 +105,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {   
+    [mapController onConnectionRestored];
+    
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
@@ -131,7 +133,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken{
     
-    //TODO: prima di inviare i dati sul server controllare la presenza della zona preferita
+    //prima di inviare i dati sul server controlla la presenza della zona preferita
     
     NSString* newToken = [devToken description];
 	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
@@ -167,8 +169,6 @@
         NSLog(@"INTERNET NN DISPONIBILE : TOKEN NN INVIATO");
         tokenSended = NO;
     }
-        
-    NSLog(@"################");
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)err{
@@ -180,7 +180,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     NSLog(@" DID RECEIVE");
-    //apre la mappa nella posizione preferita
+    //apre la mappa nella posizione preferita dopo la ricezione di una push
     [self.mapController refreshViewMap];
     //mostrare alert quando l'applicazione è in foreground
 }
@@ -190,12 +190,15 @@
 - (void) reachabilityChanged:(NSNotification *)notice
 {  
     NSLog(@"################");
-    NSLog(@"HANDLE NETWORK CHANGE");
+    NSLog(@"HANDLE NETWORK: CHANGE");
     
     NetworkStatus remoteStatus = [reachability currentReachabilityStatus];  
     
     //se internet è raggiungibile e il token non è stato ancora inviato
-    if(remoteStatus != NotReachable && !tokenSended){
+    if(remoteStatus != NotReachable){
+        [mapController onConnectionRestored];
+    }
+    else if(remoteStatus != NotReachable && !tokenSended){
         NSLog(@"DENTRO IF");
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
        
@@ -206,8 +209,8 @@
         #if !TARGET_IPHONE_SIMULATOR
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
         #endif
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-            [reachability stopNotifier];
+//            [[NSNotificationCenter defaultCenter] removeObserver:self];
+//            [reachability stopNotifier];
         }
         else{
             NSLog(@" APP DELEGATE : nessun preferito");        
@@ -234,7 +237,7 @@
     }
 }
 
-#pragma mark - FacebookDelegate
+#pragma mark - per facebook
 
 // Pre 4.2 support
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {

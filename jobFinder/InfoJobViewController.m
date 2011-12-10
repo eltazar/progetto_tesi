@@ -269,8 +269,7 @@
                                    [NSString stringWithFormat:@"http://maps.google.it/maps?q=%f,%f",job.coordinate.latitude,job.coordinate.longitude], @"link",
                                    @"http://jobfinder.altervista.org/Icon_2x.png", @"picture",
                                    @"Segnalazione di un'offerta di lavoro attraverso JobFinder", @"name",
-                                   [self createJobString:@"fb"], @"caption"/*,
-                                   @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi.", @"description"*/,
+                                   [self createJobString:@"fb"], @"caption",
                                    @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi, di ricevere notifiche quando c'è un nuovo lavoro nella tua zona di interesse.",@"description",
                                    nil];                
     //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
@@ -293,9 +292,9 @@
         // Check if the facebook session is valid.
         // If it’s not valid clear any authorization and mark the status as not connected.
         if (![facebook isSessionValid]) {
-            [facebook authorize:nil];
+            //[facebook authorize:nil];
             NSLog(@"SESSIONE NN VALIDA");
-            //[facebook logout:self];
+            [facebook logout:self];
             isConnected = NO;
         }
         else {

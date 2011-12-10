@@ -14,7 +14,7 @@ NSString* key(NSURLConnection* con);
 @protocol DatabaseAccessDelegate;
 
 @class Job;
-@interface DatabaseAccess : NSObject{
+@interface DatabaseAccess : NSObject <NSURLConnectionDelegate>{
     //NSMutableData *receivedData;
     id<DatabaseAccessDelegate> delegate;
     //NSMutableDictionary *connectionDictionary;
@@ -27,7 +27,7 @@ NSString* key(NSURLConnection* con);
 
 -(void)jobWriteRequest:(Job*)job;
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSString*)field;
--(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)oldRegion field:(NSString*)field;
+-(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSString*)field;
 -(void)registerDevice:(NSString*)token;
 
 @end

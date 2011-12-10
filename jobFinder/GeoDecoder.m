@@ -11,7 +11,7 @@
 #import "CoreLocation/CLLocation.h"
 
 @implementation GeoDecoder
-@synthesize dictionary, delegate;
+@synthesize geoDataDictionary, delegate;
 
 
 - (id)init
@@ -102,12 +102,12 @@
     
     NSString *jsonResult = [[[NSString alloc] initWithData:receivedGeoData encoding:NSUTF8StringEncoding] autorelease]; //giusto sto autorelease?
     NSError *theError = NULL;
-    dictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
+    geoDataDictionary = [NSMutableDictionary dictionaryWithJSONString:jsonResult error:&theError];
     
    // NSLog(@"%@",dictionary);
 //    NSLog(@"JSON is: %@",jsonResult);
     
-    [delegate didReceivedGeoDecoderData:dictionary];
+    [delegate didReceivedGeoDecoderData:geoDataDictionary];
 }
 
 

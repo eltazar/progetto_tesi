@@ -17,13 +17,13 @@
 @interface GeoDecoder : NSObject{
     
     NSMutableData *receivedGeoData;
-    NSMutableDictionary *dictionary;
+    NSMutableDictionary *geoDataDictionary;
     
     id<GeoDecoderDelegate> delegate;
     
 }
 
-@property(nonatomic,readonly) NSMutableDictionary *dictionary;
+@property(nonatomic,readonly) NSMutableDictionary *geoDataDictionary;
 @property(nonatomic, assign) id<GeoDecoderDelegate> delegate;
 
 -(void) searchCoordinatesForAddress:(NSString *)inAddress;

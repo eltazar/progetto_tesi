@@ -16,7 +16,7 @@
 #import "DatabaseAccess.h"
 #import "GeoDecoder.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, UIActionSheetDelegate, DatabaseAccessDelegate,GeoDecoderDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, DatabaseAccessDelegate,GeoDecoderDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  
@@ -29,6 +29,7 @@
     UIView *alternativeToolbar;
     UIButton *saveJobInPositionBtn;
     UIButton *backBtn;
+    UIView *hintView;
     
     FavouriteAnnotation *favouriteAnnotation;
         
@@ -39,6 +40,7 @@
     MKCoordinateRegion oldRegion;
     
 }
+@property(nonatomic, retain) IBOutlet UIView *hintView;
 @property(nonatomic, retain)Job *jobToPublish;
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
@@ -51,6 +53,7 @@
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *bookmarkButtonItem;
 
 
+-(void)onConnectionRestored;
 -(IBAction)publishBtnClicked:(id)sender;
 -(IBAction)saveNewJobInPositionBtnClicked:(id)sender;
 -(IBAction)bookmarkBtnClicked:(id)sender;

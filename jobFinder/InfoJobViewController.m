@@ -218,16 +218,6 @@
     // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
-//DA CANCELLARE ???? 30 ottobre
--(void) setJob:(Job*) newJob{
-    if(job != newJob){
-        [newJob retain];
-        [job release];
-        job = newJob;
-    }
-}
-
-
 #pragma mark - Metodi utili per facebook
 
 -(NSString*) createJobString:(NSString*)sender

@@ -30,6 +30,5 @@
 
 @property(nonatomic, retain)Facebook *facebook;
 //@property(nonatomic,retain) Job *job;
--(void) setJob:(Job*) newJob;
 @end
 

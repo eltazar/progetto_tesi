@@ -114,12 +114,12 @@
     NSString *placeholder;
     
     if(jobSector != nil){
-        job.employee = jobSector;
+        job.field = jobSector;
         placeholder = jobSector;
         job.code = code;
     }    
     else{
-        job.employee = @"";
+        job.field = @"";
         placeholder = @"Scegli...";
         job.code = @"";
     } 
@@ -137,10 +137,10 @@
     NSString *datakey= [rowDesc objectForKey:@"DataKey"];
     
     if([datakey isEqualToString:@"employee"]){
-         cell.detailTextLabel.text = job.employee;
-        if(job.employee == nil || [job.employee isEqualToString:@""])
+         cell.detailTextLabel.text = job.field;
+        if(job.field == nil || [job.field isEqualToString:@""])
             ((ActionCell *)cell).detailTextLabel.text = [rowDesc objectForKey:@"placeholder"];
-        else ((ActionCell *)cell).detailTextLabel.text = job.employee;
+        else ((ActionCell *)cell).detailTextLabel.text = job.field;
     }
     else if([datakey isEqualToString:@"description"])
         ((TextAreaCell*)cell).textView.text = job.description;

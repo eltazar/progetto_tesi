@@ -206,7 +206,7 @@
     timer = nil;
                 
     //se c'è internet posso fare le query
-    //if([Utilities networkReachable]){
+    if([Utilities networkReachable]){
         
         //calcolo i rect delle regioni
         MKMapRect oldRect = [MKMapView mapRectForCoordinateRegion:oldRegion];
@@ -221,40 +221,42 @@
         MKCoordinateRegion regionQuery = MKCoordinateRegionForMapRect(newExtendedRect);
         
         //in base a come effettuo lo zoom cambia il tipo di query
-        NSLog(@"CURRENT ZOOM LIVEL: %d", [map currentZoomLevel]);
-        NSLog(@"FABS %ef",fabs(newRect.size.width - oldRect.size.width));
+//        NSLog(@"CURRENT ZOOM LIVEL: %d", [map currentZoomLevel]);
+//        NSLog(@"FABS %ef",fabs(newRect.size.width - oldRect.size.width));
         
     
-    if([map currentZoomLevel] < ZOOM_THRESHOLD){
-        NSLog(@"PHP 1B");
-        [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
-    }
-    else
-    {
-        if(fabs((newRect.size.width - oldRect.size.width)) > EPS){
-            NSLog(@"PHP 1A");
-            [dbAccess jobReadRequest:map.region field: [Utilities createFieldsString]];
+        if([map currentZoomLevel] < ZOOM_THRESHOLD){
+            NSLog(@"PHP 1B");
+            [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
         }
-        else{
-            NSLog(@"PHP 2");
-            [dbAccess jobReadRequestOldRegion:oldRegion newRegion:map.region field:[Utilities createFieldsString]];
+        else
+        {
+            if(fabs((newRect.size.width - oldRect.size.width)) > EPS){
+                NSLog(@"PHP 1A");
+                [dbAccess jobReadRequest:map.region field: [Utilities createFieldsString]];
+            }
+            else{
+                NSLog(@"PHP 2");
+                [dbAccess jobReadRequestOldRegion:oldRegion newRegion:map.region field:[Utilities createFieldsString]];
+            }
         }
-    }
     
-   // }
-//            else{
-//                //se non c'è internet mostro alert
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//                [alert show];
-//                [alert release];
-//            }
+    }
+    else{
+           //se non c'è internet mostro alert
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+                [alert release];
+    }
     
         if([map currentZoomLevel] < ZOOM_THRESHOLD)
             self.oldZoom = ZOOM_THRESHOLD-1;
+    if([map currentZoomLevel] < ZOOM_THRESHOLD)
+        self.oldZoom = ZOOM_THRESHOLD-1;
 
 
-        //aggiorno oldRegion con la region attuale
-        oldRegion = map.region;
+    //aggiorno oldRegion con la region attuale
+    oldRegion = map.region;
 
         // NSLog(@"VISIBLE MAP RECT = w:%f  h:%f, log w = %f", mapView.visibleMapRect.size.width,mapView.visibleMapRect.size.height,log2(mapView.visibleMapRect.size.width / 664.000000));
 }

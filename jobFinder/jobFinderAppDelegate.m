@@ -32,7 +32,7 @@
     tokenSended = NO;
     
     //############# controlla se i servizi di localizzazione sono attivi #################
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
     
     if([CLLocationManager locationServicesEnabled]){
         
@@ -48,16 +48,16 @@
         //[alert show];
     }
         
-    [alert release];
+    //[alert release];
     
     
     //################ controlla presenza rete al primo avvio dell'app ###################
     
-    if(![Utilities networkReachable]){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-        [alert release];
-    }
+//    if(![Utilities networkReachable]){
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//        [alert show];
+//        [alert release];
+//    }
     
     
     //per controllare quando cambia stato connessione

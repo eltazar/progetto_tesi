@@ -190,7 +190,7 @@
         if(count == 0)
             ++count;
         else if(count == 1){
-            [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+            //[dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
             ++count;
         }
         else if(count == 2){

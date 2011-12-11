@@ -1,208 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>0</key>
-        <string>Prova Settore</string>
-        
-        <key>a1</key>
-        <string>Abbigliamento</string>
-
-        <key>a2</key>
-        <string>Acquisti</string>
-
-        <key>a3</key>
-        <string>Affari legali</string>
-
-        <key>a4</key>
-        <string>Agricoltura</string>
-
-        <key>a5</key>
-        <string>Alberghi</string>
-
-        <key>a6</key>
-        <string>Alimentazione</string>
-
-        <key>a7</key>
-        <string>Amministrazione</string>
-
-        <key>a8</key>
-        <string>Architettura - design</string>
-
-        <key>a9</key>
-        <string>Arte - cultura</string>
-
-        <key>a10</key>
-        <string>Artigianato</string>
-
-        <key>a11</key>
-        <string>Assicurazioni</string>
-        
-        <key>b1</key>
-        <string>Banche</string>
-
-        <key>b2</key>
-        <string>Biologia</string>
-
-        <key>b3</key>
-        <string>Biotecnologia</string>
-
-        <key>c1</key>
-        <string>Call center</string>
-
-        <key>c2</key>
-        <string>Chimica</string>
-    
-        <key>c3</key>
-        <string>Cinema - spettacolo</string>
-    
-        <key>c4</key>
-        <string>Commercio</string>
-        
-        <key>c5</key>
-        <string>Consulenza</string>
-
-        <key>c6</key>
-        <string>Contabilità</string>
-    
-        <key>c7</key>
-        <string>Cura della persona - estetica</string>
-
-        <key>d1</key>
-        <string>Distribuzione</string>
-
-        <key>e1</key>
-        <string>Edilizia</string>
-    
-        <key>e2</key>
-        <string>Editoria - stampa</string>
-        
-        <key>e3</key>
-        <string>Elettronica</string>
-        
-        <key>e4</key>
-        <string>Energia - ecologia</string>
-    
-        <key>f1</key>
-        <string>Farmaceutica</string>
-    
-        <key>f2</key>
-        <string>Formazione - istruzione</string>
-    
-        <key>g1</key>
-        <string>Giochi - intrattenimento</string>
-
-        <key>i1</key>
-        <string>Immobiliare</string>
-        
-        <key>i2</key>
-        <string>Import - export</string>
-        
-        <key>i3</key>
-        <string>Industria</string>
-        
-        <key>i4</key>
-        <string>Informatica - IT</string>
-    
-        <key>i5</key>
-        <string>Ingegneria</string>
-    
-        <key>i6</key>
-        <string>Internet</string>
-        
-        <key>l1</key>
-        <string>Lavori domestici</string>
-        
-        <key>l2</key>
-        <string>Lavori pubblici</string>
-        
-        <key>l3</key>
-        <string>Legge e finanza</string>
-        
-        <key>l4</key>
-        <string>Libera professione</string>
-        
-        <key>l5</key>
-        <string>Locali pubblici</string>
-        
-        <key>l6</key>
-        <string>Logistica e trasporti</string>
-        
-        <key>m1</key>
-        <string>Management</string>
-        
-        <key>m2</key>
-        <string>Manovalanza</string>
-        
-        <key>m3</key>
-        <string>Marketing - pubblicità</string>
-        
-        <key>m4</key>
-        <string>Meccanica</string>
-        
-        <key>m5</key>
-        <string>Medicina</string>
-        
-        <key>m6</key>
-        <string>Moda</string>
-        
-        <key>m7</key>
-        <string>Musica</string>
-    
-        <key>p1</key>
-        <string>Pesca - itticoltura</string>
-    
-        <key>p2</key>
-        <string>Produzione</string>
-        
-        <key>p3</key>
-        <string>Pubblica amministrazione</string>
-        
-        <key>r1</key>
-        <string>Ricerca - sviluppo</string>
-        
-        <key>r2</key>
-        <string>Riparazione - manutenzione</string>
-        
-        <key>r3</key>
-        <string>Risorse umane</string>
-        
-        <key>r4</key>
-        <string>Ristorazione</string>
-    
-        <key>s1</key>
-        <string>Scienze</string>
-    
-        <key>s2</key>
-        <string>Segreteria - direzione</string>
-    
-        <key>s3</key>
-        <string>Servizi generali</string>
-    
-        <key>s4</key>
-        <string>Servizi pubblici</string>
-        
-        <key>s5</key>
-        <string>Sicurezza - vigilanza</string>
-        
-        <key>s6</key>
-        <string>Sport - tempo libero</string>
-        
-        <key>s7</key>
-        <string>Supporto clientela</string>
-    
-        <key>t1</key>
-        <string>Telecomunicazioni - ICT</string>
-        
-        <key>t2</key>
-        <string>Turismo</string>
-    
-        <key>v1</key>
-        <string>Vendite</string>
-
-        <key>altro</key>
-        <string>Altro</string>
-
-    </dict>
-
+<dict>
+	<key>0</key>
+	<string>Prova Settore</string>
+	<key>a1</key>
+	<string>Abbigliamento</string>
+	<key>a2</key>
+	<string>Acquisti</string>
+	<key>a3</key>
+	<string>Affari legali</string>
+	<key>a4</key>
+	<string>Agricoltura</string>
+	<key>a5</key>
+	<string>Alberghi</string>
+	<key>a6</key>
+	<string>Alimentazione</string>
+	<key>a7</key>
+	<string>Amministrazione</string>
+	<key>a8</key>
+	<string>Architettura - design</string>
+	<key>a9</key>
+	<string>Arte - cultura</string>
+	<key>a10</key>
+	<string>Artigianato</string>
+	<key>a11</key>
+	<string>Assicurazioni</string>
+	<key>b1</key>
+	<string>Banche</string>
+	<key>b2</key>
+	<string>Biologia</string>
+	<key>b3</key>
+	<string>Biotecnologia</string>
+	<key>c1</key>
+	<string>Call center</string>
+	<key>c2</key>
+	<string>Chimica</string>
+	<key>c3</key>
+	<string>Cinema - spettacolo</string>
+	<key>c4</key>
+	<string>Commercio</string>
+	<key>c5</key>
+	<string>Consulenza</string>
+	<key>c6</key>
+	<string>Contabilità</string>
+	<key>c7</key>
+	<string>Cura della persona - estetica</string>
+	<key>d1</key>
+	<string>Distribuzione</string>
+	<key>e1</key>
+	<string>Edilizia</string>
+	<key>e2</key>
+	<string>Editoria - stampa</string>
+	<key>e3</key>
+	<string>Elettronica</string>
+	<key>e4</key>
+	<string>Energia - ecologia</string>
+	<key>f1</key>
+	<string>Farmaceutica</string>
+	<key>f2</key>
+	<string>Formazione - istruzione</string>
+	<key>g1</key>
+	<string>Giochi - intrattenimento</string>
+	<key>i1</key>
+	<string>Immobiliare</string>
+	<key>i2</key>
+	<string>Import - export</string>
+	<key>i3</key>
+	<string>Industria</string>
+	<key>i4</key>
+	<string>Informatica - IT</string>
+	<key>i5</key>
+	<string>Ingegneria</string>
+	<key>i6</key>
+	<string>Internet</string>
+	<key>l1</key>
+	<string>Lavori domestici</string>
+	<key>l2</key>
+	<string>Lavori pubblici</string>
+	<key>l3</key>
+	<string>Legge e finanza</string>
+	<key>l4</key>
+	<string>Libera professione</string>
+	<key>l5</key>
+	<string>Locali pubblici</string>
+	<key>l6</key>
+	<string>Logistica e trasporti</string>
+	<key>m1</key>
+	<string>Management</string>
+	<key>m2</key>
+	<string>Manovalanza</string>
+	<key>m3</key>
+	<string>Marketing - pubblicità</string>
+	<key>m4</key>
+	<string>Meccanica</string>
+	<key>m5</key>
+	<string>Medicina</string>
+	<key>m6</key>
+	<string>Moda</string>
+	<key>m7</key>
+	<string>Musica</string>
+	<key>p1</key>
+	<string>Pesca - itticoltura</string>
+	<key>p2</key>
+	<string>Produzione</string>
+	<key>p3</key>
+	<string>Pubblica amministrazione</string>
+	<key>r1</key>
+	<string>Ricerca - sviluppo</string>
+	<key>r2</key>
+	<string>Riparazione - manutenzione</string>
+	<key>r3</key>
+	<string>Risorse umane</string>
+	<key>r4</key>
+	<string>Ristorazione</string>
+	<key>s1</key>
+	<string>Scienze</string>
+	<key>s2</key>
+	<string>Segreteria - direzione</string>
+	<key>s3</key>
+	<string>Servizi generali</string>
+	<key>s4</key>
+	<string>Servizi pubblici</string>
+	<key>s5</key>
+	<string>Sicurezza - vigilanza</string>
+	<key>s6</key>
+	<string>Sport - tempo libero</string>
+	<key>s7</key>
+	<string>Supporto clientela</string>
+	<key>t1</key>
+	<string>Telecomunicazioni - ICT</string>
+	<key>t2</key>
+	<string>Turismo</string>
+	<key>v1</key>
+	<string>Vendite</string>
+	<key>spec1</key>
+	<string>Altro</string>
+</dict>
 </plist>

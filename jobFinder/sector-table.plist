@@ -310,8 +310,12 @@
             <dict>
 				<key>label</key>
 				<string>Giochi - intrattenimento</string>
-				<key>enum</key>
+				<key>code</key>
 				<string>g1</string>
+                <key>kind</key>
+				<string>InfoCell</string>
+				<key>style</key>
+				<string>UITableViewCellStyleDefault</string>
 			</dict>
         </array>
         <key>I</key>

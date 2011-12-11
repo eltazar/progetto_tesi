@@ -239,6 +239,8 @@
 
 - (void)viewDidUnload
 {
+    self.theSearchBar = nil;
+    self.theTableView = nil;
     self.tableData = nil;
     self.disableViewOverlay = nil;
     [super viewDidUnload];

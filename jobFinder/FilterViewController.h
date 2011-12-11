@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FilterViewController : UIViewController <UITableViewDataSource,UITextFieldDelegate>{
+@interface FilterViewController : UIViewController <UITableViewDataSource>{
     NSArray *structureForSwitchTable;
     NSMutableDictionary *tableStructureForSwitchTable;
     NSMutableArray *sectionsForSwitchTable;

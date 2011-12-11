@@ -363,6 +363,7 @@
 
 - (void)viewDidUnload
 {
+    self.mainView = nil;
     self.sectionsForContentTable = nil;
     self.structureForContentTable = nil;
     self.tableStructureForContentTable = nil;
@@ -371,6 +372,10 @@
     self.sectionsForSwitchTable = nil;
     self.structureForSwitchTable = nil;
     self.tableStructureForSwitchTable = nil;
+    self.contentTable = nil;
+    self.switchTable = nil;
+    [aSwitch release];
+    aSwitch = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -392,12 +397,18 @@
     [tableStructureForContentTable release];
     [sectionsForContentTable release];
     [structureForContentTable release];
+   
     [indices release];
     [selectedCells release];
-    [structureForSwitchTable release];
     [aSwitch release];
+
+    [structureForSwitchTable release];
     [tableStructureForSwitchTable release];
     [sectionsForSwitchTable release];
+    
+    [mainView release];
+    [contentTable release];
+    [switchTable release];
     [super dealloc];
     
 }

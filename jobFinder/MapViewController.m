@@ -919,15 +919,17 @@
 {    
     NSLog(@"MAPCONTROLLER DID UNLOAD");
     
-    backBtn = nil;
-    saveJobInPositionBtn = nil;
-    alternativeToolbar = nil;
-    map = nil;
-    toolBar = nil;
-    filterButton = nil;
-    publishBtn = nil;
-    refreshBtn = nil;
-    bookmarkButtonItem = nil;
+    self.backBtn = nil;
+    self.saveJobInPositionBtn = nil;
+    self.alternativeToolbar = nil;
+    self.map = nil;
+    self.toolBar = nil;
+    self.filterButton = nil;
+    self.publishBtn = nil;
+    self.refreshBtn = nil;
+    self.bookmarkButtonItem = nil;
+    [infoBarButtonItem release];
+    infoBarButtonItem = nil;
     
     [zoomBuffer release];
     zoomBuffer = nil;

@@ -609,8 +609,7 @@
     logoutBtn = nil;
     [permissions release];
     permissions = nil;
-    [facebook release];
-    facebook = nil;
+    self.facebook = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

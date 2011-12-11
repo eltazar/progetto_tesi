@@ -291,6 +291,8 @@
     
     [secA autorelease];
     [secB autorelease];
+    [secC autorelease];
+    [secD autorelease];
 
 }
 

@@ -787,29 +787,33 @@
             if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
                // NSLog(@"GPS NON AUTORIZZATO PER L APP");
                 //NSLog(@"CERCO REGIONE");
-                GeoDecoder *geoDec = [[GeoDecoder alloc]init];
-                [geoDec setDelegate:self];
-                NSLocale *currentLocale = [NSLocale currentLocale];
-                NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-                countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
-                //NSLog(@"ULOCALE = %@",countryCode);
-                [geoDec searchCoordinatesForAddress:countryCode];
-                [geoDec release];
+                if([Utilities networkReachable]){
+                    GeoDecoder *geoDec = [[GeoDecoder alloc]init];
+                    [geoDec setDelegate:self];
+                    NSLocale *currentLocale = [NSLocale currentLocale];
+                    NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+                    countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
+                    //NSLog(@"ULOCALE = %@",countryCode);
+                    [geoDec searchCoordinatesForAddress:countryCode];
+                    [geoDec release];
+                }
             }
         }
     }
     else {
         //NSLog(@"GPS TOTALMENTE DISATTIVATO");
-        GeoDecoder *geoDec = [[GeoDecoder alloc]init];
-        [geoDec setDelegate:self];
-        NSLocale *currentLocale = [NSLocale currentLocale];
-        NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-        countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
-        //NSLog(@"ULOCALE = %@",countryCode);
-        [geoDec searchCoordinatesForAddress:countryCode];
-        [geoDec release];
-    }
+        if([Utilities networkReachable]){
+            GeoDecoder *geoDec = [[GeoDecoder alloc]init];
+            [geoDec setDelegate:self];
+            NSLocale *currentLocale = [NSLocale currentLocale];
+            NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+            countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
+            //NSLog(@"ULOCALE = %@",countryCode);
+            [geoDec searchCoordinatesForAddress:countryCode];
+            [geoDec release];
     
+        }
+    }
     /*inizializzazione pulsanti view
      */
     //aggiungo bottone Info alla navigation bar

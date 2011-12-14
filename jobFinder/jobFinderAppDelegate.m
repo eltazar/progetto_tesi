@@ -18,7 +18,7 @@
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
-@synthesize navController, mapController, fb;
+@synthesize navController, mapController, facebook;
 
 
 
@@ -38,13 +38,13 @@
         
         if ([CLLocationManager respondsToSelector:@selector(authorizationStatus)]){
             if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
-                NSLog(@"PRIMO");
+                //NSLog(@"PRIMO");
                 //[alert show];
             }
         }
     }  
     else{
-        NSLog(@"SECONDO");
+        //NSLog(@"SECONDO");
         //[alert show];
     }
         
@@ -76,6 +76,15 @@
     application.applicationIconBadgeNumber = 0;
     
     
+    //FACEBOOK
+    // Set i permessi di accesso
+    permissions = [[NSArray arrayWithObjects:@"publish_stream", nil] retain];
+    
+    // Set the Facebook object we declared. We’ll use the declared object from the application
+    // delegate.
+    facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
+    
+    NSLog(@"APP DELEGATE: facebook = %p", facebook);
     return YES;
 }
 
@@ -88,7 +97,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
-{
+{    
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -97,6 +106,9 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    //query
+    [mapController onConnectionRestored];
+
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
@@ -104,9 +116,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
-{   
-    [mapController onConnectionRestored];
-    
+{     
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
@@ -179,10 +189,9 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@" DID RECEIVE");
+    NSLog(@" é STATA RICEVUTA UNA PUSH NOTF");
     //apre la mappa nella posizione preferita dopo la ricezione di una push
     [self.mapController refreshViewMap];
-    //mostrare alert quando l'applicazione è in foreground
 }
 
 
@@ -203,14 +212,12 @@
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
        
         if([pref objectForKey: @"lat"] != nil &&
-           [pref objectForKey: @"long"] != nil){
+           [pref objectForKey: @"long"] != nil) {
             
             NSLog(@" APP DELEGATE : preferito settato");
         #if !TARGET_IPHONE_SIMULATOR
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
         #endif
-//            [[NSNotificationCenter defaultCenter] removeObserver:self];
-//            [reachability stopNotifier];
         }
         else{
             NSLog(@" APP DELEGATE : nessun preferito");        
@@ -237,30 +244,106 @@
     }
 }
 
-#pragma mark - per facebook
+#pragma mark - FacebookSessionDelegate
 
 // Pre 4.2 support
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     NSLog(@"DENTRO APP DELEGATE2");
 
-    return [fb handleOpenURL:url]; 
+    return [facebook handleOpenURL:url]; 
 }
 
 // For 4.2+ support
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     
-    NSLog(@"DENTRO APP DELEGATE, facebook = %p",fb);
-    return [fb handleOpenURL:url]; 
+    NSLog(@"DENTRO APP DELEGATE, facebook = %p",facebook);
+    return [facebook handleOpenURL:url]; 
 }
 
+-(void)checkForPreviouslySavedAccessTokenInfo{
+    // Initially set the isConnected value to NO.
+    //isConnected = NO;
+    
+    // Check if there is a previous access token key in the user defaults file.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"] &&
+        [defaults objectForKey:@"FBExpirationDateKey"]) {
+        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+        NSLog(@"APP DELEGATE: expirationDate = %@",facebook.expirationDate);       
+        // Check if the facebook session is valid.
+        // If it’s not valid clear any authorization and mark the status as not connected.
+        if (![facebook isSessionValid]) {
+            //[facebook authorize:nil];
+            NSLog(@"APP DELEGATE: SESSIONE NN VALIDA");
+            [facebook logout:self];
+            //isConnected = NO;
+        }
+        else {
+            NSLog(@"APP DELEGATE: SESSIONE VALIDA");
+            //isConnected = YES;
+        }
+    }
+}
 
+-(void)logIntoFacebook
+{
+    NSLog(@"APP DELEGATE: loginIntoFacebook");
+    [facebook authorize:permissions];
+}
+
+#pragma mark - FBSessionDelegate
+-(void)fbDidLogin{
+    NSLog(@"APP DELEGATE: DID LOGIN --> salva in pref -> invia notifica");
+    //salva valori di accesso e sessione
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[facebook accessToken] forKey:@"FBAccessTokenKey"];
+    [defaults setObject:[facebook expirationDate] forKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+    
+    
+    // Save the access token key info.
+    //[self saveAccessTokenKeyInfo];
+    // Get the user's info.
+    //[facebook requestWithGraphPath:@"me" andDelegate:self];
+    //[self postOnFacebookWall];
+    //mostro tasto logout
+    //[self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FBdidLogin" object:nil];
+}
+
+-(void)fbDidNotLogin:(BOOL)cancelled{
+    NSLog(@"APP DELEGATE: CANCELLED LOGIN -> invio notifica");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FBerrLogin" object:nil];
+}
+
+-(void)fbDidLogout{
+    // Keep this for testing purposes.
+    NSLog(@"APP DELEGATE: DID LOGOUT. --> cancella pref -> invia notifica");
+    
+    //nascondo tasto logout
+    
+    // Remove saved authorization information if it exists
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"]) {
+        [defaults removeObjectForKey:@"FBAccessTokenKey"];
+        [defaults removeObjectForKey:@"FBExpirationDateKey"];
+        [defaults synchronize];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FBdidLogout" object:nil];
+    //[self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
 
 
 #pragma mark - memory management
 
 - (void)dealloc
 {   
+    [facebook release];
+    [permissions release];
     [reachability release];
     [navController release];
     [_window release];

@@ -16,11 +16,14 @@
     UINavigationController *navController; 
     BOOL tokenSended;
     Reachability *reachability;
-    Facebook *fb;
+    Facebook *facebook;
+    NSArray *permissions;
 }
-@property(nonatomic, retain) Facebook *fb;
+@property(nonatomic, retain) Facebook *facebook;
 @property(nonatomic, retain) IBOutlet MapViewController *mapController;
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navController;
 
+-(void)logIntoFacebook;
+-(void)checkForPreviouslySavedAccessTokenInfo;
 @end

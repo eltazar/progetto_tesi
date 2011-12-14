@@ -13,7 +13,8 @@
 #import "jobFinderAppDelegate.h"
 #import "Utilities.h"
 
-#define EMAIL_CONTACT @"el-tazar@hotmail.it" //per prova
+#define EMAIL_CONTACT_1 @"el-tazar@hotmail.it"
+#define EMAIL_CONTACT_2 @"panizzi@di.uniroma1.it"
 #define URL_INFO @"http://www.google.it" //per prova
 
 @implementation ConfigViewController
@@ -120,8 +121,9 @@
                 mail.mailComposeDelegate = self;
                 
                 if([MFMailComposeViewController canSendMail]){
-                    [mail setToRecipients:[NSArray arrayWithObjects:EMAIL_CONTACT, nil]];
-                    [mail setSubject:@"Oggetto della mail"];
+                    [mail setToRecipients:[NSArray arrayWithObjects:EMAIL_CONTACT_1,EMAIL_CONTACT_2, nil]];
+#warning cambiare sito web e oggetto email
+                    [mail setSubject:@"Email da XXXXXX"];
                     [mail setMessageBody:@"" isHTML:NO];
                     [self presentModalViewController:mail animated:YES];
                     [mail release];

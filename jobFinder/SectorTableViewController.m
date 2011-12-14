@@ -8,10 +8,9 @@
 
 #import "SectorTableViewController.h"
 #import "BaseCell.h"
-#import "SubSectorTableViewController.h"
 
 @implementation SectorTableViewController
-@synthesize secDelegate, tableStructure, sections,structureFromPlist, indeces;
+@synthesize secDelegate, tableStructure, sections,structureFromPlist, indices;
 
 -(id) initWithPlist:(NSString *)plist
 {
@@ -78,7 +77,7 @@
 
 // metodi per gestire la barra degli indici nella view
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return  indeces;
+    return  indices;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -126,7 +125,7 @@
     [self.sections removeObject:@"Altro"];
     [self.sections addObject:@"Altro"];
     
-    self.indeces = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
+    self.indices = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
                     @"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
     [sectionsTemp release];
 }
@@ -135,7 +134,7 @@
     self.structureFromPlist = nil;
     self.tableStructure = nil;
     self.sections = nil;
-    self.indeces = nil;
+    self.indices = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -145,7 +144,7 @@
 
 -(void) dealloc
 {
-    [indeces release];
+    [indices release];
     [structureFromPlist release];
     [tableStructure release];
     [sections release];

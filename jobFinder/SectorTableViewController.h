@@ -23,7 +23,7 @@
     NSArray *indices;
 
 }
-@property(nonatomic, retain) NSArray *indeces;
+@property(nonatomic, retain) NSArray *indices;
 @property(nonatomic, retain) NSArray *structureFromPlist;
 @property(nonatomic, retain) NSDictionary *tableStructure;
 @property(nonatomic, retain) NSMutableArray *sections;

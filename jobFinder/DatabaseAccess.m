@@ -81,9 +81,7 @@ NSString* key(NSURLConnection* con)
 
 //invia richiesta lettura da db
 -(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSString*)field
-{
-    //NSLog(@"DATABASE ACCESS FIELD 1 = %@",field);
-    
+{    
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/read2.php"];
     
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
@@ -105,8 +103,6 @@ NSString* key(NSURLConnection* con)
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
     
-//    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-//	[connection start];
     
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
@@ -147,9 +143,6 @@ NSString* key(NSURLConnection* con)
     [request setHTTPBody:postData];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-    
-//    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-//	[connection start];
     
     if(connection){
         //NSLog(@"IS CONNECTION TRUE");
@@ -289,6 +282,7 @@ NSString* key(NSURLConnection* con)
                job.code = [tempDict objectForKey:@"field"];
                job.date = [formatter dateFromString: [tempDict objectForKey:@"date"]];
                job.description = [tempDict objectForKey:@"description"];
+               job.address = @"";
                job.phone = [tempDict objectForKey:@"phone"];
                //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
                job.email = [tempDict objectForKey:@"email"];

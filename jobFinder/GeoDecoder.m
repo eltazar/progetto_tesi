@@ -107,7 +107,8 @@
    // NSLog(@"%@",dictionary);
 //    NSLog(@"JSON is: %@",jsonResult);
     
-    [delegate didReceivedGeoDecoderData:geoDataDictionary];
+    if(delegate && [delegate respondsToSelector:@selector(didReceivedGeoDecoderData:)])
+        [delegate didReceivedGeoDecoderData:geoDataDictionary];
 }
 
 

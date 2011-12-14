@@ -23,6 +23,7 @@
     BOOL isConnected;
     UIBarButtonItem *logoutBtn;
     Facebook *facebook;
+    GeoDecoder *geoDec;
 }
 
 -(id) initWithJob:(Job *)aJob;

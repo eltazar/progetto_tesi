@@ -550,10 +550,9 @@
      */
     if(job.address == nil || [job.address isEqualToString:@""] || [job.address isEqualToString:@"Non disponibile"]){
         NSLog(@"FACCIO REVERSE GECODING!");
-        GeoDecoder *geoDec = [[GeoDecoder alloc] init];
+        geoDec = [[GeoDecoder alloc] init];
         [geoDec setDelegate:self];
         [geoDec searchAddressForCoordinate:job.coordinate];
-        [geoDec release];
     }
     
     [secA autorelease];
@@ -635,6 +634,8 @@
 -(void) dealloc
 {   
     NSLog(@"DEALLOC");
+    [geoDec setDelegate:nil];
+    [geoDec release];
     [logoutBtn release];
     [permissions release];
     [facebook release];

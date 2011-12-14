@@ -11,7 +11,7 @@
 @implementation FavouriteAnnotation
 @synthesize address;
 @synthesize coordinate = _coordinate;
-
+@synthesize title,subtitle;
 - (id)init
 {
     self = [super init];
@@ -40,6 +40,8 @@
 
 -(void) dealloc{
     self.address = nil;
+    [title release];
+    [subtitle release];
     [super dealloc];
 }
 

@@ -66,14 +66,10 @@
     
     //controllo presenza connessione ad internet    
     if ([Utilities networkReachable]){
-          
-        //se presente, avvio il geocoding
-        GeoDecoder *geoDec = [[GeoDecoder alloc] init];
-        [geoDec setDelegate:self]; 
+
         //passo indirizzo per calcolare coordinate
         [geoDec searchCoordinatesForAddress:searchBar.text];
         [self searchBar:searchBar activate:NO];
-        [geoDec release];
     }
     else{    
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Per favore controlla le impostazioni di rete e riprova" message:@"Impossibile collegarsi ad internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -199,8 +195,6 @@
                                 [NSNumber numberWithDouble: longitude], @"long", nil] autorelease];
         [addresses addObject:entry];
     }
-//    [addresses addObject:@"<html>ciao come stai <br> bene grazie ciao</html>"];
-//    NSLog(@"ARRAY ADDRESSES: %@",addresses);
     
     //aggiorno il model con i nuovi dati
     [self.tableData removeAllObjects];
@@ -235,10 +229,15 @@
     label.text = @"Puoi inserire un indirizzo, una zona, un codice postale o una città.";
     [self.disableViewOverlay addSubview:label];
     [label release];
+    
+    geoDec = [[GeoDecoder alloc] init];
+    [geoDec setDelegate:self]; 
 }
 
 - (void)viewDidUnload
 {
+    [geoDec release];
+    geoDec = nil;
     self.theSearchBar = nil;
     self.theTableView = nil;
     self.tableData = nil;
@@ -261,7 +260,9 @@
 
 
 - (void)dealloc {
-    
+
+    [geoDec setDelegate:nil];
+    [geoDec release];
     [disableViewOverlay release];
     [theTableView release], theTableView = nil;
     [theSearchBar release], theSearchBar = nil;

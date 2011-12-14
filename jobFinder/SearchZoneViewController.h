@@ -25,6 +25,7 @@
     UIView *disableViewOverlay;
         
     id<SearchZoneDelegate> delegate;
+    GeoDecoder *geoDec;
 
     
 }

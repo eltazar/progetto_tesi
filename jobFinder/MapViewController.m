@@ -13,7 +13,6 @@
 #import "FilterViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MKMapView+Utils.h"
-#import "GeoDecoder.h"
 #import "Utilities.h"
 
 #define DEFAULT_COORDINATE -180
@@ -422,29 +421,6 @@
 }
 
 
-#pragma mark - GeoDecoderDelegate
-
-//all'avvio dell'app setta la region in base alla localizzazione del device utente, se il gps è spento
--(void)didReceivedGeoDecoderData:(NSDictionary *)geoData
-{    
-    NSArray *resultsArray = [geoData objectForKey:@"results"];
-    NSDictionary *result = [resultsArray objectAtIndex:0];
-    CLLocationDegrees latitudeNE = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"northeast"] objectForKey:@"lat"] doubleValue];
-    CLLocationDegrees longitudeNE = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"northeast"] objectForKey:@"lng"] doubleValue];
-    CLLocationDegrees latitudeSW = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"southwest"] objectForKey:@"lat"] doubleValue];
-    CLLocationDegrees longitudeSW = [[[[[result objectForKey:@"geometry"] objectForKey:@"viewport"] objectForKey:@"southwest"] objectForKey:@"lng"] doubleValue];
-    
-    CLLocationCoordinate2D regionCenter;
-    MKCoordinateSpan regionSpan;
-    regionCenter.latitude = (latitudeNE+latitudeSW) / 2;
-    regionCenter.longitude = (longitudeNE+longitudeSW) / 2;
-    regionSpan.latitudeDelta = fabs(latitudeSW-latitudeNE);
-    regionSpan.longitudeDelta = fabs(longitudeNE-longitudeSW);
-    
-    oldRegion = MKCoordinateRegionMake(regionCenter, regionSpan);
-    [map setRegion:oldRegion animated:YES];
-}
-
 #pragma mark - DatabaseAccessDelegate
 
 /*riceve una lista dinuove annotazioni dal server
@@ -776,41 +752,6 @@
     for(int i=0;i<11;i++)
         [zoomBuffer insertObject:[[[NSMutableArray alloc]init]autorelease] atIndex:i];  
    
-    /* se gps è disattivato interroga google per reperire il paese in base al currentLocale dell'utente
-     */
-    if([CLLocationManager locationServicesEnabled]) {
-        
-        if ([CLLocationManager respondsToSelector:@selector(authorizationStatus)]){
-            if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
-               // NSLog(@"GPS NON AUTORIZZATO PER L APP");
-                //NSLog(@"CERCO REGIONE");
-                if([Utilities networkReachable]){
-                    GeoDecoder *geoDec = [[GeoDecoder alloc]init];
-                    [geoDec setDelegate:self];
-                    NSLocale *currentLocale = [NSLocale currentLocale];
-                    NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-                    countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
-                    //NSLog(@"ULOCALE = %@",countryCode);
-                    [geoDec searchCoordinatesForAddress:countryCode];
-                    [geoDec release];
-                }
-            }
-        }
-    }
-    else {
-        //NSLog(@"GPS TOTALMENTE DISATTIVATO");
-        if([Utilities networkReachable]){
-            GeoDecoder *geoDec = [[GeoDecoder alloc]init];
-            [geoDec setDelegate:self];
-            NSLocale *currentLocale = [NSLocale currentLocale];
-            NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-            countryCode = [currentLocale displayNameForKey:NSLocaleCountryCode value:countryCode];
-            //NSLog(@"ULOCALE = %@",countryCode);
-            [geoDec searchCoordinatesForAddress:countryCode];
-            [geoDec release];
-    
-        }
-    }
     /*inizializzazione pulsanti view
      */
     //aggiungo bottone Info alla navigation bar

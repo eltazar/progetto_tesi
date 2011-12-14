@@ -18,7 +18,6 @@
 #import "jobFinderAppDelegate.h"
 
 @implementation InfoJobViewController
-@synthesize facebook;
 
 -(id) initWithJob:(Job *)aJob
 {
@@ -170,13 +169,14 @@
     else if(section == 3){
         if(row==0){
             NSLog(@"selezionata riga di fb");
-            if (!isConnected) {
-                NSLog(@"non è connesso ---> lancio login");
-                [facebook authorize:permissions];
+            if (![appDelegate.facebook isSessionValid]) {
+                NSLog(@"FB non è connesso ---> lancio login");
+                [appDelegate logIntoFacebook];
+                waitingForFacebook = YES;
 //                [self postOnFacebookWall];
             }
             else{
-                NSLog(@"era gia connesso ---> invio post");
+                NSLog(@"FB era gia connesso ---> invio post");
                 [self postOnFacebookWall];
             }
         }
@@ -264,55 +264,38 @@
                                    nil];                
     //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
     
-    [facebook dialog:@"feed" andParams:params andDelegate:self];
+    [appDelegate.facebook dialog:@"feed" andParams:params andDelegate:self];
 
 }
 
--(void)checkForPreviouslySavedAccessTokenInfo{
-    // Initially set the isConnected value to NO.
-    isConnected = NO;
-    
-    // Check if there is a previous access token key in the user defaults file.
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"FBAccessTokenKey"] &&
-        [defaults objectForKey:@"FBExpirationDateKey"]) {
-        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
-        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-        NSLog(@"expirationDate = %@",facebook.expirationDate);       
-        // Check if the facebook session is valid.
-        // If it’s not valid clear any authorization and mark the status as not connected.
-        if (![facebook isSessionValid]) {
-            //[facebook authorize:nil];
-            NSLog(@"SESSIONE NN VALIDA");
-            [facebook logout:self];
-            isConnected = NO;
-        }
-        else {
-            NSLog(@"SESSIONE VALIDA");
-            isConnected = YES;
-        }
-    }
-}
-
--(void)saveAccessTokenKeyInfo{
-    // Save the access token key info into the user defaults.
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[facebook accessToken] forKey:@"FBAccessTokenKey"];
-    [defaults setObject:[facebook expirationDate] forKey:@"FBExpirationDateKey"];
-    [defaults synchronize];
-}
 
 -(void)logoutFromFB{
     //eseguo logout e rimuovo token
-    [facebook logout:self];
+    [appDelegate.facebook logout:appDelegate];
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    [defaults removeObjectForKey:@"FBAccessTokenKey"];
 //    [defaults removeObjectForKey:@"FBExpirationDateKey"];
 //    [defaults synchronize];
-    isConnected = NO;
 }
 
-#pragma mark - Facebook's delegates
+-(void)FBdidLogout{
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
+-(void)FBdidLogin{
+    
+    if(waitingForFacebook){
+        [self postOnFacebookWall];
+        waitingForFacebook = NO;
+    }
+    [self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
+}
+
+-(void)FBerrLogin{
+    waitingForFacebook = NO;
+}
+
+#pragma mark - FacebookDialogDelegate
 
 - (void) dialogDidNotComplete:(FBDialog *)dialog
 {
@@ -328,7 +311,7 @@
         NSLog(@"post non inserito");
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio postato sulla tua bacheca" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio pubblicato sulla tua bacheca" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [alert show];
         [alert release];
         
@@ -354,36 +337,7 @@
 }
 
 
--(void)fbDidLogin{
-    NSLog(@"DID LOGIN");
-    // Save the access token key info.
-    [self saveAccessTokenKeyInfo];
-    // Get the user's info.
-    //[facebook requestWithGraphPath:@"me" andDelegate:self];
-    [self postOnFacebookWall];
-    //mostro tasto logout
-    [self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
-}
 
--(void)fbDidNotLogin:(BOOL)cancelled{
-    
-    isConnected = NO;
-}
-
--(void)fbDidLogout{
-    // Keep this for testing purposes.
-    NSLog(@"Logged out");
-    //nascondo tasto logout
-    // Remove saved authorization information if it exists
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"FBAccessTokenKey"]) {
-        [defaults removeObjectForKey:@"FBAccessTokenKey"];
-        [defaults removeObjectForKey:@"FBExpirationDateKey"];
-        [defaults synchronize];
-    }
-
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-}
 
 
 
@@ -544,7 +498,6 @@
     sectionDescripition = [[NSArray alloc] initWithObjects:@"Informazioni generali", @"Descrizione", @"Contatti",@"Condividi con", nil];  
     
     
-    //#warning REVERSE GECODING SPOSTARE??
     /* Quando viene caricata la view controllo se il job scaricato dal server ha il campo address a nil o @"". Se si fa partire il reverse geocoding, altrimenti vuol dire che il job era già stato visualizzato in precedenza ed era già stato fatto il geocoding. In questo 
         modo il reverse gecoding è fatto una volta sola, appena scaricato un job dal server.
      */
@@ -568,29 +521,18 @@
     tmpButton.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
     [tmpButton addTarget:self action:@selector(logoutFromFB) forControlEvents:UIControlEventTouchUpInside];
     
-    logoutBtn = [[UIBarButtonItem alloc] initWithCustomView:tmpButton];
     
     //###### FACEBOOK ########
     
-    jobFinderAppDelegate *appDelegate = (jobFinderAppDelegate*) [[UIApplication sharedApplication] delegate];
+    logoutBtn = [[UIBarButtonItem alloc] initWithCustomView:tmpButton];
+    
+    appDelegate = (jobFinderAppDelegate*) [[UIApplication sharedApplication] delegate];
 
-    
-    // Set i permessi di accesso
-    permissions = [[NSArray arrayWithObjects:@"publish_stream", nil] retain];
-    
-    // Set the Facebook object we declared. We’ll use the declared object from the application
-    // delegate.
-    facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
-    appDelegate.fb = facebook;
-    
-    
-    NSLog(@"DID LOAD FACEBOOK DELEGATE : %p, FACEBOOK: %p",facebook.sessionDelegate, facebook);
-    
     //controllo se ci sono token e sessione precedenti valide
-    [self checkForPreviouslySavedAccessTokenInfo];
+    [appDelegate checkForPreviouslySavedAccessTokenInfo];
        
     //mostra il tasto per il logout se connesso
-    if(isConnected){
+    if([appDelegate.facebook isSessionValid]){
         NSLog(@"DID LOAD CONNECTED");
         self.navigationItem.rightBarButtonItem = logoutBtn;
     }
@@ -598,7 +540,25 @@
         NSLog(@"DID LOAD NOT CONNECTED");
         self.navigationItem.rightBarButtonItem = nil;
     }
+    
 
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(FBdidLogout)
+                                                 name:@"FBdidLogout"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(FBdidLogin)
+                                                 name:@"FBdidLogin"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(FBerrLogin)
+                                                 name:@"FBerrLogin"
+                                               object:nil];
+    
+    waitingForFacebook = NO;
+    
 }
 
 
@@ -606,9 +566,6 @@
 {
     [logoutBtn release];
     logoutBtn = nil;
-    [permissions release];
-    permissions = nil;
-    self.facebook = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -634,11 +591,10 @@
 -(void) dealloc
 {   
     NSLog(@"DEALLOC");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [geoDec setDelegate:nil];
     [geoDec release];
     [logoutBtn release];
-    [permissions release];
-    [facebook release];
     [job release];
     [super dealloc];
 }

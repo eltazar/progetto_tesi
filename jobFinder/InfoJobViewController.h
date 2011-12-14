@@ -13,6 +13,9 @@
 #import "GeoDecoder.h"
 #import "FBConnect.h"
 #import "Facebook.h"
+#import "jobFinderAppDelegate.h"
+#import "InfoCell.h"
+
 /* Rappresenta la tabella dei dati da mostrare quando viene selezionato un job sulla mappa
  */
 
@@ -20,16 +23,16 @@
 { 
     NSArray *permissions;
     //Facebook *facebook;
-    BOOL isConnected;
     UIBarButtonItem *logoutBtn;
-    Facebook *facebook;
     GeoDecoder *geoDec;
+    jobFinderAppDelegate *appDelegate;
+    BOOL waitingForFacebook;
+    InfoCell *spinnerCell;
 }
 
 -(id) initWithJob:(Job *)aJob;
 -(void) fillCell:(UITableViewCell*)cell InRow:(int)row inSection:(int)section;
 
-@property(nonatomic, retain)Facebook *facebook;
 //@property(nonatomic,retain) Job *job;
 @end
 

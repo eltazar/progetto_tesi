@@ -33,9 +33,7 @@
 {
     self = [super init];
     if (self) {
-        // Initialization code here.
-        //self.job = [[[Job alloc] init] autorelease];
-        coordinate = coord; // ????????? MEMORIA??? usare setCoordinate?
+        coordinate = coord; 
         isMultiple = FALSE;
         isAnimated = TRUE;
         isEmailValid = TRUE;
@@ -402,52 +400,13 @@
     [tempArray release];
 }
 
-//+(NSArray*)createJobsFromData:(NSArray*)data
-//{
-//    
-//    NSMutableArray *jobsArray = [[[NSMutableArray alloc]initWithCapacity:data.count] autorelease];
-//    
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"yyyy-MM-dd"];
-//    //    return [f dateFromString:dateString];
-//    //NSLog(@"FORMATTER = %p",formatter);
-//    for(int i=0; i < data.count-1; i++){
-//        NSDictionary *tempDict = [data objectAtIndex:i];
-//        CLLocationCoordinate2D aCoordinate = CLLocationCoordinate2DMake([[tempDict objectForKey:@"latitude"] doubleValue],[[tempDict objectForKey:@"longitude"] doubleValue]);        
-//        Job *job = [[[Job alloc] initWithCoordinate:aCoordinate] autorelease]; //aggiunto 7 nov
-//        
-//        //sistemare il tipo ritornato da field e da date
-//        //job.employee = [Utilities sectorFromCode:[tempDict objectForKey:@"field"]];
-//        job.time = [tempDict objectForKey:@"time"];
-//        job.idDb = [[tempDict objectForKey:@"id"] integerValue];
-//        job.code = [tempDict objectForKey:@"field"];
-//        job.date = [formatter dateFromString: [tempDict objectForKey:@"date"]];
-//        //               NSLog(@"DATE é DI TIPO %@, %@",[[tempDict objectForKey:@"date"] class], [tempDict objectForKey:@"date"]);
-//        job.description = [tempDict objectForKey:@"description"];
-//        job.phone = [tempDict objectForKey:@"phone"];
-//        //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
-//        job.email = [tempDict objectForKey:@"email"];
-//        [job setUrlWithString:[tempDict objectForKey:@"url"]];
-//        
-//        [jobsArray addObject:job];
-//    }    
-//    
-//    
-////    [jobsArray release];
-//    [formatter release];
-////    formatter = nil;
-//
-//    return jobsArray;
-//
-//
-//
-//}
 
 
 -(void)dealloc{
     [time release];
     [code release];
     [subtitle release];
+    [title release];
     [field release];
     [date release];
     [address release];

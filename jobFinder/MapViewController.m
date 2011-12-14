@@ -180,10 +180,7 @@
         if(count == 0)
             ++count;
         else if(count == 1){
-            //[dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
-            ++count;
-        }
-        else if(count == 2){
+            NSLog(@"QUERY");
             [timer invalidate];
             timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(regionDidChange) userInfo:nil repeats:NO];
         }

@@ -16,6 +16,7 @@
 #import "FBDialog.h"
 #import "Facebook.h"
 #import "jobFinderAppDelegate.h"
+#import "InfoCell.h"
 
 @implementation InfoJobViewController
 
@@ -37,6 +38,13 @@
     
     NSArray *sec = [sectionData objectAtIndex:indexPath.section];
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
+    
+    if(indexPath.section == 0 && indexPath.row==3 && [job.address isEqualToString:@""]){
+        NSLog(@"cellForRow: ritorno Spinner Cell");
+        return spinnerCell;
+    }
+        //[[[sectionData objectAtIndex:0] objectAtIndex:3] setObject:@"spinner" forKey:@"DataKey"];
+    //else [[[sectionData objectAtIndex:0] objectAtIndex:3] setObject:@"regular" forKey:@"DataKey"];
     
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
         
@@ -72,8 +80,14 @@
                 else cell.detailTextLabel.text = @"Non disponibile";
             else if(row == 2)
                 cell.detailTextLabel.text = [job stringFromDate];
-            else if(row == 3)
-                cell.detailTextLabel.text = job.address;
+            else if(row == 3){
+                if([job.address isEqualToString:@""]){
+                }
+                else{
+                    cell.accessoryView = nil;
+                    cell.detailTextLabel.text = job.address;
+                }
+            }
            // else if(row == 4)
                 //cell.detailTextLabel.text = job.city;
             
@@ -411,6 +425,7 @@
     NSMutableArray *secD = [[NSMutableArray alloc] init];
     
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"InfoCell",         @"kind", 
                          @"Settore",          @"label",
                          @"",                 @"detailLabel",
@@ -419,6 +434,7 @@
                             @"style",
                          nil] autorelease] atIndex: 0];
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"InfoCell",         @"kind", 
                          @"Contratto",        @"label",
                          @"",                 @"detailLabel",
@@ -428,6 +444,7 @@
                          nil] autorelease] atIndex: 1];
 
     [secA insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"InfoCell",         @"kind", 
                          @"Inserito il",      @"label",
                          @"",                 @"detailLabel",
@@ -437,8 +454,9 @@
                          nil] autorelease] atIndex: 2];
     
     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",                 @"DataKey",
                          @"InfoCell",         @"kind", 
-                         @"Zona",        @"label",
+                         @"Zona",             @"label",
                          @"",                 @"detailLabel",
                          @"",                 @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1],
@@ -452,12 +470,14 @@
 //                         nil]autorelease] atIndex: 3];
     //descrizione
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"TextAreaCell",     @"kind",
                          @"",                 @"label",
                          @"",                 @"img",
                          nil] autorelease] atIndex: 0];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"ActionCell",       @"kind", 
                          @"Chiama",           @"label", 
                          @"call.png",         @"img", 
@@ -465,6 +485,7 @@
                          nil]autorelease] atIndex: 0];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Scrivi",           @"label",
                          @"mail.png",         @"img",
@@ -472,6 +493,7 @@
                          nil] autorelease] atIndex: 1];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"ActionCell",       @"kind", 
                          @"Visita",           @"label",
                          @"home.png",         @"img",
@@ -479,6 +501,7 @@
                          nil]autorelease] atIndex: 2];
     
     [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"ActionCell",       @"kind", 
                          @"Facebook",           @"label",
                          @"facebook.png",         @"img",
@@ -486,6 +509,7 @@
                          nil]autorelease] atIndex: 0];
     
     [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
                          @"ActionCell",       @"kind", 
                          @"E-mail",           @"label",
                          @"mail.png",         @"img",
@@ -559,6 +583,14 @@
     
     waitingForFacebook = NO;
     
+    // spinner cell
+    
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] 
+               initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [spinner startAnimating];
+    spinnerCell = [[InfoCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"spinner" withDictionary:[secA objectAtIndex:3]];
+    spinnerCell.accessoryView = spinner;
+    [spinner release];
 }
 
 
@@ -594,6 +626,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [geoDec setDelegate:nil];
     [geoDec release];
+    [spinnerCell release];
     [logoutBtn release];
     [job release];
     [super dealloc];

@@ -17,7 +17,7 @@
 @end
 
 @implementation FilterViewController
-@synthesize tableStructureForSwitchTable, sectionsForSwitchTable, structureForSwitchTable, selectedCells, indeces, mainView, switchTable, contentTable,tableStructureForContentTable, sectionsForContentTable, structureForContentTable;
+@synthesize tableStructureForSwitchTable, sectionsForSwitchTable, structureForSwitchTable, selectedCells, mainView, indices, switchTable, contentTable,tableStructureForContentTable, sectionsForContentTable, structureForContentTable;
 
 -(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     
@@ -37,6 +37,7 @@
 {
 //    NSLog(@"cell for row");
     
+    //TODO: sistemare il codice qui sotto per renderlo piu snello
     
     if(tableView == contentTable){
        // NSLog(@"ENTRATO");
@@ -146,14 +147,12 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    
-    //TODO: SISTEMARE
     if(tableView == switchTable){
         switch (section) {
             case 0:
                 if(aSwitch.on)
                     return @"Disattivando il filtro ti verranno mostrati i lavori appartenenti a qualsiasi settore";
-                else return @"Attivando il filtro potrai scegliere i tuoi settori di interesse e visualizzare solo i lavori appartenenti a essi";
+                else return @"Attivando il filtro potrai scegliere i settori di tuo interesse e visualizzare solo i lavori appartenenti a essi";
                 break;
             default:
                 return nil;
@@ -199,7 +198,7 @@
    
     if(tableView == contentTable){
         // NSLog(@"ENTRATO 5");
-        return  indeces;
+        return  indices;
     
     }
     else return nil;
@@ -315,7 +314,7 @@
         self.selectedCells = [[[prefs objectForKey:@"selectedCells"]mutableCopy]autorelease];
     
     //indici per la content view
-    self.indeces = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
+    self.indices = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",
                     @"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
 
     self.title = @"Imposta filtro";//[[structureFromPlist objectAtIndex:0] objectForKey:@"name"];
@@ -367,7 +366,7 @@
     self.sectionsForContentTable = nil;
     self.structureForContentTable = nil;
     self.tableStructureForContentTable = nil;
-    self.indeces = nil;
+    self.indices = nil;
     self.selectedCells = nil;
     self.sectionsForSwitchTable = nil;
     self.structureForSwitchTable = nil;

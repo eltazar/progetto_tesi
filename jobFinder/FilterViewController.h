@@ -22,11 +22,12 @@
     
 }
 
+@property(nonatomic,retain) NSArray *indices;
+
 @property(nonatomic, retain) IBOutlet UITableView *switchTable;
 @property(nonatomic ,retain) IBOutlet UITableView *contentTable;
 @property(nonatomic, retain) IBOutlet UIView *mainView;
 
-@property(nonatomic, retain) NSArray *indeces;
 @property(nonatomic,retain) NSMutableArray *selectedCells;
 
 @property(nonatomic, retain) NSArray *structureForContentTable;

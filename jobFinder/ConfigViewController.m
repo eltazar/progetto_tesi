@@ -13,9 +13,9 @@
 #import "jobFinderAppDelegate.h"
 #import "Utilities.h"
 
-#define EMAIL_CONTACT_1 @"el-tazar@hotmail.it"
-#define EMAIL_CONTACT_2 @"panizzi@di.uniroma1.it"
-#define URL_INFO @"http://www.google.it" //per prova
+#define EMAIL_CONTACT_1 @"mrgreco3@gmail.com"
+#define EMAIL_CONTACT_2 @"panizzi@uniroma1.it"
+#define URL_INFO @"http://www.sapienzaapps.it/jobfinder/index.html"
 
 @implementation ConfigViewController
 @synthesize delegate;
@@ -81,7 +81,7 @@
             return @"Scegliendo una zona preferita e attivando le notifiche push sarai avvisato se è stato aggiunto un nuovo lavoro nella tua zona";
             break;
         case 1:
-            return nil;
+            return @"Dipartimento di Informatica";
             break;
         
         default:
@@ -122,15 +122,14 @@
                 
                 if([MFMailComposeViewController canSendMail]){
                     [mail setToRecipients:[NSArray arrayWithObjects:EMAIL_CONTACT_1,EMAIL_CONTACT_2, nil]];
-#warning cambiare sito web e oggetto email
-                    [mail setSubject:@"Email da XXXXXX"];
+                    [mail setSubject:@"Email da JobNavigatorJo"];
                     [mail setMessageBody:@"" isHTML:NO];
                     [self presentModalViewController:mail animated:YES];
                     [mail release];
                 }
                 break; 
             case 1:
-                NSLog(@"url didSelectRow");
+                //NSLog(@"url didSelectRow");
                 url = [NSURL URLWithString:URL_INFO];
                 [[UIApplication sharedApplication]openURL: url ]; 
                 break; 
@@ -257,7 +256,7 @@
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"site",              @"DataKey",
                          @"InfoCell",          @"kind",
-                         @"Emanuele Panizzi",  @"label",
+                         @"Prof. Emanuele Panizzi",  @"label",
                          @"",                  @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil]autorelease] atIndex: 0];
@@ -289,7 +288,7 @@
     
     
     sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC,secD, nil];
-    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"Supervisor",@"Developer",@"Contatti",nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"Supervisore",@"Sviluppatore",@"Contatti",nil];
     
     [secA autorelease];
     [secB autorelease];

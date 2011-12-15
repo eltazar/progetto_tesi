@@ -84,7 +84,6 @@
     // delegate.
     facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
     
-    NSLog(@"APP DELEGATE: facebook = %p", facebook);
     return YES;
 }
 
@@ -98,6 +97,10 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {    
+    
+    //NSLog(@"DID ENTER BACK");
+    [self.mapController setNewPins:nil];
+    
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -108,7 +111,7 @@
 {
     //query
     [mapController onConnectionRestored];
-
+    
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
@@ -149,21 +152,20 @@
 	newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    NSLog(@"################");
-    NSLog(@"DID REGISTER: \nIl token è %@, ed è lungo %d", newToken, [newToken length]);
+    //NSLog(@"DID REGISTER: \nIl token è %@, ed è lungo %d", newToken, [newToken length]);
 
     //se c'è connessione internet
     if([Utilities networkReachable]){
             
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];    
-        NSLog(@"pefs lat = %f, long = %f", [[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]);
+        //NSLog(@"pefs lat = %f, long = %f", [[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]);
         
         //se coordinate sono settate e token è valido
         if([pref objectForKey: @"lat"] != nil &&
            [pref objectForKey: @"long"] != nil &&
            ![newToken isEqualToString:@""]){
             
-            NSLog(@" APP DELEGATE : preferito settato");
+            //NSLog(@" APP DELEGATE : preferito settato");
             DatabaseAccess *dbAccess = [[DatabaseAccess alloc] init];
             [dbAccess setDelegate:self];
             [dbAccess registerDevice:newToken];
@@ -171,12 +173,12 @@
         }
         else{
             
-            NSLog(@" APP DELEGATE : nessun preferito");
+            //NSLog(@" APP DELEGATE : nessun preferito");
             tokenSended = NO;
         }
     }
     else{
-        NSLog(@"INTERNET NN DISPONIBILE : TOKEN NN INVIATO");
+        //NSLog(@"INTERNET NN DISPONIBILE : TOKEN NN INVIATO");
         tokenSended = NO;
     }
 }
@@ -188,8 +190,11 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    NSLog(@" é STATA RICEVUTA UNA PUSH NOTF");
+{    
+    [self.mapController setNewPins:[userInfo objectForKey:@"jobs"]];
+    
+    
+    //NSLog(@" é STATA RICEVUTA UNA PUSH NOTF");
     //apre la mappa nella posizione preferita dopo la ricezione di una push
     [self.mapController refreshViewMap];
 }
@@ -198,8 +203,8 @@
 //si accorge se cambia stato connessione, e se il token non è stato ancora inviato lo invia sul db
 - (void) reachabilityChanged:(NSNotification *)notice
 {  
-    NSLog(@"################");
-    NSLog(@"HANDLE NETWORK: CHANGE");
+//    NSLog(@"################");
+//    NSLog(@"HANDLE NETWORK: CHANGE");
     
     NetworkStatus remoteStatus = [reachability currentReachabilityStatus];  
     
@@ -208,39 +213,37 @@
         [mapController onConnectionRestored];
     }
     else if(remoteStatus != NotReachable && !tokenSended){
-        NSLog(@"DENTRO IF");
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
        
         if([pref objectForKey: @"lat"] != nil &&
            [pref objectForKey: @"long"] != nil) {
             
-            NSLog(@" APP DELEGATE : preferito settato");
+            //NSLog(@" APP DELEGATE : preferito settato");
         #if !TARGET_IPHONE_SIMULATOR
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
         #endif
         }
         else{
-            NSLog(@" APP DELEGATE : nessun preferito");        
+            //NSLog(@" APP DELEGATE : nessun preferito");        
             tokenSended = NO;
         }
     }
 
-    NSLog(@"################");
 } 
 
 #pragma mark - DatabaseAccessDelegate
 
 - (void) didReceiveResponsFromServer:(NSString *)receivedData {
-    NSLog(@"%s", [receivedData UTF8String]);
+    //NSLog(@"%s", [receivedData UTF8String]);
     
     //se scrittura su db è andata a buon fine
     if([receivedData isEqualToString:@"OK"]){
         tokenSended = YES;
-        NSLog(@"token inviato");
+       // NSLog(@"token inviato");
     }
     else{
         tokenSended = NO;
-        NSLog(@"TOKEN NN INVIATO");
+        //NSLog(@"TOKEN NN INVIATO");
     }
 }
 
@@ -248,7 +251,6 @@
 
 // Pre 4.2 support
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    NSLog(@"DENTRO APP DELEGATE2");
 
     return [facebook handleOpenURL:url]; 
 }
@@ -257,7 +259,6 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     
-    NSLog(@"DENTRO APP DELEGATE, facebook = %p",facebook);
     return [facebook handleOpenURL:url]; 
 }
 
@@ -271,17 +272,17 @@
         [defaults objectForKey:@"FBExpirationDateKey"]) {
         facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
         facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-        NSLog(@"APP DELEGATE: expirationDate = %@",facebook.expirationDate);       
+//        NSLog(@"APP DELEGATE: expirationDate = %@",facebook.expirationDate);       
         // Check if the facebook session is valid.
         // If it’s not valid clear any authorization and mark the status as not connected.
         if (![facebook isSessionValid]) {
             //[facebook authorize:nil];
-            NSLog(@"APP DELEGATE: SESSIONE NN VALIDA");
+//            NSLog(@"APP DELEGATE: SESSIONE NN VALIDA");
             [facebook logout:self];
             //isConnected = NO;
         }
         else {
-            NSLog(@"APP DELEGATE: SESSIONE VALIDA");
+//            NSLog(@"APP DELEGATE: SESSIONE VALIDA");
             //isConnected = YES;
         }
     }
@@ -289,39 +290,26 @@
 
 -(void)logIntoFacebook
 {
-    NSLog(@"APP DELEGATE: loginIntoFacebook");
     [facebook authorize:permissions];
 }
 
 #pragma mark - FBSessionDelegate
 -(void)fbDidLogin{
-    NSLog(@"APP DELEGATE: DID LOGIN --> salva in pref -> invia notifica");
     //salva valori di accesso e sessione
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[facebook accessToken] forKey:@"FBAccessTokenKey"];
     [defaults setObject:[facebook expirationDate] forKey:@"FBExpirationDateKey"];
     [defaults synchronize];
-    
-    
-    // Save the access token key info.
-    //[self saveAccessTokenKeyInfo];
-    // Get the user's info.
-    //[facebook requestWithGraphPath:@"me" andDelegate:self];
-    //[self postOnFacebookWall];
-    //mostro tasto logout
-    //[self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
-    
+       
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FBdidLogin" object:nil];
 }
 
 -(void)fbDidNotLogin:(BOOL)cancelled{
-    NSLog(@"APP DELEGATE: CANCELLED LOGIN -> invio notifica");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FBerrLogin" object:nil];
 }
 
 -(void)fbDidLogout{
     // Keep this for testing purposes.
-    NSLog(@"APP DELEGATE: DID LOGOUT. --> cancella pref -> invia notifica");
     
     //nascondo tasto logout
     

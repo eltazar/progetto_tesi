@@ -14,9 +14,8 @@
 #import "Job.h"
 #import "FavouriteAnnotation.h"
 #import "DatabaseAccess.h"
-#import "GeoDecoder.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, DatabaseAccessDelegate,GeoDecoderDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, DatabaseAccessDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  
@@ -45,12 +44,13 @@
 @property(nonatomic, retain) IBOutlet UIView *alternativeToolbar;
 @property(nonatomic, retain) IBOutlet MKMapView *map;
 @property(nonatomic, retain) IBOutlet UIToolbar *toolBar;
-@property(nonatomic, retain)  IBOutlet UIBarButtonItem *filterButton;
+@property(nonatomic, retain) IBOutlet UIBarButtonItem *filterButton;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *publishBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *refreshBtn;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *bookmarkButtonItem;
 
 
+-(void)setNewPins:(NSArray*)pins;
 -(void)onConnectionRestored;
 -(IBAction)publishBtnClicked:(id)sender;
 -(IBAction)saveNewJobInPositionBtnClicked:(id)sender;
@@ -60,5 +60,6 @@
 -(IBAction)backBtnClicked:(id)sender;
 -(IBAction)filterBtnClicked:(id)sender;
 -(void) refreshViewMap;
+
 @end
 

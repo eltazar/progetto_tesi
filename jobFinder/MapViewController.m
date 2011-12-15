@@ -28,6 +28,7 @@
 /*Dichiaro property e metodi privati per il MapViewController
  */
 @interface MapViewController()
+@property(nonatomic,retain) NSArray *newJobs;
 @property(nonatomic,retain) NSString *oldFieldsString;
 @property(nonatomic, assign) BOOL oldSwitch;
 @property(nonatomic,retain) NSTimer *timer;
@@ -47,7 +48,7 @@
 //ivar pubbliche
 @synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
 //ivar private
-@synthesize annotationsBuffer, zoomBuffer,oldZoom, timer, oldSwitch, oldFieldsString;
+@synthesize annotationsBuffer, zoomBuffer,oldZoom, timer, oldSwitch, oldFieldsString, newJobs;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -96,9 +97,16 @@
             [mapView setRegion:region animated:YES];
         }
         //se il pin è draggabile --> viene mostrato con il callout già aperto
-        if([annotationView.annotation isKindOfClass:[Job class]])
-            if(((Job*)annotationView.annotation).isDraggable)
+        if([annotationView.annotation isKindOfClass:[Job class]]){
+            if(((Job*)annotationView.annotation).isDraggable){
                 [mapView selectAnnotation:annotationView.annotation animated:YES];
+            }
+            else if(newJobs && [newJobs count] != 0 && 
+                    [[newJobs objectAtIndex:0] intValue] == ((Job*)(annotationView.annotation)).idDb){
+                
+                [mapView selectAnnotation:annotationView.annotation animated:YES];
+            }
+        }
     }
 }
 
@@ -126,6 +134,8 @@
         return favouritePinView;
     }
     
+    NSInteger annotationIndexInNewJobs = [self.newJobs indexOfObject:[NSNumber numberWithInt:((Job*)annotation).idDb]];
+    
     //se invece la annotation riguarda un lavoro creo e ritorno la annotationView dedicata
     MKPinAnnotationView* pinView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"pin" ];
     
@@ -150,12 +160,19 @@
         [pinView setDraggable:YES];
         pinView.pinColor = MKPinAnnotationColorRed;
     }
+    else if(newJobs && annotationIndexInNewJobs != NSNotFound ){
+        pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        [pinView setDraggable:NO];
+        pinView.pinColor = MKPinAnnotationColorPurple;
+    }
     else{
         //NSLog(@"IS NOT DRAGGABLE");
         pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
         [pinView setDraggable:NO];
-        pinView.pinColor = MKPinAnnotationColorGreen; 
+        pinView.pinColor = MKPinAnnotationColorGreen;
     }
+    
+    
     
     return pinView;
 }
@@ -179,7 +196,7 @@
         if(count == 0)
             ++count;
         else if(count == 1){
-            NSLog(@"QUERY");
+            //NSLog(@"QUERY");
             [timer invalidate];
             timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(regionDidChange) userInfo:nil repeats:NO];
         }
@@ -213,17 +230,17 @@
         
     
         if([map currentZoomLevel] < ZOOM_THRESHOLD){
-            NSLog(@"PHP 1B");
+            //NSLog(@"PHP 1B");
             [dbAccess jobReadRequest:regionQuery field: [Utilities createFieldsString]];
         }
         else
         {
             if(fabs((newRect.size.width - oldRect.size.width)) > EPS){
-                NSLog(@"PHP 1A");
+                //NSLog(@"PHP 1A");
                 [dbAccess jobReadRequest:map.region field: [Utilities createFieldsString]];
             }
             else{
-                NSLog(@"PHP 2");
+               // NSLog(@"PHP 2");
                 [dbAccess jobReadRequestOldRegion:oldRegion newRegion:map.region field:[Utilities createFieldsString]];
             }
         }
@@ -427,7 +444,7 @@
  */
 -(void)didReceiveJobList:(NSArray *)jobList
 {
-    NSLog(@"JOBLIST: %d",[jobList count]);
+    //NSLog(@"JOBLIST: %d",[jobList count]);
     if([jobList count] != 0){
         if([map currentZoomLevel] >= ZOOM_THRESHOLD) {
             [self filterOverThreshold:jobList];
@@ -440,14 +457,60 @@
 {
     //NSLog(@"RECEIVED DATA: %@",receivedData);
     
-    if(![receivedData isEqualToString:@"OK"]){
+    if(![[receivedData substringWithRange:NSMakeRange(0,2)] isEqualToString:@"OK"]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
         [alert show];
         [alert release];
     }
+    else{
+        if(jobToPublish != nil){
+            jobToPublish.idDb = [[receivedData substringFromIndex:2] intValue];
+            jobToPublish.isDraggable = NO;
+            [map addAnnotation:jobToPublish];
+        }
+    }
 }
 
-#pragma mark - gestione click bottoni della view
+#pragma mark - gestione click bottoni e view
+
+-(void)setNewPins:(NSArray *)pins{
+    
+    if(pins == nil && newJobs != nil){
+                
+        NSMutableArray * mapJobAnn = [map orderedMutableAnnotations];
+        
+        for(int i = 0; i < [self.newJobs count]; i++){
+            int index = [Job jobBinarySearch:mapJobAnn withID:[[self.newJobs objectAtIndex:i] intValue]];
+            
+            if(index != -1 ){
+                [map removeAnnotation: [mapJobAnn objectAtIndex:index]];
+            }
+        }
+        self.newJobs = nil;    
+        
+        return;
+    }
+    
+    
+    
+    NSMutableArray *temp =[[NSMutableArray alloc] initWithCapacity:[pins count]];
+
+    for(int i = 0; i < [pins count]; i++){
+        [temp insertObject: [NSNumber numberWithInt:[[pins objectAtIndex:i] intValue]] atIndex:i];
+    }
+    self.newJobs = temp;
+    
+    NSMutableArray * mapJobAnn = [map orderedMutableAnnotations];
+    for(int i = 0; i < [pins count]; i++){
+        int index = [Job jobBinarySearch:mapJobAnn withID:[[pins objectAtIndex:i] intValue]];
+        
+        if(index != -1 ){
+            [map removeAnnotation: [mapJobAnn objectAtIndex:index]];
+        }
+    }
+    
+    [temp release];
+}
 
 //mostra la barra con i pulsanti per inserimento di un nuovo job
 -(IBAction)publishBtnClicked:(id)sender 
@@ -559,7 +622,13 @@
 //mostra la regione in cui si trova la zona preferita scelta dall'utente
 -(IBAction)bookmarkBtnClicked:(id)sender
 {
-    if(favouriteAnnotation != nil &&
+    if(favouriteAnnotation == nil){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Scegli prima la tua zona preferita nella sezione i (in alto a sinistra)" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        [alert release];
+    }
+    
+    else if(favouriteAnnotation != nil &&
        favouriteAnnotation.coordinate.latitude != 0 &&
        favouriteAnnotation.coordinate.longitude != 0){
         
@@ -631,7 +700,7 @@
         [map removeAnnotation:jobToPublish];
         //[map addAnnotation:jobToPublish];
         //faccio partire una query per far caricare il nuovo job sulla mappa
-        [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+        //[dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
     }
     
     //fa sparire con uno slide la alternativeToolbar
@@ -836,6 +905,7 @@
     [dbAccess release];
     dbAccess = nil;
     
+    newJobs = nil;
     
     [super viewDidUnload];
     // Release any retained subviews of the main view.
@@ -847,6 +917,7 @@
 
 - (void)dealloc
 {
+    [newJobs release];
     [jobToPublish release], jobToPublish = nil;
     [filterButton release];
     [favouriteAnnotation release];

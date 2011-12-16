@@ -198,7 +198,7 @@
         else if(count == 1){
             //NSLog(@"QUERY");
             [timer invalidate];
-            timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(regionDidChange) userInfo:nil repeats:NO];
+            timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(regionDidChange) userInfo:nil repeats:NO];
         }
     }
 }
@@ -467,6 +467,7 @@
             jobToPublish.idDb = [[receivedData substringFromIndex:2] intValue];
             jobToPublish.isDraggable = NO;
             [map addAnnotation:jobToPublish];
+
         }
     }
 }
@@ -657,7 +658,7 @@
     //segnalo che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO;
     
-    [map removeAnnotations:[map jobAnnotations]];
+//    [map removeAnnotations:[map jobAnnotations]];
     [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
     
     //riabilito il pulsante segnala

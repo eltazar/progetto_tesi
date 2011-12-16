@@ -40,7 +40,7 @@
     NSDictionary *rowDesc = [sec objectAtIndex:indexPath.row]; 
     
     if(indexPath.section == 0 && indexPath.row==3 && [job.address isEqualToString:@""]){
-        NSLog(@"cellForRow: ritorno Spinner Cell");
+        //NSLog(@"cellForRow: ritorno Spinner Cell");
         return spinnerCell;
     }
         //[[[sectionData objectAtIndex:0] objectAtIndex:3] setObject:@"spinner" forKey:@"DataKey"];
@@ -77,7 +77,7 @@
             else if(row == 1)
                 if(![job.time isEqualToString:@""])
                     cell.detailTextLabel.text = job.time;
-                else cell.detailTextLabel.text = @"Non disponibile";
+                else cell.detailTextLabel.text = @"Non specificato";
             else if(row == 2)
                 cell.detailTextLabel.text = [job stringFromDate];
             else if(row == 3){
@@ -122,6 +122,84 @@
 
 }
 
+#pragma mark - Metodi utili per facebook
+
+-(NSString*) createJobString:(NSString*)sender
+{
+    NSMutableString *jobString;
+    
+    if([sender isEqualToString:@"mail"])
+        jobString = [NSMutableString stringWithFormat:@"%@",@"<html><body>"];
+    else jobString = [NSMutableString stringWithFormat:@"%@",@""];
+    
+    [jobString appendString:[NSString stringWithFormat:@"<b>Settore:</b> %@ ", [Utilities sectorFromCode:job.code]]];
+    [jobString appendString:[NSString stringWithFormat:@"<b>Vicino a:</b> %@ ",[job address]]];
+    
+    if(![job.time isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"<b>Contratto:</b> %@ ",job.time]];
+    
+    if(![job.description isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"<b>Descrizione:</b> %@ ",job.description]];
+    if(![job.phone isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"<b>Telefono:</b> %@ ",job.phone]];
+    
+    if(![job.email isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"<b>E-mail:</b> %@ ",job.email]];
+    
+    if(![[job urlAsString] isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"<b>Url:</b> %@ ",[job urlAsString]]];
+    
+    if([sender isEqualToString:@"mail"])
+        [jobString appendFormat:@"</body></html>",nil];
+    
+    return jobString;
+    
+}
+
+-(void)postOnFacebookWall
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   @"175161829247160", @"app_id",
+                                   @"http://www.sapienzaapps.it/jobfinder/index.html", @"link",
+                                   @"http://www.sapienzaapps.it/jobfinder/Icon@2x.png", @"picture",
+                                   @"Segnalazione di un'offerta di lavoro attraverso JobNavigator", @"name",
+                                   [self createJobString:@"fb"], @"caption",
+                                   @"JobNavigator è un App social per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi e di ricevere notifiche quando c'è un nuovo lavoro nella tua zona di interesse.",@"description",
+                                   nil];                
+    //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
+    
+    [appDelegate.facebook dialog:@"feed" andParams:params andDelegate:self];
+    
+}
+
+
+-(void)logoutFromFB{
+    //eseguo logout e rimuovo token
+    [appDelegate.facebook logout:appDelegate];
+    //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //    [defaults removeObjectForKey:@"FBAccessTokenKey"];
+    //    [defaults removeObjectForKey:@"FBExpirationDateKey"];
+    //    [defaults synchronize];
+}
+
+-(void)FBdidLogout{
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
+-(void)FBdidLogin{
+    
+    if(waitingForFacebook){
+        [self postOnFacebookWall];
+        waitingForFacebook = NO;
+    }
+    [self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
+}
+
+-(void)FBerrLogin{
+    waitingForFacebook = NO;
+}
+
+
 #pragma mark - TableViewDelegate
 
 //azioni per le celle selezionate
@@ -137,7 +215,6 @@
         switch (row) {
             case 0:
                 if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
-                    NSLog(@"riga 0 sezione 2");
                     //fa partire una chiamata
                     UIDevice *device = [UIDevice currentDevice];    
                     if ([[device model] isEqualToString:@"iPhone"]){
@@ -156,7 +233,6 @@
                 break;
                 
             case 1:
-                NSLog(@"emaildidSelectRow");
                 if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
                     MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
                     mail.mailComposeDelegate = self;
@@ -164,14 +240,13 @@
                     if([MFMailComposeViewController canSendMail]){
                         [mail setToRecipients:[NSArray arrayWithObjects:cell.detailTextLabel.text, nil]];
                         [mail setSubject:@"Oggetto della mail"];
-                        [mail setMessageBody:@"Corpo del messaggio della nostra e-mail" isHTML:NO];
+                        [mail setMessageBody:@"" isHTML:NO];
                         [self presentModalViewController:mail animated:YES];
                         [mail release];
                     }
                 }
                 break;  
             case 2:
-                NSLog(@"url didSelectRow");
                 if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
                     url = [NSURL URLWithString:cell.detailTextLabel.text];
                     //this will open the selected URL into the safari
@@ -182,15 +257,12 @@
     }
     else if(section == 3){
         if(row==0){
-            NSLog(@"selezionata riga di fb");
             if (![appDelegate.facebook isSessionValid]) {
-                NSLog(@"FB non è connesso ---> lancio login");
                 [appDelegate logIntoFacebook];
                 waitingForFacebook = YES;
 //                [self postOnFacebookWall];
             }
             else{
-                NSLog(@"FB era gia connesso ---> invio post");
                 [self postOnFacebookWall];
             }
         }
@@ -201,7 +273,7 @@
             
             if([MFMailComposeViewController canSendMail]){
                 //[mail setToRecipients:[NSArray arrayWithObjects:cell.detailTextLabel.text, nil]];
-                [mail setSubject:@"Segnalazione offerta di lavoro da jobFinder"];
+                [mail setSubject:@"Segnalazione offerta di lavoro da JobNavigator"];
                 [mail setMessageBody:[self createJobString:@"mail"] isHTML:YES];
                 [self presentModalViewController:mail animated:YES];
                 [mail release];
@@ -232,93 +304,17 @@
     // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
-#pragma mark - Metodi utili per facebook
-
--(NSString*) createJobString:(NSString*)sender
-{
-    NSMutableString *jobString;
-    
-    if([sender isEqualToString:@"mail"])
-        jobString = [NSMutableString stringWithFormat:@"%@",@"<html><body>"];
-    else jobString = [NSMutableString stringWithFormat:@"%@",@""];
-    
-    [jobString appendString:[NSString stringWithFormat:@"<b>Settore:</b> %@ ", [Utilities sectorFromCode:job.code]]];
-    [jobString appendString:[NSString stringWithFormat:@"<b>Vicino a:</b> %@ ",[job address]]];
-    
-    if(![job.time isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"<b>Contratto:</b> %@ ",job.time]];
-    
-    if(![job.description isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"<b>Descrizione:</b> %@ ",job.description]];
-    if(![job.phone isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"<b>Telefono:</b> %@ ",job.phone]];
-     
-    if(![job.email isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"<b>E-mail:</b> %@ ",job.email]];
-    
-    if(![[job urlAsString] isEqualToString:@""])
-        [jobString appendString:[NSString stringWithFormat:@"<b>Url:</b> %@ ",[job urlAsString]]];
-    
-    if([sender isEqualToString:@"mail"])
-        [jobString appendFormat:@"</body></html>",nil];
-
-    return jobString;
-    
-}
-
--(void)postOnFacebookWall
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   @"175161829247160", @"app_id",
-                                   [NSString stringWithFormat:@"http://maps.google.it/maps?q=%f,%f",job.coordinate.latitude,job.coordinate.longitude], @"link",
-                                   @"http://jobfinder.altervista.org/Icon_2x.png", @"picture",
-                                   @"Segnalazione di un'offerta di lavoro attraverso JobFinder", @"name",
-                                   [self createJobString:@"fb"], @"caption",
-                                   @"JobFinder è un app per iPhone che ti permette di trovare, offrire o segnalarne un lavoro ovunque ti trovi, di ricevere notifiche quando c'è un nuovo lavoro nella tua zona di interesse.",@"description",
-                                   nil];                
-    //[facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self]; 
-    
-    [appDelegate.facebook dialog:@"feed" andParams:params andDelegate:self];
-
-}
-
-
--(void)logoutFromFB{
-    //eseguo logout e rimuovo token
-    [appDelegate.facebook logout:appDelegate];
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults removeObjectForKey:@"FBAccessTokenKey"];
-//    [defaults removeObjectForKey:@"FBExpirationDateKey"];
-//    [defaults synchronize];
-}
-
--(void)FBdidLogout{
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-}
-
--(void)FBdidLogin{
-    
-    if(waitingForFacebook){
-        [self postOnFacebookWall];
-        waitingForFacebook = NO;
-    }
-    [self.navigationItem setRightBarButtonItem:logoutBtn animated:YES];
-}
-
--(void)FBerrLogin{
-    waitingForFacebook = NO;
-}
 
 #pragma mark - FacebookDialogDelegate
 
 - (void) dialogDidNotComplete:(FBDialog *)dialog
 {
-    NSLog(@"DIALOG DID NOT COMPLETE");
+//    NSLog(@"DIALOG DID NOT COMPLETE");
 }
 
 - (void)dialogCompleteWithUrl:(NSURL *)url{
     
-    NSLog(@"DIALOG COMPLETE WITH URL : %@", [url absoluteString]);
+    //NSLog(@"DIALOG COMPLETE WITH URL : %@", [url absoluteString]);
     
     if ([[url absoluteString] rangeOfString:@"?post_id="].location == NSNotFound )
     {
@@ -346,7 +342,6 @@
 
 - (void)dialogDidComplete:(FBDialog *)dialog{
     
-    NSLog(@"DIALOG COMPLETE");
 
 }
 
@@ -526,7 +521,7 @@
         modo il reverse gecoding è fatto una volta sola, appena scaricato un job dal server.
      */
     if(job.address == nil || [job.address isEqualToString:@""] || [job.address isEqualToString:@"Non disponibile"]){
-        NSLog(@"FACCIO REVERSE GECODING!");
+        //NSLog(@"FACCIO REVERSE GECODING!");
         geoDec = [[GeoDecoder alloc] init];
         [geoDec setDelegate:self];
         [geoDec searchAddressForCoordinate:job.coordinate];
@@ -557,11 +552,11 @@
        
     //mostra il tasto per il logout se connesso
     if([appDelegate.facebook isSessionValid]){
-        NSLog(@"DID LOAD CONNECTED");
+       // NSLog(@"DID LOAD CONNECTED");
         self.navigationItem.rightBarButtonItem = logoutBtn;
     }
     else{
-        NSLog(@"DID LOAD NOT CONNECTED");
+        //NSLog(@"DID LOAD NOT CONNECTED");
         self.navigationItem.rightBarButtonItem = nil;
     }
     
@@ -596,6 +591,8 @@
 
 - (void)viewDidUnload
 {
+    [spinnerCell release];
+    spinnerCell = nil;
     [logoutBtn release];
     logoutBtn = nil;
     [super viewDidUnload];
@@ -622,7 +619,7 @@
 
 -(void) dealloc
 {   
-    NSLog(@"DEALLOC");
+   // NSLog(@"DEALLOC");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [geoDec setDelegate:nil];
     [geoDec release];

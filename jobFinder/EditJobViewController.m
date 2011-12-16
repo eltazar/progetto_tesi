@@ -160,6 +160,7 @@
 }
 
 - (void) selectedTime:(id)sender{
+    NSLog(@"SELECTOR");
     switch(segmentedCtrl.selectedSegmentIndex)
     {
         case 0:
@@ -171,6 +172,8 @@
         default: job.time = @"";
             break;
     }
+    
+    NSLog(@"job.time = %@",job.time);
 }
     
 
@@ -182,6 +185,7 @@
     //return (interfaceOrientation == UIInterfaceOrientationPortrait);
     return YES;
 }
+
 
  // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
  - (void)viewDidLoad
@@ -268,6 +272,8 @@
      [self.tableView addGestureRecognizer:gestureRecognizer];
      gestureRecognizer.cancelsTouchesInView = NO;  // this prevents the gesture recognizers to 'block' touches
      [gestureRecognizer release];
+     
+     job.time = @"";
 
  }
 

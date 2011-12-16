@@ -658,7 +658,7 @@
     //segnalo che non ci sono pin draggabili sulla mappa
     isDragPinOnMap = NO;
     
-//    [map removeAnnotations:[map jobAnnotations]];
+    [map removeAnnotations:[map jobAnnotations]];
     [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
     
     //riabilito il pulsante segnala

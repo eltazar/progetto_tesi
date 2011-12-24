@@ -122,7 +122,7 @@
                 
                 if([MFMailComposeViewController canSendMail]){
                     [mail setToRecipients:[NSArray arrayWithObjects:EMAIL_CONTACT_1,EMAIL_CONTACT_2, nil]];
-                    [mail setSubject:@"Email da JobNavigatorJo"];
+                    [mail setSubject:@"Email da JobNavigator"];
                     [mail setMessageBody:@"" isHTML:NO];
                     [self presentModalViewController:mail animated:YES];
                     [mail release];

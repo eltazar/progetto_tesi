@@ -51,7 +51,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">sapienza.png</string>
+							<string key="NSResourceName">logoSapienza.png</string>
 						</object>
 					</object>
 				</object>
@@ -261,7 +261,7 @@ AAgACAAIAAEAAQABAAE</bytes>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">sapienza.png</string>
+			<string key="NS.key.0">logoSapienza.png</string>
 			<string key="NS.object.0">{320, 89}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">933</string>

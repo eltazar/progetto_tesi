@@ -74,10 +74,13 @@
         case 0:
             if(row == 0)
                 cell.detailTextLabel.text = [Utilities sectorFromCode:job.code];
-            else if(row == 1)
-                if(![job.time isEqualToString:@""])
+            else if(row == 1){
+                NSLog(@"JOB TIME INFO: %@",job.time);
+#warning RELEASE 1.01 controllo job.time != nil aggiunto
+                if(job.time != nil && ![job.time isEqualToString:@""])
                     cell.detailTextLabel.text = job.time;
                 else cell.detailTextLabel.text = @"Non specificato";
+            }
             else if(row == 2)
                 cell.detailTextLabel.text = [job stringFromDate];
             else if(row == 3){

@@ -117,9 +117,16 @@
         return;
     }
     
-    NSLog(@"_PHONE = %@",_phone);
+    BOOL isPlus = FALSE;
+    
+    //NSLog(@"_PHONE = %@",_phone);
+   
+    //se il numero di telefono ha il prefisso internazionale che comincia con +
+    if([[_phone substringWithRange:NSMakeRange(0,1)] isEqualToString:@"+"])
+        isPlus = TRUE;
+    
     NSMutableString *strippedString = [NSMutableString 
-                                       stringWithCapacity:_phone.length];
+                                       stringWithCapacity:_phone.length+1];
     
     NSScanner *scanner = [NSScanner scannerWithString:_phone];
     NSCharacterSet *numbers = [NSCharacterSet 
@@ -128,6 +135,11 @@
     while ([scanner isAtEnd] == NO) {
         NSString *buffer;
         if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
+            
+            //sostituisco il + con 00
+            if(isPlus)
+                strippedString = [NSMutableString stringWithFormat:@"%@",@"00"];
+            
             [strippedString appendString:buffer];
             
         } else {
@@ -135,8 +147,8 @@
         }
     }
     
-    NSLog(@"STRIPPED STRING = %@",strippedString);
-    
+   // NSLog(@"STRIPPED STRING = %@",strippedString);
+
     [self setPhone:strippedString];
 }
 

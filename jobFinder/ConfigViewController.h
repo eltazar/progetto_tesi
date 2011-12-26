@@ -7,21 +7,22 @@
 
 #import <UIKit/UIKit.h>
 #import "TextFieldCell.h"
-#import <MessageUI/MessageUI.h>
 #import "SearchZoneViewController.h"
 #import "DatabaseAccess.h"
+#import "CreditsViewController.h"
 
 /* Mostra la view relativa alle configurazioni utente
  */
 
 @protocol ConfigViewControllerDelegate;
 
-@interface ConfigViewController : UITableViewController <UITableViewDataSource,MFMailComposeViewControllerDelegate, SearchZoneDelegate, DatabaseAccessDelegate >{
+@interface ConfigViewController : UITableViewController <UITableViewDataSource, SearchZoneDelegate, DatabaseAccessDelegate >{
     
     NSArray *sectionDescripition;
     NSArray *sectionData;
     SearchZoneViewController *searchZone;
     id<ConfigViewControllerDelegate> delegate;
+    CreditsViewController *creditsViewController;
     
 }
 @property(nonatomic,assign) id<ConfigViewControllerDelegate> delegate;

@@ -12,10 +12,9 @@
 #import "DatabaseAccess.h"
 #import "jobFinderAppDelegate.h"
 #import "Utilities.h"
+#import "CreditsViewController.h"
+#import "TextAreaCell.h"
 
-#define EMAIL_CONTACT_1 @"mrgreco3@gmail.com"
-#define EMAIL_CONTACT_2 @"panizzi@uniroma1.it"
-#define URL_INFO @"http://www.sapienzaapps.it/jobfinder/index.html"
 
 @implementation ConfigViewController
 @synthesize delegate;
@@ -59,9 +58,15 @@
 	if (cell == nil) {
         cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
-
-    cell.textLabel.numberOfLines = 2;
-    cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+    
+    if([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextAreaCell"]){
+        //rendo la cella non editabile
+        ((TextAreaCell *)cell).textView.editable = NO;
+    }
+    else{
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+    }
     
     return cell;
 }
@@ -81,7 +86,7 @@
             return @"Scegliendo una zona preferita e attivando le notifiche push sarai avvisato se è stato aggiunto un nuovo lavoro nella tua zona";
             break;
         case 1:
-            return @"Dipartimento di Informatica";
+            return @"";
             break;
         
         default:
@@ -92,13 +97,18 @@
 
 #pragma mark - TableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+    return cell.frame.size.height;
+}
+
 //azioni per le celle selezionate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     int section = indexPath.section;
     int row = indexPath.row;
-    NSURL *url; 
     
     if(section == 0){
         switch (row) {
@@ -112,29 +122,9 @@
                 break;
         }
     }
-    else if(section == 3
-            ){
-        switch (row) {
-            case 0:
-                NSLog(@"emaildidSelectRow");
-                MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
-                mail.mailComposeDelegate = self;
-                
-                if([MFMailComposeViewController canSendMail]){
-                    [mail setToRecipients:[NSArray arrayWithObjects:EMAIL_CONTACT_1,EMAIL_CONTACT_2, nil]];
-                    [mail setSubject:@"Email da JobNavigator"];
-                    [mail setMessageBody:@"" isHTML:NO];
-                    [self presentModalViewController:mail animated:YES];
-                    [mail release];
-                }
-                break; 
-            case 1:
-                //NSLog(@"url didSelectRow");
-                url = [NSURL URLWithString:URL_INFO];
-                [[UIApplication sharedApplication]openURL: url ]; 
-                break; 
-                
-        }
+    else if(section == 2){
+        creditsViewController = [[[CreditsViewController alloc] initWithNibName:@"CreditsViewController" bundle:nil] autorelease];
+        [self.navigationController pushViewController:creditsViewController animated:YES];
     }
     
     //deseleziona la cella
@@ -156,22 +146,6 @@
           popViewControllerAnimated:NO];
      }
      completion:NULL];
-}
-
-//torna alla vista precedente una volta inviata o annullata un'email
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
-    
-    //[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	
-    [self dismissModalViewControllerAnimated:YES];
-    
-	if (result == MFMailComposeResultFailed){
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messaggio non inviato!" message:@"Non è stato possibile inviare la tua e-mail" delegate:self cancelButtonTitle:@"Annulla" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	}
-    
-   // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 #pragma mark - SearchZoneDelegate
@@ -234,7 +208,6 @@
     NSMutableArray *secA = [[NSMutableArray alloc] init];
     NSMutableArray *secB = [[NSMutableArray alloc] init];
     NSMutableArray *secC = [[NSMutableArray alloc] init];
-    NSMutableArray *secD = [[NSMutableArray alloc] init];
     
     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                          @"bookmarks",              @"DataKey",
@@ -249,51 +222,34 @@
                          @"search",           @"DataKey",
                          @"ActionCell",       @"kind",
                          @"Cerca zona",       @"label",
-                         @"search.png",                 @"img",
+                         @"search.png",       @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 1];
     
     [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"site",              @"DataKey",
-                         @"InfoCell",          @"kind",
-                         @"Prof. Emanuele Panizzi",  @"label",
+                         @"TextAreaCell",      @"kind",
+                         @"",                  @"label",
                          @"",                  @"img",
-                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                          nil]autorelease] atIndex: 0];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"site",             @"DataKey",
-                         @"InfoCell",         @"kind",
-                         @"Mario Greco",      @"label",
-                         @"",         @"img",
-                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
+                         @"ActionCell",       @"kind",
+                         @"Credits",          @"label",
+                         @"",                 @"img",
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil]autorelease] atIndex: 0];
     
-    [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"email",            @"DataKey",
-                         @"ActionCell",       @"kind",
-                         @"Scrivici",       @"label",
-                         @"mail.png",         @"img",
-                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
-                         nil] autorelease] atIndex: 0];
-    
-    [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"site",             @"DataKey",
-                         @"ActionCell",       @"kind",
-                         @"Visitaci",   @"label",
-                         @"home.png",                 @"img",
-                         [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
-                         nil]autorelease] atIndex: 1];
     
     
     
-    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC,secD, nil];
-    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"Supervisore",@"Sviluppatore",@"Contatti",nil];
+    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"Disclaimer",@"Credits",nil];
     
     [secA autorelease];
     [secB autorelease];
     [secC autorelease];
-    [secD autorelease];
 
 }
 

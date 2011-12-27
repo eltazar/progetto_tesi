@@ -84,7 +84,9 @@
     TextFieldCell *cell = (TextFieldCell *) [[txtField superview] superview];
 
     if([cell.dataKey isEqualToString:@"phone"])
-        [job _setPhone:txtField.text];
+        [job _setPhone:txtField.text  kind:@"phone"];
+    else if([cell.dataKey isEqualToString:@"phone2"])
+        [job _setPhone:txtField.text kind:@"phone2"];
     else if([cell.dataKey isEqualToString:@"email"])
         job.email = txtField.text;    
     else if([cell.dataKey isEqualToString:@"url"])
@@ -146,6 +148,8 @@
         ((TextAreaCell*)cell).textView.text = job.description;
     else if([datakey isEqualToString:@"phone"])
          ((TextFieldCell *)cell).textField.text = job.phone;
+    else if([datakey isEqualToString:@"phone2"])
+        ((TextFieldCell *)cell).textField.text = job.phone2;
     else if([datakey isEqualToString:@"email"])
          ((TextFieldCell *)cell).textField.text = job.email;
     else if([datakey isEqualToString:@"url"])
@@ -232,12 +236,22 @@
      [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                           @"phone",            @"DataKey",
                           @"TextFieldCell",    @"kind",
-                          @"Telefono",         @"label",
+                          @"Telefono 1",         @"label",
                           @"44112233",         @"placeholder",
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
-                          [NSString stringWithFormat:@"%d", UIKeyboardTypeNumbersAndPunctuation], @"keyboardType",
+                          [NSString stringWithFormat:@"%d", UIKeyboardTypePhonePad], @"keyboardType",
                           nil] autorelease ]  atIndex: 0];
+     
+     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                          @"phone2",            @"DataKey",
+                          @"TextFieldCell",    @"kind",
+                          @"Telefono 2",         @"label",
+                          @"44112233",         @"placeholder",
+                          @"",                 @"img",
+                          [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
+                          [NSString stringWithFormat:@"%d", UIKeyboardTypePhonePad], @"keyboardType",
+                          nil] autorelease ]  atIndex: 1];
      
      [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                           @"email",            @"DataKey",
@@ -247,7 +261,7 @@
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeEmailAddress], @"keyboardType",
-                          nil] autorelease] atIndex: 1];
+                          nil] autorelease] atIndex: 2];
      
      [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                           @"url",              @"DataKey",
@@ -257,7 +271,7 @@
                           @"",                 @"img", 
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
                           [NSString stringWithFormat:@"%d", UIKeyboardTypeURL], @"keyboardType", 
-                          nil] autorelease] atIndex: 2];
+                          nil] autorelease] atIndex: 3];
      
      
      //il release è lasciato alla classe madre
@@ -272,6 +286,7 @@
      [self.tableView addGestureRecognizer:gestureRecognizer];
      gestureRecognizer.cancelsTouchesInView = NO;  // this prevents the gesture recognizers to 'block' touches
      [gestureRecognizer release];
+
      
      job.time = @"";
 

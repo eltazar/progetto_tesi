@@ -165,7 +165,7 @@ NSString* key(NSURLConnection* con)
 //invia richiesta scrittura su db
 -(void)jobWriteRequest:(Job *)job
 { 
-    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/write.php"];    
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/write.php"];    
     //Replace Spaces with a '+' character.
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
@@ -173,11 +173,30 @@ NSString* key(NSURLConnection* con)
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     NSString *postFormatString = @"time=%@&description=%@&phone=%@&phone2=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=%@";
     
+    NSMutableString *phoneTmp;
+    NSMutableString *phone2Tmp;
+    
+    if(![job.phone isEqualToString:@""] && [[job.phone substringWithRange:NSMakeRange(0,1)] isEqualToString:@"+"]){
+        phoneTmp = [NSMutableString stringWithFormat:@"%@",job.phone];
+        [phoneTmp setString:[phoneTmp stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"]];
+    }
+    else{
+        phoneTmp = [NSMutableString stringWithFormat:@"%@",job.phone];
+    }
+    
+    if(![job.phone2 isEqualToString:@""] && [[job.phone2 substringWithRange:NSMakeRange(0,1)] isEqualToString:@"+"]){
+        phone2Tmp = [NSMutableString stringWithFormat:@"%@",job.phone2];
+        [phone2Tmp setString:[phone2Tmp stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"]];
+    }
+    else{
+        phone2Tmp = [NSMutableString stringWithFormat:@"%@",job.phone2];
+    }
+    
     NSString *postString = [NSString stringWithFormat:postFormatString,
         job.time,
         job.description,
-        job.phone,
-        job.phone2,
+        phoneTmp,
+        phone2Tmp,
         job.email,
         job.urlAsString,
         job.date,
@@ -186,6 +205,8 @@ NSString* key(NSURLConnection* con)
         job.code
     ];
     
+    
+    NSLog(@"JOB WRITE PHONE = %@",job.phone);
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
     [request addValue:postLength forHTTPHeaderField:@"Content-Length"];

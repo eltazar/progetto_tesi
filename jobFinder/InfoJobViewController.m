@@ -108,12 +108,17 @@
                     cell.detailTextLabel.text = job.phone;
                 else cell.detailTextLabel.text = @"Non disponibile";
             }
-            else if(row == 1){
+            if(row == 1){
+                if(![job.phone2 isEqualToString:@""])
+                    cell.detailTextLabel.text = job.phone2;
+                else cell.detailTextLabel.text = @"Non disponibile";
+            }
+            else if(row == 2){
                 if(![job.email isEqualToString:@""])
                     cell.detailTextLabel.text = job.email;
                 else cell.detailTextLabel.text = @"Non disponibile";
             } 
-            else if(row == 2){
+            else if(row == 3){
                 if(![[job urlAsString] isEqualToString:@""])
                     cell.detailTextLabel.text = job.urlAsString;
                 else cell.detailTextLabel.text = @"Non disponibile";
@@ -237,19 +242,38 @@
                 
             case 1:
                 if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                    //fa partire una chiamata
+                    UIDevice *device = [UIDevice currentDevice];    
+                    if ([[device model] isEqualToString:@"iPhone"]){
+                        
+                        if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                            NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
+                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+                        }
+                    }
+                    else{
+                        UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Attenzione" message:@"Il tuo device non supporta questa feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [Notpermitted show];
+                        [Notpermitted release];
+                    }
+                }
+                break;
+                
+            case 2:
+                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
                     MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
                     mail.mailComposeDelegate = self;
                     
                     if([MFMailComposeViewController canSendMail]){
                         [mail setToRecipients:[NSArray arrayWithObjects:cell.detailTextLabel.text, nil]];
-                        [mail setSubject:@"Oggetto della mail"];
+                        [mail setSubject:@"Risposta ad annuncio di lavoro da JobNavigator"];
                         [mail setMessageBody:@"" isHTML:NO];
                         [self presentModalViewController:mail animated:YES];
                         [mail release];
                     }
                 }
                 break;  
-            case 2:
+            case 3:
                 if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
                     url = [NSURL URLWithString:cell.detailTextLabel.text];
                     //this will open the selected URL into the safari
@@ -477,10 +501,18 @@
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"regular",          @"DataKey",
                          @"ActionCell",       @"kind", 
-                         @"Chiama",           @"label", 
+                         @"Chiama 1",           @"label", 
                          @"call.png",         @"img", 
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
                          nil]autorelease] atIndex: 0];
+    
+    [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"regular",          @"DataKey",
+                         @"ActionCell",       @"kind", 
+                         @"Chiama 2",           @"label", 
+                         @"call.png",         @"img", 
+                         [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
+                         nil]autorelease] atIndex: 1];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"regular",          @"DataKey",
@@ -488,7 +520,7 @@
                          @"Scrivi",           @"label",
                          @"mail.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
-                         nil] autorelease] atIndex: 1];
+                         nil] autorelease] atIndex: 2];
     
     [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"regular",          @"DataKey",
@@ -496,7 +528,7 @@
                          @"Visita",           @"label",
                          @"home.png",         @"img",
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleSubtitle], @"style",
-                         nil]autorelease] atIndex: 2];
+                         nil]autorelease] atIndex: 3];
     
     [secD insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
                          @"regular",          @"DataKey",

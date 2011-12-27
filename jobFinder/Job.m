@@ -8,6 +8,8 @@
 
 #import "Job.h"
 #import "Utilities.h"
+#import "PhoneNumberFormatter.h"
+
 @implementation Job
 
 @synthesize field, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time, phone2;
@@ -136,9 +138,9 @@
         NSString *buffer;
         if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
             
-            //sostituisco il + con simbolo compatibile con http post request
+            //reinserisco il + ad inizio stringa
             if(isPlus){
-                strippedString = [NSMutableString stringWithFormat:@"%@",@"%2B"];
+                strippedString = [NSMutableString stringWithFormat:@"%@",@"+"];
                 isPlus = FALSE;
             }
             
@@ -158,9 +160,7 @@
 }
 
 -(void)setPhone:(NSString *)newPhone
-{
-    NSLog(@"SET PHONE 1");
-    
+{    
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
 
         [phone release];
@@ -173,15 +173,11 @@
 //    NSString *_newPhone = [[newPhone stringByReplacingOccurrencesOfString:@" " withString:@""] retain];
     [newPhone retain];
     [phone release];
-    phone = newPhone;
-    NSLog(@"PHONE 1 = %@",phone);
-    
+    phone = newPhone;    
 }
 
 -(void)setPhone2:(NSString *)newPhone
-{
-     NSLog(@"SET PHONE 2");
-    
+{    
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
         
         [phone2 release];
@@ -195,8 +191,6 @@
     [newPhone retain];
     [phone2 release];
     phone2 = newPhone;
-    
-    NSLog(@"PHONE 2 = %@",phone2);
 }
 
 //problemi con questo metodo, vedere commit 7 novembre --> risolti
@@ -307,11 +301,25 @@
     NSString *tempPhone;
     
     if(phone == nil){
-       tempPhone = @"";
+        tempPhone = @"";
     }
     else{
         tempPhone = phone;
         NSLog(@"INFO PHONE = %@",phone);
+    }
+    return [[ tempPhone retain] autorelease];
+}
+
+- (NSString *)phone2
+{    
+    NSString *tempPhone;
+    
+    if(phone2 == nil){
+        tempPhone = @"";
+    }
+    else{
+        tempPhone = phone2;
+        NSLog(@"INFO PHONE = %@",phone2);
     }
     return [[ tempPhone retain] autorelease];
 }

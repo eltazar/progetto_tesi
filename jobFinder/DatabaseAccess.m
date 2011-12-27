@@ -307,6 +307,7 @@ NSString* key(NSURLConnection* con)
                job.description = [tempDict objectForKey:@"description"];
                job.address = @"";
                job.phone = [tempDict objectForKey:@"phone"];
+               job.phone2 = [tempDict objectForKey:@"phone2"];
                //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
                job.email = [tempDict objectForKey:@"email"];
                [job setUrlWithString:[tempDict objectForKey:@"url"]];

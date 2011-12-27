@@ -171,11 +171,13 @@ NSString* key(NSURLConnection* con)
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *postFormatString = @"time=%@&description=%@&phone=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=%@";
+    NSString *postFormatString = @"time=%@&description=%@&phone=%@&phone2=%@&email=%@&url=%@&date=%@&latitude=%f&longitude=%f&field=%@";
+    
     NSString *postString = [NSString stringWithFormat:postFormatString,
         job.time,
         job.description,
         job.phone,
+        job.phone2,
         job.email,
         job.urlAsString,
         job.date,

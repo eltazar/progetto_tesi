@@ -91,11 +91,11 @@
     
     // permette di zoomare sulla posizione dell'utente se gps attivo
     for (MKAnnotationView *annotationView in views) {
-        if (annotationView.annotation == mapView.userLocation) {
-            MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
-            MKCoordinateRegion region = MKCoordinateRegionMake(mapView.userLocation.coordinate, span);
-            [mapView setRegion:region animated:YES];
-        }
+//        if (annotationView.annotation == mapView.userLocation) {
+//            MKCoordinateSpan span = MKCoordinateSpanMake(0.215664, 0.227966);
+//            MKCoordinateRegion region = MKCoordinateRegionMake(mapView.userLocation.coordinate, span);
+//            [mapView setRegion:region animated:YES];
+//        }
         //se il pin è draggabile --> viene mostrato con il callout già aperto
         if([annotationView.annotation isKindOfClass:[Job class]]){
             if(((Job*)annotationView.annotation).isDraggable){

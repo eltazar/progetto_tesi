@@ -10,7 +10,7 @@
 #import "Utilities.h"
 @implementation Job
 
-@synthesize field, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time;
+@synthesize field, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time, phone2;
 @synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init
@@ -110,13 +110,13 @@
 //    else NSLog(@"EMAIL NO VALIDA");
 }
 
--(void)_setPhone:(NSString *)_phone
+-(void)_setPhone:(NSString *)_phone kind:(NSString*)kind
 {
     if(_phone == nil || [_phone isEqualToString:@""]){
         [self setPhone:@""];
         return;
     }
-    
+
     BOOL isPlus = FALSE;
     
     //NSLog(@"_PHONE = %@",_phone);
@@ -136,9 +136,11 @@
         NSString *buffer;
         if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
             
-            //sostituisco il + con 00
-            if(isPlus)
-                strippedString = [NSMutableString stringWithFormat:@"%@",@"00"];
+            //sostituisco il + con simbolo compatibile con http post request
+            if(isPlus){
+                strippedString = [NSMutableString stringWithFormat:@"%@",@"%2B"];
+                isPlus = FALSE;
+            }
             
             [strippedString appendString:buffer];
             
@@ -148,12 +150,17 @@
     }
     
    // NSLog(@"STRIPPED STRING = %@",strippedString);
+    
+    if([kind isEqualToString:@"phone"])    
+        [self setPhone:strippedString];
+    else [self setPhone2:strippedString];
 
-    [self setPhone:strippedString];
 }
 
 -(void)setPhone:(NSString *)newPhone
 {
+    NSLog(@"SET PHONE 1");
+    
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
 
         [phone release];
@@ -167,9 +174,30 @@
     [newPhone retain];
     [phone release];
     phone = newPhone;
+    NSLog(@"PHONE 1 = %@",phone);
     
 }
 
+-(void)setPhone2:(NSString *)newPhone
+{
+     NSLog(@"SET PHONE 2");
+    
+    if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
+        
+        [phone2 release];
+        phone2 = @"";
+        return;
+    }
+    
+    //TODO: CREARE REGEX PER CONTROLLO DATI INSERITI
+    
+    //    NSString *_newPhone = [[newPhone stringByReplacingOccurrencesOfString:@" " withString:@""] retain];
+    [newPhone retain];
+    [phone2 release];
+    phone2 = newPhone;
+    
+    NSLog(@"PHONE 2 = %@",phone2);
+}
 
 //problemi con questo metodo, vedere commit 7 novembre --> risolti
 -(void)setDescription:(NSString *)newDescription
@@ -283,6 +311,7 @@
     }
     else{
         tempPhone = phone;
+        NSLog(@"INFO PHONE = %@",phone);
     }
     return [[ tempPhone retain] autorelease];
 }

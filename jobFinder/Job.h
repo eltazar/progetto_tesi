@@ -16,6 +16,8 @@
     NSDate *date;
     NSString *description;
     NSString *phone;
+    NSString *phone2;
+    
     NSString *email;
     NSURL *url;
     NSString *code;   
@@ -41,6 +43,7 @@
 @property(nonatomic, retain) NSString *address;
 //@property(nonatomic, retain) NSString *city;
 @property(nonatomic, retain) NSString *phone;
+@property(nonatomic, retain) NSString *phone2;
 @property(nonatomic, retain) NSString *email;
 @property(nonatomic, retain) NSString *description;
 @property(nonatomic, retain) NSURL *url;
@@ -52,7 +55,7 @@
 -(id) initWithCoordinate:(CLLocationCoordinate2D)coord;
 -(void) setEmail:(NSString*)newEmail;
 -(void) setUrlWithString:(NSString *) urlString;
--(void) _setPhone:(NSString*) _phone;
+-(void) _setPhone:(NSString*) _phone kind:(NSString*)kind;
 -(BOOL) isValid;
 -(NSString*) invalidReason;
 -(NSString*)urlAsString;

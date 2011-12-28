@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HelpViewController : UIViewController
+@interface HelpViewController : UIViewController{
 
+    IBOutlet UIPageControl *pageCtrl;
+    IBOutlet UIView *view1;
+    IBOutlet UIView *view2;
+    IBOutlet UIView *view3;
+    
+}
+
+
+-(IBAction) changeView:(id)sender;
+-(void)oneFingerSwipeLeft:(id)sender;
+-(void)oneFingerSwipeRight:(id)sender;
 @end

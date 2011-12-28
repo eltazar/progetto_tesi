@@ -240,7 +240,7 @@
                           @"44112233",         @"placeholder",
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
-                          [NSString stringWithFormat:@"%d", UIKeyboardTypePhonePad], @"keyboardType",
+                          [NSString stringWithFormat:@"%d", UIKeyboardTypeNumbersAndPunctuation], @"keyboardType",
                           nil] autorelease ]  atIndex: 0];
      
      [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
@@ -250,7 +250,7 @@
                           @"44112233",         @"placeholder",
                           @"",                 @"img",
                           [NSString stringWithFormat:@"%d", UITableViewCellStyleValue1], @"style",
-                          [NSString stringWithFormat:@"%d", UIKeyboardTypePhonePad], @"keyboardType",
+                          [NSString stringWithFormat:@"%d", UIKeyboardTypeNumbersAndPunctuation], @"keyboardType",
                           nil] autorelease ]  atIndex: 1];
      
      [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
@@ -287,8 +287,6 @@
      gestureRecognizer.cancelsTouchesInView = NO;  // this prevents the gesture recognizers to 'block' touches
      [gestureRecognizer release];
 
-     
-     job.time = @"";
 
  }
 

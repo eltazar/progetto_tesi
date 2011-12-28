@@ -55,7 +55,7 @@
 
     //setto data creazione annuncio, il formato è tale per esser compatibile con mysql
     theNewJob.date = [NSDate date];
-    //NSLog(@"NSDATE IS : %@",newJob.date);
+    //NSLog(@"NSDATE IS : %@", [theNewJob stringFromDate]);
        
     //se i campi inseriti sono formalmente validi controllo connessione per invio
     if([self validate:theNewJob]){    
@@ -66,11 +66,19 @@
             [alert release];
         }
             
+        else if([theNewJob.description isEqualToString:@""] /*|| ([theNewJob.email isEqualToString:@""] && [theNewJob.phone isEqualToString:@""] && [theNewJob.phone2 isEqualToString:@""])*/){
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Informazioni mancanti" message:@"Inserisci una breve descrizione per poter pubblicare l'annuncio" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+            [alert release];
+        }
         else{
              if(pwDelegate && [pwDelegate respondsToSelector:@selector(didInsertNewJob:)])
                  [pwDelegate didInsertNewJob:theNewJob]; //passo al delegato il nuovo job;
         }        
     }
+    
+
     
     //[newJob release];
 }
@@ -94,19 +102,18 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    NSLog(@"WILL APPEAR");
+    
     [super viewWillAppear:animated];
     //passo il newJob alla tabella per esser riempito
     ((EditJobViewController *) tableView).job = theNewJob;
-    //NSLog(@"WILL: NEW JOB PUNTA A: %p", newJob);
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-     
-    // NSLog(@"VIEWLoad user coordinate %f %f",userCoordinate.latitude,userCoordinate.longitude);    
-    
+         
     //setto la navigationBar
     self.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationBar.translucent = YES;

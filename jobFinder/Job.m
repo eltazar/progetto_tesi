@@ -8,7 +8,6 @@
 
 #import "Job.h"
 #import "Utilities.h"
-#import "PhoneNumberFormatter.h"
 
 @implementation Job
 
@@ -151,7 +150,7 @@
         }
     }
     
-   // NSLog(@"STRIPPED STRING = %@",strippedString);
+    NSLog(@"STRIPPED STRING = %@",strippedString);
     
     if([kind isEqualToString:@"phone"])    
         [self setPhone:strippedString];
@@ -461,6 +460,7 @@
     [address release];
     //[city release];
     [phone release];
+    [phone2 release];
     [email release];
     [description release];
     [url release];

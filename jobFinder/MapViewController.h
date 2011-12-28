@@ -28,6 +28,7 @@
     UIView *alternativeToolbar;
     UIButton *saveJobInPositionBtn;
     UIButton *backBtn;
+    UIButton *helpBtn;
     
     FavouriteAnnotation *favouriteAnnotation;
         
@@ -38,6 +39,7 @@
     MKCoordinateRegion oldRegion;
     
 }
+@property(nonatomic, retain) IBOutlet UIButton *helpBtn;
 @property(nonatomic, retain)Job *jobToPublish;
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
@@ -60,6 +62,7 @@
 -(IBAction)backBtnClicked:(id)sender;
 -(IBAction)filterBtnClicked:(id)sender;
 -(void) refreshViewMap;
+-(IBAction)helpBtnClicked:(id)sender;
 
 @end
 

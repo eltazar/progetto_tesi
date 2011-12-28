@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MKMapView+Utils.h"
 #import "Utilities.h"
+#import "HelpViewController.h"
 
 #define DEFAULT_COORDINATE -180
 #define DEFAUlT_COORDINATE_0 0
@@ -46,7 +47,7 @@
 
 @implementation MapViewController 
 //ivar pubbliche
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish, helpBtn;
 //ivar private
 @synthesize annotationsBuffer, zoomBuffer,oldZoom, timer, oldSwitch, oldFieldsString, newJobs;
 
@@ -474,6 +475,15 @@
 
 #pragma mark - gestione click bottoni e view
 
+-(IBAction)helpBtnClicked:(id)sender{
+    
+    NSLog(@"HELP BUTTON CLICKED");
+    
+    HelpViewController *helpView = [[HelpViewController alloc]init];
+    [self.navigationController pushViewController:helpView animated:YES];
+    [helpView release];
+}
+
 -(void)setNewPins:(NSArray *)pins{
     
     if(pins == nil && newJobs != nil){
@@ -887,6 +897,7 @@
 {    
     NSLog(@"MAPCONTROLLER DID UNLOAD");
     
+    self.helpBtn = nil;
     self.backBtn = nil;
     self.saveJobInPositionBtn = nil;
     self.alternativeToolbar = nil;
@@ -918,6 +929,7 @@
 
 - (void)dealloc
 {
+    [helpBtn release];
     [newJobs release];
     [jobToPublish release], jobToPublish = nil;
     [filterButton release];

@@ -8,17 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HelpViewController : UIViewController{
+@interface HelpViewController : UIViewController<UIScrollViewDelegate>{
 
-    IBOutlet UIPageControl *pageCtrl;
-    IBOutlet UIView *view1;
-    IBOutlet UIView *view2;
-    IBOutlet UIView *view3;
-    
+	IBOutlet UIScrollView *scrollView;
+	IBOutlet UIPageControl *pageControl;
+	NSMutableArray *arrayDelleView;
+	BOOL pageControlUsato;
+	
 }
 
+@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, retain) UIPageControl *pageControl;
+@property (nonatomic, retain) NSMutableArray *arrayDelleView;
 
--(IBAction) changeView:(id)sender;
--(void)oneFingerSwipeLeft:(id)sender;
--(void)oneFingerSwipeRight:(id)sender;
+- (IBAction)cambiaPagina:(id)sender;
+- (void)loadScrollViewWithPage:(int)page;
+- (void)scrollViewDidScroll:(UIScrollView *)sender;
 @end

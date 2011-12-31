@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PagesControllerViewController : UIViewController
+
+@interface PagesControllerViewController : UIViewController {
+	
+	IBOutlet UILabel *etichettaNumeroPagina;
+	int numeroPagina;
+	
+}
+
+
+@property (nonatomic, retain) UILabel *etichettaNumeroPagina;
+
+- (id)initWithnumeroPagina:(int)page;
+
 
 @end

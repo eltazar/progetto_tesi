@@ -28,7 +28,7 @@ NSString* key(NSURLConnection* con);
 -(void)jobWriteRequest:(Job*)job;
 -(void)jobReadRequest:(MKCoordinateRegion)region field:(NSString*)field;
 -(void)jobReadRequestOldRegion:(MKCoordinateRegion)oldRegion newRegion:(MKCoordinateRegion)newRegion field:(NSString*)field;
--(void)registerDevice:(NSString*)token;
+-(void)registerDevice:(NSString*)token typeRequest:(NSString*)type;
 
 @end
 

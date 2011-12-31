@@ -7,6 +7,7 @@
 //
 
 #import "DatabaseAccess.h"
+#import "jobFinderAppDelegate.h"
 #import "NSDictionary_JSONExtensions.h"
 #import "Job.h"
 #import "Utilities.h"
@@ -38,6 +39,7 @@ NSString* key(NSURLConnection* con)
 -(void)registerDevice:(NSString*)token
 {
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://www.sapienzaapps.it/jobfinder/registerDevice.php"];
+-(void)registerDevice:(NSString*)token typeRequest:(NSString*)type
     
     [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];

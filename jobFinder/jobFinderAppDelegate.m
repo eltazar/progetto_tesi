@@ -18,7 +18,7 @@
 @implementation jobFinderAppDelegate
 
 @synthesize window = _window;
-@synthesize navController, mapController, facebook;
+@synthesize navController, mapController, facebook,typeRequest;
 
 
 
@@ -30,6 +30,7 @@
     [self.window makeKeyAndVisible];
     
     tokenSended = NO;
+    typeRequest = @"flush";
     
     //############# controlla se i servizi di localizzazione sono attivi #################
     //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"GPS non attivo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
@@ -83,6 +84,16 @@
     // Set the Facebook object we declared. We’ll use the declared object from the application
     // delegate.
     facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
+    
+    if (launchOptions != nil)
+	{
+		NSDictionary* dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+		if (dictionary != nil)
+		{
+			NSLog(@"Launched from push notification: %@", dictionary);
+			[self.mapController setNewPins:[dictionary objectForKey:@"jobs"]];
+		}
+	}
     
     return YES;
 }
@@ -168,7 +179,7 @@
             //NSLog(@" APP DELEGATE : preferito settato");
             DatabaseAccess *dbAccess = [[DatabaseAccess alloc] init];
             [dbAccess setDelegate:self];
-            [dbAccess registerDevice:newToken];
+            [dbAccess registerDevice:newToken typeRequest:typeRequest];
             [dbAccess release];
         }
         else{
@@ -330,6 +341,7 @@
 
 - (void)dealloc
 {   
+    [typeRequest release];
     [facebook release];
     [permissions release];
     [reachability release];

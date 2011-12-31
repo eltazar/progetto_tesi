@@ -19,6 +19,7 @@
     Facebook *facebook;
     NSArray *permissions;
 }
+@property(nonatomic, retain) NSString *typeRequest;
 @property(nonatomic, retain) Facebook *facebook;
 @property(nonatomic, retain) IBOutlet MapViewController *mapController;
 @property (nonatomic, retain) IBOutlet UIWindow *window;

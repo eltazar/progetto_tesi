@@ -15,7 +15,6 @@
 #import "CreditsViewController.h"
 #import "TextAreaCell.h"
 
-
 @implementation ConfigViewController
 @synthesize delegate;
 
@@ -171,6 +170,7 @@
     [self.navigationController popViewControllerAnimated:YES];
     
     //scrivo sul db il cambiamento della zona preferita per il relativo token
+    ((jobFinderAppDelegate*)[[UIApplication sharedApplication] delegate]).typeRequest = @"zoneChanged";        
     
 #if !TARGET_IPHONE_SIMULATOR
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];

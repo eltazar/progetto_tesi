@@ -913,7 +913,7 @@
     self.alternativeToolbar = nil;
     self.map = nil;
     self.toolBar = nil;
-    self.filterButton = nil;
+    //self.filterButton = nil;
     self.publishBtn = nil;
     self.refreshBtn = nil;
     self.bookmarkButtonItem = nil;

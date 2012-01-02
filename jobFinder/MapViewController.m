@@ -859,7 +859,7 @@
     backBtn.layer.borderColor = [UIColor grayColor].CGColor;
     backBtn.clipsToBounds = YES;
     
-    [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
+    //[filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
 
 
     /* Gestione delle configurazioni preferite dell'utente

@@ -10,12 +10,12 @@
 #import <MapKit/MapKit.h>
 #import <MapKit/MKAnnotation.h>
 #import "PublishViewController.h"
-#import "ConfigViewController.h"
 #import "Job.h"
 #import "FavouriteAnnotation.h"
 #import "DatabaseAccess.h"
+#import "InformationSectionViewController.h"
 
-@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, ConfigViewControllerDelegate, DatabaseAccessDelegate>{
+@interface MapViewController : UIViewController <PublishViewControllerDelegate,  MKMapViewDelegate, DatabaseAccessDelegate,InformationSectionViewControllerDelegate>{
     
     MKMapView *map;
     UIToolbar *toolBar;  
@@ -28,7 +28,6 @@
     UIView *alternativeToolbar;
     UIButton *saveJobInPositionBtn;
     UIButton *backBtn;
-    UIButton *helpBtn;
     
     FavouriteAnnotation *favouriteAnnotation;
         
@@ -39,7 +38,6 @@
     MKCoordinateRegion oldRegion;
     
 }
-@property(nonatomic, retain) IBOutlet UIButton *helpBtn;
 @property(nonatomic, retain)Job *jobToPublish;
 @property(nonatomic, retain) IBOutlet UIButton *backBtn;
 @property(nonatomic, retain) IBOutlet UIButton *saveJobInPositionBtn;
@@ -62,7 +60,7 @@
 -(IBAction)backBtnClicked:(id)sender;
 -(IBAction)filterBtnClicked:(id)sender;
 -(void) refreshViewMap;
--(IBAction)helpBtnClicked:(id)sender;
+-(void)launchTourMessage:(id)sender;
 
 @end
 

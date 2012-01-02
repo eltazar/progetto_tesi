@@ -55,7 +55,7 @@
         ((TextAreaCell *)cell).textView.editable = NO;
     }
     
-    if([cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+    if([cell.detailTextLabel.text isEqualToString:@"Non specificato"]){
         cell.accessoryType = UITableViewCellAccessoryNone;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
@@ -75,8 +75,6 @@
             if(row == 0)
                 cell.detailTextLabel.text = [Utilities sectorFromCode:job.code];
             else if(row == 1){
-                NSLog(@"JOB TIME INFO: %@",job.time);
-#warning RELEASE 1.01 controllo job.time != nil aggiunto
                 if(job.time != nil && ![job.time isEqualToString:@""])
                     cell.detailTextLabel.text = job.time;
                 else cell.detailTextLabel.text = @"Non specificato";
@@ -106,22 +104,22 @@
             if(row == 0){
                 if(![job.phone isEqualToString:@""])
                     cell.detailTextLabel.text = job.phone;
-                else cell.detailTextLabel.text = @"Non disponibile";
+                else cell.detailTextLabel.text = @"Non specificato";
             }
             if(row == 1){
                 if(![job.phone2 isEqualToString:@""])
                     cell.detailTextLabel.text = job.phone2;
-                else cell.detailTextLabel.text = @"Non disponibile";
+                else cell.detailTextLabel.text = @"Non specificato";
             }
             else if(row == 2){
                 if(![job.email isEqualToString:@""])
                     cell.detailTextLabel.text = job.email;
-                else cell.detailTextLabel.text = @"Non disponibile";
+                else cell.detailTextLabel.text = @"Non specificato";
             } 
             else if(row == 3){
                 if(![[job urlAsString] isEqualToString:@""])
                     cell.detailTextLabel.text = job.urlAsString;
-                else cell.detailTextLabel.text = @"Non disponibile";
+                else cell.detailTextLabel.text = @"Non specificato";
             }
             break;
         default:

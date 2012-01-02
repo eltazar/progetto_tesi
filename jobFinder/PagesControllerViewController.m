@@ -26,11 +26,19 @@ static NSArray *__pageControlColorList = nil;
         [imgView1 setFrame:CGRectMake(0, 0, 320, 389)];
         UIImageView *imgView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"helpView2.png"]];
         [imgView2 setFrame:CGRectMake(0, 0, 320, 389)];
+        
+        UIImageView *imgView3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"helpView3.png"]];
+        [imgView3 setFrame:CGRectMake(0, 0, 320, 389)];
+        
+        UIImageView *imgView4 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"helpView4.png"]];
+        [imgView4 setFrame:CGRectMake(0, 0, 320, 389)];
        
-        __pageControlColorList = [[NSArray alloc] initWithObjects:imgView1,imgView2, nil];
+        __pageControlColorList = [[NSArray alloc] initWithObjects:imgView1,imgView2,imgView3,imgView4, nil];
         
        [imgView1 release];
        [imgView2 release];
+       [imgView3 release];
+       [imgView4 release];
         
     }
     

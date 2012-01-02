@@ -9,7 +9,7 @@
 #import "HelpViewController.h"
 #import "PagesControllerViewController.h"
 
-static NSUInteger numeroTotalePagine = 2;
+static NSUInteger numeroTotalePagine = 4;
 
 @implementation HelpViewController
 @synthesize  scrollView, pageControl, arrayDelleView;
@@ -165,9 +165,6 @@ static NSUInteger numeroTotalePagine = 2;
 
 - (void)viewDidUnload
 {
-    NSLog(@"HELP VIEW DID UNLOAD");
-
-
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

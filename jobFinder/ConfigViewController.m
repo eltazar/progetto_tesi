@@ -12,8 +12,6 @@
 #import "DatabaseAccess.h"
 #import "jobFinderAppDelegate.h"
 #import "Utilities.h"
-#import "CreditsViewController.h"
-#import "TextAreaCell.h"
 
 @implementation ConfigViewController
 @synthesize delegate;
@@ -57,15 +55,11 @@
 	if (cell == nil) {
         cell = [[[NSClassFromString(kind) alloc] initWithStyle: cellStyle reuseIdentifier:kind withDictionary:rowDesc] autorelease];
     }
-    
-    if([[rowDesc objectForKey:@"kind"] isEqualToString:@"TextAreaCell"]){
-        //rendo la cella non editabile
-        ((TextAreaCell *)cell).textView.editable = NO;
-    }
-    else{
-        cell.textLabel.numberOfLines = 2;
-        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-    }
+
+
+    cell.textLabel.numberOfLines = 2;
+    cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+
     
     return cell;
 }
@@ -96,11 +90,6 @@
 
 #pragma mark - TableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    return cell.frame.size.height;
-}
 
 //azioni per le celle selezionate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -120,10 +109,6 @@
             default:
                 break;
         }
-    }
-    else if(section == 2){
-        creditsViewController = [[[CreditsViewController alloc] initWithNibName:@"CreditsViewController" bundle:nil] autorelease];
-        [self.navigationController pushViewController:creditsViewController animated:YES];
     }
     
     //deseleziona la cella
@@ -206,8 +191,6 @@
     
     //creo le sezioni
     NSMutableArray *secA = [[NSMutableArray alloc] init];
-    NSMutableArray *secB = [[NSMutableArray alloc] init];
-    NSMutableArray *secC = [[NSMutableArray alloc] init];
     
     [secA insertObject:[[[NSMutableDictionary alloc] initWithObjectsAndKeys:
                          @"bookmarks",              @"DataKey",
@@ -226,31 +209,11 @@
                          [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
                          nil] autorelease] atIndex: 1];
     
-    [secB insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"site",              @"DataKey",
-                         @"TextAreaCell",      @"kind",
-                         @"",                  @"label",
-                         @"",                  @"img",
-                         nil]autorelease] atIndex: 0];
-    
-    [secC insertObject:[[[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"site",             @"DataKey",
-                         @"ActionCell",       @"kind",
-                         @"Credits",          @"label",
-                         @"",                 @"img",
-                         [NSString stringWithFormat:@"%d", UITableViewCellStyleDefault], @"style",
-                         nil]autorelease] atIndex: 0];
-    
-    
-    
-    
-    sectionData = [[NSArray alloc] initWithObjects: secA, secB, secC, nil];
-    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita", @"Disclaimer",@"Credits",nil];
+        
+    sectionData = [[NSArray alloc] initWithObjects: secA, nil];
+    sectionDescripition = [[NSArray alloc] initWithObjects:@"Zona preferita",nil];
     
     [secA autorelease];
-    [secB autorelease];
-    [secC autorelease];
-
 }
 
 

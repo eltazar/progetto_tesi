@@ -876,6 +876,14 @@
         
     } 
     
+    if(  [prefs boolForKey:@"switch"]){
+        [filterButton setImage:[UIImage imageNamed:@"filterYellow.png"]];
+    }
+    else{
+        NSLog(@"MAP LOAD SWITCH off = %p",[UIImage imageNamed:@"filterWhite.png"]);
+        [filterButton setImage:[UIImage imageNamed:@"filterWhite.png"]];
+    }
+    
     /* Inizializzazione valori booleani per la classe
      */
     //di default i pin non possono esser "draggabili"

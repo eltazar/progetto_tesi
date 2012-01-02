@@ -807,6 +807,16 @@
         }
     }
     
+    
+    //sono cambiate le impostazioni del filtro lancio query per cambiare dati sul db
+    if(! [oldFieldsString isEqualToString:[Utilities createFieldsString]]){
+         ((jobFinderAppDelegate*)[[UIApplication sharedApplication] delegate]).typeRequest = @"fieldsChanged";
+        #if !TARGET_IPHONE_SIMULATOR
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+        #endif    
+    }
+    
+    
     oldSwitch = [prefs boolForKey:@"switch"];
     self.oldFieldsString = [Utilities createFieldsString];
     //NSLog(@"selected cells = %@",[prefs objectForKey:@"selectedCells"]);

@@ -602,21 +602,13 @@
 -(IBAction)configBtnClicked:(id)sender
 {
     
-    ConfigViewController *configView = [[ConfigViewController alloc] initWithNibName:@"ConfigViewController" bundle:nil];
-    [configView setDelegate:self];
+    InformationSectionViewController *infoView = [[InformationSectionViewController alloc] initWithNibName:@"InformationSectionViewController" bundle:nil];
+    [infoView setDelegate:self];
     //animazione e push della view
-    [UIView 
-     transitionWithView:self.navigationController.view
-     duration:0.8
-     options:UIViewAnimationOptionTransitionFlipFromRight
-     animations:^{ 
-         [self.navigationController 
-          pushViewController: configView 
-          animated:NO];
-     }
-     completion:NULL];   
+    [self.navigationController pushViewController:infoView animated:YES];  
     
-    [configView release];
+    [infoView release];
+    
 }
 
 //mostra la posizione attuale dell'utente

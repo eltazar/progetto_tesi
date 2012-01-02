@@ -7,7 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ConfigViewController.h"
 
-@interface InformationSectionViewController : UITableViewController
+
+@protocol InformationSectionViewControllerDelegate;
+
+
+@interface InformationSectionViewController : UITableViewController<ConfigViewControllerDelegate>{
+    
+    
+    NSArray *sectionDescripition;
+    NSArray *sectionData;
+
+}
+
+@property(nonatomic, assign) id<InformationSectionViewControllerDelegate> delegate;
+
+@end
+
+@protocol InformationSectionViewControllerDelegate <NSObject>
+
+-(void)didSelectedFavouriteZone:(CLLocationCoordinate2D) coordinate;
 
 @end

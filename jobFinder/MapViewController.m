@@ -181,10 +181,22 @@
 //per gestire il tap sul disclosure
 - (void)mapView:(MKMapView *)_mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
+    
+    NSLog(@"CALLAOUT JOB USER = %@",((Job*)view.annotation).user);
     //carico la vista relativa al job
-    InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
-    [self.navigationController pushViewController:infoJobView animated: YES];
-    [infoJobView release];
+    
+    if([((Job*)view.annotation).user isEqualToString:[[UIDevice currentDevice] uniqueIdentifier]]){
+        PublishViewController *publishViewCtrl = [[PublishViewController alloc] initWithJob: view.annotation];
+        publishViewCtrl.pwDelegate = self;
+        
+        [self presentModalViewController:publishViewCtrl animated:YES];
+        [publishViewCtrl release];
+    }
+    else{
+        InfoJobViewController *infoJobView = [[InfoJobViewController alloc] initWithJob: view.annotation];
+        [self.navigationController pushViewController:infoJobView animated: YES];
+        [infoJobView release];
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated

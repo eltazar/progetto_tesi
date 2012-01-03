@@ -50,4 +50,6 @@
 //-(void)publishViewControllerDidInsert:(PublishViewController *)viewController aJob:(Job *)job;
 -(void)didInsertNewJob:(Job *) theNewJob;
 -(void)didCancelNewJob:(PublishViewController *)viewController;
+-(void)didModifiedJob:(Job*) theNewJob;
+-(void)didDelJob:(Job*)theNewJob;
 @end

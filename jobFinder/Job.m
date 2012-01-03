@@ -11,7 +11,7 @@
 
 @implementation Job
 
-@synthesize field, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time, phone2;
+@synthesize field, date, address, description, phone, url, email, coordinate, title, subtitle, idDb, code, time, phone2, user;
 @synthesize isAnimated, isMultiple, isDraggable;
 
 - (id)init
@@ -177,6 +177,7 @@
 
 -(void)setPhone2:(NSString *)newPhone
 {    
+    
     if([newPhone isKindOfClass:[NSNull class]] || [newPhone isEqualToString:@""]){
         
         [phone2 release];
@@ -190,6 +191,20 @@
     [newPhone retain];
     [phone2 release];
     phone2 = newPhone;
+}
+
+-(void)setUser:(NSString *)newUser
+{
+    if([newUser isKindOfClass:[NSNull class]] || [newUser isEqualToString:@""]){
+        
+        [user release];
+        user = @"";
+        return;        
+    }
+    
+    [newUser retain];
+    [user release];
+    user = newUser;
 }
 
 //problemi con questo metodo, vedere commit 7 novembre --> risolti
@@ -304,7 +319,7 @@
     }
     else{
         tempPhone = phone;
-        NSLog(@"INFO PHONE = %@",phone);
+        //NSLog(@"INFO PHONE = %@",phone);
     }
     return [[ tempPhone retain] autorelease];
 }
@@ -318,9 +333,23 @@
     }
     else{
         tempPhone = phone2;
-        NSLog(@"INFO PHONE = %@",phone2);
+        //NSLog(@"INFO PHONE = %@",phone2);
     }
+
     return [[ tempPhone retain] autorelease];
+}
+
+-(NSString*)user
+{
+    NSString *tempUser;
+    if(user == nil){
+        tempUser = @"";
+    }
+    else{
+        tempUser = user;
+    }
+    return [[ tempUser retain] autorelease];
+    
 }
 
 //- (NSURL *)url
@@ -451,6 +480,7 @@
 
 
 -(void)dealloc{
+    [user release];
     [time release];
     [code release];
     [subtitle release];

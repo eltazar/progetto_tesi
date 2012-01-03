@@ -23,6 +23,8 @@
     NSString *code;   
     NSString *time;
     
+    NSString *user;
+    
     NSString *address;
 //    NSString *city;
     
@@ -32,6 +34,7 @@
     CLLocationCoordinate2D coordinate;
 }
 
+@property(nonatomic, retain) NSString *user;
 @property(nonatomic,retain) NSString *time;
 @property(nonatomic, retain) NSString *code;
 @property(nonatomic, assign) NSInteger idDb;

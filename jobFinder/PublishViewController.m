@@ -16,7 +16,7 @@
 @synthesize pwDelegate, jobCoordinate, addressGeocoding, theNewJob;
 
 
-
+//istanzia tableView per creare nuova offerta di lavoro
 - (id) initWithStandardRootViewController
 {    
     tableView = [[EditJobViewController alloc] initWithNibName:@"RootJobViewController" bundle:nil];
@@ -70,8 +70,11 @@
     //fa si che il testo inserito nei texfield sia preso anche se non è stata dismessa la keyboard
     [self.view endEditing:TRUE];
 
-    //setto data creazione annuncio, il formato è tale per esser compatibile con mysql
-    theNewJob.date = [NSDate date];
+    if([tableView isKindOfClass:[EditJobViewController class]]){
+        //setto data creazione annuncio, il formato è tale per esser compatibile con mysql
+        theNewJob.date = [NSDate date];
+        theNewJob.user = [[UIDevice currentDevice] uniqueIdentifier];
+    }
     //NSLog(@"NSDATE IS : %@", [theNewJob stringFromDate]);
        
     //se i campi inseriti sono formalmente validi controllo connessione per invio
@@ -90,8 +93,10 @@
             [alert release];
         }
         else{
-             if(pwDelegate && [pwDelegate respondsToSelector:@selector(didInsertNewJob:)])
+             if(pwDelegate && [pwDelegate respondsToSelector:@selector(didInsertNewJob:)] && [tableView isKindOfClass: [EditJobViewController class]])
                  [pwDelegate didInsertNewJob:theNewJob]; //passo al delegato il nuovo job;
+             else if(pwDelegate && [pwDelegate respondsToSelector:@selector(didInsertNewJob:)] && [tableView isKindOfClass: [ModJobViewController class]])
+                     [pwDelegate didModifiedJob:theNewJob];
         }        
     }
     
@@ -125,23 +130,23 @@
 #pragma mark - View lifecycle
 
 -(void)viewWillAppear:(BOOL)animated
-{
-    NSLog(@"WILL APPEAR");
-    
+{    
     [super viewWillAppear:animated];
     //passo il newJob alla tabella per esser riempito
-    ((EditJobViewController *) tableView).job = theNewJob;
+    if([tableView isKindOfClass: [EditJobViewController class]]){
+        ((EditJobViewController *) tableView).job = theNewJob;
+    }
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-         
+            
     //setto la navigationBar
     self.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationBar.translucent = YES;
-    tableView.navigationItem.title = @"Nuovo lavoro";
+    //tableView.navigationItem.title = @"Nuovo lavoro";
     
     //aggiungo bottone "inserisci" ed "annulla" alla barra
     UIBarButtonItem *insertButton = [[UIBarButtonItem alloc] initWithTitle:@"Invia" style:UIBarButtonItemStyleDone target:self action:@selector(insertBtnPressed:)];          
@@ -149,8 +154,9 @@
     tableView.navigationItem.rightBarButtonItem = insertButton;
     tableView.navigationItem.leftBarButtonItem = cancelButton;
     
-    //di default insertButton è disabilitato
-    insertButton.enabled = NO;
+    //di default insertButton è disabilitato se è un nuovo lavoro
+    if([tableView isKindOfClass:[EditJobViewController class]])
+        insertButton.enabled = NO;
     
     //attende il segnale di avvenuta selezione di un settore di lavoro per far attivare il tasto "inserisci"
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activeInsertBtn:) name:@"employeeDidSet" object:nil];

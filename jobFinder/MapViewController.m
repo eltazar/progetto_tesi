@@ -694,6 +694,26 @@
 
 #pragma mark - PublishViewControllerDelegate
 
+-(void)didDelJob:(Job *)theNewJob{
+    NSLog(@"MAP THE NEW JOB ID %d", theNewJob.idDb);
+    
+    [dbAccess jobDelRequest:theNewJob];
+    
+    if(theNewJob)
+        [map removeAnnotation:theNewJob];
+    
+    [self dismissPublishView];
+}
+
+-(void)didModifiedJob:(Job *)theNewJob
+{    
+    //richiedo scrittura su db dei dati
+    [dbAccess jobModRequest:theNewJob];
+    if(theNewJob)
+        [map removeAnnotation:theNewJob];
+    [self dismissPublishView];
+}
+
 /*richiamato dalla view modale dopo il click su inserisci. spedisce i dati sul db
  */
 -(void)didInsertNewJob:(Job *)theNewJob

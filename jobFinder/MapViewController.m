@@ -976,8 +976,8 @@
     zoomBuffer = nil;
     [annotationsBuffer release];
     annotationsBuffer = nil;
-    [dbAccess release];
-    dbAccess = nil;
+//    [dbAccess release];
+//    dbAccess = nil;
     
     newJobs = nil;
     

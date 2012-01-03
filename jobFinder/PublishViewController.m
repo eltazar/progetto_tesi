@@ -8,6 +8,7 @@
 
 #import "PublishViewController.h"
 #import "EditJobViewController.h"
+#import "ModJobViewController.h"
 #import "MapKit/MKAnnotation.h"
 #import "Utilities.h"
 
@@ -112,6 +113,13 @@
     tableView.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
+#pragma mark - ModJobViewControllerDelegate
+-(void)didDeletedJob:(id)sender{
+    
+    NSLog(@"CANCELLATO PREMUTO");
+    if(pwDelegate && [pwDelegate respondsToSelector:@selector(didDelJob:)])
+        [pwDelegate didDelJob:theNewJob];
+}
 
 
 #pragma mark - View lifecycle

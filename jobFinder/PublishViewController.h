@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "RootJobViewController.h"
 #import "EditJobViewController.h"
+#import "ModJobViewController.h"
 #import "Job.h"
 
 @protocol PublishViewControllerDelegate;
@@ -18,7 +19,7 @@
  */
 
 
-@interface PublishViewController : UINavigationController{
+@interface PublishViewController : UINavigationController <ModJobViewControllerDelegate>{
     //punta al delegato di questa vista
     id<PublishViewControllerDelegate> pwDelegate;
     //la tabella per la raccolta dati dell'utente

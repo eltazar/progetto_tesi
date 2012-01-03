@@ -163,6 +163,115 @@ NSString* key(NSURLConnection* con)
     }
 }   
 
+-(void)jobModRequest:(Job *)job
+{
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/mod.php"];    
+    //Replace Spaces with a '+' character.
+    [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
+    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *postFormatString = @"jobId=%d&time=%@&description=%@&phone=%@&phone2=%@&email=%@&url=%@&field=%@";
+    
+    NSMutableString *phoneTmp;
+    NSMutableString *phone2Tmp;
+    
+    if(![job.phone isEqualToString:@""] && [[job.phone substringWithRange:NSMakeRange(0,1)] isEqualToString:@"+"]){
+        phoneTmp = [NSMutableString stringWithFormat:@"%@",job.phone];
+        [phoneTmp setString:[phoneTmp stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"]];
+    }
+    else{
+        phoneTmp = [NSMutableString stringWithFormat:@"%@",job.phone];
+    }
+    
+    if(![job.phone2 isEqualToString:@""] && [[job.phone2 substringWithRange:NSMakeRange(0,1)] isEqualToString:@"+"]){
+        phone2Tmp = [NSMutableString stringWithFormat:@"%@",job.phone2];
+        [phone2Tmp setString:[phone2Tmp stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"]];
+    }
+    else{
+        phone2Tmp = [NSMutableString stringWithFormat:@"%@",job.phone2];
+    }
+    
+    NSString *postString = [NSString stringWithFormat:postFormatString,
+                            job.idDb,
+                            job.time,
+                            job.description,
+                            phoneTmp,
+                            phone2Tmp,
+                            job.email,
+                            job.urlAsString,
+                            job.code
+                            ];
+    
+    
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    [request setHTTPBody:postData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+        [writeConnections addObject:connection];
+        
+        NSMutableData *receivedData = [[NSMutableData data] retain];
+        //[connectionDictionary setObject:connection forKey:key(connection)];
+        [dataDictionary setObject:receivedData forKey:key(connection)];
+        //NSLog(@"RECEIVED DATA FROM DICTIONARY : %p",[dataDictionary objectForKey:connection]);
+    }
+    else{
+        NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita
+    }
+
+}
+
+-(void)jobDelRequest:(Job*)job
+{
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"http://jobfinder.altervista.org/delJob.php"];    
+    //Replace Spaces with a '+' character.
+    [urlString setString:[urlString stringByReplacingOccurrencesOfString:@" " withString:@"+"]];  
+    NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease]; //aggiunto autorelease
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *postFormatString = @"jobId=%d";
+    
+    NSString *postString = [NSString stringWithFormat:postFormatString,job.idDb];
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    [request setHTTPBody:postData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(connection){
+        //NSLog(@"IS CONNECTION TRUE");
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        
+        [writeConnections addObject:connection];
+        
+        NSMutableData *receivedData = [[NSMutableData data] retain];
+        //[connectionDictionary setObject:connection forKey:key(connection)];
+        [dataDictionary setObject:receivedData forKey:key(connection)];
+        //NSLog(@"RECEIVED DATA FROM DICTIONARY : %p",[dataDictionary objectForKey:connection]);
+    }
+    else{
+        NSLog(@"theConnection is NULL");
+        //mostrare alert all'utente che la connessione è fallita
+    }
+
+    
+}
+
 
 //invia richiesta scrittura su db
 -(void)jobWriteRequest:(Job *)job

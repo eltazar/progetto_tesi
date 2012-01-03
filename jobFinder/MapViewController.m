@@ -47,7 +47,7 @@
 
 @implementation MapViewController 
 //ivar pubbliche
-@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish, helpBtn;
+@synthesize map, publishBtn,toolBar, refreshBtn, bookmarkButtonItem, filterButton, alternativeToolbar, saveJobInPositionBtn, backBtn, jobToPublish;
 //ivar private
 @synthesize annotationsBuffer, zoomBuffer,oldZoom, timer, oldSwitch, oldFieldsString, newJobs;
 
@@ -959,7 +959,6 @@
 {    
     NSLog(@"MAPCONTROLLER DID UNLOAD");
     
-    self.helpBtn = nil;
     self.backBtn = nil;
     self.saveJobInPositionBtn = nil;
     self.alternativeToolbar = nil;
@@ -991,7 +990,6 @@
 
 - (void)dealloc
 {
-    [helpBtn release];
     [newJobs release];
     [jobToPublish release], jobToPublish = nil;
     [filterButton release];

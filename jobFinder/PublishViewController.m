@@ -30,6 +30,22 @@
     return self;
 }
 
+//istanzia tableView per modificare offerta di lavoro già presente
+- (id) initWithJob:(Job*)aJob
+{    
+    tableView = [[ModJobViewController alloc] initWithJob:aJob];
+    ((ModJobViewController*)tableView).delegate = self;
+    self = [super initWithRootViewController:tableView];
+    
+    if(self)
+    {
+        self.theNewJob = aJob;
+        //self.newJob = nil; //commentato 19 novembre
+    }
+    
+    return self;
+}
+
 #pragma mark - metodi bottoni della view
 -(BOOL)validate:(Job*) job
 {

@@ -38,6 +38,7 @@
 
 
 - (id) initWithStandardRootViewController;
+- (id) initWithJob:(Job*)aJob;
 -(void)insertBtnPressed: (id)sender;
 -(void)cancelBtnPressed: (id)sender;
 

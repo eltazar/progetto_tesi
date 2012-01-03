@@ -303,6 +303,7 @@ NSString* key(NSURLConnection* con)
         phone2Tmp = [NSMutableString stringWithFormat:@"%@",job.phone2];
     }
     
+    
     NSString *postString = [NSString stringWithFormat:postFormatString,
         job.time,
         job.description,
@@ -313,7 +314,8 @@ NSString* key(NSURLConnection* con)
         job.date,
         job.coordinate.latitude,
         job.coordinate.longitude,
-        job.code
+        job.code,
+        job.user
     ];
     
     
@@ -422,6 +424,7 @@ NSString* key(NSURLConnection* con)
                //NSLog(@"########### email = %@",[tempDict objectForKey:@"email"] );
                job.email = [tempDict objectForKey:@"email"];
                [job setUrlWithString:[tempDict objectForKey:@"url"]];
+               job.user = [tempDict objectForKey:@"user"];
                 
                 [jobsArray addObject:job];
             }

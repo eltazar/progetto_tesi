@@ -66,13 +66,22 @@
     return cell;    
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if(section == 3){
+            return @"Attenzione: premendo \"Cancella offerta\" eliminerai definitivamente la tua inserzione dal sistema";
+    }
+    return nil;
+
+}
+
 
 #pragma mark - TableViewDelegate
 
 
 // Notice: this will work only for one section within the table view
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     if(section == 3){
         // create the parent view that will hold 1 or more buttons
@@ -100,11 +109,11 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView   heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView   heightForHeaderInSection:(NSInteger)section {
     
     if(section == 3)
         return 46;
-    else return 0;
+    else return 40;
 }
 
 

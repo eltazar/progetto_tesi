@@ -148,6 +148,8 @@
         [jobString appendString:[NSString stringWithFormat:@"<b>Descrizione:</b> %@ ",job.description]];
     if(![job.phone isEqualToString:@""])
         [jobString appendString:[NSString stringWithFormat:@"<b>Telefono:</b> %@ ",job.phone]];
+    if(![job.phone2 isEqualToString:@""])
+        [jobString appendString:[NSString stringWithFormat:@"<b>Telefono 2:</b> %@ ",job.phone2]];
     
     if(![job.email isEqualToString:@""])
         [jobString appendString:[NSString stringWithFormat:@"<b>E-mail:</b> %@ ",job.email]];

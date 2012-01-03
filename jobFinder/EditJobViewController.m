@@ -177,7 +177,7 @@
             break;
     }
     
-    NSLog(@"job.time = %@",job.time);
+    //NSLog(@"job.time = %@",job.time);
 }
     
 
@@ -199,6 +199,7 @@
 //     job = [[Job alloc]initWithCoordinate:CLLocationCoordinate2DMake(0,0)];
      //NSLog(@"job in EDTI_VIEW: %p",job);
      
+     [self.navigationItem setTitle:@"Nuovo lavoro"];
      
      //creo il model della tabella
      NSMutableArray *secA = [[NSMutableArray alloc] init];

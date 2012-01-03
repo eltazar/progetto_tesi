@@ -470,29 +470,39 @@
 {
     NSLog(@"RECEIVED DATA ORA: %@",receivedData);
     
+    UIAlertView *alert;
+    alert = [[UIAlertView alloc]initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    
     if([receivedData isEqualToString:@"Deleted"]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Annuncio cancellato" message:@"Il tuo annunncio è stato correttamente cancellato" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        
+        [alert setTitle:@"Annuncio cancellato"];
+        [alert setMessage:@"Il tuo annuncio è stato cancellato"];
+
         [alert show];
-        [alert release];
     }
     else if([receivedData isEqualToString:@"Modified"]){
     
-    
-    
-    }
-    else if(![[receivedData substringWithRange:NSMakeRange(0,2)] isEqualToString:@"OK"]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+        [alert setTitle:@"Annuncio modificato"];
+        [alert setMessage:@"Il tuo annuncio è stato modificato"];
         [alert show];
-        [alert release];
+        [dbAccess jobReadRequest:map.region field:[Utilities createFieldsString]];
+
     }
-    else{
+    else if([[receivedData substringWithRange:NSMakeRange(0,2)] isEqualToString:@"OK"]){
         if(jobToPublish != nil){
             jobToPublish.idDb = [[receivedData substringFromIndex:2] intValue];
             jobToPublish.isDraggable = NO;
             [map addAnnotation:jobToPublish];
-
         }
+
     }
+    else{
+        [alert setTitle:@"Errore connessione"];
+        [alert setMessage:@"Non è stato possibile portare a termine la tua richiesta, riprovare"];
+        [alert show];
+    }
+
+    [alert release];
 }
 
 #pragma mark - gestione click bottoni e view

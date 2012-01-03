@@ -468,9 +468,19 @@
 
 -(void)didReceiveResponsFromServer:(NSString *)receivedData
 {
-    //NSLog(@"RECEIVED DATA: %@",receivedData);
+    NSLog(@"RECEIVED DATA ORA: %@",receivedData);
     
-    if(![[receivedData substringWithRange:NSMakeRange(0,2)] isEqualToString:@"OK"]){
+    if([receivedData isEqualToString:@"Deleted"]){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Annuncio cancellato" message:@"Il tuo annunncio è stato correttamente cancellato" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        [alert release];
+    }
+    else if([receivedData isEqualToString:@"Modified"]){
+    
+    
+    
+    }
+    else if(![[receivedData substringWithRange:NSMakeRange(0,2)] isEqualToString:@"OK"]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Errore connessione" message:@"Non è stato possibile segnalare il lavoro, riprovare" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
         [alert show];
         [alert release];

@@ -114,7 +114,11 @@
 -(void)_setPhone:(NSString *)_phone kind:(NSString*)kind
 {
     if(_phone == nil || [_phone isEqualToString:@""]){
-        [self setPhone:@""];
+        
+        if([kind isEqualToString:@"phone"])
+            [self setPhone:@""];
+        else [self setPhone2:@""]; 
+        
         return;
     }
 

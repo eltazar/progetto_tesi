@@ -220,12 +220,12 @@
     if(section == 2){
         switch (row) {
             case 0:
-                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                if(![cell.detailTextLabel.text isEqualToString:@"Non specificato"]){
                     //fa partire una chiamata
                     UIDevice *device = [UIDevice currentDevice];    
                     if ([[device model] isEqualToString:@"iPhone"]){
                         
-                        if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                        if(![cell.detailTextLabel.text isEqualToString:@"Non specificato"]){
                             NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
                             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
                         }
@@ -239,12 +239,12 @@
                 break;
                 
             case 1:
-                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                if(![cell.detailTextLabel.text isEqualToString:@"Non specificato"]){
                     //fa partire una chiamata
                     UIDevice *device = [UIDevice currentDevice];    
                     if ([[device model] isEqualToString:@"iPhone"]){
                         
-                        if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                        if(![cell.detailTextLabel.text isEqualToString:@"Non Specificato"]){
                             NSString *number = [NSString stringWithFormat:@"%@%@", @"tel://", cell.detailTextLabel.text];
                             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
                         }
@@ -258,7 +258,7 @@
                 break;
                 
             case 2:
-                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                if(![cell.detailTextLabel.text isEqualToString:@"Non specificato"]){
                     MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
                     mail.mailComposeDelegate = self;
                     
@@ -272,7 +272,7 @@
                 }
                 break;  
             case 3:
-                if(![cell.detailTextLabel.text isEqualToString:@"Non disponibile"]){
+                if(![cell.detailTextLabel.text isEqualToString:@"Non specificato"]){
                     url = [NSURL URLWithString:cell.detailTextLabel.text];
                     //this will open the selected URL into the safari
                     [[UIApplication sharedApplication]openURL: url ]; 

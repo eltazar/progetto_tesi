@@ -45,11 +45,18 @@ NSString* key(NSURLConnection* con)
     NSURL *url = [[[NSURL alloc] initWithString:urlString] autorelease];
     
     NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+    NSString *typeRequest = ((jobFinderAppDelegate*)[[UIApplication sharedApplication] delegate]).typeRequest;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *postFormatString = @"token=%@&latitude=%f&longitude=%f";
+    
+    NSString *postFormatString = @"token=%@&latitude=%f&longitude=%f&fields=%@&type=%@";
     NSString *postString = [NSString stringWithFormat:postFormatString,
-                            token,[[pref objectForKey:@"lat"] doubleValue],[[pref objectForKey:@"long"] doubleValue]];
+                            token,
+                            [[pref objectForKey:@"lat"] doubleValue],
+                            [[pref objectForKey:@"long"] doubleValue], 
+                            [Utilities createFieldsString],
+                            typeRequest
+                            ];
 
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];

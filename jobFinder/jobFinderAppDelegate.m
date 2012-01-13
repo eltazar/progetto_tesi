@@ -92,16 +92,24 @@
     
     //redirect console output su file di log
     //[self redirectNSLogToDocuments];
+
+    
+    //per gestire arrivo notifica push quando app è not running
+    
     if (launchOptions != nil)
 	{
 		NSDictionary* dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 		if (dictionary != nil)
 		{
-			NSLog(@"Launched from push notification: %@", dictionary);
+			//NSLog(@"Launched from push notification in didFinishLaunching: %@", dictionary);
 			[self.mapController setNewPins:[dictionary objectForKey:@"jobs"]];
+            [self.mapController refreshViewMap];
 		}
 	}
     
+    //[self.mapController launchTourMessage:nil];
+
+      
     return YES;
 }
 
@@ -215,6 +223,9 @@
     //NSLog(@" é STATA RICEVUTA UNA PUSH NOTF");
     //apre la mappa nella posizione preferita dopo la ricezione di una push
     [self.mapController refreshViewMap];
+    
+    //NSLog(@" é STATA RICEVUTA UNA PUSH NOTF = %@",[userInfo objectForKey:@"jobs"]);
+    
 }
 
 

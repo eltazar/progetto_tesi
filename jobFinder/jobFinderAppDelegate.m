@@ -20,7 +20,12 @@
 @synthesize window = _window;
 @synthesize navController, mapController, facebook,typeRequest;
 
-
+-(void) redirectNSLogToDocuments {
+    NSArray *allPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDIR = [allPaths objectAtIndex:0];
+    NSString *pathForLog = [documentsDIR stringByAppendingPathComponent:@"LOG.txt"];
+    freopen([pathForLog cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {            
@@ -85,6 +90,8 @@
     // delegate.
     facebook = [[Facebook alloc] initWithAppId:@"175161829247160" andDelegate:self];
     
+    //redirect console output su file di log
+    //[self redirectNSLogToDocuments];
     if (launchOptions != nil)
 	{
 		NSDictionary* dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
